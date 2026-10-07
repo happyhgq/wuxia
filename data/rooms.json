@@ -160,10 +160,11 @@
   "official_road": {
     "name": "黄土官道",
     "zone": "main",
-    "desc": "黄土官道上车辙深深，两侧野草没膝。北边回青石村，西边有一条荒僻小径通往村后荒野。（输入 search 可采集资源）",
+    "desc": "黄土官道上车辙深深，两侧野草没膝。北边回青石村，西边有一条荒僻小径通往村后荒野，东边官道延伸往远方。（输入 search 可采集资源）",
     "exits": {
       "北": "village_gate",
-      "西": "wild_fields"
+      "西": "wild_fields",
+      "东": "official_road_east_1"
     },
     "enemies": [
       "野猪"
@@ -174,6 +175,42 @@
     },
     "coord": [
       2,
+      0
+    ]
+  },
+  "official_road_east_1": {
+    "name": "黄土官道",
+    "zone": "main",
+    "desc": "官道向东延伸，地势渐渐平坦。远处隐约能看到一座城池的轮廓，空气中多了一丝喧嚣。",
+    "exits": {
+      "西": "official_road",
+      "东": "official_road_east_2"
+    },
+    "enemies": [
+      "野狼"
+    ],
+    "forage": {
+      "草药": 0.3
+    },
+    "coord": [
+      3,
+      0
+    ]
+  },
+  "official_road_east_2": {
+    "name": "黄土官道",
+    "zone": "main",
+    "desc": "离城门已经不远了，路上的行人渐渐多了解甲归田的商旅和行色匆匆的江湖客。东边便是归云城南门。",
+    "exits": {
+      "西": "official_road_east_1",
+      "东": "guiyun_south_gate"
+    },
+    "enemies": [],
+    "forage": {
+      "草药": 0.2
+    },
+    "coord": [
+      4,
       0
     ]
   },
@@ -343,6 +380,905 @@
     "coord": [
       0,
       2
+    ]
+  },
+  "guiyun_south_gate": {
+    "name": "归云城南门",
+    "zone": "guiyun_city",
+    "desc": "高大的青砖城墙横贯南北，两扇包铁城门敞开着。城外是黄土官道，门内车马往来不绝。城门上方“归云城”三个大字古朴苍劲。",
+    "exits": {
+      "北": "guiyun_south_gate_inner",
+      "西": "official_road_east_2"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      0
+    ]
+  },
+  "guiyun_south_gate_inner": {
+    "name": "南门内街",
+    "zone": "guiyun_city",
+    "desc": "穿过城门，眼前豁然开阔。车马、挑夫和行商交错而过，空气中混着牲口、尘土与沿街小贩的吆喝声。",
+    "exits": {
+      "南": "guiyun_south_gate",
+      "北": "guiyun_south_main_street",
+      "西": "guiyun_longle_lane",
+      "东": "guiyun_stable"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      1
+    ]
+  },
+  "guiyun_south_main_street": {
+    "name": "南城大街",
+    "zone": "guiyun_city",
+    "desc": "青石铺就的大街笔直向北。两侧多是客栈、茶铺和寻常民居，南来北往的江湖客常在此歇脚。",
+    "exits": {
+      "南": "guiyun_south_gate_inner",
+      "北": "guiyun_south_market_gate",
+      "西": "guiyun_guest_lane",
+      "东": "guiyun_restaurant_street"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      2
+    ]
+  },
+  "guiyun_south_market_gate": {
+    "name": "南市街口",
+    "zone": "guiyun_city",
+    "desc": "街道在这里豁然开阔，南市牌楼立在路旁。西侧飘来茶香，东侧则是商贩密集的万商坊入口。",
+    "exits": {
+      "南": "guiyun_south_main_street",
+      "北": "guiyun_central_street_s"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      3
+    ]
+  },
+  "guiyun_central_street_s": {
+    "name": "中央大街南段",
+    "zone": "guiyun_city",
+    "desc": "归云城最繁忙的十字街之一。东西两路在此相交，南北方向直通城门与官署。",
+    "exits": {
+      "南": "guiyun_south_market_gate",
+      "北": "guiyun_central_square",
+      "西": "guiyun_west_street_s",
+      "东": "guiyun_central_market"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      4
+    ]
+  },
+  "guiyun_central_square": {
+    "name": "天衡广场",
+    "zone": "guiyun_city",
+    "desc": "巨大的广场位于归云城心。中央立着一座刻满历代碑文的青石台，江湖人、商贾、百姓和差役终日在此汇聚。",
+    "exits": {
+      "南": "guiyun_central_street_s",
+      "北": "guiyun_central_street_n",
+      "西": "guiyun_city_notice"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      5
+    ]
+  },
+  "guiyun_central_street_n": {
+    "name": "中央大街北段",
+    "zone": "guiyun_city",
+    "desc": "越过天衡广场，街市渐渐安静下来，官署与富户宅院开始增多。",
+    "exits": {
+      "南": "guiyun_central_square",
+      "北": "guiyun_north_street",
+      "东": "guiyun_east_trade_street"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      6
+    ]
+  },
+  "guiyun_north_street": {
+    "name": "北城大街",
+    "zone": "guiyun_city",
+    "desc": "北城大街路旁栽着修剪整齐的老槐树。再往北便是归云府衙，往来之人多半衣着规整。",
+    "exits": {
+      "南": "guiyun_central_street_n",
+      "北": "guiyun_yamen_gate"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      7
+    ]
+  },
+  "guiyun_yamen_gate": {
+    "name": "归云府衙",
+    "zone": "guiyun_city",
+    "desc": "朱漆府衙的大门前立着两座石狮，檐下悬着“明镜高悬”的匾额。",
+    "exits": {
+      "南": "guiyun_north_street",
+      "北": "guiyun_yamen_hall"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      8
+    ]
+  },
+  "guiyun_yamen_hall": {
+    "name": "府衙大堂",
+    "zone": "guiyun_city",
+    "desc": "大堂宽敞肃穆，公案、惊堂木与刑具一应俱全。墙上挂着归云城辖境舆图。",
+    "exits": {
+      "南": "guiyun_yamen_gate",
+      "北": "guiyun_yamen_back"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      9
+    ]
+  },
+  "guiyun_yamen_back": {
+    "name": "府衙后堂",
+    "zone": "guiyun_city",
+    "desc": "后堂清幽，远离前堂喧闹。案上摆着城防册与各地驿报，几株老梅探过院墙。",
+    "exits": {
+      "南": "guiyun_yamen_hall",
+      "北": "guiyun_city_wall_north"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      10
+    ]
+  },
+  "guiyun_city_wall_north": {
+    "name": "北城墙根",
+    "zone": "guiyun_city",
+    "desc": "青石甬道贴着北城墙延伸。北面高墙挡住视线，只偶尔能听见城外风声。",
+    "exits": {
+      "南": "guiyun_yamen_back"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      11
+    ]
+  },
+  "guiyun_guest_lane": {
+    "name": "客商小巷",
+    "zone": "guiyun_city",
+    "desc": "狭窄巷道连接着几家客栈与小旅舍，青石地面常有拖着行李的旅人经过。",
+    "exits": {
+      "东": "guiyun_south_main_street",
+      "西": "guiyun_yunlai_inn",
+      "北": "guiyun_tea_house"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      2
+    ]
+  },
+  "guiyun_yunlai_inn": {
+    "name": "云来客栈",
+    "zone": "guiyun_city",
+    "desc": "两层木楼临街而立，门口挂着“云来客栈”的旧招牌。长途赶路的商客多在这里落脚。",
+    "exits": {
+      "东": "guiyun_guest_lane"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      2
+    ],
+    "npcs": [
+      "掌柜",
+      "店小二"
+    ]
+  },
+  "guiyun_tea_house": {
+    "name": "听风茶馆",
+    "zone": "guiyun_city",
+    "desc": "临街茶馆不大，竹帘半卷，桌旁常坐着南来北往的脚夫、商贾和江湖客。这里向来是城中消息流通最快的地方。",
+    "exits": {
+      "南": "guiyun_guest_lane",
+      "西": "guiyun_tea_room"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      3
+    ]
+  },
+  "guiyun_tea_room": {
+    "name": "听风雅间",
+    "zone": "guiyun_city",
+    "desc": "雅间以竹屏隔开，桌上摆着一壶未凉的清茶。相比楼下喧闹，这里更适合谈些不愿让旁人听见的话。",
+    "exits": {
+      "东": "guiyun_tea_house",
+      "西": "guiyun_qiqu_lane_1"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      3
+    ]
+  },
+  "guiyun_west_street_s": {
+    "name": "西城大街",
+    "zone": "guiyun_city",
+    "desc": "西城大街上的行人多半佩刀带剑，铁器碰撞声和练武喝声此起彼伏。",
+    "exits": {
+      "东": "guiyun_central_street_s",
+      "西": "guiyun_west_center",
+      "北": "guiyun_city_notice"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      4
+    ]
+  },
+  "guiyun_west_center": {
+    "name": "西市街口",
+    "zone": "guiyun_city",
+    "desc": "这里连接西城商业街与武人街，刀客、镖师和小商贩络绎不绝。",
+    "exits": {
+      "东": "guiyun_west_street_s",
+      "西": "guiyun_forge"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      4
+    ]
+  },
+  "guiyun_forge": {
+    "name": "百炼铁铺",
+    "zone": "guiyun_city",
+    "desc": "数座铁炉同时燃烧，墙上挂满刀剑、枪头与各式护具。铁砧上的锤击声沉闷有力。（可使用 forge 强化装备）",
+    "exits": {
+      "东": "guiyun_west_center"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      4
+    ],
+    "npcs": [
+      "铁匠"
+    ]
+  },
+  "guiyun_city_notice": {
+    "name": "江湖榜墙",
+    "zone": "guiyun_city",
+    "desc": "天衡广场西侧竖着一面巨大的告示墙，贴满缉盗、悬赏、寻人和商队招募等布告。",
+    "exits": {
+      "东": "guiyun_central_square",
+      "南": "guiyun_west_street_s",
+      "北": "guiyun_west_martial_street"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      5
+    ]
+  },
+  "guiyun_west_martial_street": {
+    "name": "武人街",
+    "zone": "guiyun_city",
+    "desc": "街上往来的都是习武之人，有人抱剑而行，有人赤手切磋。酒旗、兵器铺和武馆招牌连成一片。",
+    "exits": {
+      "南": "guiyun_city_notice",
+      "西": "guiyun_martial_hall",
+      "北": "guiyun_guard_camp"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      6
+    ]
+  },
+  "guiyun_martial_hall": {
+    "name": "归云武馆",
+    "zone": "guiyun_city",
+    "desc": "一座朴素的武馆临街而立，门内传来木桩震响。门楣没有显赫门派的名号，只有“以武会友”四字。",
+    "exits": {
+      "东": "guiyun_west_martial_street",
+      "北": "guiyun_martial_yard",
+      "西": "guiyun_dart_entrance"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      6
+    ]
+  },
+  "guiyun_martial_yard": {
+    "name": "武馆演武场",
+    "zone": "guiyun_city",
+    "desc": "青砖小院里摆着木人桩、石锁和兵器架。这里是城中武人切磋较艺之地。",
+    "exits": {
+      "南": "guiyun_martial_hall"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      7
+    ]
+  },
+  "guiyun_guard_camp": {
+    "name": "捕快营",
+    "zone": "guiyun_city",
+    "desc": "数间青瓦房围成小院，是城中捕快轮值、换班与存放兵器的地方。",
+    "exits": {
+      "南": "guiyun_west_martial_street",
+      "北": "guiyun_yamen_room"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      7
+    ]
+  },
+  "guiyun_yamen_room": {
+    "name": "捕快房",
+    "zone": "guiyun_city",
+    "desc": "房内摆着几排长桌，值夜捕快正在登记案情。墙上钉着近月城内案件的记录。",
+    "exits": {
+      "南": "guiyun_guard_camp",
+      "西": "guiyun_archive"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      8
+    ]
+  },
+  "guiyun_archive": {
+    "name": "府衙卷宗室",
+    "zone": "guiyun_city",
+    "desc": "木架上堆满城中卷宗、户籍与商路文书，空气里弥漫着旧纸和墨汁的味道。",
+    "exits": {
+      "东": "guiyun_yamen_room"
+    },
+    "safe": true,
+    "coord": [
+      -2,
+      8
+    ]
+  },
+  "guiyun_dart_entrance": {
+    "name": "震远镖局",
+    "zone": "guiyun_city",
+    "desc": "黑底金字的“震远镖局”匾额悬在门楣，院中停着几辆蒙着油布的镖车。",
+    "exits": {
+      "东": "guiyun_martial_hall",
+      "西": "guiyun_dart_yard",
+      "南": "guiyun_dart_hall"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      6
+    ]
+  },
+  "guiyun_dart_yard": {
+    "name": "镖局后院",
+    "zone": "guiyun_city",
+    "desc": "镖局后院堆放着木箱、绳索和备用车轮，一排骏马拴在廊下。",
+    "exits": {
+      "东": "guiyun_dart_entrance",
+      "南": "guiyun_dart_horse_yard"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      6
+    ]
+  },
+  "guiyun_dart_horse_yard": {
+    "name": "镖局马厩",
+    "zone": "guiyun_city",
+    "desc": "数匹高头大马安静地啃着草料，墙边整齐堆着马具与备用鞍辔。",
+    "exits": {
+      "北": "guiyun_dart_yard"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      5
+    ]
+  },
+  "guiyun_dart_hall": {
+    "name": "镖局议事厅",
+    "zone": "guiyun_city",
+    "desc": "议事厅中央摆着宽大的木案，案上铺着归云城周边商路图和各地镖单。",
+    "exits": {
+      "北": "guiyun_dart_entrance"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      5
+    ]
+  },
+  "guiyun_qiqu_lane_1": {
+    "name": "七曲巷口",
+    "zone": "guiyun_city",
+    "desc": "巷口立着一块掉漆的旧牌匾。白日里这里少有人来，只有几户老住家紧闭着门窗。",
+    "exits": {
+      "东": "guiyun_tea_room",
+      "西": "guiyun_qiqu_lane_2"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      3
+    ]
+  },
+  "guiyun_qiqu_lane_2": {
+    "name": "七曲巷",
+    "zone": "guiyun_city",
+    "desc": "七曲巷曲折狭长，两侧墙面潮湿斑驳。明明仍在城内，却仿佛与繁华街市隔了一层看不见的墙。",
+    "exits": {
+      "东": "guiyun_qiqu_lane_1",
+      "南": "guiyun_dye_house"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      3
+    ]
+  },
+  "guiyun_dye_house": {
+    "name": "废弃染坊",
+    "zone": "guiyun_city",
+    "desc": "残破染坊早已停业，池槽里积着黑褐色污水。墙上残留着褪色染布印记。",
+    "exits": {
+      "北": "guiyun_qiqu_lane_2",
+      "南": "guiyun_secret_passage_entrance"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      2
+    ]
+  },
+  "guiyun_secret_passage_entrance": {
+    "name": "染坊暗室",
+    "zone": "guiyun_city",
+    "desc": "暗室极其狭窄，角落堆满废弃木桶。墙后似乎有回声，一道被木板遮住的石门若隐若现。",
+    "exits": {
+      "北": "guiyun_dye_house",
+      "南": "guiyun_secret_passage"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      1
+    ]
+  },
+  "guiyun_secret_passage": {
+    "name": "地下暗道",
+    "zone": "guiyun_city",
+    "desc": "青砖砌成的地下通道一路向南，墙上残留着年代久远的油灯架，脚下有拖拽货物留下的磨痕。",
+    "exits": {
+      "北": "guiyun_secret_passage_entrance",
+      "南": "guiyun_black_market_gate"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      0
+    ]
+  },
+  "guiyun_black_market_gate": {
+    "name": "黑市入口",
+    "zone": "guiyun_city",
+    "desc": "石门之后传来低沉的人声。这里没有招牌，也没有守卫，只有一盏被黑布包住的昏黄油灯。",
+    "exits": {
+      "北": "guiyun_secret_passage",
+      "南": "guiyun_black_market"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      -1
+    ]
+  },
+  "guiyun_black_market": {
+    "name": "沉星黑市",
+    "zone": "guiyun_city",
+    "desc": "地下大厅灯火昏暗，人影在摊位间来回穿梭。交易的东西很少公开摆在台面上。",
+    "exits": {
+      "北": "guiyun_black_market_gate",
+      "东": "guiyun_black_market_east",
+      "西": "guiyun_black_market_west",
+      "南": "guiyun_black_market_hall"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      -2
+    ]
+  },
+  "guiyun_black_market_east": {
+    "name": "黑市东街",
+    "zone": "guiyun_city",
+    "desc": "黑市东侧多是材料和药材摊位，摊主大多遮着面孔。",
+    "exits": {
+      "西": "guiyun_black_market"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      -2
+    ]
+  },
+  "guiyun_black_market_west": {
+    "name": "黑市西街",
+    "zone": "guiyun_city",
+    "desc": "黑市西侧聚集着收购旧兵器、古籍与来路不明货物的人。",
+    "exits": {
+      "东": "guiyun_black_market"
+    },
+    "safe": true,
+    "coord": [
+      -5,
+      -2
+    ]
+  },
+  "guiyun_black_market_hall": {
+    "name": "黑市内堂",
+    "zone": "guiyun_city",
+    "desc": "内堂比外面安静许多，只摆着一张长桌和几盏孤灯。真正重要的交易通常在这里完成。",
+    "exits": {
+      "北": "guiyun_black_market",
+      "东": "guiyun_black_market_store"
+    },
+    "safe": true,
+    "coord": [
+      -4,
+      -3
+    ]
+  },
+  "guiyun_black_market_store": {
+    "name": "黑市暗铺",
+    "zone": "guiyun_city",
+    "desc": "门帘后摆着一些不愿见光的货物。柜台后只露出一双警惕的眼睛。",
+    "exits": {
+      "西": "guiyun_black_market_hall"
+    },
+    "safe": true,
+    "coord": [
+      -3,
+      -3
+    ]
+  },
+  "guiyun_longle_lane": {
+    "name": "长乐坊",
+    "zone": "guiyun_city",
+    "desc": "南城生活区的热闹街坊，茶摊、面摊与小铺紧挨着民居。夜里灯火通明。",
+    "exits": {
+      "东": "guiyun_south_gate_inner",
+      "南": "guiyun_drama_stage"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      1
+    ]
+  },
+  "guiyun_drama_stage": {
+    "name": "长乐戏台",
+    "zone": "guiyun_city",
+    "desc": "一座木制戏台搭在街旁，台下围着一些闲人。说书、唱戏和江湖传闻在这里常常混成一团。",
+    "exits": {
+      "北": "guiyun_longle_lane"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      0
+    ]
+  },
+  "guiyun_stable": {
+    "name": "归云马厩",
+    "zone": "guiyun_city",
+    "desc": "马厩宽敞整洁，几匹驮马正在吃草。墙上挂着不同价位的草料牌。",
+    "exits": {
+      "西": "guiyun_south_gate_inner"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      1
+    ]
+  },
+  "guiyun_restaurant_street": {
+    "name": "酒楼街",
+    "zone": "guiyun_city",
+    "desc": "酒楼街昼夜不歇，沿街酒旗招展。镖师、商客和江湖客在这里饮酒吃饭。",
+    "exits": {
+      "西": "guiyun_south_main_street",
+      "北": "guiyun_restaurant_hall"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      2
+    ]
+  },
+  "guiyun_restaurant_hall": {
+    "name": "醉仙楼",
+    "zone": "guiyun_city",
+    "desc": "三层木楼临街而立，楼下大堂座无虚席。墙上挂着历代江湖名士留下的字画。",
+    "exits": {
+      "南": "guiyun_restaurant_street"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      3
+    ]
+  },
+  "guiyun_central_market": {
+    "name": "东市街口",
+    "zone": "guiyun_city",
+    "desc": "中央大街向东延伸后，商铺逐渐密集起来。这里是万商坊的外沿。",
+    "exits": {
+      "西": "guiyun_central_street_s",
+      "东": "guiyun_market_east"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      4
+    ]
+  },
+  "guiyun_market_east": {
+    "name": "万商坊街口",
+    "zone": "guiyun_city",
+    "desc": "万商坊牌楼横跨街道，来自各地的货物在这里汇集。空气中混杂着香料、药材和谷物气味。",
+    "exits": {
+      "西": "guiyun_central_market",
+      "东": "guiyun_general_market"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      4
+    ]
+  },
+  "guiyun_general_market": {
+    "name": "万商集市",
+    "zone": "guiyun_city",
+    "desc": "一片拥挤的露天集市，摊棚连成一片。吆喝声、讨价声和骡马嘶鸣交织不散。",
+    "exits": {
+      "西": "guiyun_market_east",
+      "南": "guiyun_general_shop",
+      "北": "guiyun_weapon_pavilion"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      4
+    ]
+  },
+  "guiyun_general_shop": {
+    "name": "万商杂货铺",
+    "zone": "guiyun_city",
+    "desc": "小铺货架一直堆到屋顶，绳索、火折、干粮、灯油等行旅杂物应有尽有。",
+    "exits": {
+      "北": "guiyun_general_market"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      3
+    ],
+    "npcs": [
+      "杂货铺老板"
+    ]
+  },
+  "guiyun_weapon_pavilion": {
+    "name": "宝器阁",
+    "zone": "guiyun_city",
+    "desc": "宝器阁门面宽阔，墙上陈列着刀剑与护具。真正上档次的兵刃都藏在内堂。",
+    "exits": {
+      "南": "guiyun_general_market",
+      "东": "guiyun_weapon_inner"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      5
+    ]
+  },
+  "guiyun_weapon_inner": {
+    "name": "宝器内堂",
+    "zone": "guiyun_city",
+    "desc": "内堂安静许多，一柄柄兵刃悬在乌木架上，刀光剑影间透出森冷寒意。",
+    "exits": {
+      "西": "guiyun_weapon_pavilion"
+    },
+    "safe": true,
+    "coord": [
+      4,
+      5
+    ]
+  },
+  "guiyun_east_trade_street": {
+    "name": "万商坊内街",
+    "zone": "guiyun_city",
+    "desc": "东城最繁华的内街，来往多是商会执事、富户管事和外地商旅。",
+    "exits": {
+      "西": "guiyun_central_street_n",
+      "东": "guiyun_baicaotang",
+      "北": "guiyun_rich_street"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      6
+    ]
+  },
+  "guiyun_baicaotang": {
+    "name": "百草堂",
+    "zone": "guiyun_city",
+    "desc": "药香扑面而来，墙上排列着一眼望不到头的药柜。这里不仅治伤，也收购城外采来的草药。",
+    "exits": {
+      "西": "guiyun_east_trade_street",
+      "东": "guiyun_medicine_inner",
+      "北": "guiyun_money_house"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      6
+    ],
+    "npcs": [
+      "药铺老板"
+    ]
+  },
+  "guiyun_medicine_inner": {
+    "name": "药堂后院",
+    "zone": "guiyun_city",
+    "desc": "后院晾着成排药草，竹架上挂满药包与草绳。墙角摆着石臼、药筛等制药用具。",
+    "exits": {
+      "西": "guiyun_baicaotang",
+      "北": "guiyun_medicine_garden"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      6
+    ]
+  },
+  "guiyun_medicine_garden": {
+    "name": "百草药圃",
+    "zone": "guiyun_city",
+    "desc": "百草堂自设的小药圃，种着常用药材。仔细搜寻可以找到少量新鲜草药。",
+    "exits": {
+      "南": "guiyun_medicine_inner"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      7
+    ],
+    "forage": {
+      "草药": 0.55
+    }
+  },
+  "guiyun_money_house": {
+    "name": "四海钱庄",
+    "zone": "guiyun_city",
+    "desc": "青砖高墙的小楼挂着“四海钱庄”金字招牌。进出这里的人都压低声音。",
+    "exits": {
+      "南": "guiyun_baicaotang"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      7
+    ]
+  },
+  "guiyun_rich_street": {
+    "name": "朱门街",
+    "zone": "guiyun_city",
+    "desc": "朱门街两侧多是富户宅院，石狮、照壁与高墙隔开了市井喧嚣。",
+    "exits": {
+      "南": "guiyun_east_trade_street",
+      "北": "guiyun_prison"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      7
+    ]
+  },
+  "guiyun_prison": {
+    "name": "府衙牢房",
+    "zone": "guiyun_city",
+    "desc": "牢门一排排嵌在厚重石墙中，空气阴冷潮湿。这里关押着待审的盗匪与重犯。",
+    "exits": {
+      "南": "guiyun_rich_street",
+      "东": "guiyun_cloth_shop",
+      "北": "guiyun_shen_mansion"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      8
+    ]
+  },
+  "guiyun_cloth_shop": {
+    "name": "云锦坊",
+    "zone": "guiyun_city",
+    "desc": "店内挂满绸缎与成衣，色泽比普通布坊精细许多。",
+    "exits": {
+      "西": "guiyun_prison",
+      "东": "guiyun_merchant_guild"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      8
+    ]
+  },
+  "guiyun_merchant_guild": {
+    "name": "万商会馆",
+    "zone": "guiyun_city",
+    "desc": "高大的商会会馆坐落在朱门街尽头，门口悬着各地商号的旗幡。",
+    "exits": {
+      "西": "guiyun_cloth_shop",
+      "北": "guiyun_merchant_backhall"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      8
+    ]
+  },
+  "guiyun_shen_mansion": {
+    "name": "沈府",
+    "zone": "guiyun_city",
+    "desc": "朱门深宅，门廊下悬着一盏旧铜灯。院墙高而不奢华，显然主人更重视实用与安全。",
+    "exits": {
+      "南": "guiyun_prison"
+    },
+    "safe": true,
+    "coord": [
+      1,
+      9
+    ]
+  },
+  "guiyun_merchant_backhall": {
+    "name": "万商会后堂",
+    "zone": "guiyun_city",
+    "desc": "会馆后堂堆放着账册与各地货运单据。墙上挂着商路图，南来北往的路线用不同标记。",
+    "exits": {
+      "南": "guiyun_merchant_guild"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      9
     ]
   }
 }

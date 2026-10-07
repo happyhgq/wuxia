@@ -1,0 +1,33 @@
+{
+  "version": 10,
+  "name": "h",
+  "sect": "武当",
+  "level": 3,
+  "exp": 13,
+  "exp_to_level": 112,
+  "hp": 130,
+  "max_hp": 130,
+  "mp": 90,
+  "max_mp": 90,
+  "atk": 18,
+  "defense": 9,
+  "gold": 98,
+  "inventory": [
+    "疗伤药",
+    "铁矿石",
+    "草药",
+    "野猪肉",
+    "野猪肉"
+  ],
+  "equipment": {
+    "weapon": "木剑",
+    "armor": "布衣"
+  },
+  "equip_enhance": {
+    "weapon": 0,
+    "armor": 0
+  },
+  "location": "official_road_east_1",
+  "active_quests": {},
+  "completed_quests": []
+}
