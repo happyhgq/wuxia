@@ -5,7 +5,7 @@ combat.py - 回合制战斗引擎、招式选择与胜负结算
 
 import random
 from copy import deepcopy
-from engine import ENEMIES, SKILLS, ITEMS, Color, draw_bar, format_statuses, process_status_effects, apply_shield, battle_pause, p_statuses_global
+from engine import ENEMIES, SKILLS, ITEMS, ROOMS, Color, draw_bar, format_statuses, process_status_effects, apply_shield, battle_pause, p_statuses_global
 
 
 def pick_enemy_skill(enemy_data):
