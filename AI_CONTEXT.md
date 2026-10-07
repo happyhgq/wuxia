@@ -1,631 +1,903 @@
-# Wuxia — AI_CONTEXT.md
+# AI_CONTEXT.md
 
-> AI 项目接管上下文。  
-> 适用对象：ChatGPT、Claude、Gemini、Cursor、Copilot、代码代理及未来维护者。
->
-> 本文件回答一个问题：**“如果你第一次接手这个仓库，应该如何理解它、修改它，并避免破坏已有系统？”**
+# Wuxia AI 开发上下文与接管规范
 
----
-
-## 1. 项目身份
-
-仓库：`happyhgq/wuxia`
-
-类型：Python 中文武侠文字 RPG。
-
-当前仓库以模块化代码 + JSON 数据为主体，同时保留一个历史单文件实现 `wuxia.py`。
-
-当前顶层结构：
-
-```text
-wuxia/
-├── README.md
-├── AI_CONTEXT.md
-├── ARCHITECTURE.md
-├── main.py
-├── engine.py
-├── player.py
-├── combat.py
-├── actions.py
-├── wuxia.py
-└── data/
-```
-
-GitHub 当前 `main` 分支仍以以上核心 Python 文件和 `data/` 为主要项目结构。
+> 本文件是未来 AI 接手 `happyhgq/wuxia` 时的最高优先级项目说明之一。
+> 它描述“现在真实存在什么”“修改时必须遵守什么”，不把未来规划伪装成现状。
 
 ---
 
-# 2. AI 第一原则
+# 1. 项目身份
 
-任何 AI 接手项目时：
-
-1. **先阅读 `README.md`。**
-2. **再阅读 `AI_CONTEXT.md`。**
-3. **再阅读 `ARCHITECTURE.md`。**
-4. 根据任务读取相关源码。
-5. 最后才修改代码或 JSON。
-
-不要看到需求后直接重写文件。
-
----
-
-# 3. 当前架构判断
-
-当前推荐的主架构是：
+项目：
 
 ```text
-main.py
-   │
-   ├── 游戏启动
-   ├── 游戏主循环
-   ├── 输入解析
-   └── 指令分发
-           │
-           ├── actions.py
-           ├── combat.py
-           └── player.py
-                    │
-                    ▼
-                 engine.py
-                    │
-                    ├── 世界数据
-                    ├── 数据加载
-                    ├── MapEngine
-                    └── 公共游戏机制
-
-data/*.json
-    │
-    └── 世界内容
+Wuxia · 武侠文字 RPG
 ```
 
-`wuxia.py` 不应被默认视为新功能的主要开发位置。
-
----
-
-# 4. 文件职责速记
-
-| 文件 | 当前职责 | 修改优先级 |
-|---|---|---|
-| `main.py` | 启动、主循环、命令解析/分发 | 输入和流程 |
-| `engine.py` | 核心数据、数据加载、地图引擎、基础机制 | 谨慎修改 |
-| `player.py` | Player、成长、属性、装备、存档 | 玩家系统 |
-| `combat.py` | 战斗、技能、敌人行动、状态 | 战斗系统 |
-| `actions.py` | 观察、NPC、任务、交易、装备等行为 | 行为系统 |
-| `data/*.json` | 世界内容 | 内容扩展首选 |
-| `wuxia.py` | 历史/旧式单文件实现 | 默认不新增功能 |
-
----
-
-# 5. 需求 → 文件映射
-
-## 只增加内容
-
-优先修改：
+仓库：
 
 ```text
-data/rooms.json
-data/npcs.json
-data/items.json
-data/enemies.json
-data/skills.json
-data/quests.json
+happyhgq/wuxia
 ```
 
-## 修改玩家规则
+技术形态：
 
 ```text
-player.py
-```
-
-## 修改战斗规则
-
-```text
-combat.py
-```
-
-## 修改玩家行为
-
-```text
-actions.py
-```
-
-## 修改核心地图 / 数据加载机制
-
-```text
-engine.py
-```
-
-## 修改命令或游戏主流程
-
-```text
-main.py
-```
-
----
-
-# 6. 最重要的安全规则
-
-## 6.1 不要随意修改已有 ID
-
-尤其是：
-
-```text
-room_id
-npc_id
-item_id
-enemy_id
-skill_id
-quest_id
-```
-
-这些 ID 很可能被：
-
-- 存档
-- 房间引用
-- NPC
-- 任务
-- 掉落
-- 商店
-- 代码
-
-引用。
-
-如果必须改 ID，应先建立兼容映射，而不是直接删除旧 ID。
-
----
-
-## 6.2 新增引用必须保证目标存在
-
-必须避免：
-
-```text
-room → 不存在 NPC
-room → 不存在 enemy
-NPC → 不存在 quest
-quest → 不存在 item
-enemy → 不存在 item
-enemy → 不存在 skill
-shop → 不存在 item
-```
-
----
-
-## 6.3 不要只改 JSON 来实现不存在的机制
-
-例如 JSON 中增加：
-
-```json
-"effect": "poison"
-```
-
-并不代表系统已经支持中毒。
-
-必须确认：
-
-```text
-combat.py
-    ↓
-创建状态
-    ↓
-每回合处理
-    ↓
-持续时间
-    ↓
-状态结束
-```
-
-全部存在。
-
----
-
-# 7. 地图修改规则
-
-地图是本项目最容易被 AI 改坏的部分。
-
-一个房间至少涉及：
-
-```text
-room_id
-name
-zone
-desc
-coord
-exits
-npcs
-enemies
-```
-
-修改地图时必须检查：
-
-```text
-[ ] room_id 唯一
-[ ] zone 正确
-[ ] coord 合理
-[ ] exits 目标存在
-[ ] 双向出口一致
-[ ] 方向与坐标关系一致
-[ ] Zone 边界明确
-[ ] 关键地点可达
-```
-
-方向与坐标应保持一致：
-
-```text
-东 = x + 1
-西 = x - 1
-北 = y + 1
-南 = y - 1
-```
-
-实际符号约定必须以当前 `MapEngine` 实现为准；不要仅凭视觉地图猜测坐标方向。
-
----
-
-# 8. 新增 Zone 的标准流程
-
-例如增加：
-
-```text
-guiyun_city
-```
-
-建议：
-
-```text
-1. 规划 Zone
-2. 设计主干道路
-3. 设计关键建筑
-4. 给关键房间确定 coord
-5. 建立 exits
-6. 检查反向出口
-7. 加 NPC
-8. 加商店/物品
-9. 加敌人
-10. 加任务
-11. 加剧情
-12. 验证全部引用
-13. 运行游戏
-14. 检查 map
-15. 检查 save/load
-```
-
-不要把大型城市全部无差别塞入旧 Zone。
-
----
-
-# 9. 城市扩展的设计原则
-
-大型城市建议独立 Zone：
-
-```text
-guiyun_city
-```
-
-城市内部可以继续划分：
-
-```text
-城门
-主街
-东市
-西市
-客栈
-药铺
-铁匠铺
-官府
-码头
-武馆
-民居
-特殊地点
-```
-
-城市地图首先追求：
-
-```text
-空间合理
-```
-
-然后再追求：
-
-```text
-内容密度
-```
-
----
-
-# 10. `wuxia.py` 的处理原则
-
-仓库中存在 `wuxia.py`。
-
-它与当前模块化代码存在历史上的职责重叠，因此：
-
-> 默认把 `wuxia.py` 当作 Legacy / 历史实现参考。
-
-除非用户明确要求：
-
-- 修复旧版单文件
-- 保持旧启动方式
-- 做迁移
-- 比较新旧实现
-
-否则新功能优先放入：
-
-```text
-main.py
-engine.py
-player.py
-combat.py
-actions.py
-data/
-```
-
-不要为了“方便”重新把模块合并回 `wuxia.py`。
-
----
-
-# 11. 存档兼容原则
-
-修改：
-
-```text
-Player
-room_id
-属性字段
-装备字段
-任务字段
-```
-
-时必须考虑旧存档。
-
-推荐兼容方式：
-
-```text
-旧数据
-  ↓
-兼容转换
-  ↓
-当前 Player
-```
-
-而不是要求所有旧存档作废。
-
----
-
-# 12. AI 修改方式
-
-推荐：
-
-```text
-阅读
- ↓
-定位
- ↓
-理解调用关系
- ↓
-小范围修改
- ↓
-静态检查
- ↓
-运行
- ↓
-验证
- ↓
-再扩展
-```
-
-不要：
-
-```text
-需求
- ↓
-全文件重写
-```
-
----
-
-# 13. 输出完整文件原则
-
-如果用户要求：
-
-> “给我完整代码”
-
-必须给完整文件，而不是只给几个需要替换的片段。
-
-如果用户不是程序员，更应该：
-
-- 给出完整文件
-- 明确文件路径
-- 不要求用户自己寻找修改位置
-- 保持 JSON 可直接复制使用
-
----
-
-# 14. JSON 原则
-
-标准 JSON：
-
-```text
-UTF-8
-双引号
-无尾逗号
-无注释
-结构完整
-```
-
-不要写：
-
-```json
-{
-  // 这是注释
-}
-```
-
----
-
-# 15. 新功能检查矩阵
-
-任何较大功能至少检查：
-
-| 层 | 检查内容 |
-|---|---|
-| 数据 | JSON 是否存在、格式是否正确 |
-| 引擎 | 机制是否真的实现 |
-| 玩家 | 状态是否保存 |
-| 战斗 | 是否影响战斗 |
-| 行为 | 是否有用户操作入口 |
-| UI | 玩家是否能看到 |
-| 存档 | save/load 是否兼容 |
-| 地图 | 地点和引用是否正确 |
-| 旧系统 | 是否破坏已有玩法 |
-
----
-
-# 16. AI 接手新任务时的标准流程
-
-收到：
-
-> “增加归云城。”
-
-不要立即写 JSON。
-
-先：
-
-```text
-读取 README
-读取 AI_CONTEXT
-读取 ARCHITECTURE
-读取 engine.py 的 MapEngine
-读取当前 rooms 数据
-读取 main.py 的地图/移动调用
-```
-
-然后再设计。
-
-收到：
-
-> “增加声望系统。”
-
-先判断：
-
-```text
-Player 是否需要新字段
-存档是否需要升级
-NPC 是否读取声望
-任务是否奖励声望
-商店是否读取声望
-剧情是否读取声望
-```
-
-收到：
-
-> “增加毒伤。”
-
-先检查：
-
-```text
-combat.py
-状态结构
-回合流程
-伤害结算
-状态持续
-```
-
----
-
-# 17. 不要假设 README 等于代码
-
-README 是设计和维护指南。
-
-真实行为最终以：
-
-```text
-当前源码
+Python
 +
-当前 JSON
+终端交互
++
+JSON 数据
++
+房间地图
++
+轻量 RPG 系统
 ```
 
-为准。
+当前主要入口：
 
-如果 README 与代码冲突：
-
-> **先以代码为准，并在完成修改后更新文档。**
+```text
+main.py
+```
 
 ---
 
-# 18. 文档更新规则
+# 2. AI 必须先区分五种状态
 
-重大变化后更新：
+所有理解和修改必须区分：
+
+### [CURRENT]
+
+当前代码真实存在，并已经参与运行。
+
+### [LIMITATION]
+
+当前虽然能运行，但能力不完整。
+
+### [TECH DEBT]
+
+当前设计可以工作，但继续扩展会造成问题。
+
+### [PLANNED]
+
+设计目标，尚未实现。
+
+### [RULE]
+
+未来修改不得违反的项目规则。
+
+---
+
+# 3. AI 接手项目后的固定阅读顺序
+
+不要直接开始改代码。
+
+必须按：
 
 ```text
 README.md
+    ↓
 AI_CONTEXT.md
+    ↓
+ARCHITECTURE.md
+    ↓
+WORLD_DESIGN.md
+    ↓
+data/*.json
+    ↓
+相关 Python 文件
+```
+
+如果任务是战斗：
+
+```text
+combat.py
+engine.py
+player.py
+data/enemies.json
+data/skills.json
+```
+
+如果任务是地图：
+
+```text
+engine.py
+data/rooms.json
+WORLD_DESIGN.md
+```
+
+如果任务是 NPC / 任务：
+
+```text
+actions.py
+engine.py
+data/npcs.json
+data/quests.json
+```
+
+---
+
+# 4. 当前真实架构
+
+```text
+                  ┌──────────────┐
+                  │   main.py    │
+                  │ 主循环/命令   │
+                  └──────┬───────┘
+                         │
+          ┌──────────────┼──────────────┐
+          ↓              ↓              ↓
+   ┌────────────┐ ┌────────────┐ ┌────────────┐
+   │ actions.py │ │ combat.py  │ │ player.py  │
+   │ 游戏动作    │ │ 战斗        │ │ 玩家        │
+   └──────┬─────┘ └──────┬─────┘ └──────┬─────┘
+          │              │              │
+          └──────────────┼──────────────┘
+                         ↓
+                  ┌────────────┐
+                  │ engine.py  │
+                  │ 数据/地图/状态│
+                  └──────┬─────┘
+                         ↓
+                    data/*.json
+```
+
+注意：
+
+> 这是当前依赖关系的概括，不代表理想架构。
+
+---
+
+# 5. 文件职责
+
+## `main.py`
+
+### [CURRENT]
+
+负责：
+
+- 程序入口
+- 命令映射
+- 主循环
+- 移动
+- 保存 / 读取
+- help
+- map
+- reload
+- heal
+- 部分玩家操作分发
+
+### [RULE]
+
+不要把所有新玩法继续堆进 `main.py`。
+
+如果是：
+
+- 对话
+- 任务
+- 商店
+- 装备
+- 使用物品
+
+优先考虑 `actions.py`。
+
+如果是战斗：
+
+```text
+combat.py
+```
+
+---
+
+# 6. `engine.py`
+
+### [CURRENT]
+
+负责：
+
+- 默认数据
+- DataLoader
+- 全局游戏数据
+- MapEngine
+- 状态效果
+- 地图渲染
+- 数据重载
+
+---
+
+# 7. `player.py`
+
+### [CURRENT]
+
+负责：
+
+- Player
+- 属性
+- 门派
+- 升级
+- 装备属性计算
+- 任务进度
+- save/load
+
+---
+
+# 8. `combat.py`
+
+### [CURRENT]
+
+负责：
+
+- 回合制战斗
+- 普攻
+- 技能
+- 物品
+- 逃跑
+- 敌人技能
+- 状态效果
+- 战斗胜负
+- 奖励
+
+### [LIMITATION]
+
+当前战斗并不是独立 `CombatState` 架构。
+
+玩家状态使用：
+
+```text
+p_statuses_global
+```
+
+全局容器。
+
+### [TECH DEBT]
+
+未来复杂化时应逐渐改成：
+
+```text
+CombatState
+ ├── player
+ ├── enemies
+ ├── turns
+ ├── statuses
+ └── battle_result
+```
+
+但除非任务明确要求，不要一次性重写整个战斗系统。
+
+---
+
+# 9. `actions.py`
+
+### [CURRENT]
+
+负责：
+
+```text
+look
+talk
+ask
+quest
+trade
+equipment
+consumable
+forge
+```
+
+---
+
+# 10. `wuxia.py`
+
+### [TECH DEBT]
+
+这是历史遗留的大型重复实现。
+
+它不是当前推荐的新功能入口。
+
+### [RULE]
+
+默认：
+
+```text
+禁止新增核心玩法到 wuxia.py
+```
+
+除非任务本身就是：
+
+- 清理旧代码
+- 迁移旧功能
+- 比较旧新实现
+- 删除遗留实现
+
+---
+
+# 11. JSON 数据规则
+
+当前 DataLoader 支持：
+
+```text
+rooms
+npcs
+items
+enemies
+skills
+quests
+```
+
+---
+
+## 11.1 ID 是长期资产
+
+以下 ID 视为稳定标识：
+
+```text
+room id
+npc id
+item id
+enemy id
+skill id
+quest id
+```
+
+### [RULE]
+
+没有明确迁移计划，不得修改已有 ID。
+
+错误示例：
+
+```text
+village_gate
+```
+
+改成：
+
+```text
+village_entrance
+```
+
+即使名字看起来更漂亮，也可能破坏：
+
+- save
+- exit
+- NPC
+- Quest
+- location
+- 其他引用
+
+---
+
+# 12. DataLoader 的真实行为
+
+`deep_merge()` 递归合并 dict。
+
+但：
+
+```text
+list
+scalar
+```
+
+不是智能合并。
+
+### [LIMITATION]
+
+例如两个列表：
+
+```json
+["a", "b"]
+```
+
+和：
+
+```json
+["c"]
+```
+
+后者可能整体替换前者。
+
+### [RULE]
+
+新增 JSON 内容前必须确认实际结构。
+
+不要假设：
+
+```text
+列表 = 自动追加
+```
+
+---
+
+# 13. 地图规则
+
+Room 是地图基本单位。
+
+核心字段通常包括：
+
+```text
+id
+name
+zone
+description
+exits
+npcs
+enemies
+safe
+coord
+```
+
+---
+
+# 14. Zone 规则
+
+当前：
+
+```text
+main
+bandit_zone
+```
+
+未来允许继续增加。
+
+例如：
+
+```text
+guiyun_city
+```
+
+### [RULE]
+
+Zone ID 必须稳定、唯一、英文/ASCII 化。
+
+---
+
+# 15. 当前地图引擎的重要限制
+
+MapEngine：
+
+- 支持坐标
+- 支持出口
+- 支持自动摆放部分房间
+- 支持跨 Zone 门/出口显示
+
+但它不是完整地图验证器。
+
+### [LIMITATION]
+
+目前不会系统性检查：
+
+- 所有出口是否存在
+- 是否所有出口双向
+- 方向与坐标是否完全一致
+- 重复坐标是否为设计错误
+- Zone 是否都注册显示名
+
+---
+
+# 16. 地图修改时 AI 必须执行的检查
+
+新增 Room 后至少检查：
+
+```text
+1. id 是否唯一
+2. name 是否合理
+3. zone 是否正确
+4. exits 指向的 room 是否存在
+5. 坐标是否冲突
+6. 坐标是否符合出口方向
+7. 是否需要反向出口
+8. 是否跨 Zone
+9. 是否需要安全区
+10. 是否影响现有 save
+```
+
+---
+
+# 17. 跨 Zone 设计
+
+跨 Zone 不应该被当成普通随机传送。
+
+应有明确世界语义：
+
+```text
+道路
+城门
+山口
+洞口
+渡口
+关隘
+```
+
+例如：
+
+```text
+主世界
+  ↓
+黄土官道
+  ↓
+城门
+  ↓
+guiyun_city
+```
+
+---
+
+# 18. 归云城专门规则
+
+归云城未来必须是：
+
+```text
+guiyun_city
+```
+
+独立 Zone。
+
+用户当前世界设计要求：
+
+```text
+主世界
+  黄土官道
+      ↓
+另一个同名“黄土官道”
+      ↓
+归云城
+```
+
+两个同名 Room 可以存在。
+
+但是：
+
+```text
+id 必须不同
+```
+
+例如：
+
+```text
+official_road_west
+official_road_east
+```
+
+而显示名可以同为：
+
+```text
+黄土官道
+```
+
+### [RULE]
+
+“显示名可以重复，内部 ID 不得重复”。
+
+---
+
+# 19. NPC 修改规则
+
+NPC ID 稳定。
+
+NPC 数据尽量包括：
+
+```text
+name
+title
+desc
+type
+dialogue
+info
+shop
+quests
+```
+
+不要为了一个对话分支直接硬编码一大片逻辑。
+
+优先数据化。
+
+---
+
+# 20. Quest 修改规则
+
+当前任务系统是轻量结构。
+
+典型：
+
+```text
+npc
+target_type
+target_name
+required_cnt
+reward
+desc
+```
+
+### [LIMITATION]
+
+暂不支持完整：
+
+```text
+多阶段任务
+条件分支
+世界状态
+失败条件
+时间限制
+复杂任务链
+```
+
+如果要增加这些能力，应先设计 Quest schema，不要继续无规则堆字段。
+
+---
+
+# 21. 战斗规则
+
+当前伤害是轻量公式。
+
+技能主要受到：
+
+```text
+attack
+power
+defense
+mp_cost
+```
+
+影响。
+
+### [RULE]
+
+修改伤害公式时必须同时考虑：
+
+- 玩家普攻
+- 玩家技能
+- 敌人普攻
+- 敌人技能
+- 装备
+- 防御
+- 等级
+- MP
+- 状态效果
+
+不要只改一个公式导致系统失衡。
+
+---
+
+# 22. 状态系统规则
+
+当前：
+
+```text
+poison
+bleed
+stun
+shield
+```
+
+### [RULE]
+
+新增状态时必须同步：
+
+```text
+STATUS_EFFECTS
+add_status
+process_status_effects
+format_statuses
+```
+
+并检查：
+
+```text
+玩家
+敌人
+战斗结算
+```
+
+---
+
+# 23. 存档规则
+
+当前：
+
+```text
+SAVE_VERSION = 10
+```
+
+### [LIMITATION]
+
+没有通用 Migration Framework。
+
+### [RULE]
+
+增加 Player 字段时：
+
+1. save 写入
+2. load 默认值
+3. 老存档兼容
+4. 版本号是否需要增加
+5. 旧存档字段缺失时不能崩溃
+
+如果修改：
+
+```text
+location
+inventory
+equipment
+quest
+```
+
+必须特别检查兼容性。
+
+---
+
+# 24. 热重载规则
+
+当前存在：
+
+```python
+from engine import ROOMS
+```
+
+等模块级引用。
+
+### [TECH DEBT]
+
+`reload_game_data()` 重新绑定 `engine.ROOMS` 后，其他模块可能仍持有旧对象引用。
+
+### [RULE]
+
+任何修改 reload 的任务都必须检查：
+
+```text
+main.py
+actions.py
+combat.py
+player.py
+engine.py
+```
+
+不要仅修改 `reload_game_data()` 就宣称热重载彻底解决。
+
+---
+
+# 25. 修改策略
+
+## 小改动
+
+例如：
+
+```text
+新增 NPC
+新增物品
+新增敌人
+新增任务
+```
+
+优先只改：
+
+```text
+data/*.json
+```
+
+---
+
+## 中型改动
+
+例如：
+
+```text
+新增一种交互
+新增商店规则
+新增装备行为
+```
+
+先找现有责任模块：
+
+```text
+actions.py
+combat.py
+player.py
+```
+
+---
+
+## 大型改动
+
+例如：
+
+```text
+Zone
+城市
+任务系统
+战斗系统
+世界状态
+```
+
+必须先更新：
+
+```text
+WORLD_DESIGN.md
 ARCHITECTURE.md
 ```
 
-至少包括：
+再实现。
+
+---
+
+# 26. AI 禁止事项
+
+### [RULE] 禁止
+
+1. 未阅读相关代码就重写核心系统。
+2. 随意改已有 ID。
+3. 把中文显示名当内部 ID。
+4. 把 `wuxia.py` 当新系统入口。
+5. 把规划功能写成已经实现。
+6. 声称 MapEngine 已经是完整验证器。
+7. 声称 reload 已经彻底热更新。
+8. 声称 save version 已经具备完整 migration。
+9. 大量内容继续硬编码。
+10. 为小功能顺手重构整个项目。
+
+---
+
+# 27. AI 修改后的检查
+
+完成修改后至少回答：
 
 ```text
-新增模块
-新增数据类型
-新增 Zone
-新增系统
-存档结构变化
-重要兼容性变化
+[ ] 是否破坏已有 ID？
+[ ] 是否破坏 save？
+[ ] 是否破坏 Room exit？
+[ ] 是否破坏跨 Zone？
+[ ] 是否破坏 combat？
+[ ] 是否破坏 NPC / Quest 引用？
+[ ] 是否需要更新文档？
+[ ] 是否把 PLANNED 写成 CURRENT？
+[ ] 是否把 TECH DEBT 当成已解决？
 ```
 
 ---
 
-# 19. 长期发展目标
+# 28. 未来目标架构
 
-项目长期目标：
+这不是当前实现。
 
-```text
-数据驱动
-+
-模块化
-+
-可验证
-+
-可扩展
-+
-存档兼容
-+
-大型武侠世界
-```
-
-最终希望做到：
+属于：
 
 ```text
-代码负责规则
-数据负责世界
-MapEngine 负责空间
-Player 负责角色状态
-Combat 负责冲突
-Actions 负责行为
-Quest 负责目标
-NPC 负责关系
-剧情系统负责世界事件
+[PLANNED]
 ```
+
+未来可以逐步演进到：
+
+```text
+Application
+    │
+    ├── Command System
+    ├── World System
+    │     ├── Zone
+    │     ├── Room
+    │     └── Travel
+    │
+    ├── Character System
+    ├── Combat System
+    ├── Quest System
+    ├── Economy System
+    ├── Save System
+    └── Data System
+```
+
+但不应为了架构漂亮而一次性推翻当前可玩版本。
 
 ---
 
-# 20. 给 AI 的最终指令
+# 29. AI 最终原则
 
-维护本项目时始终遵守：
+> **兼容优先，数据优先，渐进重构，真实状态优先。**
 
-> **不要为了实现一个新功能而破坏已有功能。**
->
-> **不要把数据问题硬编码到 Python。**
->
-> **不要把核心规则偷偷放进 JSON。**
->
-> **不要随意修改已有 ID。**
->
-> **不要默认修改 `wuxia.py`。**
->
-> **不要在不了解调用关系时重写核心文件。**
->
-> **大型扩展先规划结构，再生成内容。**
->
-> **每次修改都要考虑数据、逻辑、入口、UI、存档和兼容性。**
+每次修改都应该让项目：
 
-这份文件是 AI 的“接手说明书”。
+```text
+更稳定
++
+更容易扩展
++
+更容易被下一次 AI 接手
+```
+
+而不是只让本次功能“看起来完成”。
