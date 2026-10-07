@@ -1,0 +1,15 @@
+{
+  "清剿黑风山": {
+    "title": "除暴安良·清剿黑风山",
+    "npc": "村长",
+    "target_type": "kill",
+    "target_name": "山贼二当家",
+    "required_cnt": 1,
+    "reward": {
+      "exp": 150,
+      "gold": 100,
+      "item": "玄铁重剑"
+    },
+    "desc": "帮助村长击败黑风山上的山贼二当家，惩奸除恶。"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "少林": [
+    {
+      "name": "罗汉拳",
+      "mp_cost": 15,
+      "power": 1.8,
+      "level": 1
+    },
+    {
+      "name": "般若掌",
+      "mp_cost": 25,
+      "power": 2.4,
+      "level": 3
+    }
+  ],
+  "武当": [
+    {
+      "name": "太极剑",
+      "mp_cost": 12,
+      "power": 1.6,
+      "level": 1
+    },
+    {
+      "name": "绵掌",
+      "mp_cost": 22,
+      "power": 2.2,
+      "level": 3
+    }
+  ],
+  "华山": [
+    {
+      "name": "华山剑法",
+      "mp_cost": 14,
+      "power": 1.9,
+      "level": 1
+    },
+    {
+      "name": "夺命连环三仙剑",
+      "mp_cost": 26,
+      "power": 2.5,
+      "level": 3
+    }
+  ],
+  "散人": [
+    {
+      "name": "基础吐纳",
+      "mp_cost": 10,
+      "power": 1.3,
+      "level": 1
+    },
+    {
+      "name": "江湖散手",
+      "mp_cost": 20,
+      "power": 2.0,
+      "level": 3
+    }
+  ]
+}

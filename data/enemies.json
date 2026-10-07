@@ -1,0 +1,253 @@
+{
+  "野狼": {
+    "hp": 40,
+    "atk": 8,
+    "defense": 2,
+    "exp": 20,
+    "gold": 5,
+    "skills": [
+      {
+        "name": "撕咬",
+        "chance": 0.35,
+        "power": 1.4
+      }
+    ],
+    "drops": [
+      {
+        "item": "野猪肉",
+        "chance": 0.5
+      }
+    ]
+  },
+  "野猪": {
+    "hp": 55,
+    "atk": 11,
+    "defense": 4,
+    "exp": 30,
+    "gold": 10,
+    "skills": [
+      {
+        "name": "冲撞",
+        "chance": 0.3,
+        "power": 1.5,
+        "effect": "stun",
+        "turns": 1
+      }
+    ],
+    "drops": [
+      {
+        "item": "野猪肉",
+        "chance": 0.8
+      }
+    ]
+  },
+  "毒蛇": {
+    "hp": 35,
+    "atk": 13,
+    "defense": 1,
+    "exp": 32,
+    "gold": 12,
+    "skills": [
+      {
+        "name": "毒牙",
+        "chance": 0.45,
+        "power": 1.2,
+        "effect": "poison",
+        "turns": 4,
+        "value": 5
+      }
+    ],
+    "drops": [
+      {
+        "item": "蛇胆",
+        "chance": 0.55
+      }
+    ]
+  },
+  "山贼": {
+    "hp": 65,
+    "atk": 13,
+    "defense": 4,
+    "exp": 38,
+    "gold": 18,
+    "skills": [
+      {
+        "name": "猛砍",
+        "chance": 0.3,
+        "power": 1.5
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.4
+      }
+    ]
+  },
+  "山贼头目": {
+    "hp": 120,
+    "atk": 18,
+    "defense": 8,
+    "exp": 80,
+    "gold": 50,
+    "skills": [
+      {
+        "name": "狂暴斩",
+        "chance": 0.3,
+        "power": 1.6
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.7
+      }
+    ]
+  },
+  "山贼二当家": {
+    "hp": 160,
+    "atk": 22,
+    "defense": 11,
+    "exp": 130,
+    "gold": 90,
+    "skills": [
+      {
+        "name": "夺命三刀",
+        "chance": 0.35,
+        "power": 1.8
+      }
+    ],
+    "drops": [
+      {
+        "item": "精铁剑",
+        "chance": 0.35
+      },
+      {
+        "item": "金创药",
+        "chance": 0.7
+      }
+    ]
+  },
+  "山贼弓手": {
+    "hp": 50,
+    "atk": 16,
+    "defense": 2,
+    "exp": 35,
+    "gold": 20,
+    "skills": [
+      {
+        "name": "冷箭",
+        "chance": 0.4,
+        "power": 1.6
+      }
+    ],
+    "drops": [
+      {
+        "item": "金创药",
+        "chance": 0.4
+      }
+    ]
+  },
+  "看守山贼": {
+    "hp": 80,
+    "atk": 14,
+    "defense": 6,
+    "exp": 45,
+    "gold": 25,
+    "skills": [
+      {
+        "name": "皮鞭抽打",
+        "chance": 0.3,
+        "power": 1.3,
+        "effect": "bleed",
+        "turns": 3,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.6
+      }
+    ]
+  },
+  "山贼精英": {
+    "hp": 100,
+    "atk": 18,
+    "defense": 8,
+    "exp": 60,
+    "gold": 35,
+    "skills": [
+      {
+        "name": "连环砍",
+        "chance": 0.35,
+        "power": 1.5
+      }
+    ],
+    "drops": [
+      {
+        "item": "锁子甲",
+        "chance": 0.15
+      },
+      {
+        "item": "金创药",
+        "chance": 0.5
+      }
+    ]
+  },
+  "宝库大总管": {
+    "hp": 180,
+    "atk": 24,
+    "defense": 12,
+    "exp": 150,
+    "gold": 120,
+    "skills": [
+      {
+        "name": "金钱镖",
+        "chance": 0.4,
+        "power": 1.7
+      }
+    ],
+    "drops": [
+      {
+        "item": "大还丹",
+        "chance": 0.5
+      },
+      {
+        "item": "锁子甲",
+        "chance": 0.3
+      }
+    ]
+  },
+  "山贼大当家": {
+    "hp": 240,
+    "atk": 30,
+    "defense": 15,
+    "exp": 220,
+    "gold": 200,
+    "skills": [
+      {
+        "name": "开山霸刀",
+        "chance": 0.3,
+        "power": 2.0
+      },
+      {
+        "name": "咆哮震慑",
+        "chance": 0.25,
+        "power": 1.2,
+        "effect": "stun",
+        "turns": 1
+      }
+    ],
+    "drops": [
+      {
+        "item": "玄铁重剑",
+        "chance": 0.3
+      },
+      {
+        "item": "大还丹",
+        "chance": 0.8
+      }
+    ]
+  }
+}

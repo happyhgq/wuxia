@@ -1,0 +1,348 @@
+{
+  "village_gate": {
+    "name": "青石村口",
+    "zone": "main",
+    "desc": "一座破旧的木牌楼立在道旁，匾额上“青石村”三字被风雨侵蚀得斑驳。牌楼下靠着个打盹的守卫。往北进入村南大街，往南则是黄土官道。",
+    "exits": {
+      "北": "village_south_street",
+      "南": "official_road"
+    },
+    "npcs": [
+      "守卫"
+    ],
+    "safe": true,
+    "coord": [
+      2,
+      1
+    ]
+  },
+  "village_south_street": {
+    "name": "村南大街",
+    "zone": "main",
+    "desc": "青石板路两侧排列着矮小的民居。西侧挂着“悦来客栈”的招牌，东侧则是一家杂货铺。北边直通村中广场，南边是村口。",
+    "exits": {
+      "北": "village_square",
+      "南": "village_gate",
+      "西": "inn",
+      "东": "general_shop"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      2
+    ]
+  },
+  "inn": {
+    "name": "悦来客栈",
+    "zone": "main",
+    "desc": "堂中灯油昏黄，掌柜支颐倚在柜台后拨弄算盘，小二在收拾桌椅。东边大门通往村南大街。",
+    "exits": {
+      "东": "village_south_street"
+    },
+    "npcs": [
+      "掌柜",
+      "店小二"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      2
+    ]
+  },
+  "general_shop": {
+    "name": "杂货铺",
+    "zone": "main",
+    "desc": "货架上摆满了日用杂物与行脚干粮。杂货铺老板正笑脸迎人。西边是大门。",
+    "exits": {
+      "西": "village_south_street"
+    },
+    "npcs": [
+      "杂货铺老板"
+    ],
+    "safe": true,
+    "coord": [
+      3,
+      2
+    ]
+  },
+  "village_square": {
+    "name": "村中广场",
+    "zone": "main",
+    "desc": "这里是青石村最宽阔的集散地，中央耸立着一棵百年老榕树。西边是百草堂，东边是打铁铺，南通村南大街，北接村北街。",
+    "exits": {
+      "北": "village_north_street",
+      "南": "village_south_street",
+      "西": "medicine_shop",
+      "东": "blacksmith"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      3
+    ]
+  },
+  "medicine_shop": {
+    "name": "百草堂",
+    "zone": "main",
+    "desc": "一进门便能闻到浓郁的药香。墙上密密麻麻排着药柜，老板垂首研磨金创药。东边是大门。",
+    "exits": {
+      "东": "village_square"
+    },
+    "npcs": [
+      "药铺老板"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      3
+    ]
+  },
+  "blacksmith": {
+    "name": "打铁铺",
+    "zone": "main",
+    "desc": "炉火通红，热浪扑面。铁匠赤膊抡锤，火星四溅。（输入 forge 可强化兵刃或防具）西边通往村中广场。",
+    "exits": {
+      "西": "village_square"
+    },
+    "npcs": [
+      "铁匠"
+    ],
+    "safe": true,
+    "coord": [
+      3,
+      3
+    ]
+  },
+  "village_north_street": {
+    "name": "村北街",
+    "zone": "main",
+    "desc": "村北比较清静，石板路顺着坡度缓缓向上。西侧是村长住宅，正北方向是一座古庙。",
+    "exits": {
+      "北": "temple",
+      "南": "village_square",
+      "西": "village_head_house"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      4
+    ]
+  },
+  "village_head_house": {
+    "name": "村长宅院",
+    "zone": "main",
+    "desc": "一座朴素的四合小院，青苔爬满石阶。正房里白发村长负手而立，眉宇间带着几分愁容。",
+    "exits": {
+      "东": "village_north_street"
+    },
+    "npcs": [
+      "村长"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      4
+    ]
+  },
+  "temple": {
+    "name": "古庙",
+    "zone": "main",
+    "desc": "古庙颓败，朱漆剥落。室内清幽无人，只有半截石佛立于堂中。这里是打坐恢复绝佳之地，可驱散病邪。（输入 dazuo 或 heal 打坐）",
+    "exits": {
+      "南": "village_north_street"
+    },
+    "safe": true,
+    "coord": [
+      2,
+      5
+    ]
+  },
+  "official_road": {
+    "name": "黄土官道",
+    "zone": "main",
+    "desc": "黄土官道上车辙深深，两侧野草没膝。北边回青石村，西边有一条荒僻小径通往村后荒野。（输入 search 可采集资源）",
+    "exits": {
+      "北": "village_gate",
+      "西": "wild_fields"
+    },
+    "enemies": [
+      "野猪"
+    ],
+    "forage": {
+      "草药": 0.4,
+      "铁矿石": 0.3
+    },
+    "coord": [
+      2,
+      0
+    ]
+  },
+  "wild_fields": {
+    "name": "村后荒野",
+    "zone": "main",
+    "desc": "杂草丛生，偶有野兽低吼。东边接官道，西边是一条蜿蜒入山的黑风山道。",
+    "exits": {
+      "东": "official_road",
+      "西": "mountain_path"
+    },
+    "enemies": [
+      "野狼",
+      "野猪"
+    ],
+    "forage": {
+      "草药": 0.5,
+      "野猪肉": 0.3
+    },
+    "coord": [
+      1,
+      0
+    ]
+  },
+  "mountain_path": {
+    "name": "黑风山道",
+    "zone": "main",
+    "desc": "山道狭窄，两侧崖壁嶙峋，山风穿谷而过。东边回村后荒野，北边直抵山贼寨门。",
+    "exits": {
+      "东": "wild_fields",
+      "北": "cave_entrance"
+    },
+    "enemies": [
+      "毒蛇",
+      "山贼"
+    ],
+    "forage": {
+      "蛇胆": 0.3
+    },
+    "coord": [
+      0,
+      0
+    ]
+  },
+  "cave_entrance": {
+    "name": "山贼寨门",
+    "zone": "main",
+    "desc": "一座用粗木和兽骨扎成的寨门矗立在前，守备森严。南下为黑风山道，往北跨过寨门即踏入黑风寨内部。",
+    "exits": {
+      "南": "mountain_path",
+      "北": "bandit_courtyard"
+    },
+    "enemies": [
+      "山贼"
+    ],
+    "coord": [
+      0,
+      1
+    ]
+  },
+  "bandit_courtyard": {
+    "name": "寨内演武场",
+    "zone": "bandit_zone",
+    "desc": "黑风寨前院演武场，地面夯得极实，摆放着不少兵器架和木人桩。南边通往山贼寨门，北边直通聚义厅，东边有高耸的哨塔，西边是一条幽暗的水牢狭道。",
+    "exits": {
+      "南": "cave_entrance",
+      "北": "bandit_camp",
+      "东": "bandit_watchtower",
+      "西": "bandit_water_dungeon"
+    },
+    "enemies": [
+      "山贼",
+      "山贼头目"
+    ],
+    "coord": [
+      0,
+      0
+    ]
+  },
+  "bandit_watchtower": {
+    "name": "山贼哨塔",
+    "zone": "bandit_zone",
+    "desc": "用圆木搭建的数丈高台，站在塔顶可俯瞰整个山寨。弓箭手居高临下戒备着。西边通往演武场。（输入 search 可搜寻守卫遗落的物资）",
+    "exits": {
+      "西": "bandit_courtyard"
+    },
+    "enemies": [
+      "山贼弓手"
+    ],
+    "forage": {
+      "铁矿石": 0.5,
+      "金创药": 0.3
+    },
+    "coord": [
+      1,
+      0
+    ]
+  },
+  "bandit_water_dungeon": {
+    "name": "水牢狭道",
+    "zone": "bandit_zone",
+    "desc": "通道阴暗潮湿，空气中飘着霉味与血腥气。角落的铁笼里缚着受难的村民。东边返回演武场。",
+    "exits": {
+      "东": "bandit_courtyard"
+    },
+    "npcs": [
+      "被绑村民"
+    ],
+    "enemies": [
+      "看守山贼"
+    ],
+    "coord": [
+      -1,
+      0
+    ]
+  },
+  "bandit_camp": {
+    "name": "聚义厅",
+    "zone": "bandit_zone",
+    "desc": "巨大溶洞改造而成的聚义厅，篝火熊熊。大厅正中摆着虎皮大椅，黑风寨二当家与大当家在此盘坐。东边是山贼宝库，北边有一条直通后山的密道。",
+    "exits": {
+      "南": "bandit_courtyard",
+      "东": "bandit_treasury",
+      "北": "bandit_back_mountain"
+    },
+    "enemies": [
+      "山贼二当家",
+      "山贼大当家"
+    ],
+    "coord": [
+      0,
+      1
+    ]
+  },
+  "bandit_treasury": {
+    "name": "山贼宝库",
+    "zone": "bandit_zone",
+    "desc": "黑风寨积攒多年不义之财的密室，箱笼堆叠。宝库大总管正带着精锐在此亲自把守。西边通往聚义厅。",
+    "exits": {
+      "西": "bandit_camp"
+    },
+    "enemies": [
+      "宝库大总管",
+      "山贼精英"
+    ],
+    "forage": {
+      "大还丹": 0.2,
+      "金创药": 0.4
+    },
+    "coord": [
+      1,
+      1
+    ]
+  },
+  "bandit_back_mountain": {
+    "name": "黑风后山",
+    "zone": "bandit_zone",
+    "desc": "这里是黑风寨后方的隐蔽峭壁密道，灌木丛生，向南可返回聚义厅，向东有一条小路通往主世界的村后荒野。",
+    "exits": {
+      "南": "bandit_camp",
+      "东": "wild_fields"
+    },
+    "enemies": [
+      "毒蛇",
+      "野狼"
+    ],
+    "coord": [
+      0,
+      2
+    ]
+  }
+}

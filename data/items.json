@@ -1,0 +1,109 @@
+{
+  "疗伤药": {
+    "type": "consumable",
+    "desc": "寻常金疮药，敷之止血生肌。",
+    "effect": {
+      "hp": 50
+    },
+    "price": 20
+  },
+  "回内丹": {
+    "type": "consumable",
+    "desc": "复耗损之内力。",
+    "effect": {
+      "mp": 30
+    },
+    "price": 25
+  },
+  "金创药": {
+    "type": "consumable",
+    "desc": "掺入冰片、麝香，外伤立止。",
+    "effect": {
+      "hp": 120
+    },
+    "price": 50
+  },
+  "大还丹": {
+    "type": "consumable",
+    "desc": "名贵灵药，可同时复大量气血与内力。",
+    "effect": {
+      "hp": 250,
+      "mp": 120
+    },
+    "price": 200
+  },
+  "护体丹": {
+    "type": "consumable",
+    "desc": "服下后真气护体，吸收40点伤害。",
+    "effect": {
+      "status": {
+        "name": "shield",
+        "turns": 3,
+        "value": 40
+      }
+    },
+    "price": 60
+  },
+  "木剑": {
+    "type": "weapon",
+    "desc": "寻常柳木所制。",
+    "atk": 5,
+    "price": 10
+  },
+  "铁剑": {
+    "type": "weapon",
+    "desc": "刃口薄利，尚堪一用。",
+    "atk": 12,
+    "price": 50
+  },
+  "精铁剑": {
+    "type": "weapon",
+    "desc": "精铁千锤百炼而成，刃口寒光凛冽。",
+    "atk": 20,
+    "price": 150
+  },
+  "玄铁重剑": {
+    "type": "weapon",
+    "desc": "重剑无锋，大巧不工。",
+    "atk": 35,
+    "price": 400
+  },
+  "布衣": {
+    "type": "armor",
+    "desc": "寻常粗布缝制，聊胜于无。",
+    "defense": 3,
+    "price": 15
+  },
+  "皮甲": {
+    "type": "armor",
+    "desc": "硝制牛皮所制，轻便耐穿。",
+    "defense": 8,
+    "price": 40
+  },
+  "锁子甲": {
+    "type": "armor",
+    "desc": "铁环相扣如网，防守极佳。",
+    "defense": 15,
+    "price": 120
+  },
+  "草药": {
+    "type": "material",
+    "desc": "山野间常见的疗伤草药。",
+    "price": 8
+  },
+  "铁矿石": {
+    "type": "material",
+    "desc": "沉甸甸的铁矿石，可用于打造强化。",
+    "price": 12
+  },
+  "野猪肉": {
+    "type": "material",
+    "desc": "新鲜野猪肉，可卖与商家换钱。",
+    "price": 6
+  },
+  "蛇胆": {
+    "type": "material",
+    "desc": "毒蛇之胆，名贵药材。",
+    "price": 15
+  }
+}
