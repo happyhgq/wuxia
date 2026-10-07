@@ -488,6 +488,7 @@ MapEngine：
 8. 是否跨 Zone
 9. 是否需要安全区
 10. 是否影响现有 save
+11. 新增 Zone 时，若尚未重构 zones.json，记得同步在 engine.py 的 ZONE_NAMES 字典中补充中文映射，否则地图头标题会显示 fallback 名称。
 ```
 
 ---
