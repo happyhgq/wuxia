@@ -1,23 +1,21 @@
 {
-  "version": 10,
-  "name": "h",
-  "sect": "武当",
-  "level": 3,
-  "exp": 13,
-  "exp_to_level": 112,
-  "hp": 130,
-  "max_hp": 130,
-  "mp": 90,
-  "max_mp": 90,
-  "atk": 18,
-  "defense": 9,
-  "gold": 98,
+  "version": 12,
+  "name": "重复交付测试",
+  "sect": "散人",
+  "level": 1,
+  "exp": 0,
+  "exp_to_level": 150,
+  "hp": 100,
+  "max_hp": 100,
+  "mp": 50,
+  "max_mp": 50,
+  "atk": 10,
+  "defense": 5,
+  "gold": 10,
   "inventory": [
     "疗伤药",
     "铁矿石",
-    "草药",
-    "野猪肉",
-    "野猪肉"
+    "草药"
   ],
   "equipment": {
     "weapon": "木剑",
@@ -27,7 +25,88 @@
     "weapon": 0,
     "armor": 0
   },
-  "location": "official_road_east_1",
+  "location": "village_gate",
   "active_quests": {},
-  "completed_quests": []
+  "quest_states": {},
+  "completed_quests": [
+    "__idempotency_test__"
+  ],
+  "world_state": {
+    "flags": {
+      "visited:village_gate": true,
+      "visited_zone:main": true,
+      "quest_active:__idempotency_test__": false,
+      "quest_completed:__idempotency_test__": true
+    },
+    "variables": {
+      "sect_state": {
+        "current_sect": "散人",
+        "reputation": {
+          "少林": 0,
+          "武当": 0,
+          "华山": 0,
+          "散人": 0,
+          "铁衣门": 0
+        }
+      },
+      "skill_progress": {
+        "基础吐纳": {
+          "learned": true,
+          "mastery": 1
+        },
+        "江湖散手": {
+          "learned": false,
+          "mastery": 0
+        },
+        "流云步": {
+          "learned": false,
+          "mastery": 0
+        },
+        "回风刺": {
+          "learned": false,
+          "mastery": 0
+        },
+        "破势掌": {
+          "learned": false,
+          "mastery": 0
+        },
+        "凝息诀": {
+          "learned": false,
+          "mastery": 0
+        },
+        "行云流水掌": {
+          "learned": false,
+          "mastery": 0
+        }
+      }
+    }
+  },
+  "economy_state": {
+    "events": {
+      "economic_flow_ledger": {
+        "player_reward_gold_created": 10,
+        "player_reward_item_units_created": 0,
+        "player_reward_items_created": {}
+      },
+      "economic_flow_history": [
+        {
+          "tick": 0,
+          "source": "任务奖励",
+          "direction": "获得奖励",
+          "item": "银两",
+          "quantity": 10,
+          "gold": 10,
+          "counterparty": "系统"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "strength": 0,
+    "constitution": 0,
+    "internal": 0,
+    "agility": 0,
+    "insight": 0
+  },
+  "attribute_points": 0
 }

@@ -1,0 +1,169 @@
+{
+  "北路商队": {
+    "route": [
+      "abandoned_iron_mine",
+      "blacksmith",
+      "guiyun_south_gate"
+    ],
+    "gold": 2600,
+    "inventory": {
+      "铁剑": 4,
+      "铁矿石": 12,
+      "木材": 10
+    },
+    "appearances": [
+      {
+        "room": "village_square",
+        "interval": 12,
+        "offset": 4
+      },
+      {
+        "room": "guiyun_central_square",
+        "interval": 15,
+        "offset": 5
+      }
+    ],
+    "capacity": 90,
+    "sale_prices": {
+      "木材": 6,
+      "草药": 8,
+      "雾露草": 12,
+      "疗伤药": 22,
+      "铁剑": 58,
+      "木剑": 20,
+      "精铁剑": 195
+    },
+    "region_rate": 1.05,
+    "buy_prices": {
+      "木剑": 10,
+      "木材": 3,
+      "草药": 10,
+      "铁矿石": 7,
+      "精铁剑": 150
+    },
+    "travel_interval": 5,
+    "travel_phase": 1,
+    "tier": "large",
+    "arrival_interval": [
+      120,
+      180
+    ],
+    "stay_ticks": [
+      8,
+      12
+    ],
+    "weight": 1,
+    "operating_cost_per_stop": 7
+  },
+  "南路商队": {
+    "route": [
+      "guiyun_forge",
+      "mistwood_trail",
+      "medicine_shop",
+      "guiyun_medicine_garden",
+      "guiyun_south_gate"
+    ],
+    "gold": 1650,
+    "inventory": {
+      "草药": 8,
+      "雾露草": 3,
+      "疗伤药": 4
+    },
+    "appearances": [
+      {
+        "room": "guiyun_central_square",
+        "interval": 19,
+        "offset": 11
+      },
+      {
+        "room": "village_square",
+        "interval": 17,
+        "offset": 10
+      }
+    ],
+    "capacity": 50,
+    "sale_prices": {
+      "木材": 5,
+      "草药": 7,
+      "雾露草": 11,
+      "疗伤药": 19,
+      "铁剑": 48,
+      "木剑": 17,
+      "精铁剑": 195
+    },
+    "region_rate": 0.95,
+    "travel_interval": 6,
+    "travel_phase": 3,
+    "tier": "medium",
+    "arrival_interval": [
+      60,
+      90
+    ],
+    "stay_ticks": [
+      6,
+      8
+    ],
+    "weight": 3,
+    "buy_prices": {
+      "木材": 2,
+      "草药": 9,
+      "雾露草": 12,
+      "疗伤药": 16,
+      "木剑": 8,
+      "精铁剑": 150
+    },
+    "operating_cost_per_stop": 4
+  },
+  "村镇行商": {
+    "route": [
+      "guiyun_south_gate",
+      "village_square"
+    ],
+    "gold": 1200,
+    "inventory": {
+      "草药": 3,
+      "木材": 5,
+      "木剑": 2
+    },
+    "appearances": [
+      {
+        "room": "village_square",
+        "interval": 22,
+        "offset": 16
+      },
+      {
+        "room": "guiyun_central_square",
+        "interval": 24,
+        "offset": 17
+      }
+    ],
+    "capacity": 30,
+    "sale_prices": {
+      "木材": 5,
+      "草药": 6,
+      "木剑": 16,
+      "疗伤药": 14,
+      "精铁剑": 195
+    },
+    "buy_prices": {
+      "木剑": 8,
+      "木材": 2,
+      "草药": 8,
+      "精铁剑": 150
+    },
+    "region_rate": 1.0,
+    "travel_interval": 7,
+    "travel_phase": 5,
+    "tier": "small",
+    "arrival_interval": [
+      30,
+      45
+    ],
+    "stay_ticks": [
+      3,
+      5
+    ],
+    "weight": 6,
+    "operating_cost_per_stop": 2
+  }
+}

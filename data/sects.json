@@ -1,0 +1,446 @@
+{
+  "少林": {
+    "title": "少林派",
+    "desc": "以禅武并重、内外兼修闻名的正道大派。门内身份由俗家弟子逐步修习、受戒并晋升为高阶传承弟子。",
+    "alignment": "正道",
+    "entry_level": 1,
+    "max_rank": 4,
+    "ranks": [
+      {
+        "name": "俗家弟子",
+        "min_reputation": 0
+      },
+      {
+        "name": "沙弥",
+        "min_reputation": 20
+      },
+      {
+        "name": "僧人",
+        "min_reputation": 50
+      },
+      {
+        "name": "传法弟子",
+        "min_reputation": 100
+      },
+      {
+        "name": "少林传承弟子",
+        "min_reputation": 180
+      }
+    ],
+    "exclusive_skills": [
+      "罗汉拳",
+      "般若掌",
+      "金刚伏魔拳",
+      "金刚护体拳"
+    ],
+    "initial_reputation": 0,
+    "relations": {
+      "武当": 10,
+      "华山": 5
+    },
+    "quest_tags": [
+      "sect:少林"
+    ],
+    "reward_multipliers": {
+      "exp": 1.05,
+      "gold": 1.0
+    },
+    "promotion_requirements": {
+      "1": {
+        "level": 3,
+        "mastery": 10
+      },
+      "2": {
+        "level": 8,
+        "mastery": 30
+      },
+      "3": {
+        "level": 15,
+        "mastery": 50
+      },
+      "4": {
+        "level": 25,
+        "mastery": 80
+      }
+    },
+    "promotion_flags": {
+      "4": [
+        "sect:shaolin:scripture_catalogue_reviewed"
+      ]
+    },
+    "questline": [
+      {
+        "quest": "少林历练·黑风除恶"
+      },
+      {
+        "quest": "少林历练·巡山护戒"
+      },
+      {
+        "quest": "少林戒律·问心持戒"
+      },
+      {
+        "quest": "少林护寺·山门驱谍"
+      },
+      {
+        "quest": "少林受戒·入室听经"
+      },
+      {
+        "quest": "少林沙弥·日课初行"
+      }
+    ],
+    "training": {
+      "room_id": "shaolin_training_ground",
+      "place": "少林罗汉场",
+      "lesson_teacher": "少林传功师父",
+      "promotion_teacher": "少林传功师兄",
+      "promotion_title": "传功师兄"
+    },
+    "skill_teachers": {
+      "罗汉拳": "少林传功师父",
+      "般若掌": "少林传功师兄",
+      "金刚伏魔拳": "少林传功师兄",
+      "金刚护体拳": "少林传功师父"
+    }
+  },
+  "武当": {
+    "title": "武当派",
+    "desc": "崇尚清静自然、以柔克刚的道门大派。",
+    "alignment": "正道",
+    "entry_level": 1,
+    "max_rank": 4,
+    "ranks": [
+      {
+        "name": "记名弟子",
+        "min_reputation": 0
+      },
+      {
+        "name": "外门弟子",
+        "min_reputation": 20
+      },
+      {
+        "name": "内门弟子",
+        "min_reputation": 50
+      },
+      {
+        "name": "真传弟子",
+        "min_reputation": 100
+      },
+      {
+        "name": "核心传人",
+        "min_reputation": 180
+      }
+    ],
+    "exclusive_skills": [
+      "太极剑",
+      "绵掌",
+      "两仪剑诀",
+      "绕指柔剑"
+    ],
+    "initial_reputation": 0,
+    "relations": {
+      "少林": 10,
+      "华山": 15
+    },
+    "quest_tags": [
+      "sect:武当"
+    ],
+    "reward_multipliers": {
+      "exp": 1.0,
+      "gold": 1.05
+    },
+    "promotion_requirements": {
+      "1": {
+        "level": 3,
+        "mastery": 10
+      },
+      "2": {
+        "level": 8,
+        "mastery": 30
+      },
+      "3": {
+        "level": 15,
+        "mastery": 50
+      },
+      "4": {
+        "level": 25,
+        "mastery": 80
+      }
+    },
+    "promotion_flags": {
+      "1": [
+        "sect:wudang:sword_principle"
+      ],
+      "2": [
+        "sect:wudang:questline:inner_breath_done"
+      ]
+    },
+    "questline": [
+      {
+        "quest": "武当历练·以静制动"
+      },
+      {
+        "quest": "武当历练·松径清扰"
+      },
+      {
+        "quest": "武当剑理·松间问道"
+      },
+      {
+        "quest": "武当内功·紫霄听息"
+      },
+      {
+        "quest": "武当外门·晨钟暮鼓"
+      }
+    ],
+    "training": {
+      "room_id": "wudang_training_ground",
+      "place": "太和演武场",
+      "lesson_teacher": "武当传功师父",
+      "promotion_teacher": "武当传功师兄",
+      "promotion_title": "传功师兄"
+    },
+    "skill_teachers": {
+      "太极剑": "武当传功师父",
+      "绵掌": "武当传功师兄",
+      "两仪剑诀": "武当传功师兄",
+      "绕指柔剑": "武当传功师父"
+    }
+  },
+  "华山": {
+    "title": "华山派",
+    "desc": "剑术凌厉、门规严谨的名门剑派。",
+    "alignment": "正道",
+    "entry_level": 1,
+    "max_rank": 4,
+    "ranks": [
+      {
+        "name": "记名弟子",
+        "min_reputation": 0
+      },
+      {
+        "name": "外门弟子",
+        "min_reputation": 20
+      },
+      {
+        "name": "内门弟子",
+        "min_reputation": 50
+      },
+      {
+        "name": "真传弟子",
+        "min_reputation": 100
+      },
+      {
+        "name": "核心传人",
+        "min_reputation": 180
+      }
+    ],
+    "exclusive_skills": [
+      "华山剑法",
+      "夺命连环三仙剑",
+      "破玉剑式",
+      "苍松迎客剑"
+    ],
+    "initial_reputation": 0,
+    "relations": {
+      "少林": 5,
+      "武当": 15
+    },
+    "quest_tags": [
+      "sect:华山"
+    ],
+    "reward_multipliers": {
+      "exp": 1.0,
+      "gold": 1.1
+    },
+    "promotion_requirements": {
+      "1": {
+        "level": 3,
+        "mastery": 10
+      },
+      "2": {
+        "level": 8,
+        "mastery": 30
+      },
+      "3": {
+        "level": 15,
+        "mastery": 50
+      },
+      "4": {
+        "level": 25,
+        "mastery": 80
+      }
+    },
+    "promotion_flags": {
+      "1": [
+        "sect:huashan:sword_principle"
+      ],
+      "2": [
+        "sect:huashan:questline:patrol_done"
+      ]
+    },
+    "questline": [
+      {
+        "quest": "华山历练·磨剑黑风"
+      },
+      {
+        "quest": "华山历练·险道试剑"
+      },
+      {
+        "quest": "华山剑理·松风听剑"
+      },
+      {
+        "quest": "华山巡剑·古道清障"
+      },
+      {
+        "quest": "青锋疑云",
+        "optional": true
+      }
+    ],
+    "training": {
+      "room_id": "huashan_training_ground",
+      "place": "华山演武场",
+      "lesson_teacher": "华山授业师父",
+      "promotion_teacher": "华山传功师兄",
+      "promotion_title": "传功师兄"
+    },
+    "skill_teachers": {
+      "华山剑法": "华山传功师兄",
+      "夺命连环三仙剑": "华山传功师兄",
+      "破玉剑式": "华山授业师父",
+      "苍松迎客剑": "华山授业师父"
+    }
+  },
+  "散人": {
+    "title": "江湖散人",
+    "desc": "不受门规约束，自由行走江湖的武者。",
+    "alignment": "中立",
+    "entry_level": 1,
+    "max_rank": 0,
+    "ranks": [
+      {
+        "name": "散人",
+        "min_reputation": 0
+      }
+    ],
+    "exclusive_skills": [
+      "基础吐纳",
+      "江湖散手",
+      "流云步",
+      "行云流水掌",
+      "回风刺",
+      "破势掌",
+      "凝息诀"
+    ],
+    "initial_reputation": 0,
+    "relations": {
+      "少林": 0,
+      "武当": 0,
+      "华山": 0
+    },
+    "quest_tags": [],
+    "reward_multipliers": {
+      "exp": 1.0,
+      "gold": 1.0
+    }
+  },
+  "铁衣门": {
+    "title": "铁衣门",
+    "desc": "以横练外功、重兵器与实战纪律立派的江湖门派。铁衣门不自认邪道，重视实力、守约与门中规矩；与三大正派因武学理念、商路护运和江湖声望存在竞争。",
+    "alignment": "江湖竞争门派",
+    "entry_level": 3,
+    "max_rank": 4,
+    "ranks": [
+      {
+        "name": "记名门人",
+        "min_reputation": 0
+      },
+      {
+        "name": "外堂弟子",
+        "min_reputation": 20
+      },
+      {
+        "name": "内堂弟子",
+        "min_reputation": 50
+      },
+      {
+        "name": "执事弟子",
+        "min_reputation": 100
+      },
+      {
+        "name": "铁衣传人",
+        "min_reputation": 180
+      }
+    ],
+    "exclusive_skills": [
+      "铁衣功",
+      "破阵刀",
+      "横练铁布衫",
+      "裂石断岳刀"
+    ],
+    "initial_reputation": 0,
+    "relations": {
+      "少林": -10,
+      "武当": -15,
+      "华山": -20
+    },
+    "quest_tags": [
+      "sect:铁衣门"
+    ],
+    "reward_multipliers": {
+      "exp": 1.05,
+      "gold": 1.0
+    },
+    "promotion_requirements": {
+      "1": {
+        "level": 3,
+        "mastery": 10
+      },
+      "2": {
+        "level": 8,
+        "mastery": 30
+      },
+      "3": {
+        "level": 15,
+        "mastery": 50
+      },
+      "4": {
+        "level": 25,
+        "mastery": 80
+      }
+    },
+    "promotion_flags": {
+      "1": [
+        "sect:tieyi:trade_route"
+      ],
+      "2": [
+        "sect:tieyi:questline:escort_done"
+      ]
+    },
+    "questline": [
+      {
+        "quest": "铁衣门历练·护路除匪"
+      },
+      {
+        "quest": "铁衣门历练·清除巡哨"
+      },
+      {
+        "quest": "铁衣门护运·商路问价"
+      },
+      {
+        "quest": "铁衣门守约·短途护送"
+      }
+    ],
+    "training": {
+      "room_id": "tieyi_training_ground",
+      "place": "铁衣门演武场",
+      "lesson_teacher": "铁衣门传功师父",
+      "promotion_teacher": "铁衣门传功师父",
+      "promotion_title": "传功师父"
+    },
+    "skill_teachers": {
+      "铁衣功": "铁衣门传功师父",
+      "破阵刀": "铁衣门传功师父",
+      "横练铁布衫": "铁衣门传功师父",
+      "裂石断岳刀": "铁衣门传功师父"
+    }
+  }
+}

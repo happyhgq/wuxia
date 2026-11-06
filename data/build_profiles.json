@@ -1,0 +1,17 @@
+{
+  "重剑强攻": {
+    "description": "以重剑与力量为核心，牺牲少量灵巧换取更高攻击与暴击。",
+    "required": {"weapon_base": "玄铁重剑", "attributes": {"strength": 2}},
+    "bonuses": {"atk": 4, "crit_bonus": 0.02, "hit_bonus": -0.01}
+  },
+  "轻灵游身": {
+    "description": "以轻甲与身法为核心，强化命中与闪避。",
+    "required": {"armor_base": "皮甲", "attributes": {"agility": 2}},
+    "bonuses": {"dodge_bonus": 0.03, "hit_bonus": 0.02}
+  },
+  "铁壁内修": {
+    "description": "以重甲、体魄与内息为核心，提升防御与生存稳定性。",
+    "required": {"armor_base": "锁子甲", "attributes": {"constitution": 3, "internal": 1}},
+    "bonuses": {"defense": 3, "dodge_bonus": 0.01, "crit_bonus": 0.01}
+  }
+}

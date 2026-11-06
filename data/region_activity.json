@@ -1,0 +1,570 @@
+{
+  "security_bands": [
+    {
+      "min": 76,
+      "label": "治安良好",
+      "criminal_activity": "少见",
+      "patrol": "常态"
+    },
+    {
+      "min": 51,
+      "label": "治安一般",
+      "criminal_activity": "偶有",
+      "patrol": "常态"
+    },
+    {
+      "min": 31,
+      "label": "治安紧张",
+      "criminal_activity": "增多",
+      "patrol": "加强"
+    },
+    {
+      "min": 11,
+      "label": "治安混乱",
+      "criminal_activity": "频繁",
+      "patrol": "严密"
+    },
+    {
+      "min": 0,
+      "label": "危险地区",
+      "criminal_activity": "猖獗",
+      "patrol": "紧急巡查"
+    }
+  ],
+  "criminal_enemies": {
+    "山贼": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    },
+    "山贼头目": {
+      "security_gain": 2,
+      "commerce_gain": 1,
+      "cooldown": 24
+    },
+    "山贼二当家": {
+      "security_gain": 3,
+      "commerce_gain": 1,
+      "cooldown": 36
+    },
+    "山贼弓手": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    },
+    "看守山贼": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    },
+    "山贼精英": {
+      "security_gain": 2,
+      "commerce_gain": 1,
+      "cooldown": 24
+    },
+    "山贼大当家": {
+      "security_gain": 4,
+      "commerce_gain": 2,
+      "cooldown": 48
+    },
+    "劫镖山贼": {
+      "security_gain": 2,
+      "commerce_gain": 2,
+      "cooldown": 24
+    },
+    "黑市打手": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    },
+    "黑市护卫": {
+      "security_gain": 2,
+      "commerce_gain": 1,
+      "cooldown": 24
+    },
+    "黑市头目": {
+      "security_gain": 4,
+      "commerce_gain": 2,
+      "cooldown": 48
+    },
+    "北境劫货客": {
+      "security_gain": 2,
+      "commerce_gain": 2,
+      "cooldown": 24
+    },
+    "河埠私枭": {
+      "security_gain": 3,
+      "commerce_gain": 2,
+      "cooldown": 36
+    },
+    "小偷": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    },
+    "流氓": {
+      "security_gain": 1,
+      "commerce_gain": 0,
+      "cooldown": 24
+    }
+  },
+  "patrol_npcs": {
+    "捕头": {
+      "security_gain": 1,
+      "cooldown": 6,
+      "max_bonus": 20
+    },
+    "巡河老兵": {
+      "security_gain": 1,
+      "cooldown": 6,
+      "max_bonus": 18
+    },
+    "守卫": {
+      "security_gain": 1,
+      "cooldown": 6,
+      "max_bonus": 15
+    }
+  },
+  "natural_recovery": {
+    "interval": 24,
+    "amount": 1,
+    "only_below_base": true
+  },
+  "extra_enemy_pools": {
+    "main": [
+      {
+        "max_security": 50,
+        "enemies": [
+          "山贼"
+        ]
+      },
+      {
+        "max_security": 25,
+        "enemies": [
+          "山贼头目",
+          "山贼弓手"
+        ]
+      }
+    ],
+    "bandit_zone": [
+      {
+        "max_security": 50,
+        "enemies": [
+          "山贼头目",
+          "山贼弓手"
+        ]
+      },
+      {
+        "max_security": 25,
+        "enemies": [
+          "山贼精英",
+          "山贼二当家"
+        ]
+      }
+    ],
+    "guiyun_city": [
+      {
+        "max_security": 50,
+        "enemies": [
+          "黑市打手"
+        ]
+      },
+      {
+        "max_security": 25,
+        "enemies": [
+          "黑市护卫"
+        ]
+      }
+    ],
+    "mistwood": [
+      {
+        "max_security": 50,
+        "enemies": [
+          "雾林野猿",
+          "迷雾毒蛛"
+        ]
+      },
+      {
+        "max_security": 25,
+        "enemies": [
+          "雾林野猿",
+          "迷雾毒蛛"
+        ]
+      }
+    ],
+    "northfront_town": [
+      {
+        "max_security": 50,
+        "enemies": [
+          "北境劫货客"
+        ]
+      },
+      {
+        "max_security": 25,
+        "enemies": [
+          "河埠私枭"
+        ]
+      }
+    ],
+    "sunken_ruins": []
+  },
+  "urban_crime": {
+    "zone": "guiyun_city",
+    "max_security": 35,
+    "base_chance": 0.04,
+    "per_missing_point": 0.004,
+    "severe_threshold": 20,
+    "rooms": [
+      "guiyun_south_main_street",
+      "guiyun_south_market_gate",
+      "guiyun_qiqu_lane_1",
+      "guiyun_qiqu_lane_2",
+      "guiyun_west_center",
+      "guiyun_central_street_s"
+    ],
+    "enemies": [
+      "小偷",
+      "流氓"
+    ],
+    "severe_enemies": [
+      "黑市打手"
+    ]
+  },
+  "crime_pressure": {
+    "zones": [
+      "main",
+      "bandit_zone",
+      "guiyun_city",
+      "northfront_town"
+    ],
+    "max_security": 35,
+    "interval": 12,
+    "security_loss": 1,
+    "commerce_loss": 1
+  },
+  "security_events": {
+    "main": {
+      "title": "青石村周边治安巡查",
+      "patrol_npcs": [
+        "守卫"
+      ],
+      "trigger_security": 40,
+      "required_patrols": 2,
+      "duration": 18,
+      "cooldown": 30,
+      "security_reward": 2,
+      "commerce_reward": 1,
+      "start_text": "青石村周边治安恶化，守卫开始加紧巡查。",
+      "success_text": "青石村守卫完成周边巡查，村外道路逐渐恢复秩序。",
+      "failure_text": "青石村周边巡查未能及时完成，村外仍有匪患。"
+    },
+    "guiyun_city": {
+      "title": "归云城街巷缉查",
+      "patrol_npcs": [
+        "捕头"
+      ],
+      "trigger_security": 45,
+      "required_patrols": 2,
+      "duration": 18,
+      "cooldown": 30,
+      "security_reward": 3,
+      "commerce_reward": 2,
+      "start_text": "归云城治安持续恶化，捕头已安排街巷缉查。",
+      "success_text": "归云城街巷缉查取得成效，恶人活动受到遏制。",
+      "failure_text": "归云城街巷缉查未能及时完成，黑市恶人仍然活跃。"
+    },
+    "northfront_town": {
+      "title": "北境商路巡查",
+      "patrol_npcs": [
+        "巡河老兵"
+      ],
+      "trigger_security": 45,
+      "required_patrols": 2,
+      "duration": 18,
+      "cooldown": 30,
+      "security_reward": 2,
+      "commerce_reward": 3,
+      "start_text": "北境商路风险上升，巡河老兵开始巡查货栈与河埠。",
+      "success_text": "北境商路巡查取得成效，货运秩序有所恢复。",
+      "failure_text": "北境商路巡查未能及时完成，河埠仍需警惕劫货者。"
+    }
+  },
+  "external_world_events": {
+    "roll_interval": 18,
+    "trigger_chance": 0.28,
+    "max_active": 2,
+    "events": [
+      {
+        "id": "northfront_war_outbreak",
+        "type": "战争",
+        "title": "北境战事骤起",
+        "cooldown": 96,
+        "duration": 48,
+        "announcement": "北境的朔风盟与铁戟军爆发冲突，边境战事骤起。北境镇治安与通行安全下降，商队运输受阻。",
+        "end_announcement": "北境双方暂时停战，边境冲突有所缓和，北境镇与沿线商路开始恢复。",
+        "effects": {
+          "northfront_town": {
+            "security": -18,
+            "commerce": -12,
+            "travel": -18
+          },
+          "main": {
+            "security": -5,
+            "commerce": -3,
+            "travel": -4
+          }
+        },
+        "npc_response": {
+          "interval": 12,
+          "relief_step": 0.1,
+          "relief_cap": 0.3,
+          "announcement": "边境守军与当地官府开始安置流民、维持商路，战事带来的部分压力有所缓和。"
+        },
+        "player_action": {
+          "label": "协助官府运送军需、安置流民",
+          "cooldown": 8,
+          "max_actions": 2,
+          "relief_step": 0.2,
+          "relief_cap": 0.4,
+          "shorten_duration": 4,
+          "min_remaining": 6,
+          "success_text": "你协助运送军需并安置流民，边境压力有所缓和。",
+          "immediate_effects": {
+            "northfront_town": {
+              "security": 1,
+              "commerce": 1,
+              "travel": 2
+            },
+            "main": {
+              "security": 0,
+              "commerce": 1,
+              "travel": 1
+            }
+          }
+        },
+        "escalation": {
+          "after": 24,
+          "multiplier": 1.25,
+          "announcement": "边境战事迟迟未能缓和，流民与商路压力进一步增加。",
+          "spread_effects": {
+            "bandit_zone": {
+              "security": -4,
+              "commerce": -3,
+              "travel": -5
+            }
+          }
+        }
+      },
+      {
+        "id": "guiyun_city_riot",
+        "type": "暴乱",
+        "title": "归云城突发暴乱",
+        "cooldown": 96,
+        "duration": 36,
+        "announcement": "归云城发生骚乱，部分街巷秩序失控。捕快已加强巡查，城内治安与商贸受到冲击。",
+        "end_announcement": "归云城骚乱逐渐平息，官府恢复街巷秩序，商铺陆续重新营业。",
+        "effects": {
+          "guiyun_city": {
+            "security": -20,
+            "commerce": -10,
+            "travel": -8
+          },
+          "main": {
+            "security": -3,
+            "commerce": -2,
+            "travel": -2
+          }
+        },
+        "npc_response": {
+          "interval": 8,
+          "relief_step": 0.12,
+          "relief_cap": 0.36,
+          "announcement": "归云城捕快与街坊开始疏导人群、恢复街巷秩序，骚乱影响有所减轻。"
+        },
+        "player_action": {
+          "label": "协助捕快平息骚乱",
+          "cooldown": 6,
+          "max_actions": 2,
+          "relief_step": 0.22,
+          "relief_cap": 0.44,
+          "shorten_duration": 4,
+          "min_remaining": 5,
+          "success_text": "你协助捕快疏导人群、制止趁乱作恶者，骚乱得到一定控制。",
+          "on_criminal_defeat": {
+            "enabled": true,
+            "relief_step": 0.08,
+            "relief_cap": 0.24,
+            "max_actions": 2,
+            "cooldown": 6,
+            "shorten_duration": 1,
+            "min_remaining": 5
+          },
+          "immediate_effects": {
+            "guiyun_city": {
+              "security": 2,
+              "commerce": 1,
+              "travel": 1
+            },
+            "main": {
+              "security": 1,
+              "commerce": 0,
+              "travel": 1
+            }
+          }
+        },
+        "escalation": {
+          "after": 18,
+          "multiplier": 1.25,
+          "announcement": "骚乱持续扩散，部分街巷秩序进一步恶化，官府请求各方协助。",
+          "spread_effects": {
+            "main": {
+              "security": -5,
+              "commerce": -3,
+              "travel": -3
+            }
+          }
+        }
+      },
+      {
+        "id": "mistwood_beast_migration",
+        "type": "兽潮",
+        "title": "雾林兽群迁徙",
+        "cooldown": 84,
+        "duration": 30,
+        "announcement": "雾隐林一带出现大批迁徙野兽，林道危险上升，采集者与行商应暂避偏僻路线。",
+        "end_announcement": "雾隐林兽群已逐渐散去，林道危险有所降低。",
+        "effects": {
+          "mistwood": {
+            "security": -7,
+            "commerce": -4,
+            "travel": -20
+          },
+          "main": {
+            "travel": -3
+          }
+        },
+        "npc_response": {
+          "interval": 10,
+          "relief_step": 0.1,
+          "relief_cap": 0.3,
+          "announcement": "附近猎户与采药人互相通报兽群踪迹，并引导行旅避开危险林道。"
+        },
+        "player_action": {
+          "label": "协助驱赶兽群、救助行旅",
+          "cooldown": 7,
+          "max_actions": 2,
+          "relief_step": 0.2,
+          "relief_cap": 0.4,
+          "shorten_duration": 4,
+          "min_remaining": 5,
+          "success_text": "你协助驱赶兽群并救助行旅，林道危险有所缓和。",
+          "immediate_effects": {
+            "mistwood": {
+              "security": 1,
+              "commerce": 0,
+              "travel": 2
+            },
+            "main": {
+              "security": 0,
+              "commerce": 0,
+              "travel": 1
+            }
+          }
+        },
+        "escalation": {
+          "after": 14,
+          "multiplier": 1.2,
+          "announcement": "兽群仍未散去，偏僻林道的危险进一步上升。",
+          "spread_effects": {
+            "sunken_ruins": {
+              "security": -4,
+              "travel": -8
+            }
+          }
+        }
+      },
+      {
+        "id": "north_route_robbery",
+        "type": "商路劫掠",
+        "title": "北境商路遭劫",
+        "cooldown": 72,
+        "duration": 30,
+        "announcement": "北境商路接连发生劫货事件，沿线通行风险上升，商队开始减少往来。",
+        "end_announcement": "北境商路劫掠事件得到控制，商队逐步恢复运输。",
+        "effects": {
+          "northfront_town": {
+            "security": -10,
+            "commerce": -16,
+            "travel": -14
+          }
+        },
+        "npc_response": {
+          "interval": 10,
+          "relief_step": 0.12,
+          "relief_cap": 0.36,
+          "announcement": "商队护卫与沿线守卫开始结伴巡查，北境商路的劫掠压力有所减轻。"
+        },
+        "player_action": {
+          "label": "协助护送商队、清剿劫匪",
+          "cooldown": 7,
+          "max_actions": 2,
+          "relief_step": 0.22,
+          "relief_cap": 0.44,
+          "shorten_duration": 4,
+          "min_remaining": 5,
+          "success_text": "你协助护送商队并打击劫匪，商路风险有所下降。",
+          "on_criminal_defeat": {
+            "enabled": true,
+            "relief_step": 0.08,
+            "relief_cap": 0.24,
+            "max_actions": 2,
+            "cooldown": 6,
+            "shorten_duration": 1,
+            "min_remaining": 5
+          },
+          "immediate_effects": {
+            "northfront_town": {
+              "security": 1,
+              "commerce": 2,
+              "travel": 2
+            }
+          }
+        },
+        "escalation": {
+          "after": 14,
+          "multiplier": 1.25,
+          "announcement": "劫掠持续发生，商队进一步减少往来，沿线物资供应受到影响。",
+          "spread_effects": {
+            "bandit_zone": {
+              "security": -5,
+              "commerce": -4,
+              "travel": -6
+            }
+          }
+        }
+      },
+      {
+        "id": "local_yamen_crackdown",
+        "type": "官府清剿",
+        "title": "官府开展跨地区清剿",
+        "cooldown": 120,
+        "duration": 24,
+        "announcement": "官府调集捕快与守卫开展跨地区清剿，青石村周边与归云城的恶人活动受到压制。",
+        "end_announcement": "本轮官府清剿结束，相关地区暂时恢复平稳。",
+        "effects": {
+          "main": {
+            "security": 8,
+            "commerce": 3,
+            "travel": 4
+          },
+          "guiyun_city": {
+            "security": 6,
+            "commerce": 4,
+            "travel": 2
+          }
+        }
+      }
+    ],
+    "recovery_fade": 12
+  }
+}

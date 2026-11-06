@@ -1,0 +1,31 @@
+{
+  "village_gate_night_lantern": {
+    "title": "夜过村口",
+    "text": "夜风卷过村口，灯笼在门楼下轻轻摇晃。守夜的人已经换班，四下只剩虫鸣。",
+    "rooms": ["village_gate"],
+    "hours": [22, 6],
+    "once": true,
+    "priority": 10
+  },
+  "village_square_night_watch": {
+    "title": "更夫过广场",
+    "text": "更夫提着灯笼从广场慢慢走过，梆子声在夜色里传出很远。榕树下只剩一块被月光照白的公告栏。",
+    "rooms": ["village_square"],
+    "hours": [21, 6],
+    "once": true,
+    "priority": 8
+  },
+  "guiyun_market_dusk_close": {
+    "title": "集市收摊",
+    "text": "最后一批摊贩收起棚布，竹筐相互碰撞着推往巷口。白日里拥挤的集市，此刻只剩下零星的灯火。",
+    "rooms": ["guiyun_general_market"],
+    "hours": [20, 23],
+    "once": true,
+    "priority": 6,
+    "effects": {
+      "set_flags": {
+        "scene:guiyun_market_dusk:seen": true
+      }
+    }
+  }
+}

@@ -1,0 +1,661 @@
+{
+  "main": {
+    "name": "主世界",
+    "recommended_level": 1,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一处被踩乱的草丛，似乎有人刚刚经过。",
+      "你在路边找到几株完整的草药。",
+      "风吹过荒野，没有发现异常。"
+    ],
+    "faction_exposure": [
+      "青石村",
+      "黑市",
+      "江湖"
+    ],
+    "region_ecology": {
+      "security_base": 72,
+      "commerce_base": 68,
+      "travel_base": 78
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -4,
+        "commerce": -2,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -8,
+        "commerce": -5,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -15,
+        "commerce": -10,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -25,
+        "commerce": -18,
+        "travel": -18
+      },
+      "war": {
+        "security": -40,
+        "commerce": -30,
+        "travel": -30
+      }
+    },
+    "danger_thresholds": {
+      "high": 35,
+      "extreme": 20
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "官道与村野的气氛明显紧张，行人开始减少。",
+        "requires_level": "conflict"
+      },
+      {
+        "min_security": 0,
+        "text": "村民加强巡查，偶尔能听到关于黑市活动的低声议论。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "bandit_zone": {
+    "name": "黑风寨",
+    "recommended_level": 5,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现山贼留下的暗记，说明附近仍有巡逻队。",
+      "你在废弃木箱中找到少量物资。",
+      "墙角有一道新鲜刀痕，似乎刚发生过冲突。"
+    ],
+    "faction_exposure": [
+      "黑市",
+      "江湖"
+    ],
+    "region_ecology": {
+      "security_base": 42,
+      "commerce_base": 48,
+      "travel_base": 45
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -2,
+        "travel": -3
+      },
+      "confrontation": {
+        "security": -7,
+        "commerce": -5,
+        "travel": -7
+      },
+      "conflict": {
+        "security": -14,
+        "commerce": -10,
+        "travel": -12
+      },
+      "escalation": {
+        "security": -22,
+        "commerce": -18,
+        "travel": -20
+      },
+      "war": {
+        "security": -35,
+        "commerce": -28,
+        "travel": -30
+      }
+    },
+    "danger_thresholds": {
+      "high": 25,
+      "extreme": 12
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "山道附近出现更多巡逻与冲突痕迹，贸然深入更加危险。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "guiyun_city": {
+    "name": "归云城",
+    "recommended_level": 6,
+    "danger": "normal",
+    "exploration_events": [
+      "你从路人的只言片语中听到一条新消息。",
+      "你发现一处隐蔽的小巷入口。",
+      "城中巡逻加密，没有发现其他异常。",
+      {
+        "text": "你从云来客栈掌柜那里得到一条只有熟客才知道的暗巷线索。",
+        "requires": {
+          "relations": {
+            "云来客栈掌柜": {
+              "gte": 2
+            }
+          }
+        },
+        "effects": {
+          "set_flags": {
+            "explore:guiyun_city:inn_clue": true
+          }
+        }
+      }
+    ],
+    "faction_exposure": [
+      "官府",
+      "黑市",
+      "商会",
+      "沈府",
+      "江湖"
+    ],
+    "region_ecology": {
+      "security_base": 78,
+      "commerce_base": 82,
+      "travel_base": 80
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -5,
+        "commerce": -4,
+        "travel": -3
+      },
+      "confrontation": {
+        "security": -12,
+        "commerce": -10,
+        "travel": -8
+      },
+      "conflict": {
+        "security": -22,
+        "commerce": -18,
+        "travel": -15
+      },
+      "escalation": {
+        "security": -35,
+        "commerce": -28,
+        "travel": -25
+      },
+      "war": {
+        "security": -55,
+        "commerce": -45,
+        "travel": -40
+      }
+    },
+    "danger_thresholds": {
+      "high": 45,
+      "extreme": 25
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "城中巡逻明显增多，商旅开始避开部分街巷。",
+        "requires_level": "confrontation"
+      },
+      {
+        "min_security": 0,
+        "text": "归云城局势紧张，部分交易与任务受到影响。",
+        "requires_level": "conflict"
+      }
+    ]
+  },
+  "northfront_town": {
+    "name": "北境商镇",
+    "recommended_level": 6,
+    "danger": "normal",
+    "exploration_events": [
+      "货栈伙计正低声议论最近几批迟到的货物。",
+      "巡检在镇口盘查行商，气氛比往日紧张。",
+      "河埠边留着一串通往仓库的湿脚印。"
+    ],
+    "faction_exposure": [
+      "官府",
+      "黑市",
+      "江湖"
+    ],
+    "region_ecology": {
+      "security_base": 62,
+      "commerce_base": 76,
+      "travel_base": 55
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -3,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -7,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -14,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -22,
+        "travel": -17
+      },
+      "war": {
+        "security": -34,
+        "commerce": -38,
+        "travel": -28
+      }
+    },
+    "danger_thresholds": {
+      "high": 32,
+      "extreme": 16
+    },
+    "conflict_events": []
+  },
+  "mistwood": {
+    "name": "雾隐山林",
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "雾气间露出一串新鲜脚印，沿溪而去。",
+      "林下草药长势正盛，但附近似有野兽活动。",
+      "旧驿道旁的石桩刻着模糊的商队记号。"
+    ],
+    "faction_exposure": [
+      "江湖",
+      "青石村"
+    ],
+    "region_ecology": {
+      "security_base": 58,
+      "commerce_base": 32,
+      "travel_base": 44
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -3,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -7,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -14,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -22,
+        "travel": -17
+      },
+      "war": {
+        "security": -34,
+        "commerce": -38,
+        "travel": -28
+      }
+    },
+    "danger_thresholds": {
+      "high": 32,
+      "extreme": 16
+    },
+    "conflict_events": []
+  },
+  "sunken_ruins": {
+    "name": "沉河遗址",
+    "recommended_level": 5,
+    "danger": "dangerous",
+    "exploration_events": [
+      "石缝里卡着一片发黑的旧布，边缘有水渍。",
+      "暗渠传来断续水声，似乎仍与外界相通。",
+      "残碑上的字迹被磨损，只剩下半个“沉”字。"
+    ],
+    "faction_exposure": [
+      "江湖",
+      "黑市"
+    ],
+    "region_ecology": {
+      "security_base": 28,
+      "commerce_base": 12,
+      "travel_base": 22
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -3,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -7,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -14,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -22,
+        "travel": -17
+      },
+      "war": {
+        "security": -34,
+        "commerce": -38,
+        "travel": -28
+      }
+    },
+    "danger_thresholds": {
+      "high": 32,
+      "extreme": 16
+    },
+    "conflict_events": []
+  },
+  "huashan_mountain": {
+    "name": "华山群峰",
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "山门传来练剑声，今日弟子似乎比往常忙碌。",
+      "山道上的商旅行迹显示门派近日补充了不少物资。",
+      "云雾散开片刻，远处峰峦与飞檐清晰可见。"
+    ],
+    "faction_exposure": [
+      "江湖",
+      "华山"
+    ],
+    "region_ecology": {
+      "security_base": 76,
+      "commerce_base": 42,
+      "travel_base": 62
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -2,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -4,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -8,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -14,
+        "travel": -16
+      },
+      "war": {
+        "security": -32,
+        "commerce": -24,
+        "travel": -26
+      }
+    },
+    "danger_thresholds": {
+      "high": 35,
+      "extreme": 18
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "华山山道巡守增多，山门对外来行旅的盘查也更加谨慎。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "shaolin_mountain": {
+    "name": "嵩山少林",
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "石阶旁的香灰尚未散尽，看来刚有香客上山。",
+      "松林间传来练功声，少林弟子似乎正在晨练。",
+      "山风掠过寺院飞檐，钟声在群峰间回荡。"
+    ],
+    "faction_exposure": [
+      "江湖",
+      "少林"
+    ],
+    "region_ecology": {
+      "security_base": 78,
+      "commerce_base": 38,
+      "travel_base": 58
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -2,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -4,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -8,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -14,
+        "travel": -16
+      },
+      "war": {
+        "security": -32,
+        "commerce": -24,
+        "travel": -26
+      }
+    },
+    "danger_thresholds": {
+      "high": 35,
+      "extreme": 18
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "嵩山山道上的香客明显减少，少林山门也加强了巡查。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "wudang_mountain": {
+    "name": "武当山",
+    "recommended_level": 3,
+    "danger": "safe",
+    "exploration_events": [
+      "山风穿过松林，石阶旁的道家题刻清晰可见。",
+      "你听见远处传来晨钟，几名道人正沿山道缓步而行。",
+      "一名采药人提醒你，山路湿滑时要留意脚下。"
+    ],
+    "faction_exposure": [
+      "江湖",
+      "武当"
+    ],
+    "region_ecology": {
+      "security_base": 88,
+      "commerce_base": 45,
+      "travel_base": 72
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -2,
+        "commerce": -1,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -5,
+        "commerce": -3,
+        "travel": -4
+      },
+      "conflict": {
+        "security": -10,
+        "commerce": -6,
+        "travel": -8
+      },
+      "escalation": {
+        "security": -18,
+        "commerce": -12,
+        "travel": -14
+      },
+      "war": {
+        "security": -30,
+        "commerce": -20,
+        "travel": -25
+      }
+    },
+    "danger_thresholds": {
+      "high": 40,
+      "extreme": 22
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "山外局势趋紧，武当加强了山道巡查。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "tieyi_mountain": {
+    "name": "铁衣门山庄",
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "你看见弟子在石坪上练习负重步法。",
+      "山风吹过兵器架，几柄厚背刀发出轻响。",
+      "山庄外的车辙显示，近日仍有护运行商往来。"
+    ],
+    "faction_exposure": [
+      "铁衣门",
+      "江湖",
+      "商会"
+    ],
+    "region_ecology": {
+      "security_base": 58,
+      "commerce_base": 62,
+      "travel_base": 55
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -3,
+        "commerce": -2,
+        "travel": -2
+      },
+      "confrontation": {
+        "security": -6,
+        "commerce": -4,
+        "travel": -5
+      },
+      "conflict": {
+        "security": -12,
+        "commerce": -8,
+        "travel": -10
+      },
+      "escalation": {
+        "security": -20,
+        "commerce": -14,
+        "travel": -16
+      },
+      "war": {
+        "security": -32,
+        "commerce": -24,
+        "travel": -25
+      }
+    },
+    "danger_thresholds": {
+      "high": 30,
+      "extreme": 15
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "铁衣门周边的护运队伍开始加派人手，山路上的气氛变得紧张。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "duanhun_ridge": {
+    "name": "断魂岭",
+    "recommended_level": 13,
+    "danger": "extreme",
+    "exploration_events": [
+      "你在岭道上发现一队马贼留下的蹄印，方向直指断魂堡。",
+      "山风送来断续的弩弦声，崖边或许有人放哨。",
+      "涧底散落着被劫商货的残片，说明这条路线仍不安全。"
+    ],
+    "faction_exposure": [
+      "黑风寨",
+      "江湖"
+    ],
+    "region_ecology": {
+      "security_base": 22,
+      "commerce_base": 18,
+      "travel_base": 20
+    },
+    "conflict_effects": {
+      "tension": {
+        "security": -4,
+        "commerce": -3,
+        "travel": -4
+      },
+      "confrontation": {
+        "security": -8,
+        "commerce": -6,
+        "travel": -8
+      },
+      "conflict": {
+        "security": -15,
+        "commerce": -11,
+        "travel": -14
+      },
+      "escalation": {
+        "security": -24,
+        "commerce": -19,
+        "travel": -22
+      },
+      "war": {
+        "security": -36,
+        "commerce": -30,
+        "travel": -32
+      }
+    },
+    "danger_thresholds": {
+      "high": 18,
+      "extreme": 8
+    },
+    "conflict_events": [
+      {
+        "min_security": 0,
+        "text": "岭上残匪与黑风寨旧部仍在活动，栈道上的截杀愈发频繁。",
+        "requires_level": "confrontation"
+      }
+    ]
+  },
+  "inn_upper": {
+    "name": "悦来客栈二楼",
+    "indoor": true,
+    "recommended_level": 1,
+    "danger": "safe",
+    "exploration_events": [],
+    "faction_exposure": [],
+    "region_ecology": {
+      "security_base": 100,
+      "commerce_base": 60,
+      "travel_base": 40
+    },
+    "conflict_effects": {},
+    "danger_thresholds": {
+      "high": 35,
+      "extreme": 20
+    },
+    "conflict_events": []
+  }
+}

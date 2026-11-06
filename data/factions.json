@@ -1,0 +1,437 @@
+{
+  "青石村": {
+    "title": "青石村乡里势力",
+    "desc": "以青石村为核心的乡里网络，重视乡民安全与地方秩序。",
+    "influence": 42,
+    "stance": "守护",
+    "relations": {
+      "官府": 18,
+      "商会": 8,
+      "黑市": -45,
+      "江湖": 10,
+      "沈府": 0,
+      "黑风寨": -65,
+      "少林": 12,
+      "武当": 10,
+      "华山": 8,
+      "铁衣门": -8
+    },
+    "actions": [
+      {
+        "id": "village_warning",
+        "title": "青石村发出警戒",
+        "type": "defense",
+        "interval": 5,
+        "cooldown": 10,
+        "requires": {
+          "faction_relations": {
+            "青石村:黑市": {
+              "lte": -40
+            }
+          }
+        },
+        "target_faction": "黑市",
+        "text": "青石村察觉地下势力活动增强，开始提醒村民提高戒备。",
+        "effects": {
+          "increment_variables": {
+            "village_alert": 1
+          }
+        },
+        "npc_reactions": [
+          {
+            "npc": "村长",
+            "state": "busy",
+            "duration": 4,
+            "reason": "组织村民警戒"
+          }
+        ],
+        "player_information": {
+          "topic": "faction:青石村:黑市",
+          "text": "青石村正在加强对黑市势力的警戒。",
+          "source": "青石村",
+          "confidence": 80,
+          "ttl": 10,
+          "sentiment": "negative"
+        }
+      }
+    ]
+  },
+  "官府": {
+    "title": "归云城官府",
+    "desc": "维护城内秩序的官府体系，重视案件、治安与证据。",
+    "influence": 68,
+    "stance": "秩序",
+    "relations": {
+      "青石村": 18,
+      "商会": 12,
+      "黑市": -70,
+      "江湖": -5,
+      "沈府": 0,
+      "黑风寨": -75,
+      "少林": 15,
+      "武当": 12,
+      "华山": 8,
+      "铁衣门": -5
+    },
+    "actions": [
+      {
+        "id": "black_market_crackdown",
+        "title": "官府清剿黑市",
+        "type": "conflict",
+        "interval": 3,
+        "cooldown": 6,
+        "requires": {
+          "faction_relations": {
+            "官府:黑市": {
+              "lte": -50
+            }
+          }
+        },
+        "target_faction": "黑市",
+        "text": "官府认为黑市活动已经越过底线，开始组织一轮针对性的查缉。",
+        "effects": {
+          "faction_relations": {
+            "官府:黑市": -4
+          },
+          "increment_variables": {
+            "law_enforcement_pressure": 1
+          }
+        },
+        "npc_reactions": [
+          {
+            "npc": "捕头",
+            "state": "busy",
+            "duration": 4,
+            "reason": "参与官府清剿行动"
+          }
+        ],
+        "player_information": {
+          "topic": "faction:官府:黑市",
+          "text": "官府正在加强对黑市的查缉，城内暗线交易风险上升。",
+          "source": "官府",
+          "confidence": 85,
+          "ttl": 8,
+          "sentiment": "negative"
+        }
+      }
+    ]
+  },
+  "商会": {
+    "title": "归云商会",
+    "desc": "掌握货物流通与商路资源的地方商业网络，偏好稳定与利益。",
+    "influence": 55,
+    "stance": "逐利",
+    "relations": {
+      "青石村": 8,
+      "官府": 12,
+      "黑市": -18,
+      "江湖": 14,
+      "沈府": 0,
+      "黑风寨": -35,
+      "少林": 8,
+      "武当": 10,
+      "华山": 12,
+      "铁衣门": 5
+    },
+    "actions": [
+      {
+        "id": "mediate_official_blackmarket",
+        "title": "商会调停暗线",
+        "type": "mediation",
+        "interval": 4,
+        "cooldown": 8,
+        "requires": {
+          "faction_relations": {
+            "官府:黑市": {
+              "lte": -65
+            }
+          }
+        },
+        "target_faction": "官府",
+        "text": "商会担心秩序失控影响商路，开始尝试缓和官府与黑市的紧张关系。",
+        "effects": {
+          "faction_relations": {
+            "官府:黑市": 6
+          },
+          "increment_variables": {
+            "merchant_mediation": 1
+          }
+        },
+        "npc_reactions": [
+          {
+            "npc": "万商会会长",
+            "state": "busy",
+            "duration": 4,
+            "reason": "处理商路与地下交易冲突"
+          }
+        ],
+        "player_information": {
+          "topic": "faction:商会调停",
+          "text": "商会正在介入官府与黑市的冲突，试图避免商路受到波及。",
+          "source": "商会",
+          "confidence": 75,
+          "ttl": 8,
+          "sentiment": "neutral"
+        }
+      }
+    ]
+  },
+  "黑市": {
+    "title": "地下黑市网络",
+    "desc": "盘踞于城中暗处的交易与情报网络，擅长规避规则并争夺隐秘资源。",
+    "influence": 46,
+    "stance": "隐秘",
+    "relations": {
+      "青石村": -45,
+      "官府": -70,
+      "商会": -18,
+      "江湖": 20,
+      "沈府": 0,
+      "黑风寨": 0,
+      "少林": -15,
+      "武当": -10,
+      "华山": -5,
+      "铁衣门": -10
+    },
+    "actions": [
+      {
+        "id": "counter_official_crackdown",
+        "title": "黑市反制官府",
+        "type": "conflict",
+        "interval": 3,
+        "cooldown": 6,
+        "requires": {
+          "faction_relations": {
+            "官府:黑市": {
+              "lte": -55
+            }
+          }
+        },
+        "target_faction": "官府",
+        "text": "黑市开始转移货路并散播消息，试图削弱官府的查缉优势。",
+        "effects": {
+          "faction_relations": {
+            "官府:黑市": 4
+          },
+          "increment_variables": {
+            "black_market_activity": 1
+          }
+        },
+        "npc_reactions": [
+          {
+            "npc": "黑市接头人",
+            "state": "busy",
+            "duration": 4,
+            "reason": "组织黑市反制行动"
+          }
+        ],
+        "player_information": {
+          "topic": "faction:官府:黑市",
+          "text": "黑市正在反制官府查缉，地下交易网络变得更加隐秘。",
+          "source": "黑市",
+          "confidence": 80,
+          "ttl": 8,
+          "sentiment": "negative"
+        }
+      }
+    ]
+  },
+  "江湖": {
+    "title": "游离江湖势力",
+    "desc": "不受单一组织完全约束的江湖人物网络，重视个人声望与机会。",
+    "influence": 35,
+    "stance": "游离",
+    "relations": {
+      "青石村": 10,
+      "官府": -5,
+      "商会": 14,
+      "黑市": 20,
+      "沈府": 0,
+      "黑风寨": -10,
+      "少林": 25,
+      "武当": 25,
+      "华山": 20,
+      "铁衣门": -8
+    },
+    "actions": [
+      {
+        "id": "spread_rumor",
+        "title": "江湖散播风声",
+        "type": "information",
+        "interval": 4,
+        "cooldown": 8,
+        "requires": {
+          "faction_relations": {
+            "官府:黑市": {
+              "lte": -50
+            }
+          }
+        },
+        "target_faction": "官府",
+        "text": "江湖人物察觉官府与黑市冲突升级，开始在城中传播消息。",
+        "effects": {
+          "increment_variables": {
+            "jianghu_rumor_wave": 1
+          }
+        },
+        "player_information": {
+          "topic": "faction:官府:黑市:rumor",
+          "text": "江湖中正在流传官府与黑市冲突升级的消息。",
+          "source": "江湖",
+          "confidence": 65,
+          "ttl": 6,
+          "sentiment": "negative"
+        }
+      }
+    ]
+  },
+  "沈府": {
+    "title": "沈府私家势力",
+    "desc": "归云城中的地方豪族网络，重视家族利益、声望与自身资源。",
+    "influence": 38,
+    "stance": "家族",
+    "relations": {
+      "青石村": 0,
+      "官府": 0,
+      "商会": 0,
+      "黑市": 0,
+      "江湖": 0,
+      "黑风寨": 0,
+      "少林": 5,
+      "武当": 5,
+      "华山": 5,
+      "铁衣门": 0
+    },
+    "actions": [
+      {
+        "id": "pressure_official",
+        "title": "沈府施压官府",
+        "type": "political",
+        "interval": 5,
+        "cooldown": 10,
+        "requires": {
+          "faction_relations": {
+            "沈府:官府": {
+              "lte": -5
+            }
+          }
+        },
+        "target_faction": "官府",
+        "text": "沈府开始利用地方人脉向官府施压，希望减少对自身事务的干预。",
+        "effects": {
+          "faction_relations": {
+            "沈府:官府": 3
+          },
+          "increment_variables": {
+            "shen_mansion_pressure": 1
+          }
+        },
+        "npc_reactions": [
+          {
+            "npc": "沈府管家",
+            "state": "busy",
+            "duration": 4,
+            "reason": "处理沈府与官府关系"
+          }
+        ],
+        "player_information": {
+          "topic": "faction:沈府:官府",
+          "text": "沈府正在通过地方关系影响官府的行动。",
+          "source": "沈府",
+          "confidence": 70,
+          "ttl": 10,
+          "sentiment": "neutral"
+        }
+      }
+    ]
+  },
+  "黑风寨": {
+    "title": "黑风寨山寨势力",
+    "desc": "盘踞于黑风山一带的劫道山寨，依靠武力控制山路、劫掠商旅并争夺补给；与沉星黑市并非同一组织，双方是否合作须由具体事件决定。",
+    "influence": 40,
+    "stance": "劫掠",
+    "relations": {
+      "青石村": -65,
+      "官府": -75,
+      "商会": -35,
+      "黑市": 0,
+      "江湖": -10,
+      "沈府": 0,
+      "少林": -25,
+      "武当": -20,
+      "华山": -15,
+      "铁衣门": -20
+    },
+    "actions": []
+  },
+  "少林": {
+    "title": "少林门派势力",
+    "stance": "正道门派",
+    "influence": 58,
+    "relations": {
+      "江湖": 25,
+      "官府": 15,
+      "商会": 8,
+      "黑市": -15,
+      "黑风寨": -25,
+      "青石村": 12,
+      "沈府": 5,
+      "武当": 10,
+      "华山": 5,
+      "铁衣门": -10
+    }
+  },
+  "武当": {
+    "title": "武当门派势力",
+    "stance": "正道门派",
+    "influence": 56,
+    "relations": {
+      "江湖": 25,
+      "官府": 12,
+      "商会": 10,
+      "黑市": -10,
+      "黑风寨": -20,
+      "青石村": 10,
+      "沈府": 5,
+      "少林": 10,
+      "华山": 15,
+      "铁衣门": -15
+    }
+  },
+  "华山": {
+    "title": "华山门派势力",
+    "stance": "正道门派",
+    "influence": 52,
+    "relations": {
+      "江湖": 20,
+      "官府": 8,
+      "商会": 12,
+      "黑市": -5,
+      "黑风寨": -15,
+      "青石村": 8,
+      "沈府": 5,
+      "少林": 5,
+      "武当": 15,
+      "铁衣门": -20
+    }
+  },
+  "铁衣门": {
+    "title": "铁衣门门派势力",
+    "desc": "以横练武学、兵器训练和护运行走立足的竞争门派，行事强硬但有自己的门规与利益。",
+    "influence": 45,
+    "stance": "江湖竞争门派",
+    "relations": {
+      "青石村": -8,
+      "官府": -5,
+      "商会": 5,
+      "黑市": -10,
+      "江湖": -8,
+      "沈府": 0,
+      "黑风寨": -20,
+      "少林": -10,
+      "武当": -15,
+      "华山": -20
+    },
+    "actions": []
+  }
+}

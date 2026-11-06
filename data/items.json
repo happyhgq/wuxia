@@ -1,38 +1,59 @@
 {
   "疗伤药": {
+    "id": "liao shang yao",
     "type": "consumable",
-    "desc": "寻常金疮药，敷之止血生肌。",
+    "desc": "常备金疮药，以止血草药与药粉调制，可恢复少量气血。",
     "effect": {
       "hp": 50
     },
-    "price": 20
+    "price": 20,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
   },
   "回内丹": {
+    "id": "hui nei dan",
     "type": "consumable",
-    "desc": "复耗损之内力。",
+    "desc": "以温养药材炼成的小丹，服下后可补回部分内力。",
     "effect": {
       "mp": 30
     },
-    "price": 25
+    "price": 25,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
   },
   "金创药": {
+    "id": "jin chuang yao",
     "type": "consumable",
-    "desc": "掺入冰片、麝香，外伤立止。",
+    "desc": "掺有冰片与麝香的外伤药，敷在伤处可止血生肌，恢复气血。",
     "effect": {
       "hp": 120
     },
-    "price": 50
+    "price": 50,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
   },
   "大还丹": {
+    "id": "da huan dan",
     "type": "consumable",
     "desc": "名贵灵药，可同时复大量气血与内力。",
     "effect": {
       "hp": 250,
       "mp": 120
     },
-    "price": 200
+    "price": 200,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
   },
   "护体丹": {
+    "id": "hu ti dan",
     "type": "consumable",
     "desc": "服下后真气护体，吸收40点伤害。",
     "effect": {
@@ -42,68 +63,1189 @@
         "value": 40
       }
     },
-    "price": 60
+    "price": 60,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
   },
   "木剑": {
+    "id": "mu jian",
     "type": "weapon",
-    "desc": "寻常柳木所制。",
+    "desc": "以柳木削制的练习用剑，分量轻，适合初学者熟悉握剑与出招。",
     "atk": 5,
-    "price": 10
+    "price": 10,
+    "slot": "weapon",
+    "attribute_bonus": {
+      "strength": 0
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "木制",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
   },
   "铁剑": {
+    "id": "tie jian",
     "type": "weapon",
-    "desc": "刃口薄利，尚堪一用。",
+    "desc": "寻常铁匠锻打的制式铁剑，刃口尚利，是初入江湖时可靠的兵器。",
     "atk": 12,
-    "price": 50
+    "price": 50,
+    "slot": "weapon",
+    "accuracy_bonus": 0.02,
+    "quality": "普通",
+    "quality_variants": {
+      "精良": "铁剑·精良",
+      "稀有": "铁剑·稀有"
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "铁制",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
   },
   "精铁剑": {
+    "id": "jing tie jian",
     "type": "weapon",
     "desc": "精铁千锤百炼而成，刃口寒光凛冽。",
     "atk": 20,
-    "price": 150
+    "price": 150,
+    "slot": "weapon",
+    "crit_bonus": 0.02,
+    "attribute_bonus": {
+      "strength": 1
+    },
+    "quality": "普通",
+    "quality_variants": {
+      "精良": "精铁剑·精良",
+      "稀有": "精铁剑·稀有",
+      "史诗": "精铁剑·史诗"
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
   },
   "玄铁重剑": {
+    "id": "xuan tie zhong jian",
     "type": "weapon",
-    "desc": "重剑无锋，大巧不工。",
+    "desc": "以沉重玄铁打造的厚刃重剑，不以锋利取胜，而以分量与劲力压制对手。",
     "atk": 35,
-    "price": 400
+    "price": 400,
+    "slot": "weapon",
+    "crit_bonus": 0.03,
+    "accuracy_bonus": -0.02,
+    "attribute_bonus": {
+      "strength": 2
+    },
+    "quality": "普通",
+    "quality_variants": {
+      "稀有": "玄铁重剑·稀有",
+      "史诗": "玄铁重剑·史诗"
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备后提升攻击；命中时有18%概率破防2回合，削弱对手防御。",
+    "material": "玄铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "armor_break",
+      "chance": 0.18,
+      "turns": 2,
+      "value": 6,
+      "description": "重剑势沉，命中时有机会破开对手架势。"
+    }
   },
   "布衣": {
+    "id": "bu yi",
+    "clothing": true,
     "type": "armor",
-    "desc": "寻常粗布缝制，聊胜于无。",
+    "desc": "粗布缝成的寻常衣衫，防护有限，但足以遮身御寒。",
     "defense": 3,
-    "price": 15
+    "price": 15,
+    "slot": "armor",
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "布料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
   },
   "皮甲": {
+    "id": "pi jia",
     "type": "armor",
-    "desc": "硝制牛皮所制，轻便耐穿。",
+    "desc": "经过硝制的皮革缝合而成，轻便耐穿，可抵挡部分寻常刀拳。",
     "defense": 8,
-    "price": 40
+    "price": 40,
+    "slot": "armor",
+    "dodge_bonus": 0.02,
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "quality": "普通",
+    "quality_variants": {
+      "精良": "皮甲·精良",
+      "稀有": "皮甲·稀有"
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "皮革",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
   },
   "锁子甲": {
+    "id": "suo zi jia",
     "type": "armor",
-    "desc": "铁环相扣如网，防守极佳。",
+    "desc": "细铁环相扣编成的护甲，覆盖处防护较强，但穿戴后略显沉重。",
     "defense": 15,
-    "price": 120
+    "price": 120,
+    "slot": "armor",
+    "dodge_bonus": -0.01,
+    "attribute_bonus": {
+      "constitution": 2
+    },
+    "quality": "普通",
+    "quality_variants": {
+      "精良": "锁子甲·精良",
+      "稀有": "锁子甲·稀有",
+      "史诗": "锁子甲·史诗"
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
   },
   "草药": {
+    "id": "cao yao",
     "type": "material",
-    "desc": "山野间常见的疗伤草药。",
-    "price": 8
+    "desc": "山野间常见的疗伤草药，可直接出售，也可留作制药原料。",
+    "price": 8,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "草药",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
   },
   "铁矿石": {
+    "id": "tie kuang shi",
     "type": "material",
     "desc": "沉甸甸的铁矿石，可用于打造强化。",
-    "price": 12
+    "price": 12,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "铁矿石",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
   },
   "野猪肉": {
+    "id": "ye zhu rou",
     "type": "material",
-    "desc": "新鲜野猪肉，可卖与商家换钱。",
-    "price": 6
+    "desc": "从野猪身上取得的新鲜兽肉，可卖给商贩，也可用于食物制作。",
+    "price": 6,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "野猪肉",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
   },
   "蛇胆": {
+    "id": "she dan",
     "type": "material",
-    "desc": "毒蛇之胆，名贵药材。",
-    "price": 15
+    "desc": "从毒蛇体内取得的药材，药性强烈，常被药铺收购或用于配药。",
+    "price": 15,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "蛇胆",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "铁剑·精良": {
+    "id": "tie jian jing liang",
+    "type": "weapon",
+    "desc": "刃口薄利，尚堪一用。【精良品质】",
+    "price": 75,
+    "slot": "weapon",
+    "quality": "精良",
+    "base_item": "铁剑",
+    "affix_count": 1,
+    "atk": 15,
+    "accuracy_bonus": 0.03,
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "铁制",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "铁剑·稀有": {
+    "id": "tie jian xi you",
+    "type": "weapon",
+    "desc": "刃口薄利，尚堪一用。【稀有品质】",
+    "price": 120,
+    "slot": "weapon",
+    "quality": "稀有",
+    "base_item": "铁剑",
+    "affix_count": 2,
+    "atk": 18,
+    "accuracy_bonus": 0.04,
+    "crit_bonus": 0.02,
+    "enhance_max": 7,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 65,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "铁制",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "精铁剑·精良": {
+    "id": "jing tie jian jing liang",
+    "type": "weapon",
+    "desc": "精铁千锤百炼而成，刃口寒光凛冽。【精良品质】",
+    "price": 225,
+    "slot": "weapon",
+    "quality": "精良",
+    "base_item": "精铁剑",
+    "affix_count": 2,
+    "atk": 23,
+    "crit_bonus": 0.03,
+    "attribute_bonus": {
+      "strength": 1
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "精铁剑·稀有": {
+    "id": "jing tie jian xi you",
+    "type": "weapon",
+    "desc": "精铁千锤百炼而成，刃口寒光凛冽。【稀有品质】",
+    "price": 330,
+    "slot": "weapon",
+    "quality": "稀有",
+    "base_item": "精铁剑",
+    "affix_count": 3,
+    "atk": 27,
+    "accuracy_bonus": 0.02,
+    "crit_bonus": 0.04,
+    "attribute_bonus": {
+      "strength": 2
+    },
+    "enhance_max": 7,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 65,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "精铁剑·史诗": {
+    "id": "jing tie jian shi shi",
+    "type": "weapon",
+    "desc": "精铁千锤百炼而成，刃口寒光凛冽。【史诗品质】",
+    "price": 520,
+    "slot": "weapon",
+    "quality": "史诗",
+    "base_item": "精铁剑",
+    "affix_count": 3,
+    "atk": 32,
+    "accuracy_bonus": 0.03,
+    "crit_bonus": 0.06,
+    "attribute_bonus": {
+      "strength": 3
+    },
+    "enhance_max": 8,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 90,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "玄铁重剑·稀有": {
+    "id": "xuan tie zhong jian xi you",
+    "type": "weapon",
+    "desc": "重剑无锋，大巧不工。【稀有品质】",
+    "price": 600,
+    "slot": "weapon",
+    "quality": "稀有",
+    "base_item": "玄铁重剑",
+    "affix_count": 3,
+    "atk": 42,
+    "accuracy_bonus": -0.01,
+    "crit_bonus": 0.05,
+    "attribute_bonus": {
+      "strength": 3
+    },
+    "enhance_max": 7,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 65,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "玄铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "玄铁重剑·史诗": {
+    "id": "xuan tie zhong jian shi shi",
+    "type": "weapon",
+    "desc": "重剑无锋，大巧不工。【史诗品质】",
+    "price": 900,
+    "slot": "weapon",
+    "quality": "史诗",
+    "base_item": "玄铁重剑",
+    "affix_count": 3,
+    "atk": 50,
+    "accuracy_bonus": 0.01,
+    "crit_bonus": 0.07,
+    "attribute_bonus": {
+      "strength": 4
+    },
+    "enhance_max": 8,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 90,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "玄铁",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "皮甲·精良": {
+    "id": "pi jia jing liang",
+    "type": "armor",
+    "desc": "硝制牛皮所制，轻便耐穿。【精良品质】",
+    "price": 70,
+    "slot": "armor",
+    "quality": "精良",
+    "base_item": "皮甲",
+    "affix_count": 2,
+    "defense": 10,
+    "dodge_bonus": 0.03,
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "皮革",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "皮甲·稀有": {
+    "id": "pi jia xi you",
+    "type": "armor",
+    "desc": "硝制牛皮所制，轻便耐穿。【稀有品质】",
+    "price": 110,
+    "slot": "armor",
+    "quality": "稀有",
+    "base_item": "皮甲",
+    "affix_count": 2,
+    "defense": 12,
+    "dodge_bonus": 0.04,
+    "attribute_bonus": {
+      "agility": 2
+    },
+    "enhance_max": 7,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 65,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "皮革",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "锁子甲·精良": {
+    "id": "suo zi jia jing liang",
+    "type": "armor",
+    "desc": "铁环相扣如网，防守极佳。【精良品质】",
+    "price": 180,
+    "slot": "armor",
+    "quality": "精良",
+    "base_item": "锁子甲",
+    "affix_count": 1,
+    "defense": 18,
+    "dodge_bonus": 0.0,
+    "attribute_bonus": {
+      "constitution": 3
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "锁子甲·稀有": {
+    "id": "suo zi jia xi you",
+    "type": "armor",
+    "desc": "铁环相扣如网，防守极佳。【稀有品质】",
+    "price": 280,
+    "slot": "armor",
+    "quality": "稀有",
+    "base_item": "锁子甲",
+    "affix_count": 2,
+    "defense": 21,
+    "dodge_bonus": 0.01,
+    "attribute_bonus": {
+      "constitution": 3,
+      "internal": 1
+    },
+    "enhance_max": 7,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 65,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "锁子甲·史诗": {
+    "id": "suo zi jia shi shi",
+    "type": "armor",
+    "desc": "铁环相扣如网，防守极佳。【史诗品质】",
+    "price": 450,
+    "slot": "armor",
+    "quality": "史诗",
+    "base_item": "锁子甲",
+    "affix_count": 2,
+    "defense": 25,
+    "dodge_bonus": 0.03,
+    "attribute_bonus": {
+      "constitution": 4,
+      "internal": 1
+    },
+    "enhance_max": 8,
+    "enhance_ore_cost": 2,
+    "enhance_gold_cost": 90,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "雾露草": {
+    "id": "wu lu cao",
+    "type": "material",
+    "desc": "雾隐溪谷常见的药草，叶面凝着清凉露珠，可供制药。",
+    "price": 8,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "雾露草",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "凝露丸": {
+    "id": "ning lu wan",
+    "type": "consumable",
+    "desc": "以雾露草炼制的小药丸，服下后恢复少量气血。",
+    "effect": {
+      "hp": 45
+    },
+    "price": 28,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
+  },
+  "山獐肉": {
+    "id": "shan zhang rou",
+    "type": "material",
+    "desc": "新鲜的山獐肉，炙烤后可作旅途干粮。",
+    "price": 12,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "山獐肉",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "猎户旧图": {
+    "id": "lie hu jiu tu",
+    "type": "quest",
+    "desc": "猎户留下的旧驿道图，边角标着一处被遗忘的渡口。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "沉河铜钱": {
+    "id": "chen he tong qian",
+    "type": "material",
+    "desc": "从河床淤泥中拾起的旧铜钱，背面刻着模糊的商队印记。",
+    "price": 15,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "沉河铜钱",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "潮纹石片": {
+    "id": "chao wen shi pian",
+    "type": "quest",
+    "desc": "石祠暗渠中找到的石片，纹路与旧商队封印相似。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "锈蚀令牌": {
+    "id": "xiu shi ling pai",
+    "type": "quest",
+    "desc": "一枚锈蚀的护运令牌，似乎曾属于失踪的商队护卫。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "北境肉干": {
+    "id": "bei jing rou gan",
+    "type": "consumable",
+    "desc": "北境商旅常备的肉干，恢复少量气血。",
+    "effect": {
+      "hp": 35
+    },
+    "price": 18,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
+  },
+  "商队封蜡": {
+    "id": "shang dui feng la",
+    "type": "material",
+    "desc": "带有北境商号印记的封蜡，可用于辨认货箱真伪。",
+    "price": 10,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "商队封蜡",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "精制护腕": {
+    "id": "jing zhi hu wan",
+    "type": "accessory",
+    "desc": "北境铁匠打制的护腕，能略微提升防御。",
+    "price": 95,
+    "slot": "accessory",
+    "defense": 4,
+    "attribute_bonus": {
+      "constitution": 1
+    },
+    "use_hint": "佩戴后发挥其附加效果，留意装备栏与属性变化。"
+  },
+  "雾行短刃": {
+    "id": "wu xing duan ren",
+    "type": "weapon",
+    "desc": "猎户用来防身的短刃，轻便而锋利。",
+    "price": 75,
+    "slot": "weapon",
+    "atk": 9,
+    "use_hint": "装备于兵器栏后提升攻击能力；不同兵刃适合不同战斗风格。",
+    "material": "常见兵材",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。"
+  },
+  "沉河铁片": {
+    "id": "chen he tie pian",
+    "type": "material",
+    "desc": "暗渠中捡到的旧铁片，表面留有被水流磨蚀的刻痕。",
+    "price": 22,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "沉河铁片",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "雾隐短刃": {
+    "id": "wu yin duan ren",
+    "type": "weapon",
+    "desc": "雾隐猎户以轻钢打造的短刃，轻巧灵便，适合迅捷出手。",
+    "atk": 17,
+    "price": 180,
+    "slot": "weapon",
+    "accuracy_bonus": 0.04,
+    "crit_bonus": 0.02,
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备后提升攻击、命中与暴击；命中时有18%概率使对手流血2回合。",
+    "material": "常见兵材",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "bleed",
+      "chance": 0.18,
+      "turns": 2,
+      "value": 4,
+      "description": "短刃迅疾，命中时有机会造成持续流血。"
+    }
+  },
+  "沉河护腕": {
+    "id": "chen he hu wan",
+    "type": "armor",
+    "desc": "从沉河遗物中修复的皮护腕，能在缠斗时护住腕骨。",
+    "defense": 7,
+    "price": 210,
+    "slot": "armor",
+    "attribute_bonus": {
+      "constitution": 1
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "北境巡河刀": {
+    "id": "bei jing xun he dao",
+    "type": "weapon",
+    "desc": "巡河老兵常用的厚背刀，出手沉稳。",
+    "atk": 24,
+    "price": 320,
+    "slot": "weapon",
+    "crit_bonus": 0.03,
+    "attribute_bonus": {
+      "strength": 1
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备后提升攻击与暴击；命中时有8%概率震乱对手，使其眩晕1回合。",
+    "material": "常见兵材",
+    "condition": "常用",
+    "craft_note": "刃口、重心与握柄状态会影响使用手感；此处为物品背景描述，不额外改变现有属性。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "stun",
+      "chance": 0.08,
+      "turns": 1,
+      "value": 0,
+      "description": "厚背刀势沉，命中时偶尔震乱对手动作。"
+    }
+  },
+  "行商软甲": {
+    "id": "xing shang ruan jia",
+    "type": "armor",
+    "desc": "商队护卫常穿的轻便软甲，兼顾防护与行动。",
+    "defense": 10,
+    "price": 350,
+    "slot": "armor",
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护，出门探索前可比较防御收益。",
+    "material": "复合护具材料",
+    "condition": "日常使用",
+    "craft_note": "缝线、扣带与受力部位是判断护具状态的关键。"
+  },
+  "清心散": {
+    "id": "qing xin san",
+    "type": "consumable",
+    "desc": "清苦药散，可恢复内力并稳定心神。",
+    "effect": {
+      "mp": 55
+    },
+    "price": 65,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
+  },
+  "行军干粮": {
+    "id": "xing jun gan liang",
+    "type": "consumable",
+    "desc": "北境商队常备干粮，能恢复少量气血与内力。",
+    "effect": {
+      "hp": 45,
+      "mp": 20
+    },
+    "price": 40,
+    "use_hint": "使用前查看恢复量或持续效果，状态良好时不必急于消耗。",
+    "material": "药材与辅料",
+    "condition": "可用",
+    "craft_note": "药效与用途以物品说明为准。"
+  },
+  "联络暗记": {
+    "id": "lian luo an ji",
+    "type": "quest",
+    "desc": "从船运记号与黑市旧账中拼合出的联络暗记，足以证明中间人使用固定时段传递消息，但还不能指认幕后主谋。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "护送回执": {
+    "id": "hu song hui zhi",
+    "type": "quest",
+    "desc": "记录夜行商队安全通过河埠的回执，可用于核对护送路线。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "证人供词": {
+    "id": "zheng ren gong ci",
+    "type": "quest",
+    "desc": "经官府核验后封存的证词，记载了账册被调换前后的可疑往来。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "残缺货单": {
+    "id": "can que huo dan",
+    "type": "quest",
+    "desc": "从私枭手中找回并拼合的货单缺页，记录了同一批货物更换商号的痕迹。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "黑市旧账": {
+    "id": "hei shi jiu zhang",
+    "type": "quest",
+    "desc": "以代称和暗语记录的黑市账目，能够交叉印证转运中间人的活动。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "封蜡拓印": {
+    "id": "feng la ta yin",
+    "type": "quest",
+    "desc": "经万商会核验的封蜡拓印，可证明可疑货箱使用过相同的私运印记。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "交接记录": {
+    "id": "jiao jie ji lu",
+    "type": "quest",
+    "desc": "确认过时段与船运记号的交接记录，可与暗仓账册相互印证。",
+    "price": 0,
+    "use_hint": "可查看详细属性与用途，再决定装备、使用、出售或留作任务与制作材料。"
+  },
+  "木材": {
+    "id": "mu cai",
+    "type": "material",
+    "desc": "从雾隐林道采伐的木料，可用于行商与日常制作。",
+    "price": 6,
+    "use_hint": "可用于出售或制作；若有配方需求，建议留存一部分。",
+    "material": "木材",
+    "condition": "原料",
+    "craft_note": "可作为交易或制作的基础原料，具体用途以配方和交易规则为准。"
+  },
+  "粗粮馒头": {
+    "id": "cu liang man tou",
+    "type": "consumable",
+    "desc": "用粗面蒸成的热馒头，味道朴实，耐放顶饱。",
+    "effect": {
+      "hp": 20,
+      "mp": 5
+    },
+    "price": 4,
+    "use_hint": "旅途中充饥，略微恢复气血与内力。",
+    "material": "粗面",
+    "quality": "寻常",
+    "condition": "新鲜",
+    "craft_note": "以粗面蒸制，便于携带，适合短途行旅充饥。"
+  },
+  "热汤面": {
+    "id": "re tang mian",
+    "type": "consumable",
+    "desc": "一碗热气腾腾的汤面，汤底鲜香，最适合赶路后暖胃。",
+    "effect": {
+      "hp": 35,
+      "mp": 12
+    },
+    "price": 8,
+    "use_hint": "食用后恢复少量气血与内力。",
+    "material": "麦面、清汤",
+    "quality": "店家手艺",
+    "condition": "现做",
+    "craft_note": "现点现做，热汤暖胃，适合在客栈堂中食用。"
+  },
+  "酱香烧鸡": {
+    "id": "jiang xiang shao ji",
+    "type": "consumable",
+    "desc": "整鸡以酱料慢火烧制，皮色红亮，肉香浓郁，是客栈招牌硬菜。",
+    "effect": {
+      "hp": 60,
+      "mp": 20
+    },
+    "price": 18,
+    "use_hint": "一顿扎实的热食，可恢复一部分气血与内力。",
+    "material": "鸡肉、香料",
+    "quality": "招牌菜",
+    "condition": "现做",
+    "craft_note": "店家以酱料慢火烧制，适合多人分食或长途赶路补充体力。"
+  },
+  "飞蝗石": {
+    "id": "fei huang shi",
+    "type": "consumable",
+    "desc": "江湖常见的铁制暗器，出手迅疾，适合在近战中打乱对手节奏。",
+    "effect": {
+      "target_damage": 35
+    },
+    "price": 18,
+    "use_hint": "仅可在战斗中使用，对当前敌人造成35点伤害。",
+    "material": "精铁",
+    "condition": "可用",
+    "craft_note": "一次性暗器，命中后即消耗。"
+  },
+  "透骨钉": {
+    "id": "tou gu ding",
+    "type": "consumable",
+    "desc": "细长淬锋的透骨钉，伤害不高，却容易令伤口持续恶化。",
+    "effect": {
+      "target_damage": 20,
+      "target_status": {
+        "name": "poison",
+        "turns": 3,
+        "value": 4
+      }
+    },
+    "price": 32,
+    "use_hint": "仅可在战斗中使用，造成20点伤害并使敌人中毒3回合，每回合损失4点气血。",
+    "material": "精铁与药毒",
+    "condition": "可用",
+    "craft_note": "一次性暗器，中毒效果可与战斗状态机制衔接。"
+  },
+  "迷烟弹": {
+    "id": "mi yan dan",
+    "type": "consumable",
+    "desc": "点燃后散出浓烟，可趁乱干扰对手片刻。",
+    "effect": {
+      "target_status": {
+        "name": "stun",
+        "turns": 1,
+        "value": 0
+      }
+    },
+    "price": 40,
+    "use_hint": "仅可在战斗中使用，使当前敌人眩晕1回合。",
+    "material": "药粉与引火料",
+    "condition": "可用",
+    "craft_note": "一次性战术道具，不造成直接伤害。"
+  },
+  "采药小锄": {
+    "id": "cai yao xiao chu",
+    "type": "tool",
+    "desc": "轻便的小药锄，便于从土层和石缝间采挖草药。持有时提高野外采药的搜寻成功率。",
+    "price": 24,
+    "tool_effect": {
+      "action": "gather",
+      "chance_bonus": 0.2
+    },
+    "use_hint": "放在行囊中即可生效，无需手动使用。",
+    "condition": "可用"
+  },
+  "砍柴斧": {
+    "id": "kan chai fu",
+    "type": "tool",
+    "desc": "一把磨过刃口的短柄柴斧。持有时伐木每次可多处理一份木料，仍受资源储量和行囊空间限制。",
+    "price": 38,
+    "tool_effect": {
+      "action": "chop",
+      "yield_bonus": 1
+    },
+    "use_hint": "放在行囊中即可生效，无需手动使用。",
+    "condition": "可用"
+  },
+  "矿镐": {
+    "id": "kuang gao",
+    "type": "tool",
+    "desc": "铁头矿镐，适合敲取矿脉中的矿石。持有时采矿每次可多开采一份矿石，仍受资源储量和行囊空间限制。",
+    "price": 45,
+    "tool_effect": {
+      "action": "mine",
+      "yield_bonus": 1
+    },
+    "use_hint": "放在行囊中即可生效，无需手动使用。",
+    "condition": "可用"
+  },
+  "黑风刀": {
+    "id": "hei feng dao",
+    "type": "weapon",
+    "desc": "黑风寨刀手常用的厚背腰刀，刀身磨损却仍锋利。",
+    "atk": 19,
+    "price": 165,
+    "slot": "weapon",
+    "accuracy_bonus": 0.01,
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "装备于兵器栏后提升攻击能力。",
+    "material": "铁制",
+    "condition": "常用",
+    "craft_note": "刀背厚重，刃口需定期打磨；刀柄缠绳松脱会影响握持稳定。"
+  },
+  "山寨护肩": {
+    "id": "shan zhai hu jian",
+    "type": "armor",
+    "desc": "由皮革与铁片拼接的护肩，做工粗糙但能挡住部分劈砍。",
+    "defense": 9,
+    "price": 90,
+    "slot": "armor",
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 30,
+    "use_hint": "穿戴后增强防护。",
+    "material": "皮革与铁片",
+    "condition": "常用",
+    "craft_note": "铁片连接处与皮带扣是主要受力点，修补时应先检查铆钉是否松动。"
+  },
+  "黑风刀法秘笈": {
+    "id": "hei feng dao fa mi ji",
+    "type": "manual",
+    "desc": "黑风寨流传的刀法秘笈，记载一套重视封路与反击的江湖刀法。可使用此物习得黑风刀法。",
+    "price": 260,
+    "teaches_skill": "黑风刀法",
+    "use_hint": "输入“使用 黑风刀法秘笈”尝试研习；习得后秘笈消耗。"
+  },
+  "断岳刀": {
+    "id": "duan yue dao",
+    "type": "weapon",
+    "desc": "黑风寨少数悍匪使用的厚背长刀，刀身沉重，适合有力者施展劈斩。",
+    "atk": 26,
+    "price": 285,
+    "slot": "weapon",
+    "accuracy_bonus": -0.01,
+    "crit_bonus": 0.02,
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "装备于兵器栏后提升攻击能力；刀身较重，出手略慢。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "检查刀背裂纹与刀柄缠绳，重刀需定期紧固。"
+  },
+  "黑风寨军械残片": {
+    "id": "hei feng zhai jun xie can pian",
+    "type": "material",
+    "desc": "从黑风寨损坏的兵器与护具上拆下的铁片，可作为锻造或任务交付材料。",
+    "price": 8,
+    "use_hint": "可留作制作材料或交付相关委托。",
+    "material": "铁制",
+    "condition": "残损",
+    "craft_note": "残片边缘锋利，分类收存前应清除锈屑，并检查是否带有可辨识的寨中印记。"
+  },
+  "少林戒棍": {
+    "id": "shao lin jie gun",
+    "type": "weapon",
+    "desc": "少林弟子用于护院与实战的戒棍，重在稳扎稳打，不以锋锐取胜。",
+    "atk": 24,
+    "price": 320,
+    "slot": "weapon",
+    "attribute_bonus": {
+      "constitution": 2
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 60,
+    "use_hint": "装备后提升攻击与体魄；适合稳健作战。",
+    "material": "硬木与铁箍",
+    "condition": "常用",
+    "craft_note": "检查棍身裂纹与铁箍松动，重击后应及时检修。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "armor_break",
+      "chance": 0.12,
+      "turns": 2,
+      "value": 4,
+      "description": "戒棍沉稳，命中时有机会震松对手架势。"
+    }
+  },
+  "菩提念珠": {
+    "id": "pu ti nian zhu",
+    "type": "accessory",
+    "desc": "少林护寺差事所赐的菩提念珠，珠色温润，佩戴时能提醒持用者收敛心念。",
+    "price": 240,
+    "slot": "accessory",
+    "defense": 5,
+    "attribute_bonus": {
+      "insight": 1
+    },
+    "use_hint": "佩戴后略增防御与洞察，适合需要稳守心神的长战。"
+  },
+  "武当云纹剑": {
+    "id": "wu dang yun wen jian",
+    "type": "weapon",
+    "desc": "剑身纹路如云气流转，重在轻灵与守势转换。",
+    "atk": 25,
+    "price": 360,
+    "slot": "weapon",
+    "accuracy_bonus": 0.04,
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 60,
+    "use_hint": "装备后提升攻击、命中与身法，适合灵活应对。",
+    "material": "精钢",
+    "condition": "常用",
+    "craft_note": "轻剑需留意剑尖与护手连接处。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "stun",
+      "chance": 0.06,
+      "turns": 1,
+      "value": 0,
+      "description": "剑势圆转，命中时偶尔扰乱对手节奏。"
+    }
+  },
+  "华山松纹剑": {
+    "id": "hua shan song wen jian",
+    "type": "weapon",
+    "desc": "剑身刻有松纹，刃口清亮，适合连续变招与迅疾出手。",
+    "atk": 26,
+    "price": 380,
+    "slot": "weapon",
+    "crit_bonus": 0.04,
+    "attribute_bonus": {
+      "agility": 1
+    },
+    "enhance_max": 6,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 60,
+    "use_hint": "装备后提升攻击、暴击与身法，适合连势进攻。",
+    "material": "精钢",
+    "condition": "常用",
+    "craft_note": "连招之后应检查剑刃与剑柄是否松动。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "bleed",
+      "chance": 0.13,
+      "turns": 2,
+      "value": 3,
+      "description": "剑锋迅捷，命中时有机会留下轻微创伤。"
+    }
+  },
+  "太极剑穗": {
+    "id": "tai ji jian sui",
+    "type": "accessory",
+    "desc": "武当松间问道后所赐的太极剑穗，穗结沉稳，佩在剑柄上可提醒持剑者收敛锋芒。",
+    "price": 260,
+    "slot": "accessory",
+    "defense": 4,
+    "attribute_bonus": {
+      "insight": 1
+    },
+    "use_hint": "佩戴后略增防御与洞察，适合以静制动、后发制人的剑路。"
+  },
+  "华山剑穗": {
+    "id": "hua shan jian sui",
+    "type": "accessory",
+    "desc": "华山松风听剑后所赐的剑穗，穗结轻捷，佩在剑柄上可提醒出剑时留一分后手。",
+    "price": 250,
+    "slot": "accessory",
+    "defense": 3,
+    "attribute_bonus": {
+      "insight": 1
+    },
+    "use_hint": "佩戴后略增防御与洞察，适合剑路求快而不失守的华山弟子。"
+  },
+  "铁衣护腕": {
+    "id": "tie yi hu wan",
+    "type": "armor",
+    "desc": "铁衣门短途护送后所发的护腕，外层包铁、内衬软革，适合长期护运行走。",
+    "defense": 6,
+    "price": 180,
+    "slot": "armor",
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 40,
+    "attribute_bonus": {
+      "constitution": 1
+    },
+    "use_hint": "装备后小幅提升防御与体魄，适合护运与正面搏杀。",
+    "material": "精铁",
+    "condition": "常用",
+    "craft_note": "护腕受力最多，护送归来后应检查铆钉与内衬。"
+  },
+  "苍脊刀": {
+    "id": "cang ji dao",
+    "type": "weapon",
+    "desc": "断魂岭猎户以山中寒铁改铸的厚背长刀，刀脊如苍岩隆起，劈斩时势沉而稳。",
+    "atk": 30,
+    "price": 480,
+    "slot": "weapon",
+    "accuracy_bonus": -0.01,
+    "crit_bonus": 0.02,
+    "attribute_bonus": {
+      "strength": 1
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "装备于兵器栏后提升攻击能力；刀势沉猛，命中时有机会造成流血。",
+    "material": "寒铁",
+    "condition": "常用",
+    "craft_note": "刀脊厚薄与缠柄松紧决定出刀是否稳当；岭上湿气重，须常拭锈。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "bleed",
+      "chance": 0.16,
+      "turns": 2,
+      "value": 4,
+      "description": "刀锋掠过，留下不易愈合的伤口。"
+    }
+  },
+  "断魂刀": {
+    "id": "duan hun dao",
+    "type": "weapon",
+    "desc": "断魂堡主随身佩刀，刀身乌沉，刃口泛着冷光，据说刀下亡魂太多，故得此名。",
+    "atk": 40,
+    "price": 900,
+    "slot": "weapon",
+    "accuracy_bonus": -0.03,
+    "crit_bonus": 0.05,
+    "attribute_bonus": {
+      "strength": 2
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 60,
+    "use_hint": "装备于兵器栏后大幅提升攻击；刀势狠辣，命中时有机会使对手流血。",
+    "material": "乌钢",
+    "condition": "常用",
+    "craft_note": "刀身乌沉，需以细石慢磨；刃口过薄反而易崩，不可一味求利。",
+    "weapon_effect": {
+      "type": "status",
+      "status": "bleed",
+      "chance": 0.18,
+      "turns": 3,
+      "value": 5,
+      "description": "刀锋带着寒意掠过，伤口久久不止。"
+    }
+  },
+  "苍脊重甲": {
+    "id": "cang ji zhong jia",
+    "type": "armor",
+    "desc": "以断魂岭出产的厚铁片与硬皮层层缀合的重甲，肩背高耸如岭脊，防护远胜寻常锁甲。",
+    "defense": 18,
+    "price": 540,
+    "slot": "armor",
+    "dodge_bonus": -0.02,
+    "attribute_bonus": {
+      "constitution": 2
+    },
+    "enhance_max": 5,
+    "enhance_ore_cost": 1,
+    "enhance_gold_cost": 45,
+    "use_hint": "穿戴后大幅增强防护；甲身沉重，闪避会略受影响。",
+    "material": "厚铁与硬皮",
+    "condition": "日常使用",
+    "craft_note": "铁片叠压处与肩带受力最重，穿着前应逐片检查铆钉。"
+  },
+  "断魂精铁": {
+    "id": "duan hun jing tie",
+    "type": "material",
+    "desc": "从断魂岭夜行客的兵刃上拆下的精铁，铁色沉暗，敲之有声，是岭上少见的锻材。",
+    "price": 40,
+    "use_hint": "可留作锻造材料，也可交给守岭猎户换取伤药。",
+    "material": "精铁",
+    "condition": "完整",
+    "craft_note": "精铁淬火后不易卷刃，收存时应与普通铁矿石分开，以免混淆。"
   }
 }

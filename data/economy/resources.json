@@ -1,0 +1,202 @@
+{
+  "abandoned_iron_mine": {
+    "name": "废弃铁矿矿脉",
+    "item": "铁矿石",
+    "capacity": 24,
+    "yield_max": 3,
+    "regen_interval": 8,
+    "regen_amount": 3,
+    "action": "mine",
+    "regen_seconds": 60
+  },
+  "mistwood_trail": {
+    "name": "雾隐林道林木",
+    "item": "木材",
+    "action": "chop",
+    "capacity": 30,
+    "yield_max": 3,
+    "regen_interval": 6,
+    "regen_amount": 4,
+    "regen_seconds": 60
+  },
+  "bamboo_hollow": {
+    "name": "竹影幽谷竹木",
+    "item": "木材",
+    "action": "chop",
+    "capacity": 24,
+    "yield_max": 3,
+    "regen_interval": 7,
+    "regen_amount": 3,
+    "regen_seconds": 60
+  },
+  "old_woodlot": {
+    "name": "荒废柴场木料",
+    "item": "木材",
+    "action": "chop",
+    "capacity": 18,
+    "yield_max": 2,
+    "regen_interval": 9,
+    "regen_amount": 2,
+    "regen_seconds": 60
+  },
+  "deep_iron_gallery": {
+    "name": "铁脉长廊矿脉",
+    "item": "铁矿石",
+    "capacity": 28,
+    "yield_max": 3,
+    "regen_interval": 10,
+    "regen_amount": 3,
+    "action": "mine",
+    "regen_seconds": 60
+  },
+  "collapsed_quarry": {
+    "name": "坍塌采石坑矿脉",
+    "item": "铁矿石",
+    "capacity": 20,
+    "yield_max": 2,
+    "regen_interval": 12,
+    "regen_amount": 2,
+    "action": "mine",
+    "regen_seconds": 60
+  },
+  "mistwood_stream": {
+    "name": "采药溪谷草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 18,
+    "yield_max": 1,
+    "regen_interval": 5,
+    "regen_amount": 3,
+    "regen_seconds": 30
+  },
+  "guiyun_medicine_garden": {
+    "name": "百草药圃药材",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 24,
+    "yield_max": 1,
+    "regen_interval": 4,
+    "regen_amount": 4,
+    "regen_seconds": 30
+  },
+  "sunken_shrine": {
+    "name": "沉河废祠雾露草",
+    "item": "雾露草",
+    "action": "gather",
+    "capacity": 10,
+    "yield_max": 1,
+    "regen_interval": 8,
+    "regen_amount": 2,
+    "regen_seconds": 60
+  },
+  "official_road": {
+    "name": "黄土官道草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 12,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "official_road_east_1": {
+    "name": "黄土官道草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 8,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "official_road_east_2": {
+    "name": "黄土官道草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 8,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "wild_fields": {
+    "name": "村后荒野草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 12,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "herb_springbank": {
+    "name": "药香浅滩草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 8,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "rocky_herb_slope": {
+    "name": "碎石药坡草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 8,
+    "yield_max": 1,
+    "regen_interval": 6,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  },
+  "sunken_cache": {
+    "name": "沉河暗库雾露草",
+    "item": "雾露草",
+    "action": "gather",
+    "capacity": 6,
+    "yield_max": 1,
+    "regen_interval": 12,
+    "regen_amount": 1,
+    "regen_seconds": 60
+  },
+  "mountain_path": {
+    "name": "黑风山道蛇胆采集点",
+    "item": "蛇胆",
+    "action": "gather",
+    "capacity": 4,
+    "yield_max": 1,
+    "regen_interval": 12,
+    "regen_amount": 1,
+    "regen_seconds": 60
+  },
+  "bandit_watchtower": {
+    "name": "山贼哨塔遗落药物",
+    "item": "金创药",
+    "action": "gather",
+    "capacity": 3,
+    "yield_max": 1,
+    "regen_interval": 20,
+    "regen_amount": 1,
+    "regen_seconds": 60
+  },
+  "bandit_treasury": {
+    "name": "山贼宝库药物储备",
+    "item": "大还丹",
+    "action": "gather",
+    "capacity": 2,
+    "yield_max": 1,
+    "regen_interval": 30,
+    "regen_amount": 1,
+    "regen_seconds": 60
+  },
+  "stone_creek_bridge": {
+    "name": "石溪古桥草药",
+    "item": "草药",
+    "action": "gather",
+    "capacity": 6,
+    "yield_max": 1,
+    "regen_interval": 7,
+    "regen_amount": 2,
+    "regen_seconds": 30
+  }
+}

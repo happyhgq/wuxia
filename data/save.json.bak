@@ -1,0 +1,89 @@
+{
+  "version": 12,
+  "name": "快捷存档",
+  "sect": "散人",
+  "level": 1,
+  "exp": 0,
+  "exp_to_level": 150,
+  "hp": 100,
+  "max_hp": 100,
+  "mp": 50,
+  "max_mp": 50,
+  "atk": 10,
+  "defense": 5,
+  "gold": 50,
+  "inventory": [
+    "疗伤药",
+    "铁矿石",
+    "草药"
+  ],
+  "equipment": {
+    "weapon": "木剑",
+    "armor": "布衣"
+  },
+  "equip_enhance": {
+    "weapon": 0,
+    "armor": 0
+  },
+  "location": "village_gate",
+  "active_quests": {},
+  "quest_states": {},
+  "completed_quests": [],
+  "world_state": {
+    "flags": {},
+    "variables": {
+      "sect_state": {
+        "current_sect": "散人",
+        "reputation": {
+          "少林": 0,
+          "武当": 0,
+          "华山": 0,
+          "散人": 0,
+          "铁衣门": 0
+        }
+      },
+      "skill_progress": {
+        "基础吐纳": {
+          "learned": true,
+          "mastery": 1
+        },
+        "江湖散手": {
+          "learned": false,
+          "mastery": 0
+        },
+        "流云步": {
+          "learned": false,
+          "mastery": 0
+        },
+        "回风刺": {
+          "learned": false,
+          "mastery": 0
+        },
+        "破势掌": {
+          "learned": false,
+          "mastery": 0
+        },
+        "凝息诀": {
+          "learned": false,
+          "mastery": 0
+        },
+        "行云流水掌": {
+          "learned": false,
+          "mastery": 0
+        }
+      },
+      "command_aliases": {
+        "回村": "南;南;西"
+      }
+    }
+  },
+  "economy_state": {},
+  "attributes": {
+    "strength": 0,
+    "constitution": 0,
+    "internal": 0,
+    "agility": 0,
+    "insight": 0
+  },
+  "attribute_points": 0
+}

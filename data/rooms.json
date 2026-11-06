@@ -2,7 +2,12 @@
   "village_gate": {
     "name": "青石村口",
     "zone": "main",
-    "desc": "一座破旧的木牌楼立在道旁，匾额上“青石村”三字被风雨侵蚀得斑驳。牌楼下靠着个打盹的守卫。往北进入村南大街，往南则是黄土官道。",
+    "desc": "一座破旧的木牌楼立在道旁，匾额上“青石村”三字被风雨侵蚀得斑驳。牌楼下靠着个打盹的守卫。往北进入青石长街，往南则是黄土官道。 风里夹着尘土与草木气息，牌楼木柱上留着多年风雨侵蚀的裂纹。",
+    "night_desc": "夜色压在木牌楼上，匾额的字迹已看不清。村口无人值守，只有一盏灯笼在夜风里轻轻摇晃。",
+    "night_hours": [
+      22,
+      6
+    ],
     "exits": {
       "北": "village_south_street",
       "南": "official_road"
@@ -14,12 +19,19 @@
     "coord": [
       2,
       1
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "travel_hub": true,
+    "absence_notes": {
+      "守卫": "守卫已换班，村口只剩一盏灯笼。"
+    }
   },
   "village_south_street": {
-    "name": "村南大街",
+    "name": "青石长街",
     "zone": "main",
-    "desc": "青石板路两侧排列着矮小的民居。西侧挂着“悦来客栈”的招牌，东侧则是一家杂货铺。北边直通村中广场，南边是村口。",
+    "desc": "青石板路两侧排列着矮小的民居。西侧挂着“悦来客栈”的招牌，东侧则是一家杂货铺。北边直通村中广场，南边是村口。 清晨常能遇见挑水老邱往各家送水。",
     "exits": {
       "北": "village_square",
       "南": "village_gate",
@@ -30,14 +42,21 @@
     "coord": [
       2,
       2
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "挑水老邱"
     ]
   },
   "inn": {
     "name": "悦来客栈",
     "zone": "main",
-    "desc": "堂中灯油昏黄，掌柜支颐倚在柜台后拨弄算盘，小二在收拾桌椅。东边大门通往村南大街。",
+    "desc": "门帘一掀，热气裹着米饭、炖肉与茶香迎面而来。几张方桌被擦得发亮，靠墙长凳留着刀鞘划出的浅痕；柜台上的算盘珠噼啪作响，后厨不时传来锅铲碰响。店小二端着托盘穿过客人之间，窗边坐着赶路的行商，旁边的说书人正用折扇轻敲桌沿，低声讲着附近山道的新鲜事。大堂西侧有木梯通往二楼客房（输入“上”或“上楼”），柜台可问住店、饭菜与消息。这里既是歇脚之处，也是打听商路和江湖风声的好地方。",
     "exits": {
-      "东": "village_south_street"
+      "东": "village_south_street",
+      "上": "inn_upper_hall"
     },
     "npcs": [
       "掌柜",
@@ -47,7 +66,11 @@
     "coord": [
       1,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 1
   },
   "general_shop": {
     "name": "杂货铺",
@@ -63,12 +86,21 @@
     "coord": [
       3,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "village_square": {
     "name": "村中广场",
     "zone": "main",
-    "desc": "这里是青石村最宽阔的集散地，中央耸立着一棵百年老榕树。西边是百草堂，东边是打铁铺，南通村南大街，北接村北街。",
+    "desc": "这里是青石村最宽阔的集散地，中央耸立着一棵百年老榕树。榕树旁立着一面木制公告栏，乡里告示、商旅消息和偶尔传来的江湖传闻都会贴在这里；公告可用“公告”查看。旁边常有青石村接引人，为初来乍到的江湖客解答疑问。西边是百草堂，东边是打铁铺，南接青石长街，北通青石后街。 广场一侧是木匠老许的木器摊，可查看木剑货品或与他交谈。 树影随风落在青石地上，摊贩的吆喝声与村民闲谈声交织在一起。 广场东侧有菜贩孙婶摆摊，常能打听村里的收成与集市消息。",
+    "night_desc": "榕树的影子铺满广场，摊贩早已收摊，只剩公告栏在月光下泛白。青石村接引人仍守在树下，替夜归的江湖客指路。",
+    "night_hours": [
+      18,
+      6
+    ],
     "exits": {
       "北": "village_north_street",
       "南": "village_south_street",
@@ -79,14 +111,31 @@
     "coord": [
       2,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "木匠老许",
+      "菜贩孙婶",
+      "青石村接引人"
+    ],
+    "absence_notes": {
+      "木匠老许": "木匠的摊子已经收了，只剩几块刨花。"
+    }
   },
   "medicine_shop": {
     "name": "百草堂",
     "zone": "main",
     "desc": "一进门便能闻到浓郁的药香。墙上密密麻麻排着药柜，老板垂首研磨金创药。东边是大门。",
+    "night_desc": "门板已经合上，柜台上只留一盏小灯。后院药炉的微光从门缝里透出来。",
+    "night_hours": [
+      20,
+      6
+    ],
     "exits": {
-      "东": "village_square"
+      "东": "village_square",
+      "后": "apothecary_backyard"
     },
     "npcs": [
       "药铺老板"
@@ -95,45 +144,127 @@
     "coord": [
       1,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
+  },
+  "apothecary_backyard": {
+    "name": "百草堂后院",
+    "zone": "main",
+    "map_hidden": true,
+    "desc": "后院围着半人高的矮墙，檐下摆着一张旧木桌和两条长凳。桌上搁着粗瓷碗、竹筷与一壶温水，墙边晾着两件换洗的布衣。石阶旁只摊着一小匾药材，前门门帘一挑便回到百草堂。",
+    "night_desc": "檐下小灯已经拨暗，木桌上的碗筷收在一边，长凳上搭着一件薄衣。窗纸透出一点暖光，门帘静静垂着，后院里只剩虫鸣。",
+    "night_hours": [
+      20,
+      6
+    ],
+    "exits": {
+      "前": "medicine_shop"
+    },
+    "npcs": [
+      "药铺老板"
+    ],
+    "safe": true,
+    "safe_zone": true,
+    "coord": [
+      0,
+      3
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "blacksmith": {
     "name": "打铁铺",
     "zone": "main",
-    "desc": "炉火通红，热浪扑面。铁匠赤膊抡锤，火星四溅。（输入 forge 可强化兵刃或防具）西边通往村中广场。",
+    "desc": "炉火通红，热浪扑面。铁匠赤膊抡锤，火星四溅。（输入“打造”可强化兵刃或防具）西边通往村中广场。 铁匠学徒小石在旁边拉风箱、整理铁料，偶尔也会谈起矿石与锻造。",
+    "night_desc": "炉火已压成一层暗红，铁砧上还留着白日敲打的余温。风箱不再作响，内堂的门半掩着。",
+    "night_hours": [
+      19,
+      6
+    ],
     "exits": {
-      "西": "village_square"
+      "西": "village_square",
+      "内": "blacksmith_inner"
     },
     "npcs": [
-      "铁匠"
+      "铁匠",
+      "铁匠学徒小石"
     ],
     "safe": true,
     "coord": [
       3,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
+  },
+  "blacksmith_inner": {
+    "name": "铁匠内堂",
+    "zone": "main",
+    "map_hidden": true,
+    "desc": "内堂不大，靠墙一张窄木床，床尾叠着两件洗得发白的粗布衣。窗下摆着方桌和两条木凳，桌上搁着粗瓷碗、半碟干粮和一壶凉茶。窗纸透进日光，门帘外便是打铁铺，墙上只挂着一副补过的旧护腕。",
+    "night_desc": "灯盏拨得很暗，床铺已经展开，桌上的碗筷收在一边。门帘垂落，窗纸外只剩一线昏光，内堂里静得能听见夜风掠过屋檐。",
+    "night_hours": [
+      19,
+      6
+    ],
+    "trade_closed": true,
+    "trade_closed_text": "内堂已打烊，只接交付与交谈；要买兵器请白天到铺面。",
+    "exits": {
+      "外": "blacksmith"
+    },
+    "npcs": [
+      "铁匠"
+    ],
+    "safe": true,
+    "safe_zone": true,
+    "coord": [
+      3,
+      6
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "village_north_street": {
-    "name": "村北街",
+    "name": "青石后街",
     "zone": "main",
-    "desc": "村北比较清静，石板路顺着坡度缓缓向上。西侧是村长住宅，正北方向是一座古庙。",
+    "desc": "青石后街比村口清静，石板路顺着坡度缓缓向上。西侧是村长住宅，正北方向是一座古庙。 农家少女阿禾常带着竹篮往返田地与村中。",
     "exits": {
       "北": "temple",
       "南": "village_square",
-      "西": "village_head_house"
+      "西": "village_head_house",
+      "东": "residents_lane"
     },
     "safe": true,
     "coord": [
       2,
       4
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "农家阿禾"
     ]
   },
   "village_head_house": {
     "name": "村长宅院",
     "zone": "main",
-    "desc": "一座朴素的四合小院，青苔爬满石阶。正房里白发村长负手而立，眉宇间带着几分愁容。",
+    "desc": "一座朴素的四合小院，青苔爬满石阶。正房里白发村长负手而立，眉宇间带着几分愁容。里侧正房窗纸常映着灯光，村长多在里面理事。",
+    "night_desc": "院门虚掩，正房窗纸上映着暖黄的灯光。石阶上的青苔被夜露打湿，院里静得只剩虫鸣。",
+    "night_hours": [
+      18,
+      6
+    ],
     "exits": {
-      "东": "village_north_street"
+      "东": "village_north_street",
+      "内": "village_chief_room"
     },
     "npcs": [
       "村长"
@@ -142,12 +273,41 @@
     "coord": [
       1,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
+  },
+  "village_chief_room": {
+    "name": "村长正房",
+    "zone": "main",
+    "map_hidden": true,
+    "desc": "正房里靠墙一张旧木床，被褥叠得整整齐齐。窗下摆着方桌和两张木凳，桌上搁着茶壶、粗瓷碗和一摞文书。窗纸透进暖黄的光，门帘半卷着，里侧墙角还立着一只旧衣箱。",
+    "night_desc": "灯盏捻得很低，茶壶还温着，方桌上的文书已经合拢。床铺铺开了一角，窗纸外的夜色沉下去，正房里静悄悄的。",
+    "night_hours": [
+      18,
+      6
+    ],
+    "exits": {
+      "外": "village_head_house"
+    },
+    "npcs": [
+      "村长"
+    ],
+    "safe": true,
+    "safe_zone": true,
+    "coord": [
+      1,
+      5
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "temple": {
     "name": "古庙",
     "zone": "main",
-    "desc": "古庙颓败，朱漆剥落。室内清幽无人，只有半截石佛立于堂中。这里是打坐恢复绝佳之地，可驱散病邪。（输入 dazuo 或 heal 打坐）",
+    "desc": "古庙颓败，朱漆剥落。室内清幽无人，只有半截石佛立于堂中。这里是打坐恢复绝佳之地，可驱散病邪。（输入“打坐”调息恢复）",
     "exits": {
       "南": "village_north_street"
     },
@@ -155,12 +315,16 @@
     "coord": [
       2,
       5
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "official_road": {
     "name": "黄土官道",
     "zone": "main",
-    "desc": "黄土官道上车辙深深，两侧野草没膝。北边回青石村，西边有一条荒僻小径通往村后荒野，东边官道延伸往远方。（输入 search 可采集资源）",
+    "desc": "黄土官道上车辙深深，两侧野草没膝。北边回青石村，西边有一条荒僻小径通往村后荒野，东边官道延伸往远方。草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。",
     "exits": {
       "北": "village_gate",
       "西": "wild_fields",
@@ -170,21 +334,31 @@
       "野猪"
     ],
     "forage": {
-      "草药": 0.4,
-      "铁矿石": 0.3
+      "草药": 0.4
     },
     "coord": [
       2,
       0
+    ],
+    "difficulty_level": 1,
+    "difficulty_label": "野外·低危",
+    "area_level": 1,
+    "recommended_level": 2,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "official_road_east_1": {
     "name": "黄土官道",
     "zone": "main",
-    "desc": "官道向东延伸，地势渐渐平坦。远处隐约能看到一座城池的轮廓，空气中多了一丝喧嚣。",
+    "desc": "官道向东延伸，地势渐渐平坦。远处隐约能看到一座城池的轮廓，空气中多了一丝喧嚣。此处草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。",
     "exits": {
       "西": "official_road",
-      "东": "official_road_east_2"
+      "东": "official_road_east_2",
+      "北": "songshan_foothill"
     },
     "enemies": [
       "野狼"
@@ -195,15 +369,26 @@
     "coord": [
       3,
       0
+    ],
+    "difficulty_level": 1,
+    "difficulty_label": "野外·低危",
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "official_road_east_2": {
     "name": "黄土官道",
     "zone": "main",
-    "desc": "离城门已经不远了，路上的行人渐渐多了解甲归田的商旅和行色匆匆的江湖客。东边便是归云城南门。",
+    "desc": "离归云城南门已经不远，路上的商旅与江湖客渐渐多了起来。东面便是归云城南门，北侧另有一条沿山势延伸的岔路，通往青岚旧驿与武当山道。此处草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。",
     "exits": {
       "西": "official_road_east_1",
-      "东": "guiyun_south_gate"
+      "东": "guiyun_south_gate",
+      "北": "road_wudang_turnoff"
     },
     "enemies": [],
     "forage": {
@@ -212,40 +397,61 @@
     "coord": [
       4,
       0
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "wild_fields": {
     "name": "村后荒野",
     "zone": "main",
-    "desc": "杂草丛生，偶有野兽低吼。东边接官道，西边是一条蜿蜒入山的黑风山道。",
+    "desc": "杂草丛生，偶有野兽低吼。东边接官道，西边是一条蜿蜒入山的黑风山道，北面通向雾隐林道，南面有一片荒废柴场。此处草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。",
     "exits": {
       "东": "official_road",
-      "西": "mountain_path"
+      "西": "mountain_path",
+      "北": "mistwood_trail",
+      "南": "old_woodlot"
     },
     "enemies": [
       "野狼",
       "野猪"
     ],
     "forage": {
-      "草药": 0.5,
-      "野猪肉": 0.3
+      "草药": 0.5
     },
     "coord": [
       1,
       0
-    ]
+    ],
+    "difficulty_level": 2,
+    "difficulty_label": "荒野·普通",
+    "area_level": 2,
+    "recommended_level": 2,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "北": "mistwood_trail"
   },
   "mountain_path": {
     "name": "黑风山道",
     "zone": "main",
-    "desc": "山道狭窄，两侧崖壁嶙峋，山风穿谷而过。东边回村后荒野，北边直抵山贼寨门。",
+    "desc": "山道狭窄，两侧崖壁嶙峋，山风穿谷而过。东边回村后荒野，北边直抵山贼寨门。（可输入“搜索”调查遗落物资；采集资源请使用“搜索”发现、“采集”获取）",
     "exits": {
       "东": "wild_fields",
       "北": "cave_entrance"
     },
     "enemies": [
       "毒蛇",
-      "山贼"
+      "山贼",
+      "黑风寨巡哨"
     ],
     "forage": {
       "蛇胆": 0.3
@@ -253,6 +459,16 @@
     "coord": [
       0,
       0
+    ],
+    "difficulty_level": 4,
+    "difficulty_label": "黑风山道·危险",
+    "area_level": 3,
+    "recommended_level": 5,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "cave_entrance": {
@@ -264,11 +480,22 @@
       "北": "bandit_courtyard"
     },
     "enemies": [
-      "山贼"
+      "山贼",
+      "黑风寨巡哨"
     ],
     "coord": [
       0,
       1
+    ],
+    "difficulty_level": 4,
+    "difficulty_label": "黑风寨外围·危险",
+    "area_level": 3,
+    "recommended_level": 5,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "bandit_courtyard": {
@@ -283,30 +510,51 @@
     },
     "enemies": [
       "山贼",
-      "山贼头目"
+      "山贼头目",
+      "黑风刀手"
     ],
     "coord": [
       0,
       0
+    ],
+    "difficulty_level": 4,
+    "difficulty_label": "黑风寨·高危",
+    "area_level": 4,
+    "recommended_level": 6,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "bandit_watchtower": {
     "name": "山贼哨塔",
     "zone": "bandit_zone",
-    "desc": "用圆木搭建的数丈高台，站在塔顶可俯瞰整个山寨。弓箭手居高临下戒备着。西边通往演武场。（输入 search 可搜寻守卫遗落的物资）",
+    "desc": "用圆木搭建的数丈高台，站在塔顶可俯瞰整个山寨。弓箭手居高临下戒备着。西边通往演武场。（输入“搜索”可搜寻守卫遗落的物资）",
     "exits": {
       "西": "bandit_courtyard"
     },
     "enemies": [
-      "山贼弓手"
+      "山贼弓手",
+      "黑风刀手"
     ],
     "forage": {
-      "铁矿石": 0.5,
       "金创药": 0.3
     },
     "coord": [
       1,
       0
+    ],
+    "difficulty_level": 5,
+    "difficulty_label": "黑风寨哨塔·高危",
+    "area_level": 4,
+    "recommended_level": 6,
+    "danger": "normal",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "bandit_water_dungeon": {
@@ -320,12 +568,24 @@
       "被绑村民"
     ],
     "enemies": [
-      "看守山贼"
+      "看守山贼",
+      "黑风寨精锐"
     ],
     "coord": [
       -1,
       0
-    ]
+    ],
+    "difficulty_level": 6,
+    "difficulty_label": "黑风寨水牢·极危",
+    "area_level": 5,
+    "recommended_level": 8,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "indoor": true
   },
   "bandit_camp": {
     "name": "聚义厅",
@@ -343,44 +603,95 @@
     "coord": [
       0,
       1
-    ]
+    ],
+    "difficulty_level": 8,
+    "difficulty_label": "黑风寨核心·极危",
+    "area_level": 7,
+    "recommended_level": 10,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "indoor": true
   },
   "bandit_treasury": {
     "name": "山贼宝库",
     "zone": "bandit_zone",
-    "desc": "黑风寨积攒多年不义之财的密室，箱笼堆叠。宝库大总管正带着精锐在此亲自把守。西边通往聚义厅。",
+    "desc": "黑风寨积攒多年不义之财的密室，箱笼堆叠。宝库大总管正带着精锐在此亲自把守。西边通往聚义厅。（输入“搜索”可搜寻有限的药物储备）",
     "exits": {
-      "西": "bandit_camp"
+      "西": "bandit_camp",
+      "东": "bandit_supply_cave"
     },
     "enemies": [
       "宝库大总管",
-      "山贼精英"
+      "山贼精英",
+      "黑风寨精锐"
     ],
     "forage": {
-      "大还丹": 0.2,
-      "金创药": 0.4
+      "大还丹": 0.2
     },
     "coord": [
       1,
       1
-    ]
+    ],
+    "difficulty_level": 8,
+    "difficulty_label": "黑风寨宝库·极危",
+    "area_level": 8,
+    "recommended_level": 8,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。",
+      {
+        "text": "你挪开宝库深处的空箱，在夹层里摸到一本被油布裹紧的旧刀谱，封皮残破，仍能辨出黑风刀法的起手式。",
+        "item": "黑风刀法秘笈",
+        "requires": {
+          "not_flags": [
+            "explore:bandit_treasury:manual_found"
+          ]
+        },
+        "effects": {
+          "set_flags": {
+            "explore:bandit_treasury:manual_found": true
+          }
+        }
+      }
+    ],
+    "indoor": true
   },
   "bandit_back_mountain": {
     "name": "黑风后山",
     "zone": "bandit_zone",
-    "desc": "这里是黑风寨后方的隐蔽峭壁密道，灌木丛生，向南可返回聚义厅，向东有一条小路通往主世界的村后荒野。",
+    "desc": "黑风寨后方的隐蔽峭壁密道，灌木丛生，石壁上留着刀劈与攀爬的痕迹。南面通往黑风寨营地，东面可绕回村后荒野，西面沿险峻高脊返回雾林采石坑，北面则通向沉河遗迹的石阶。这里已被黑风寨巡哨和刀手控制，行走时须防备伏击。",
     "exits": {
       "南": "bandit_camp",
-      "东": "wild_fields"
+      "东": "wild_fields",
+      "北": "sunken_stairs",
+      "西": "mistwood_ridge_path"
     },
     "enemies": [
-      "毒蛇",
-      "野狼"
+      "黑风寨巡哨",
+      "黑风刀手",
+      "黑风寨精锐"
     ],
     "coord": [
       0,
       2
-    ]
+    ],
+    "difficulty_level": 7,
+    "difficulty_label": "黑风后山·高危",
+    "area_level": 7,
+    "recommended_level": 8,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "北": "sunken_stairs"
   },
   "guiyun_south_gate": {
     "name": "归云城南门",
@@ -388,13 +699,22 @@
     "desc": "高大的青砖城墙横贯南北，两扇包铁城门敞开着。城外是黄土官道，门内车马往来不绝。城门上方“归云城”三个大字古朴苍劲。",
     "exits": {
       "北": "guiyun_south_gate_inner",
-      "西": "official_road_east_2"
+      "西": "official_road_east_2",
+      "东": "northfront_gate"
     },
     "safe": true,
     "coord": [
       0,
       0
-    ]
+    ],
+    "npcs": [
+      "归云城守门校尉"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "东": "northfront_gate",
+    "travel_hub": true
   },
   "guiyun_south_gate_inner": {
     "name": "南门内街",
@@ -410,7 +730,10 @@
     "coord": [
       0,
       1
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_south_main_street": {
     "name": "南城大街",
@@ -426,7 +749,10 @@
     "coord": [
       0,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_south_market_gate": {
     "name": "南市街口",
@@ -440,7 +766,10 @@
     "coord": [
       0,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_central_street_s": {
     "name": "中央大街南段",
@@ -456,12 +785,15 @@
     "coord": [
       0,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_central_square": {
     "name": "天衡广场",
     "zone": "guiyun_city",
-    "desc": "巨大的广场位于归云城心。中央立着一座刻满历代碑文的青石台，江湖人、商贾、百姓和差役终日在此汇聚。",
+    "desc": "巨大的广场位于归云城心。中央立着一座刻满历代碑文的青石台，江湖人、商贾、百姓和差役终日在此汇聚。西侧的江湖榜墙贴满缉盗、悬赏、寻人、商队招募和近日江湖传闻。 商贩推车穿过人群，布幡被风吹得猎猎作响，几名江湖客正低声交换消息。 石碑旁常有游学书生陆文清抄录旧文，愿与人讨论地方旧事和江湖传闻。",
     "exits": {
       "南": "guiyun_central_street_s",
       "北": "guiyun_central_street_n",
@@ -471,6 +803,12 @@
     "coord": [
       0,
       5
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "书生陆文清"
     ]
   },
   "guiyun_central_street_n": {
@@ -486,7 +824,10 @@
     "coord": [
       0,
       6
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_north_street": {
     "name": "北城大街",
@@ -500,7 +841,10 @@
     "coord": [
       0,
       7
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_yamen_gate": {
     "name": "归云府衙",
@@ -514,7 +858,10 @@
     "coord": [
       0,
       8
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_yamen_hall": {
     "name": "府衙大堂",
@@ -528,7 +875,14 @@
     "coord": [
       0,
       9
-    ]
+    ],
+    "npcs": [
+      "府衙文书"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_yamen_back": {
     "name": "府衙后堂",
@@ -542,7 +896,11 @@
     "coord": [
       0,
       10
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_city_wall_north": {
     "name": "北城墙根",
@@ -555,7 +913,10 @@
     "coord": [
       0,
       11
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_guest_lane": {
     "name": "客商小巷",
@@ -570,12 +931,15 @@
     "coord": [
       -1,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_yunlai_inn": {
     "name": "云来客栈",
     "zone": "guiyun_city",
-    "desc": "两层木楼临街而立，门口挂着“云来客栈”的旧招牌。长途赶路的商客多在这里落脚。",
+    "desc": "两层木楼临街而立，门口悬着一面被风雨磨旧的“云来客栈”招牌。楼下大堂灯火通明，靠窗的商客摊开地图核对商路，几名镖师把兵器放在手边低声交谈；后厨传来切菜声与炖汤香，楼梯上方是供旅人歇息的客房。掌柜熟悉城中行情，店小二记得常客的口味，说书人偶尔也会在堂中讲些路上的奇闻。这里可以用餐、住店，也能向熟客打听城里的风声。",
     "exits": {
       "东": "guiyun_guest_lane"
     },
@@ -585,9 +949,13 @@
       2
     ],
     "npcs": [
-      "掌柜",
-      "店小二"
-    ]
+      "云来客栈掌柜",
+      "云来客栈小二"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_tea_house": {
     "name": "听风茶馆",
@@ -601,7 +969,14 @@
     "coord": [
       -1,
       3
-    ]
+    ],
+    "npcs": [
+      "听风茶馆老板"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_tea_room": {
     "name": "听风雅间",
@@ -615,7 +990,14 @@
     "coord": [
       -2,
       3
-    ]
+    ],
+    "npcs": [
+      "说书先生"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_west_street_s": {
     "name": "西城大街",
@@ -630,7 +1012,10 @@
     "coord": [
       -1,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_west_center": {
     "name": "西市街口",
@@ -644,12 +1029,15 @@
     "coord": [
       -2,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_forge": {
     "name": "百炼铁铺",
     "zone": "guiyun_city",
-    "desc": "数座铁炉同时燃烧，墙上挂满刀剑、枪头与各式护具。铁砧上的锤击声沉闷有力。（可使用 forge 强化装备）",
+    "desc": "数座铁炉同时燃烧，墙上挂满刀剑、枪头与各式护具。铁砧上的锤击声沉闷有力。（输入“打造”可强化装备）",
     "exits": {
       "东": "guiyun_west_center"
     },
@@ -659,8 +1047,12 @@
       4
     ],
     "npcs": [
-      "铁匠"
-    ]
+      "百炼铁铺铁匠"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_city_notice": {
     "name": "江湖榜墙",
@@ -675,7 +1067,10 @@
     "coord": [
       -1,
       5
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_west_martial_street": {
     "name": "武人街",
@@ -690,12 +1085,15 @@
     "coord": [
       -1,
       6
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_martial_hall": {
     "name": "归云武馆",
     "zone": "guiyun_city",
-    "desc": "一座朴素的武馆临街而立，门内传来木桩震响。门楣没有显赫门派的名号，只有“以武会友”四字。",
+    "desc": "一座朴素的武馆临街而立，门内传来木桩震响。门楣没有显赫门派的名号，只有“以武会友”四字。 木地板被多年步法磨得发亮，墙边兵器架整齐排列，空气中回荡着沉稳的吐纳声。",
     "exits": {
       "东": "guiyun_west_martial_street",
       "北": "guiyun_martial_yard",
@@ -705,7 +1103,14 @@
     "coord": [
       -2,
       6
-    ]
+    ],
+    "npcs": [
+      "归云武馆馆主"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_martial_yard": {
     "name": "武馆演武场",
@@ -718,7 +1123,10 @@
     "coord": [
       -2,
       7
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_guard_camp": {
     "name": "捕快营",
@@ -732,7 +1140,13 @@
     "coord": [
       -1,
       7
-    ]
+    ],
+    "npcs": [
+      "捕头"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_yamen_room": {
     "name": "捕快房",
@@ -746,7 +1160,11 @@
     "coord": [
       -1,
       8
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_archive": {
     "name": "府衙卷宗室",
@@ -759,7 +1177,14 @@
     "coord": [
       -2,
       8
-    ]
+    ],
+    "npcs": [
+      "府衙文书"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_dart_entrance": {
     "name": "震远镖局",
@@ -774,7 +1199,13 @@
     "coord": [
       -3,
       6
-    ]
+    ],
+    "npcs": [
+      "震远镖局总镖头"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_dart_yard": {
     "name": "镖局后院",
@@ -784,10 +1215,23 @@
       "东": "guiyun_dart_entrance",
       "南": "guiyun_dart_horse_yard"
     },
-    "safe": true,
+    "safe": false,
     "coord": [
       -4,
       6
+    ],
+    "enemies": [
+      "劫镖山贼"
+    ],
+    "difficulty_level": 8,
+    "difficulty_label": "归云城·江湖冲突",
+    "area_level": 8,
+    "recommended_level": 8,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
     ]
   },
   "guiyun_dart_horse_yard": {
@@ -801,7 +1245,10 @@
     "coord": [
       -4,
       5
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_dart_hall": {
     "name": "镖局议事厅",
@@ -814,7 +1261,11 @@
     "coord": [
       -3,
       5
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_qiqu_lane_1": {
     "name": "七曲巷口",
@@ -828,7 +1279,10 @@
     "coord": [
       -3,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_qiqu_lane_2": {
     "name": "七曲巷",
@@ -842,7 +1296,10 @@
     "coord": [
       -4,
       3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_dye_house": {
     "name": "废弃染坊",
@@ -856,7 +1313,11 @@
     "coord": [
       -4,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_secret_passage_entrance": {
     "name": "染坊暗室",
@@ -870,7 +1331,11 @@
     "coord": [
       -4,
       1
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_secret_passage": {
     "name": "地下暗道",
@@ -884,7 +1349,11 @@
     "coord": [
       -4,
       0
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_black_market_gate": {
     "name": "黑市入口",
@@ -898,7 +1367,11 @@
     "coord": [
       -4,
       -1
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_black_market": {
     "name": "沉星黑市",
@@ -914,7 +1387,14 @@
     "coord": [
       -4,
       -2
-    ]
+    ],
+    "npcs": [
+      "黑市接头人"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_black_market_east": {
     "name": "黑市东街",
@@ -923,11 +1403,28 @@
     "exits": {
       "西": "guiyun_black_market"
     },
-    "safe": true,
+    "safe": false,
     "coord": [
       -3,
       -2
-    ]
+    ],
+    "npcs": [
+      "黑市商人"
+    ],
+    "enemies": [
+      "黑市打手"
+    ],
+    "difficulty_level": 9,
+    "difficulty_label": "黑市·危险",
+    "area_level": 9,
+    "recommended_level": 9,
+    "danger": "high",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "indoor": true
   },
   "guiyun_black_market_west": {
     "name": "黑市西街",
@@ -936,11 +1433,25 @@
     "exits": {
       "东": "guiyun_black_market"
     },
-    "safe": true,
+    "safe": false,
     "coord": [
       -5,
       -2
-    ]
+    ],
+    "enemies": [
+      "黑市护卫"
+    ],
+    "difficulty_level": 10,
+    "difficulty_label": "黑市·高危",
+    "area_level": 10,
+    "recommended_level": 10,
+    "danger": "high",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "indoor": true
   },
   "guiyun_black_market_hall": {
     "name": "黑市内堂",
@@ -950,11 +1461,29 @@
       "北": "guiyun_black_market",
       "东": "guiyun_black_market_store"
     },
-    "safe": true,
+    "safe": false,
     "coord": [
       -4,
       -3
-    ]
+    ],
+    "npcs": [
+      "黑市管事"
+    ],
+    "enemies": [
+      "黑市头目",
+      "黑市死士"
+    ],
+    "difficulty_level": 12,
+    "difficulty_label": "黑市内堂·极危",
+    "area_level": 12,
+    "recommended_level": 12,
+    "danger": "extreme",
+    "exploration_events": [
+      "你发现一些异常脚印。",
+      "你找到少量可用资源。",
+      "这里似乎隐藏着什么，但暂时没有更多发现。"
+    ],
+    "indoor": true
   },
   "guiyun_black_market_store": {
     "name": "黑市暗铺",
@@ -967,7 +1496,11 @@
     "coord": [
       -3,
       -3
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_longle_lane": {
     "name": "长乐坊",
@@ -981,7 +1514,10 @@
     "coord": [
       -1,
       1
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_drama_stage": {
     "name": "长乐戏台",
@@ -994,12 +1530,15 @@
     "coord": [
       -1,
       0
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_stable": {
     "name": "归云马厩",
     "zone": "guiyun_city",
-    "desc": "马厩宽敞整洁，几匹驮马正在吃草。墙上挂着不同价位的草料牌。",
+    "desc": "马厩宽敞整洁，几匹驮马正在吃草。墙上挂着不同价位的草料牌。 马夫赵六负责刷洗马匹、添草加水，熟悉车队进出城的情况。",
     "exits": {
       "西": "guiyun_south_gate_inner"
     },
@@ -1007,6 +1546,12 @@
     "coord": [
       1,
       1
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "马夫赵六"
     ]
   },
   "guiyun_restaurant_street": {
@@ -1021,12 +1566,15 @@
     "coord": [
       1,
       2
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_restaurant_hall": {
     "name": "醉仙楼",
     "zone": "guiyun_city",
-    "desc": "三层木楼临街而立，楼下大堂座无虚席。墙上挂着历代江湖名士留下的字画。",
+    "desc": "醉仙楼大堂灯火通明，雕花梁柱间悬着酒旗与旧字画，热菜香气和杯盏碰响混在一处。靠窗的商客谈着货价，临柱的镖师低声核对路引，角落里偶有江湖人压低嗓音交换消息。掌柜守在柜台后招呼来客；若想打听风声，不妨先点一壶茶，再听听邻桌闲谈。",
     "exits": {
       "南": "guiyun_restaurant_street"
     },
@@ -1034,7 +1582,14 @@
     "coord": [
       1,
       3
-    ]
+    ],
+    "npcs": [
+      "醉仙楼掌柜"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_central_market": {
     "name": "东市街口",
@@ -1048,7 +1603,10 @@
     "coord": [
       1,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_market_east": {
     "name": "万商坊街口",
@@ -1062,12 +1620,20 @@
     "coord": [
       2,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_general_market": {
     "name": "万商集市",
     "zone": "guiyun_city",
-    "desc": "一片拥挤的露天集市，摊棚连成一片。吆喝声、讨价声和骡马嘶鸣交织不散。",
+    "desc": "一片拥挤的露天集市，摊棚连成一片。吆喝声、讨价声和骡马嘶鸣交织不散。 货郎周四常在摊棚间走动，售卖针线、香料和日用小物，也熟悉各地商路。",
+    "night_desc": "集市已经收摊，摊棚在夜色里缩成一片片黑影。白日里的吆喝声散去，只剩几只压货的竹筐。",
+    "night_hours": [
+      20,
+      7
+    ],
     "exits": {
       "西": "guiyun_market_east",
       "南": "guiyun_general_shop",
@@ -1077,7 +1643,16 @@
     "coord": [
       3,
       4
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "npcs": [
+      "货郎周四"
+    ],
+    "absence_notes": {
+      "货郎周四": "货郎的摊棚空着，只剩压货的竹筐。"
+    }
   },
   "guiyun_general_shop": {
     "name": "万商杂货铺",
@@ -1092,8 +1667,12 @@
       3
     ],
     "npcs": [
-      "杂货铺老板"
-    ]
+      "万商坊掌柜"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_weapon_pavilion": {
     "name": "宝器阁",
@@ -1107,7 +1686,11 @@
     "coord": [
       3,
       5
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_weapon_inner": {
     "name": "宝器内堂",
@@ -1120,7 +1703,14 @@
     "coord": [
       4,
       5
-    ]
+    ],
+    "npcs": [
+      "宝器阁掌柜"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_east_trade_street": {
     "name": "万商坊内街",
@@ -1135,7 +1725,10 @@
     "coord": [
       1,
       6
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_baicaotang": {
     "name": "百草堂",
@@ -1152,8 +1745,12 @@
       6
     ],
     "npcs": [
-      "药铺老板"
-    ]
+      "百草堂掌柜"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_medicine_inner": {
     "name": "药堂后院",
@@ -1167,12 +1764,15 @@
     "coord": [
       3,
       6
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_medicine_garden": {
     "name": "百草药圃",
     "zone": "guiyun_city",
-    "desc": "百草堂自设的小药圃，种着常用药材。仔细搜寻可以找到少量新鲜草药。",
+    "desc": "百草堂自设的小药圃，种着常用药材。仔细搜寻可以找到少量新鲜草药。此处草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。",
     "exits": {
       "南": "guiyun_medicine_inner"
     },
@@ -1183,7 +1783,10 @@
     ],
     "forage": {
       "草药": 0.55
-    }
+    },
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_money_house": {
     "name": "四海钱庄",
@@ -1196,7 +1799,14 @@
     "coord": [
       2,
       7
-    ]
+    ],
+    "npcs": [
+      "四海钱庄掌柜"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_rich_street": {
     "name": "朱门街",
@@ -1210,7 +1820,10 @@
     "coord": [
       1,
       7
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_prison": {
     "name": "府衙牢房",
@@ -1225,7 +1838,14 @@
     "coord": [
       1,
       8
-    ]
+    ],
+    "npcs": [
+      "狱卒"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_cloth_shop": {
     "name": "云锦坊",
@@ -1239,7 +1859,11 @@
     "coord": [
       2,
       8
-    ]
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_merchant_guild": {
     "name": "万商会馆",
@@ -1253,7 +1877,14 @@
     "coord": [
       3,
       8
-    ]
+    ],
+    "npcs": [
+      "万商会会长"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
   },
   "guiyun_shen_mansion": {
     "name": "沈府",
@@ -1266,7 +1897,13 @@
     "coord": [
       1,
       9
-    ]
+    ],
+    "npcs": [
+      "沈府管家"
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe"
   },
   "guiyun_merchant_backhall": {
     "name": "万商会后堂",
@@ -1279,6 +1916,1939 @@
     "coord": [
       3,
       9
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "indoor": true
+  },
+  "mistwood_trail": {
+    "name": "雾隐林道",
+    "zone": "mistwood",
+    "desc": "浓雾沿着山势流动，林道两侧布满湿润的苔痕，路旁有可持续恢复的林木。南面可返回村后荒野，北面通向采药溪谷，西面进入竹影幽谷。此处可伐木，输入“伐木”采集木材。 雾气贴着林地缓缓流动，湿叶与松脂的气味混在一起，远处偶尔传来斧声。",
+    "exits": {
+      "南": "wild_fields",
+      "北": "mistwood_stream",
+      "西": "bamboo_hollow"
+    },
+    "npcs": [
+      "采药人阿芷",
+      "樵夫老周"
+    ],
+    "safe": false,
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 3,
+    "recommended_level": 4,
+    "danger": "normal",
+    "enemies": [
+      "雾林野猿"
     ]
+  },
+  "mistwood_stream": {
+    "name": "采药溪谷",
+    "zone": "mistwood",
+    "desc": "清溪绕过乱石，岩壁边生着几丛药草。南面回到林道，东面有一间猎户留下的旧屋，西面沿溪可到药香浅滩。溪边可采集草药；要采矿请经猎户旧屋进入东侧废弃铁矿。此处草药储量有限，先输入“搜索”发现资源，再输入“采集”获取。 溪水漫过圆润石块，草叶上挂着水珠，清苦的药草香随着湿风飘来。",
+    "exits": {
+      "南": "mistwood_trail",
+      "东": "mistwood_hut",
+      "西": "herb_springbank"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 5,
+    "danger": "normal",
+    "enemies": [
+      "迷雾毒蛛"
+    ],
+    "forage": {
+      "草药": 0.55
+    }
+  },
+  "mistwood_hut": {
+    "name": "猎户旧屋",
+    "zone": "mistwood",
+    "desc": "木屋门轴锈蚀，桌上压着一张标注旧驿道的残图。西面回到溪谷，东面通往一处废弃铁矿，北面有一段长着药草的碎石坡。受伤的猎户同伴仍留在屋内，可以向他打听林中异状。",
+    "exits": {
+      "西": "mistwood_stream",
+      "东": "abandoned_iron_mine",
+      "北": "rocky_herb_slope"
+    },
+    "npcs": [
+      "失踪猎户的同伴"
+    ],
+    "safe": false,
+    "coord": [
+      1,
+      1
+    ],
+    "area_level": 4,
+    "recommended_level": 4,
+    "danger": "normal",
+    "enemies": [],
+    "indoor": true
+  },
+  "sunken_stairs": {
+    "name": "沉河石阶",
+    "zone": "sunken_ruins",
+    "desc": "石阶斜插入塌陷的河床，水痕停在半腰。南面可返回黑风后山，北面通往废祠。",
+    "exits": {
+      "南": "bandit_back_mountain",
+      "北": "sunken_shrine"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 5,
+    "recommended_level": 6,
+    "danger": "dangerous",
+    "enemies": [
+      "沉河尸傀"
+    ]
+  },
+  "sunken_shrine": {
+    "name": "沉河废祠",
+    "zone": "sunken_ruins",
+    "desc": "祠堂梁柱倾斜，供台下方透出潮湿冷风。南面回到石阶，东侧石壁后似有暗渠入口。 灰衣守祠人似乎知道旧商队的去向。此处有少量雾露草，先输入“搜索”发现资源，再输入“采集”获取。",
+    "exits": {
+      "南": "sunken_stairs",
+      "东": "sunken_channel"
+    },
+    "npcs": [
+      "守祠残僧"
+    ],
+    "safe": false,
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 6,
+    "recommended_level": 7,
+    "danger": "dangerous",
+    "enemies": [
+      "遗祠守墓人"
+    ],
+    "forage": {
+      "雾露草": 0.45
+    },
+    "indoor": true
+  },
+  "sunken_channel": {
+    "name": "地下暗渠",
+    "zone": "sunken_ruins",
+    "desc": "水流没过脚踝，墙面刻着旧商队的记号。西面返回废祠，东侧石壁被泥沙覆盖，似乎藏着一道暗门。输入“探索”仔细查看暗渠。",
+    "exits": {
+      "西": "sunken_shrine"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      1,
+      1
+    ],
+    "area_level": 6,
+    "recommended_level": 6,
+    "danger": "dangerous",
+    "enemies": [
+      "沉河尸傀"
+    ],
+    "hidden_exits": {
+      "东": {
+        "target": "sunken_cache",
+        "flag": "explore:sunken_channel:cache_found",
+        "blocked_text": "东侧石壁被泥沙与碎石堵住了。先在地下暗渠输入“探索”，查明石门机关后再尝试向东。"
+      }
+    },
+    "exploration_events": [
+      {
+        "text": "你沿着旧商队留下的刻痕摸索，发现东侧石壁后有一道被泥沙掩住的石门。你清理出狭窄通路，暗门后的石室已经可以进入。",
+        "requires": {
+          "variables": {
+            "explore:sunken_channel": {
+              "lte": 0
+            }
+          }
+        },
+        "effects": {
+          "set_flags": {
+            "explore:sunken_channel:cache_found": true
+          }
+        }
+      },
+      {
+        "text": "你重新检查暗渠中的旧商队刻痕，确认这条暗门通向曾经的货物藏放处。",
+        "requires": {
+          "flags": [
+            "explore:sunken_channel:cache_found"
+          ]
+        }
+      }
+    ],
+    "indoor": true
+  },
+  "northfront_gate": {
+    "name": "北境镇门",
+    "zone": "northfront_town",
+    "desc": "厚木镇门旁挂着商路告示，南面可返回归云城南门，北面是镇中街市。",
+    "exits": {
+      "南": "guiyun_south_gate",
+      "北": "northfront_street"
+    },
+    "npcs": [
+      "巡河老兵"
+    ],
+    "safe": true,
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 6,
+    "recommended_level": 6,
+    "danger": "normal",
+    "enemies": []
+  },
+  "northfront_street": {
+    "name": "北境街市",
+    "zone": "northfront_town",
+    "desc": "商贩沿街摆摊，几家货栈门前堆着封好的木箱。南面回到镇门，东面通向河埠。 货栈掌柜正在核验货物封蜡。",
+    "exits": {
+      "南": "northfront_gate",
+      "东": "northfront_wharf"
+    },
+    "npcs": [
+      "北境货栈掌柜"
+    ],
+    "safe": true,
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 6,
+    "recommended_level": 6,
+    "danger": "normal",
+    "enemies": []
+  },
+  "northfront_wharf": {
+    "name": "北境河埠",
+    "zone": "northfront_town",
+    "desc": "货船停靠在木桩旁，水面漂着几片被撕碎的封条。西面回到街市。 断裂的封绳散落在缆桩旁，几名可疑之人徘徊不去。",
+    "exits": {
+      "西": "northfront_street"
+    },
+    "npcs": [
+      "货船伙计小满"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      1
+    ],
+    "area_level": 7,
+    "recommended_level": 8,
+    "danger": "normal",
+    "enemies": [
+      "北境劫货客",
+      "河埠私枭"
+    ]
+  },
+  "abandoned_iron_mine": {
+    "name": "废弃铁矿",
+    "zone": "mistwood",
+    "desc": "旧矿道入口被碎石半掩，岩壁上可见铁矿脉。西面返回猎户旧屋，北面通往坍塌采石坑，采石坑东侧可进入铁脉长廊。此处可采矿，输入“采矿”开采铁矿石。 矿道旁有老矿工顾三驻守，可与他交谈了解矿脉情况。",
+    "exits": {
+      "西": "mistwood_hut",
+      "北": "collapsed_quarry"
+    },
+    "npcs": [
+      "矿工顾三"
+    ],
+    "safe": false,
+    "coord": [
+      2,
+      1
+    ],
+    "area_level": 4,
+    "recommended_level": 4,
+    "danger": "normal",
+    "enemies": [
+      "雾林野猿"
+    ]
+  },
+  "bamboo_hollow": {
+    "name": "竹影幽谷",
+    "zone": "mistwood",
+    "desc": "修竹密集，竹叶间漏下斑驳天光，地面散落着适合加工的竹木。东面返回雾隐林道。此处可伐木，输入“伐木”采集木材。",
+    "exits": {
+      "东": "mistwood_trail"
+    },
+    "safe": false,
+    "coord": [
+      -1,
+      0
+    ],
+    "area_level": 3,
+    "recommended_level": 4,
+    "danger": "normal",
+    "enemies": [
+      "雾林野猿"
+    ]
+  },
+  "old_woodlot": {
+    "name": "荒废柴场",
+    "zone": "main",
+    "desc": "旧柴棚早已倾斜，附近仍有不少枯木与可用木料。北面返回村后荒野。此处可伐木，输入“伐木”采集木材。",
+    "exits": {
+      "北": "wild_fields",
+      "东": "pine_ridge_foot"
+    },
+    "safe": false,
+    "coord": [
+      1,
+      -1
+    ],
+    "area_level": 2,
+    "recommended_level": 2,
+    "danger": "normal",
+    "enemies": [
+      "野狼"
+    ]
+  },
+  "deep_iron_gallery": {
+    "name": "铁脉长廊",
+    "zone": "mistwood",
+    "desc": "矿壁深处泛着暗红色的铁光，支撑木梁发出轻微吱呀声。西面返回坍塌采石坑。此处可采矿，输入“采矿”开采铁矿石。 矿壁渗着冷水，火把照出铁矿暗红的纹理，脚下碎石不时滚入深处。 补足矿料并清除矿道隐患后，这里的铁脉才会逐步恢复开采。",
+    "exits": {
+      "西": "collapsed_quarry"
+    },
+    "safe": false,
+    "coord": [
+      3,
+      2
+    ],
+    "area_level": 5,
+    "recommended_level": 5,
+    "danger": "dangerous",
+    "enemies": [
+      "雾林野猿",
+      "铁背矿獾"
+    ],
+    "indoor": true
+  },
+  "collapsed_quarry": {
+    "name": "坍塌采石坑",
+    "zone": "mistwood",
+    "desc": "露天岩坑被藤蔓和碎石覆盖，几处岩层仍露出可开采的铁矿。南面返回废弃铁矿，东面通往铁脉长廊。此处可采矿，输入“采矿”开采铁矿石。",
+    "exits": {
+      "南": "abandoned_iron_mine",
+      "北": "mistwood_ridge_path",
+      "东": "deep_iron_gallery"
+    },
+    "safe": false,
+    "coord": [
+      2,
+      2
+    ],
+    "area_level": 5,
+    "recommended_level": 5,
+    "danger": "dangerous",
+    "enemies": [
+      "雾林野猿"
+    ]
+  },
+  "herb_springbank": {
+    "name": "药香浅滩",
+    "zone": "mistwood",
+    "desc": "溪水在浅滩分成数股，石缝间长着耐寒药草。东面返回采药溪谷。此处有少量草药，先输入“搜索”发现资源，再输入“采集”获取。",
+    "exits": {
+      "东": "mistwood_stream"
+    },
+    "safe": false,
+    "coord": [
+      -1,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 5,
+    "danger": "normal",
+    "enemies": [
+      "迷雾毒蛛"
+    ],
+    "forage": {
+      "草药": 0.68
+    }
+  },
+  "rocky_herb_slope": {
+    "name": "碎石药坡",
+    "zone": "mistwood",
+    "desc": "坡面碎石松动，岩缝中藏着几株药性强烈的草药。南面返回猎户旧屋。此处有少量草药，先输入“搜索”发现资源，再输入“采集”获取。",
+    "exits": {
+      "南": "mistwood_hut"
+    },
+    "safe": false,
+    "coord": [
+      1,
+      2
+    ],
+    "area_level": 4,
+    "recommended_level": 4,
+    "danger": "normal",
+    "enemies": [
+      "毒蛇"
+    ],
+    "forage": {
+      "草药": 0.62
+    }
+  },
+  "sunken_cache": {
+    "name": "沉河暗库",
+    "zone": "sunken_ruins",
+    "desc": "狭小石室里堆着腐朽木箱，墙缝渗出清冷水汽。地面残留着旧商队封蜡碎片，角落长着少量雾露草。向西可返回地下暗渠；先输入“搜索”发现草药，再输入“采集”获取。",
+    "exits": {
+      "西": "sunken_channel"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      2,
+      1
+    ],
+    "area_level": 7,
+    "recommended_level": 7,
+    "danger": "dangerous",
+    "enemies": [],
+    "forage": {
+      "雾露草": 0.45
+    },
+    "exploration_events": [
+      "石箱底部留有一枚褪色的商会印记。",
+      "潮湿石缝里传来微弱回声，似乎还有别的暗道，但暂时无法辨认。"
+    ],
+    "indoor": true
+  },
+  "residents_lane": {
+    "name": "居民巷",
+    "zone": "main",
+    "desc": "青石铺成的窄巷从青石后街旁延伸出去，两侧是朴素院墙与晾晒的衣物。巷内住着几户村民，白日里常能听见邻里说话声。",
+    "exits": {
+      "西": "village_north_street",
+      "东": "public_well",
+      "北": "public_drying_yard"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      4
+    ]
+  },
+  "public_well": {
+    "name": "公共水井",
+    "zone": "main",
+    "desc": "一口用青石砌成的老井位于居民巷东侧，井沿被麻绳磨得光滑。村民会在清晨和傍晚来此打水。",
+    "exits": {
+      "西": "residents_lane",
+      "北": "sun_aunt_yard",
+      "南": "old_qiu_residence",
+      "东": "farm_lane"
+    },
+    "safe": true,
+    "coord": [
+      4,
+      4
+    ]
+  },
+  "public_drying_yard": {
+    "name": "居民公共晒场",
+    "zone": "main",
+    "desc": "几根木架与竹竿围出一片空地，村民在这里晒谷、晾菜，也会交换附近的消息。",
+    "exits": {
+      "南": "residents_lane",
+      "东": "sun_aunt_yard"
+    },
+    "safe": true,
+    "coord": [
+      3,
+      5
+    ]
+  },
+  "sun_aunt_yard": {
+    "name": "孙婶家院",
+    "zone": "main",
+    "desc": "院门内收拾得干净整齐，墙边摆着菜筐和竹筛。院门属于私人住处，未经主人允许不宜擅入。",
+    "exits": {
+      "西": "public_drying_yard",
+      "南": "public_well"
+    },
+    "safe": true,
+    "coord": [
+      4,
+      5
+    ],
+    "residence": {
+      "owner": "菜贩孙婶",
+      "private": true,
+      "trust_required": 20
+    }
+  },
+  "old_qiu_residence": {
+    "name": "老邱住处",
+    "zone": "main",
+    "desc": "一间靠近水井的旧瓦房，门边放着扁担、水桶和修补过的草鞋。这里是挑水老邱的住处，平日不对生人开放。",
+    "exits": {
+      "北": "public_well"
+    },
+    "safe": true,
+    "coord": [
+      4,
+      3
+    ],
+    "residence": {
+      "owner": "挑水老邱",
+      "private": true,
+      "trust_required": 20
+    },
+    "indoor": true
+  },
+  "farm_lane": {
+    "name": "村北农路",
+    "zone": "main",
+    "desc": "土路从水井附近向村北延伸，路旁是菜畦、篱笆与农具棚，再往前便是村外田地。",
+    "exits": {
+      "西": "public_well",
+      "北": "farmer_ahe_yard",
+      "南": "vacant_yard"
+    },
+    "safe": true,
+    "coord": [
+      5,
+      4
+    ]
+  },
+  "farmer_ahe_yard": {
+    "name": "阿禾家的农家小院",
+    "zone": "main",
+    "desc": "院中堆着柴草与农具，墙角有几只竹筐，院外连着村北田地。院落是私人住处，未经允许不可随意进入。",
+    "exits": {
+      "南": "farm_lane"
+    },
+    "safe": true,
+    "coord": [
+      5,
+      5
+    ],
+    "residence": {
+      "owner": "农家阿禾",
+      "private": true,
+      "trust_required": 20
+    }
+  },
+  "vacant_yard": {
+    "name": "空置小院",
+    "zone": "main",
+    "desc": "一座暂时无人居住的小院，院墙虽旧，屋舍仍可修整。村里暂未决定如何处置，未来或许能派上用场。",
+    "exits": {
+      "北": "farm_lane"
+    },
+    "safe": true,
+    "coord": [
+      5,
+      3
+    ],
+    "residence": {
+      "owner": null,
+      "private": false,
+      "reserved_for_future_player_home": true
+    }
+  },
+  "pine_ridge_foot": {
+    "name": "松岭山脚",
+    "zone": "main",
+    "desc": "荒废柴场东侧的小路渐渐抬高，松针铺满石缝。西边回荒废柴场，东边沿着山脊通往石溪古桥。路旁有可辨认的旧车辙，偶尔能见到挑担行商留下的脚印。",
+    "exits": {
+      "西": "old_woodlot",
+      "东": "stone_creek_bridge"
+    },
+    "coord": [
+      2,
+      -1
+    ],
+    "area_level": 2,
+    "recommended_level": 2,
+    "danger": "normal",
+    "enemies": [
+      "野狼"
+    ],
+    "exploration_events": [
+      "松针下压着一枚旧铜钱。",
+      "石边留有新鲜的担杖痕迹。",
+      "山风穿过松林，暂时没有异动。"
+    ],
+    "travel_hub": false
+  },
+  "stone_creek_bridge": {
+    "name": "石溪古桥",
+    "zone": "main",
+    "desc": "一座窄石桥横跨山溪，桥面有几处修补痕迹。西边回松岭山脚，东边通往云栈山道。溪边可见药草，也有被水冲来的木料。 石桥旁草药受储量与恢复周期限制；先输入“搜索”发现，再输入“采集”获取。",
+    "exits": {
+      "西": "pine_ridge_foot",
+      "东": "cloud_stack_road"
+    },
+    "coord": [
+      3,
+      -1
+    ],
+    "area_level": 2,
+    "recommended_level": 3,
+    "danger": "normal",
+    "forage": {
+      "草药": 0.25
+    },
+    "exploration_events": [
+      "桥栏上刻着半个模糊的“华”字。",
+      "溪水冲来一截带有商号印记的木片。",
+      "桥下传来短促的鸟鸣。"
+    ],
+    "travel_hub": false
+  },
+  "cloud_stack_road": {
+    "name": "云栈山道",
+    "zone": "main",
+    "desc": "山道沿着崖壁盘旋向上，远处隐约可见山门飞檐。西边回石溪古桥，东边进入华山外围山径。路面狭窄，行旅需留意脚下；此处已能听见山上传来的练剑声。",
+    "exits": {
+      "西": "stone_creek_bridge",
+      "东": "huashan_approach"
+    },
+    "coord": [
+      4,
+      -1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "enemies": [
+      "野狼"
+    ],
+    "exploration_events": [
+      "崖边石刻记着旧时修路人的姓名。",
+      "一截断裂的练剑木桩滚落在路旁。",
+      "山风送来几声清越剑鸣。"
+    ],
+    "travel_hub": false
+  },
+  "huashan_approach": {
+    "name": "华山外围山径",
+    "zone": "huashan_mountain",
+    "desc": "越过云栈山道，山势陡然开阔，苍松与峭壁之间铺着一条青石路。西边返回云栈山道，北边通往华山迎客道。沿途可见挑水弟子留下的脚印。",
+    "exits": {
+      "西": "cloud_stack_road",
+      "北": "huashan_guest_path"
+    },
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "石阶边刻着华山旧规的一句残文。",
+      "松枝上系着一条褪色的祈愿布带。",
+      "远处山门钟声随风传来。"
+    ],
+    "travel_hub": false
+  },
+  "huashan_guest_path": {
+    "name": "华山迎客道",
+    "zone": "huashan_mountain",
+    "desc": "石阶沿山势盘旋，路边立着指向山门的木牌。南边回华山外围山径，北边便是华山山门。此路供访客与送货行商通行，遇到门中弟子时可上前问路。",
+    "exits": {
+      "南": "huashan_approach",
+      "北": "huashan_gate"
+    },
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "exploration_events": [
+      "路边的脚印显示近日有不少访客上山。",
+      "木牌背面写着访客需遵守的山门规矩。",
+      "石阶被打扫得很干净。"
+    ],
+    "travel_hub": false
+  },
+  "huashan_gate": {
+    "name": "华山山门",
+    "zone": "huashan_mountain",
+    "desc": "两根青石门柱立于云雾之间，门额刻着“华山”二字。南边是迎客道，北边通往门内前庭。守门弟子会接待来访者，但门内练武与传功之地只对本门弟子开放。",
+    "exits": {
+      "南": "huashan_guest_path",
+      "北": "huashan_front_court",
+      "西": "huashan_guest_hall"
+    },
+    "coord": [
+      0,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "npcs": [
+      "华山守门弟子"
+    ],
+    "travel_hub": true
+  },
+  "huashan_front_court": {
+    "name": "华山前庭",
+    "zone": "huashan_mountain",
+    "desc": "前庭宽阔，青石地面被来往弟子的脚步磨得发亮。南边是山门，东边通往演武场，北边通往掌门居所。非本门弟子不得擅入。",
+    "exits": {
+      "南": "huashan_gate",
+      "东": "huashan_training_ground",
+      "北": "huashan_master_hall"
+    },
+    "coord": [
+      0,
+      3
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "access": {
+      "sect": "华山",
+      "blocked_text": "前庭内侧属于华山门内区域。守门弟子拦住了你：“若要入内，请先取得本门身份或得到正式准许。”"
+    }
+  },
+  "huashan_training_ground": {
+    "name": "华山演武场",
+    "zone": "huashan_mountain",
+    "desc": "数十根练剑木桩沿场地排开，几名弟子平日会在此练习基本剑式。西边回前庭。这里是日常练功与切磋之处，进场需有华山门内身份。",
+    "exits": {
+      "西": "huashan_front_court"
+    },
+    "coord": [
+      1,
+      3
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "access": {
+      "sect": "华山",
+      "blocked_text": "演武场属于华山门内练武之地，暂不接待外人。"
+    },
+    "npcs": [
+      "华山传功师兄",
+      "华山授业师父"
+    ]
+  },
+  "huashan_guest_hall": {
+    "name": "华山迎客厅",
+    "zone": "huashan_mountain",
+    "desc": "厅中陈设简洁，墙上挂着华山周边山路图。此厅直接位于山门旁，外来访客可在此等候接见或询问公开事务；门派内部议事不在此处进行。东边返回华山山门。",
+    "exits": {
+      "东": "huashan_gate"
+    },
+    "coord": [
+      -1,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "npcs": [
+      "华山接引执事"
+    ],
+    "indoor": true
+  },
+  "huashan_master_hall": {
+    "name": "华山议事堂",
+    "zone": "huashan_mountain",
+    "desc": "堂中悬着历代掌门画像，案上摆放门派事务簿册。南边回前庭。此处处理门规、晋升与重要门派事务，仅对具备相应身份的华山弟子开放。",
+    "exits": {
+      "南": "huashan_front_court",
+      "北": "huashan_sword_lecture_hall"
+    },
+    "coord": [
+      0,
+      4
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "access": {
+      "sect": "华山",
+      "blocked_text": "议事堂暂不接待外人。需正式晋升为内门弟子或更高身份，方可参与门派内部事务。",
+      "min_rank_index": 2
+    },
+    "indoor": true
+  },
+  "songshan_foothill": {
+    "name": "嵩山山麓",
+    "zone": "shaolin_mountain",
+    "desc": "官道转入嵩山山麓，石阶沿山势缓缓抬高。南面可回黄土官道，北面通往松林古道。路边立着一块风化的指路石，隐约刻着“少林”二字。",
+    "exits": {
+      "南": "official_road_east_1",
+      "北": "songshan_pine_path"
+    },
+    "npcs": [
+      "行脚僧"
+    ],
+    "safe": true,
+    "coord": [
+      5,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "travel_hub": false,
+    "exploration_events": [
+      "石阶旁留着新鲜脚印，似乎有香客刚刚上山。",
+      "风吹过松林，远处传来悠长的钟声。"
+    ]
+  },
+  "songshan_pine_path": {
+    "name": "松林古道",
+    "zone": "shaolin_mountain",
+    "desc": "高大的松树遮住日光，古道沿山脊向北延伸。南面返回嵩山山麓，北面通往石阶禅径。林间偶有樵夫经过，也能听见山雀鸣叫。",
+    "exits": {
+      "南": "songshan_foothill",
+      "北": "songshan_stone_steps"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      5,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "enemies": [
+      "野狼"
+    ],
+    "exploration_events": [
+      "松针下压着一张褪色的香客名帖。",
+      "石旁有僧人练步留下的浅浅足印。"
+    ]
+  },
+  "songshan_stone_steps": {
+    "name": "石阶禅径",
+    "zone": "shaolin_mountain",
+    "desc": "整齐的石阶穿过山门前的坡地，两侧石壁刻着劝人静心的偈语。南面回松林古道，北面便是少林山门。",
+    "exits": {
+      "南": "songshan_pine_path",
+      "北": "shaolin_gate"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      5,
+      3
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal"
+  },
+  "shaolin_gate": {
+    "name": "少林山门",
+    "zone": "shaolin_mountain",
+    "desc": "古朴山门依山而立，匾额上的“少林”二字苍劲有力。守门僧人审视来客，香客可在此礼佛问路；若要进入寺内修习，须先向接引僧说明来意。南面是石阶禅径，东面通往访客客堂。",
+    "exits": {
+      "南": "songshan_stone_steps",
+      "东": "shaolin_guest_hall"
+    },
+    "npcs": [
+      "少林守山僧"
+    ],
+    "safe": true,
+    "coord": [
+      5,
+      4
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "travel_hub": true
+  },
+  "shaolin_guest_hall": {
+    "name": "少林迎客堂",
+    "zone": "shaolin_mountain",
+    "desc": "客堂陈设朴素，木案上放着访客名册与茶盏。接引僧负责答疑、登记来意与办理入门申请。西面回到少林山门，北面进入寺院前院；尚未入门者只能在此及山门一带活动。",
+    "exits": {
+      "西": "shaolin_gate",
+      "北": "shaolin_front_court"
+    },
+    "npcs": [
+      "少林接引僧"
+    ],
+    "safe": true,
+    "coord": [
+      6,
+      4
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "travel_hub": true,
+    "indoor": true
+  },
+  "shaolin_front_court": {
+    "name": "少林寺前院",
+    "zone": "shaolin_mountain",
+    "desc": "青砖铺成的前院整洁肃穆，僧众往来有序。南面通向迎客堂，东面是日常练功的罗汉场，北面通往讲经堂。此处属于少林门内区域，须正式拜入少林方可进入。",
+    "exits": {
+      "南": "shaolin_guest_hall",
+      "东": "shaolin_training_ground",
+      "北": "shaolin_dharma_hall"
+    },
+    "npcs": [
+      "少林知客师兄"
+    ],
+    "access": {
+      "sect": "少林",
+      "blocked_text": "前院属于少林寺门内区域。知客僧合十道：“若有心入门，请先到迎客堂登记来意。”"
+    },
+    "safe": true,
+    "coord": [
+      6,
+      5
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe"
+  },
+  "shaolin_training_ground": {
+    "name": "少林罗汉场",
+    "zone": "shaolin_mountain",
+    "desc": "宽阔的练功场上立着木人桩与兵器架，几名僧人正演练基础拳架。西面回寺院前院，南侧小门通向僧众休息处。少林弟子可在此接受传功指点与晋升考核。",
+    "exits": {
+      "西": "shaolin_front_court",
+      "南": "shaolin_monk_quarters"
+    },
+    "npcs": [
+      "少林传功师父",
+      "少林传功师兄"
+    ],
+    "access": {
+      "sect": "少林",
+      "blocked_text": "罗汉场是少林弟子修习武艺之处，外来访客不得擅入。"
+    },
+    "safe": true,
+    "coord": [
+      7,
+      5
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe"
+  },
+  "shaolin_dharma_hall": {
+    "name": "少林讲经堂",
+    "zone": "shaolin_mountain",
+    "desc": "讲经堂内木鱼声缓缓回荡，墙上悬着戒律与修心偈语。初入门的少林弟子可在此听受戒律、办理入门受戒；可向戒律僧请教“晨课”“受戒次序”，也可询问寺院门规。南面通往寺院前院，北面连接方丈院外廊。",
+    "exits": {
+      "南": "shaolin_front_court",
+      "北": "shaolin_abbot_corridor"
+    },
+    "npcs": [
+      "少林戒律僧"
+    ],
+    "access": {
+      "sect": "少林",
+      "min_rank_index": 0,
+      "blocked_text": "讲经堂为本寺弟子听戒受礼之所，访客未经引荐不得入内。"
+    },
+    "safe": true,
+    "coord": [
+      6,
+      6
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "indoor": true
+  },
+  "shaolin_abbot_corridor": {
+    "name": "方丈院外廊",
+    "zone": "shaolin_mountain",
+    "desc": "幽静的外廊通向方丈院，廊下摆着几盆松柏。可向巡院僧请教“清修”或“院规”；此处仅供达到相应身份或获准访客通行。南面回讲经堂，东面通往藏经阁外院。",
+    "exits": {
+      "南": "shaolin_dharma_hall",
+      "东": "shaolin_scripture_court"
+    },
+    "npcs": [
+      "少林巡院僧"
+    ],
+    "access": {
+      "sect": "少林",
+      "min_rank_index": 3,
+      "blocked_text": "方丈院外廊属于少林清修区域，须正式晋升为传法弟子或获得特别许可。"
+    },
+    "safe": true,
+    "coord": [
+      6,
+      7
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe"
+  },
+  "shaolin_scripture_court": {
+    "name": "藏经阁外院",
+    "zone": "shaolin_mountain",
+    "desc": "藏经阁外院静得只听见风过檐角。可向守阁僧询问“藏经目录”或“借阅规矩”。外院仅供获准者查看目录与办理登记，不允许擅入内阁。西面返回方丈院外廊。",
+    "exits": {
+      "西": "shaolin_abbot_corridor",
+      "东": "shaolin_vajra_court"
+    },
+    "npcs": [
+      "少林守阁僧"
+    ],
+    "access": {
+      "sect": "少林",
+      "min_rank_index": 3,
+      "blocked_text": "藏经阁外院仅对传法弟子及更高身份开放。传法弟子可向守阁僧了解藏经目录与阅览规矩；更高阶弟子方可进一步申请借阅。"
+    },
+    "safe": true,
+    "coord": [
+      7,
+      7
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe"
+  },
+  "shaolin_monk_quarters": {
+    "name": "僧众歇息院",
+    "zone": "shaolin_mountain",
+    "desc": "院中晾着僧衣，墙边整齐摆放着木桶与水缸，是僧众练功后歇息的地方。北面回罗汉场。此处为少林门内生活区域。",
+    "exits": {
+      "北": "shaolin_training_ground"
+    },
+    "npcs": [],
+    "access": {
+      "sect": "少林",
+      "blocked_text": "此处为少林僧众生活区域，外人不便进入。"
+    },
+    "safe": true,
+    "coord": [
+      7,
+      4
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe"
+  },
+  "wudang_foothill": {
+    "name": "武当山麓",
+    "zone": "wudang_mountain",
+    "desc": "山麓群峰隐在云气之间，路旁立着一块指向武当的旧石碑。西面沿紫霄山径可返回青岚旧驿与黄土官道，南面通往松风古道。初次登山宜沿石阶前行，不要擅入林间小径。",
+    "exits": {
+      "西": "road_wudang_mountain_path",
+      "南": "wudang_pine_path"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "travel_hub": true,
+    "coord": [
+      0,
+      0
+    ]
+  },
+  "wudang_pine_path": {
+    "name": "松风古道",
+    "zone": "wudang_mountain",
+    "desc": "古道穿过苍松与青石，山风吹动枝叶，隐约可听见远处晨钟。北面返回武当山麓，南面沿石阶通往迎真台。",
+    "exits": {
+      "北": "wudang_foothill",
+      "南": "wudang_stone_steps"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      0,
+      -1
+    ]
+  },
+  "wudang_stone_steps": {
+    "name": "迎真石阶",
+    "zone": "wudang_mountain",
+    "desc": "石阶依山势盘旋而上，沿途可见道家题刻。北面下山返回松风古道，南面便是武当山门。",
+    "exits": {
+      "北": "wudang_pine_path",
+      "南": "wudang_gate"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      0,
+      -2
+    ]
+  },
+  "wudang_gate": {
+    "name": "武当山门",
+    "zone": "wudang_mountain",
+    "desc": "山门古朴庄严，门额题着“武当”二字。守门弟子向来客抱拳致意。北面是迎真石阶，东面通往迎客厅；若要进入门内修习，须先正式拜入武当。",
+    "exits": {
+      "北": "wudang_stone_steps",
+      "东": "wudang_guest_hall",
+      "南": "wudang_outer_court"
+    },
+    "npcs": [
+      "武当守山弟子"
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "travel_hub": true,
+    "coord": [
+      0,
+      -3
+    ]
+  },
+  "wudang_guest_hall": {
+    "name": "武当迎客厅",
+    "zone": "wudang_mountain",
+    "desc": "厅内清茶待客，墙上挂着武当门规与拜师礼仪。西面返回山门。可向接引道人打听拜师、门规与山中道路。",
+    "exits": {
+      "西": "wudang_gate"
+    },
+    "npcs": [
+      "武当接引道人"
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      1,
+      -3
+    ],
+    "indoor": true
+  },
+  "wudang_outer_court": {
+    "name": "武当外院",
+    "zone": "wudang_mountain",
+    "desc": "外院弟子在此洒扫、静坐与练习基础步法。北面回到山门，东面通往太和演武场，南面通往弟子静修院，西面通往真武殿。此处为门内区域，非武当弟子不得擅入。",
+    "exits": {
+      "北": "wudang_gate",
+      "东": "wudang_training_ground",
+      "南": "wudang_disciple_courtyard",
+      "西": "wudang_zhenwu_hall"
+    },
+    "npcs": [
+      "武当执事弟子"
+    ],
+    "access": {
+      "sect": "武当",
+      "blocked_text": "武当外院属于门内区域。执事弟子拱手道：“若有心入门，请先到迎客厅说明来意，正式拜师后再入院修习。”"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      0,
+      -4
+    ]
+  },
+  "wudang_training_ground": {
+    "name": "太和演武场",
+    "zone": "wudang_mountain",
+    "desc": "青石演武场宽阔平整，弟子们练习剑法与绵掌，招式舒缓而不失劲力。西面回武当外院。可向传功师父请教太极剑，向传功师兄请教绵掌与两仪剑诀。仅武当弟子可进入。",
+    "exits": {
+      "西": "wudang_outer_court"
+    },
+    "npcs": [
+      "武当传功师父",
+      "武当传功师兄"
+    ],
+    "access": {
+      "sect": "武当",
+      "blocked_text": "演武场只对武当门人开放。"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      1,
+      -4
+    ]
+  },
+  "wudang_disciple_courtyard": {
+    "name": "武当弟子静修院",
+    "zone": "wudang_mountain",
+    "desc": "静修院清幽安静，廊下放着经卷与练功木剑。北面回武当外院。弟子可在此休整，也可向同门询问修习心得。仅武当弟子可进入。",
+    "exits": {
+      "北": "wudang_outer_court"
+    },
+    "access": {
+      "sect": "武当",
+      "blocked_text": "静修院是武当弟子休息与静修之处，外人不便入内。"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      0,
+      -5
+    ]
+  },
+  "wudang_zhenwu_hall": {
+    "name": "真武殿",
+    "zone": "wudang_mountain",
+    "desc": "殿中供奉真武大帝，香烟袅袅，气氛肃穆。这里用于门内重要礼仪与高阶传承，不是普通游客可以随意进入的地方。东面返回武当外院；内殿仅对达到相应身份的武当弟子开放。",
+    "exits": {
+      "东": "wudang_outer_court",
+      "北": "wudang_taiji_courtyard"
+    },
+    "access": {
+      "sect": "武当",
+      "min_rank_index": 2,
+      "blocked_text": "真武殿内殿只对内门弟子及更高身份开放。"
+    },
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "safe",
+    "safe": true,
+    "coord": [
+      -1,
+      -4
+    ],
+    "indoor": true
+  },
+  "road_wudang_turnoff": {
+    "name": "官道北岔口",
+    "zone": "main",
+    "desc": "黄土官道城南段向北分出一条旧路，路旁石碑上的字迹已被风雨磨淡。南面返回黄土官道，北面通往青岚旧驿。",
+    "exits": {
+      "南": "official_road_east_2",
+      "北": "road_wudang_old_post",
+      "东": "road_tieyi_turnoff"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      4,
+      1
+    ],
+    "area_level": 2,
+    "recommended_level": 2,
+    "danger": "normal"
+  },
+  "road_wudang_old_post": {
+    "name": "青岚旧驿",
+    "zone": "main",
+    "desc": "荒废的驿亭倚着山势而建，残存的石阶被松针覆盖。西面回到官道北岔口，东面沿石径继续深入，可抵达武当山麓。",
+    "exits": {
+      "南": "road_wudang_turnoff",
+      "东": "road_wudang_mountain_path"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      4,
+      2
+    ],
+    "area_level": 2,
+    "recommended_level": 2,
+    "danger": "normal"
+  },
+  "road_wudang_mountain_path": {
+    "name": "紫霄山径",
+    "zone": "main",
+    "desc": "石径渐入山林，薄雾绕过苍松，远处隐约传来晨钟。西面返回青岚旧驿，东面抵达武当山麓。",
+    "exits": {
+      "西": "road_wudang_old_post",
+      "东": "wudang_foothill"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      5,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal"
+  },
+  "road_tieyi_turnoff": {
+    "name": "铁衣门岔道",
+    "zone": "main",
+    "desc": "官道北岔口东侧另有一条压实的山路，路旁立着一块刻有铁衣纹样的石牌。西面返回官道北岔口，东面通往铁衣门山麓。路上常有运送铁料与兵器的车辙。",
+    "exits": {
+      "西": "road_wudang_turnoff",
+      "东": "tieyi_foothill"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      5,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal"
+  },
+  "tieyi_foothill": {
+    "name": "铁衣门山麓",
+    "zone": "tieyi_mountain",
+    "desc": "山麓石路宽阔，沿途可见练功留下的沉重脚印。西面返回铁衣门岔道，北面沿石阶上行可到铁衣门山门。访客可以在山门与接待堂询问公开事务。",
+    "exits": {
+      "西": "road_tieyi_turnoff",
+      "北": "tieyi_gate"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal"
+  },
+  "tieyi_gate": {
+    "name": "铁衣门山门",
+    "zone": "tieyi_mountain",
+    "desc": "两根厚重石柱立在山门前，门楣刻着“铁衣门”三字。南面是山麓石路，东面通往接待堂，北面进入外院。守门弟子允许访客询问门规，但门内练武区域只对本门弟子开放。",
+    "exits": {
+      "南": "tieyi_foothill",
+      "东": "tieyi_guest_hall",
+      "北": "tieyi_outer_court"
+    },
+    "npcs": [
+      "铁衣门守门弟子"
+    ],
+    "safe": true,
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal"
+  },
+  "tieyi_guest_hall": {
+    "name": "铁衣门接待堂",
+    "zone": "tieyi_mountain",
+    "desc": "堂内摆着访客簿、护运路线图和几件旧兵器。西面回山门。接引执事在此登记来访与拜师申请，外人可在此等候，不必擅入内院。",
+    "exits": {
+      "西": "tieyi_gate"
+    },
+    "npcs": [
+      "铁衣门接引执事"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      1
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "indoor": true
+  },
+  "tieyi_outer_court": {
+    "name": "铁衣门外院",
+    "zone": "tieyi_mountain",
+    "desc": "外院石坪上摆着木桩、沙袋和负重石锁。南面回山门，东面是门内演武场。这里是弟子练习基本功的地方，访客须取得铁衣门身份后方可进入。",
+    "exits": {
+      "南": "tieyi_gate",
+      "东": "tieyi_training_ground",
+      "北": "tieyi_council_hall"
+    },
+    "npcs": [
+      "铁衣门护运执事"
+    ],
+    "safe": true,
+    "coord": [
+      0,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "access": {
+      "sect": "铁衣门",
+      "blocked_text": "外院属于铁衣门门内区域。守门弟子提醒你，先到接待堂登记并正式拜入门下，方可入内修习。"
+    }
+  },
+  "tieyi_training_ground": {
+    "name": "铁衣门演武场",
+    "zone": "tieyi_mountain",
+    "desc": "厚背刀、铁尺与练功桩整齐排列，弟子们正练习稳步、架刀与合击。西面回外院。传功师父在此讲授铁衣功与破阵刀，进场需有本门身份。",
+    "exits": {
+      "西": "tieyi_outer_court"
+    },
+    "npcs": [
+      "铁衣门传功师父"
+    ],
+    "safe": true,
+    "coord": [
+      1,
+      2
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "access": {
+      "sect": "铁衣门",
+      "blocked_text": "演武场只对铁衣门门人开放。"
+    }
+  },
+  "tieyi_council_hall": {
+    "name": "铁衣门议事堂",
+    "zone": "tieyi_mountain",
+    "desc": "堂中挂着历代门主画像，墙上标注着护运路线与门内规约。南面回外院。此处处理门规、晋升与护运事务，须正式晋升为内堂弟子或更高身份。",
+    "exits": {
+      "南": "tieyi_outer_court"
+    },
+    "npcs": [],
+    "safe": true,
+    "coord": [
+      0,
+      3
+    ],
+    "area_level": 3,
+    "recommended_level": 3,
+    "danger": "normal",
+    "access": {
+      "sect": "铁衣门",
+      "min_rank_index": 2,
+      "blocked_text": "议事堂只对铁衣门内堂弟子及更高身份开放。"
+    },
+    "indoor": true
+  },
+  "bandit_supply_cave": {
+    "name": "黑风寨粮道",
+    "zone": "bandit_zone",
+    "desc": "宝库东侧是一条储存粮草与赃物的狭长洞道，木箱层层堆叠，几名精锐在此看守。西边返回山贼宝库，北边通往断崖暗哨。可输入“搜索”调查遗落的粮草与赃物。",
+    "exits": {
+      "西": "bandit_treasury",
+      "北": "bandit_cliff_post"
+    },
+    "enemies": [
+      "黑风寨精锐",
+      "黑风刀手"
+    ],
+    "coord": [
+      2,
+      1
+    ],
+    "difficulty_level": 8,
+    "difficulty_label": "黑风寨粮道·极危",
+    "area_level": 8,
+    "recommended_level": 8,
+    "danger": "dangerous",
+    "exploration_events": [
+      "木箱底下似乎藏着被抢来的货物。",
+      "你发现了几处新鲜脚印，说明此处仍有人巡守。",
+      "洞壁上留有一段残缺刀谱的刻痕。"
+    ],
+    "indoor": true
+  },
+  "bandit_cliff_post": {
+    "name": "断崖暗哨",
+    "zone": "bandit_zone",
+    "desc": "粮道尽头是一处贴着断崖修筑的暗哨，山风从石缝间呼啸而过。南边返回黑风寨粮道，哨位由寨中执法头目亲自巡视。此处地势险恶，非有准备不宜深入。",
+    "exits": {
+      "南": "bandit_supply_cave",
+      "东": "bandit_outer_wood"
+    },
+    "enemies": [
+      "黑风刀手",
+      "黑风寨执法头目"
+    ],
+    "coord": [
+      2,
+      2
+    ],
+    "difficulty_level": 9,
+    "difficulty_label": "断崖暗哨·极危",
+    "area_level": 9,
+    "recommended_level": 9,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你在石缝里发现一枚刻有黑风寨记号的旧令牌。",
+      "崖边有一道新鲜刀痕，似乎有人刚刚练过刀法。",
+      "风声掩盖了远处的脚步声，暗哨仍在戒备。"
+    ]
+  },
+  "bandit_outer_wood": {
+    "name": "黑风寨外林",
+    "zone": "bandit_zone",
+    "desc": "断崖暗哨东侧的山林被黑风寨用作外围巡逻与伏击之地。树干上留着新旧刀痕，北边山坡隐约传来脚步声，西边可退回断崖暗哨。这里已不是普通山路，贸然深入容易遭伏击。",
+    "exits": {
+      "西": "bandit_cliff_post",
+      "北": "bandit_ambush_slope"
+    },
+    "enemies": [
+      "黑风寨伏击手",
+      "黑风寨刀阵头目",
+      "黑风寨游骑"
+    ],
+    "coord": [
+      3,
+      2
+    ],
+    "difficulty_level": 9,
+    "difficulty_label": "黑风寨外林·极危",
+    "area_level": 9,
+    "recommended_level": 10,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你在树根下发现几片破损的兵器铁片。",
+      "林间绳索留下了布置伏击的痕迹。",
+      "远处的暗号声说明寨中仍有人活动。"
+    ]
+  },
+  "bandit_ambush_slope": {
+    "name": "伏击石坡",
+    "zone": "bandit_zone",
+    "desc": "石坡狭窄，乱石与枯枝遮蔽了脚下，最适合多人围攻。南边回到黑风寨外林，北边通向山脊旧烽台。黑风寨刀手会借地形封住退路，切勿只凭等级判断危险。",
+    "exits": {
+      "南": "bandit_outer_wood",
+      "北": "bandit_old_beacon"
+    },
+    "enemies": [
+      "黑风寨刀阵头目",
+      "黑风寨伏击手",
+      "黑风寨游骑"
+    ],
+    "coord": [
+      3,
+      3
+    ],
+    "difficulty_level": 10,
+    "difficulty_label": "伏击石坡·凶险",
+    "area_level": 10,
+    "recommended_level": 10,
+    "danger": "high",
+    "exploration_events": [
+      "石缝里藏着一小包军械残片。",
+      "地面上有几道拖拽痕迹，像是有人转移过箱笼。",
+      "坡顶风声很大，敌人可能借此掩护脚步。"
+    ]
+  },
+  "bandit_old_beacon": {
+    "name": "山脊旧烽台",
+    "zone": "bandit_zone",
+    "desc": "废弃烽台俯瞰黑风寨外侧山路，寨中悍匪把这里改成最后一道警戒线。南边回到伏击石坡，北面山道通往断魂岭猎户棚。守关者一旦发觉入侵，便会借高处与重刀压制来敌；此处适合作为挑战黑风寨外围的终点，不应视作普通刷怪点。",
+    "exits": {
+      "南": "bandit_ambush_slope",
+      "北": "duanhun_camp"
+    },
+    "enemies": [
+      "黑风寨守关首领",
+      "黑风寨悍卒"
+    ],
+    "coord": [
+      3,
+      4
+    ],
+    "difficulty_level": 11,
+    "difficulty_label": "山脊烽台·首领威胁",
+    "area_level": 11,
+    "recommended_level": 11,
+    "danger": "extreme",
+    "exploration_events": [
+      "烽台底部压着一张残缺的巡防路线图。",
+      "旧石槽里留有黑风寨的军械印记。",
+      "风中传来铁器相击声，守关首领正在附近巡查。"
+    ]
+  },
+  "mistwood_ridge_path": {
+    "name": "雾林高脊",
+    "zone": "mistwood",
+    "desc": "采石坑北侧是一段被风蚀的高脊山径。碎石沿坡滚落，远处隐约可见黑风寨后山的峭壁。南面返回坍塌采石坑，东面有一条险峻小道接入黑风后山；山径狭窄，行走时须提防山贼与野兽。",
+    "exits": {
+      "南": "collapsed_quarry",
+      "东": "bandit_back_mountain"
+    },
+    "enemies": [
+      "山贼精英",
+      "铁背矿獾"
+    ],
+    "safe": false,
+    "coord": [
+      2,
+      3
+    ],
+    "area_level": 7,
+    "recommended_level": 7,
+    "danger": "dangerous",
+    "exploration_events": [
+      "你在岩缝里发现几块尚可利用的铁矿石。",
+      "风中传来黑风寨巡哨的喝问声。",
+      "你辨清了通往黑风后山的隐蔽路径。"
+    ]
+  },
+  "shaolin_vajra_court": {
+    "name": "金刚演法院",
+    "zone": "shaolin_mountain",
+    "desc": "院中立着数尊石制金刚像，地面留有长期演练步法的浅痕。这里不传初学招式，而是让根基扎实的少林弟子磨炼护体与进退。西面返回藏经阁外院。",
+    "exits": {
+      "西": "shaolin_scripture_court"
+    },
+    "access": {
+      "sect": "少林",
+      "min_rank_index": 3,
+      "blocked_text": "金刚演法院只对正式晋升为传法弟子或更高身份的少林门人开放。"
+    },
+    "safe": true,
+    "coord": [
+      8,
+      7
+    ],
+    "area_level": 4,
+    "recommended_level": 6,
+    "danger": "safe"
+  },
+  "wudang_taiji_courtyard": {
+    "name": "太极静修院",
+    "zone": "wudang_mountain",
+    "desc": "院中青石铺地，几株老松随风轻摇。弟子在此练习以静制动、借力化劲，讲究招式与呼吸相合。南面返回真武殿。",
+    "exits": {
+      "南": "wudang_zhenwu_hall"
+    },
+    "access": {
+      "sect": "武当",
+      "min_rank_index": 3,
+      "blocked_text": "太极静修院只对正式晋升为真传弟子或更高身份的武当门人开放。"
+    },
+    "safe": true,
+    "coord": [
+      -1,
+      -3
+    ],
+    "area_level": 4,
+    "recommended_level": 6,
+    "danger": "safe"
+  },
+  "huashan_sword_lecture_hall": {
+    "name": "剑理讲武堂",
+    "zone": "huashan_mountain",
+    "desc": "堂中悬着历代华山剑谱的拓本，墙上写着“先明剑理，后求剑快”。这里供高阶弟子拆解剑招、演练连势。南面返回华山议事堂。",
+    "exits": {
+      "南": "huashan_master_hall"
+    },
+    "access": {
+      "sect": "华山",
+      "min_rank_index": 3,
+      "blocked_text": "剑理讲武堂只对正式晋升为真传弟子或更高身份的华山门人开放。"
+    },
+    "safe": true,
+    "coord": [
+      0,
+      5
+    ],
+    "area_level": 4,
+    "recommended_level": 6,
+    "danger": "safe",
+    "indoor": true
+  },
+  "duanhun_camp": {
+    "name": "断魂岭猎户棚",
+    "zone": "duanhun_ridge",
+    "desc": "黑风寨旧烽台北面的一处避风石棚，猎户在棚外插了几支削尖的木桩。南边退回山脊旧烽台，北边沿栈道进入断魂岭。这里地势虽险，却是岭上少有的歇脚处。",
+    "exits": {
+      "南": "bandit_old_beacon",
+      "北": "duanhun_trail"
+    },
+    "npcs": [
+      "守岭猎户"
+    ],
+    "safe": true,
+    "coord": [
+      3,
+      5
+    ],
+    "difficulty_level": 13,
+    "difficulty_label": "断魂岭猎户棚·暂歇",
+    "area_level": 13,
+    "recommended_level": 13,
+    "danger": "normal",
+    "exploration_events": [
+      "石棚角落里挂着几张风干的兽皮，猎户显然在这里住了很久。",
+      "棚外木桩上留着新旧刀痕，最近应有人在此试过刀。"
+    ]
+  },
+  "duanhun_trail": {
+    "name": "断魂岭栈道",
+    "zone": "duanhun_ridge",
+    "desc": "栈道贴着山壁向北延伸，木板被马蹄与刀鞘磨得发亮。东侧有一处突出的断魂崖，北面是枯骨涧。马贼与弩手常在此截往来行人。",
+    "exits": {
+      "南": "duanhun_camp",
+      "北": "duanhun_ravine",
+      "东": "duanhun_cliff"
+    },
+    "enemies": [
+      "断魂岭马贼",
+      "岭道弩手"
+    ],
+    "coord": [
+      3,
+      6
+    ],
+    "difficulty_level": 13,
+    "difficulty_label": "断魂岭栈道·高危",
+    "area_level": 13,
+    "recommended_level": 13,
+    "danger": "high",
+    "exploration_events": [
+      "栈道木板下卡着一枚折断的弩矢，箭头还带着干涸的血迹。",
+      "崖壁上刻着几道浅痕，像是马贼用来计数的记号。",
+      "你在路旁捡到半截被踩碎的商队封蜡。"
+    ]
+  },
+  "duanhun_cliff": {
+    "name": "断魂崖",
+    "zone": "duanhun_ridge",
+    "desc": "断魂崖向外突出，脚下是看不见底的深涧。崖边散落着折断的弩矢和旧绳，东来西往的马贼常在这里放哨，夜里偶尔还能遇见独行的夜行客。西边回到栈道。",
+    "exits": {
+      "西": "duanhun_trail"
+    },
+    "enemies": [
+      "岭道弩手",
+      "断魂岭马贼",
+      "断魂岭夜行客"
+    ],
+    "coord": [
+      4,
+      6
+    ],
+    "difficulty_level": 13,
+    "difficulty_label": "断魂崖·高危",
+    "area_level": 13,
+    "recommended_level": 13,
+    "danger": "high",
+    "exploration_events": [
+      "崖边一块石头被磨得光滑，显然常有人趴在这里放哨。",
+      "你在石缝里摸到几枚锈蚀的弩机零件。",
+      "山风卷起旧绳，绳端还系着一枚褪色的布条。"
+    ]
+  },
+  "duanhun_ravine": {
+    "name": "枯骨涧",
+    "zone": "duanhun_ridge",
+    "desc": "山涧里堆着被雨水冲下的枯骨与破甲，风穿过石缝时发出低沉的呜咽。南边是断魂岭栈道，北边通往断魂堡门。刀客们把这里当作试刀的地方。",
+    "exits": {
+      "南": "duanhun_trail",
+      "北": "duanhun_fort_gate"
+    },
+    "enemies": [
+      "枯骨涧刀客",
+      "断魂岭马贼"
+    ],
+    "coord": [
+      3,
+      7
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "枯骨涧·极危",
+    "area_level": 14,
+    "recommended_level": 14,
+    "danger": "extreme",
+    "exploration_events": [
+      "涧底散落着几柄卷刃的旧刀，刀柄上还缠着黑风寨的布条。",
+      "你在枯骨间发现一块被刀劈开的护心镜。",
+      "石壁上有新刻的刀痕，深浅几乎一致，像是有人反复练同一式。"
+    ]
+  },
+  "duanhun_fort_gate": {
+    "name": "断魂堡门",
+    "zone": "duanhun_ridge",
+    "desc": "断魂堡的门楼建在两块巨岩之间，门板包着厚铁，箭孔后仍有人影晃动。南边退回枯骨涧，北边是堡内厅。守卫长带着残部死守此处。",
+    "exits": {
+      "南": "duanhun_ravine",
+      "北": "duanhun_keep"
+    },
+    "enemies": [
+      "断魂堡守卫长",
+      "枯骨涧刀客"
+    ],
+    "coord": [
+      3,
+      8
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "断魂堡门·极危",
+    "area_level": 14,
+    "recommended_level": 14,
+    "danger": "extreme",
+    "exploration_events": [
+      "门楼下堆着新砍的木料，守军显然打算长期据守。",
+      "箭孔边缘留着整齐的刀痕，守门者不是寻常匪徒。",
+      "你在门缝里看到一条通往里厅的窄道，火盆的光一闪即灭。"
+    ]
+  },
+  "duanhun_keep": {
+    "name": "断魂堡内厅",
+    "zone": "duanhun_ridge",
+    "desc": "堡内大厅的火盆早已熄灭，梁柱上留着新旧刀痕。断魂堡主坐在尽头，刀横膝上，死卫分列两侧。南边是堡门，退路只有一条。",
+    "exits": {
+      "南": "duanhun_fort_gate"
+    },
+    "enemies": [
+      "断魂堡主",
+      "断魂堡死卫"
+    ],
+    "coord": [
+      3,
+      9
+    ],
+    "difficulty_level": 15,
+    "difficulty_label": "断魂堡内厅·绝险",
+    "area_level": 15,
+    "recommended_level": 15,
+    "danger": "extreme",
+    "exploration_events": [
+      "厅角堆着从商队抢来的箱笼，锁扣大多被粗暴撬开。",
+      "梁柱上的刀痕深浅不一，最新的一道还带着木屑。",
+      "断魂堡主的目光始终落在门口，像是在等一个敢进来的人。"
+    ],
+    "indoor": true
+  },
+  "inn_upper_hall": {
+    "name": "客栈二楼走廊",
+    "zone": "inn_upper",
+    "desc": "木梯尽头是一条铺着旧毡毯的走廊，两侧房门挂着天字、地字的木牌。走廊临着天井，一低头便能看见大堂的灯火与来往食客；窗边摆着两盆兰草，夜风穿过半开的木窗，带着淡淡的茶香。东、西、南三面各有客房，北面的房门锁着。",
+    "exits": {
+      "下": "inn",
+      "东": "inn_upper_tian1",
+      "西": "inn_upper_tian2",
+      "南": "inn_upper_tian3",
+      "北": "inn_upper_di1"
+    },
+    "exit_notes": {
+      "北": "（门锁着）"
+    },
+    "npcs": [
+      "柳三娘",
+      "小翠"
+    ],
+    "safe": true,
+    "window_view": true,
+    "coord": [
+      0,
+      0
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 2
+  },
+  "inn_upper_tian1": {
+    "name": "天字一号房",
+    "zone": "inn_upper",
+    "desc": "房内陈设简净，一张榆木床靠墙放着，床帐是洗得发白的青布。窗下有一张矮几，几上搁着半盏凉茶与一柄未入鞘的长剑，剑穗随风轻晃。",
+    "exits": {
+      "西": "inn_upper_hall"
+    },
+    "npcs": [
+      "沈青霜"
+    ],
+    "safe": true,
+    "window_view": true,
+    "coord": [
+      1,
+      0
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 2
+  },
+  "inn_upper_tian2": {
+    "name": "天字二号房",
+    "zone": "inn_upper",
+    "desc": "这间客房比走廊另一侧宽敞些，桌上摊着晒干的药材与几只白瓷药瓶，空气里浮着淡淡的甘草香。靠窗的架子上整齐码着纸包，每一包都用细麻绳扎紧。",
+    "exits": {
+      "东": "inn_upper_hall"
+    },
+    "npcs": [
+      "苏挽晴"
+    ],
+    "safe": true,
+    "window_view": true,
+    "coord": [
+      -1,
+      0
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 2
+  },
+  "inn_upper_tian3": {
+    "name": "天字三号房（雅间）",
+    "zone": "inn_upper",
+    "desc": "雅间铺着厚软的草席，屏风后燃着一炉沉香。矮桌上摆着棋盘与两只青瓷杯，窗纸透进柔和的天光，将屋里的陈设照得安静而温暖。",
+    "exits": {
+      "北": "inn_upper_hall"
+    },
+    "npcs": [
+      "阿蘅"
+    ],
+    "safe": true,
+    "window_view": true,
+    "coord": [
+      0,
+      -1
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 2
+  },
+  "inn_upper_di1": {
+    "name": "地字一号房",
+    "zone": "inn_upper",
+    "desc": "这间客房的门板厚重，铜锁上落着一层薄灰。门缝里透不出灯光，只隐约能闻到陈旧木料与樟脑的气味。",
+    "exits": {
+      "南": "inn_upper_hall"
+    },
+    "access": {
+      "locked": true,
+      "blocked_text": "地字一号房的门锁着，门缝里没有灯光，似乎暂时无人居住。"
+    },
+    "safe": true,
+    "window_view": true,
+    "coord": [
+      0,
+      1
+    ],
+    "area_level": 1,
+    "recommended_level": 1,
+    "danger": "safe",
+    "floor": 2
   }
 }

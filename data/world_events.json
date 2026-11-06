@@ -1,0 +1,999 @@
+{
+  "main_bandit_warning": {
+    "title": "黑风寨劫道风声",
+    "region": "main",
+    "description": "商路附近传来黑风寨活动加剧的消息。",
+    "text": "你从赶路商客口中得知黑风寨近日扩大了劫掠范围，商路上的气氛骤然紧张。",
+    "once": true,
+    "requires": {
+      "variables": {
+        "exploration:main": {
+          "gte": 2
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:main:bandit_pressure": true
+      },
+      "increment_variables": {
+        "world:main:bandit_pressure": 1
+      },
+      "npc_information": [
+        {
+          "npc": "守卫",
+          "topic": "bandit_warning",
+          "text": "黑风寨正在扩大劫掠范围，村口巡防必须加强。",
+          "confidence": 94,
+          "ttl": 24,
+          "sentiment": "negative"
+        },
+        {
+          "npc": "村长",
+          "topic": "bandit_warning",
+          "text": "黑风寨近期活动异常频繁，村民应暂避山路。",
+          "confidence": 90,
+          "ttl": 24,
+          "sentiment": "negative"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 8,
+      "relations": {
+        "村长": 2
+      }
+    },
+    "unlock_events": [
+      "main_caravan_help"
+    ]
+  },
+  "main_caravan_help": {
+    "title": "商队求援",
+    "region": "main",
+    "description": "受到黑风寨压力影响，一支商队请求你护送。",
+    "text": "一支受惊的商队向你求援。你出手相助，商路暂时恢复了秩序。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "world:main:bandit_pressure"
+      ],
+      "level": {
+        "gte": 2
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:main:caravan_safe": true
+      },
+      "increment_variables": {
+        "world:main:caravan_rescues": 1
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "caravan_safe",
+          "text": "商队获救后，东侧商路暂时恢复通行，但仍需提防余党。",
+          "confidence": 91,
+          "ttl": 16,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "府衙文书",
+          "topic": "caravan_safe",
+          "text": "商路暂时恢复，相关护送记录已经归档。",
+          "confidence": 96,
+          "ttl": 20,
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 18,
+      "sect_reputation": {
+        "少林": 3,
+        "武当": 3,
+        "华山": 3
+      }
+    }
+  },
+  "bandit_reinforcement": {
+    "title": "黑风寨增援",
+    "region": "bandit_zone",
+    "description": "黑风寨巡逻队正在重新集结。",
+    "text": "山道尽头传来号角声，黑风寨增援正在集结。你趁乱夺下一份补给，令山贼损失不小。",
+    "cooldown": 5,
+    "requires": {
+      "variables": {
+        "exploration:bandit_zone": {
+          "gte": 1
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:bandit:reinforced": true
+      },
+      "increment_variables": {
+        "world:bandit:pressure": 1
+      }
+    },
+    "rewards": {
+      "gold": 12,
+      "item": "疗伤药"
+    }
+  },
+  "bandit_supply_cut": {
+    "title": "截断山贼补给",
+    "region": "bandit_zone",
+    "description": "若已发现增援迹象，可以进一步破坏补给。",
+    "text": "你循着补给车辙找到山贼粮车，趁守卫松懈截断了一批补给。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "world:bandit:reinforced"
+      ],
+      "sect": {
+        "in": [
+          "少林",
+          "武当",
+          "华山"
+        ]
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:bandit:supply_cut": true
+      },
+      "increment_variables": {
+        "world:bandit:pressure": -1
+      }
+    },
+    "rewards": {
+      "gold": 25,
+      "sect_reputation": {
+        "少林": 5,
+        "武当": 5,
+        "华山": 5
+      }
+    }
+  },
+  "city_patrol_shift": {
+    "title": "归云城巡防变动",
+    "region": "guiyun_city",
+    "description": "城中巡防因近期事件发生变化。",
+    "text": "归云城巡防突然调整，几名捕快正在搜查可疑人物。你从中察觉到城内势力正在重新洗牌。",
+    "cooldown": 4,
+    "requires": {
+      "variables": {
+        "exploration:guiyun_city": {
+          "gte": 1
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:guiyun:patrol_shift": true
+      },
+      "increment_variables": {
+        "world:guiyun:rumor_level": 1
+      }
+    },
+    "rewards": {
+      "gold": 10,
+      "relations": {
+        "捕头": 2
+      }
+    },
+    "unlock_events": [
+      "city_inn_whisper"
+    ]
+  },
+  "city_inn_whisper": {
+    "title": "客栈密谈",
+    "region": "guiyun_city",
+    "description": "巡防变化后，熟悉客栈掌柜的人能得到更深的消息。",
+    "text": "掌柜压低声音告诉你：近期有人在暗中打听镖局的押运路线。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "world:guiyun:patrol_shift"
+      ],
+      "relations": {
+        "云来客栈掌柜": {
+          "gte": 2
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:guiyun:inn_network": true
+      }
+    },
+    "rewards": {
+      "gold": 15,
+      "relations": {
+        "云来客栈掌柜": 3
+      }
+    }
+  },
+  "mistwood_herb_cache": {
+    "title": "雾林药草补给",
+    "region": "mistwood",
+    "description": "雾气稍散，溪边露出一处被遗忘的药草包。",
+    "text": "你沿着湿润的脚印找到一包未被损坏的药草。阿芷可以用它救治受伤的采药人。",
+    "once": true,
+    "requires": {
+      "variables": {
+        "exploration:mistwood": {
+          "gte": 1
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:mistwood:herb_cache_found": true
+      },
+      "increment_variables": {
+        "mistwood_helped": 1
+      }
+    },
+    "rewards": {
+      "gold": 12,
+      "item": "雾露草",
+      "relations": {
+        "采药人阿芷": 2
+      }
+    }
+  },
+  "mistwood_beast_signs": {
+    "title": "雾林兽踪警讯",
+    "region": "mistwood",
+    "description": "林中野兽的活动范围正在扩大。",
+    "text": "你发现野猿与毒蛛的踪迹交错，及时提醒附近采药人避开溪谷深处。",
+    "cooldown": 8,
+    "requires": {
+      "variables": {
+        "exploration:mistwood": {
+          "gte": 2
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:mistwood:beast_warning": true
+      },
+      "increment_variables": {
+        "mistwood_warning_count": 1
+      }
+    },
+    "rewards": {
+      "gold": 10,
+      "relations": {
+        "失踪猎户的同伴": 1
+      }
+    }
+  },
+  "sunken_inscription": {
+    "title": "沉河残碑字迹",
+    "region": "sunken_ruins",
+    "description": "水位退去，残碑上露出一行旧商队记号。",
+    "text": "你清理残碑上的淤泥，辨出一段关于沉船日期与货物封蜡的记载。",
+    "once": true,
+    "requires": {
+      "variables": {
+        "exploration:sunken_ruins": {
+          "gte": 1
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:sunken:inscription_read": true
+      },
+      "increment_variables": {
+        "sunken_evidence": 1
+      }
+    },
+    "rewards": {
+      "gold": 16,
+      "item": "沉河铜钱",
+      "relations": {
+        "守祠残僧": 2
+      }
+    }
+  },
+  "sunken_channel_cache": {
+    "title": "暗渠遗落箱笼",
+    "region": "sunken_ruins",
+    "description": "暗渠边的木箱尚未完全腐烂。",
+    "text": "你撬开木箱，找到几枚铜钱和一块旧令牌，但水声也惊动了遗址中的尸傀。",
+    "cooldown": 10,
+    "requires": {
+      "flags": [
+        "world:sunken:inscription_read"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:sunken:cache_opened": true
+      },
+      "increment_variables": {
+        "sunken_cache_runs": 1
+      }
+    },
+    "rewards": {
+      "gold": 22,
+      "item": "锈蚀令牌"
+    }
+  },
+  "northfront_cargo_manifest": {
+    "title": "货栈遗失清单",
+    "region": "northfront_town",
+    "description": "货栈掌柜从账册夹层里找到一份被撕下的清单。",
+    "text": "清单记着失货最后一次转运的时辰，指向河埠一艘没有登记的货船。",
+    "once": true,
+    "requires": {
+      "variables": {
+        "exploration:northfront_town": {
+          "gte": 1
+        }
+      }
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:manifest_found": true
+      },
+      "increment_variables": {
+        "northfront_trade_clues": 1
+      }
+    },
+    "rewards": {
+      "gold": 18,
+      "relations": {
+        "北境货栈掌柜": 2
+      }
+    }
+  },
+  "northfront_wharf_patrol": {
+    "title": "河埠夜巡",
+    "region": "northfront_town",
+    "description": "河埠夜间出现可疑装卸活动。",
+    "text": "你协助巡河老兵查验货船，几名劫货客被迫弃货逃走，商路暂时恢复平静。",
+    "cooldown": 8,
+    "requires": {
+      "flags": [
+        "world:northfront:manifest_found"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:night_patrol_done": true,
+        "northfront:trade_route_safe": true
+      },
+      "increment_variables": {
+        "northfront_trade_security": 1
+      }
+    },
+    "rewards": {
+      "gold": 28,
+      "item": "北境肉干",
+      "relations": {
+        "巡河老兵": 2
+      }
+    }
+  },
+  "sunken_official_escort": {
+    "title": "官府护送旧案证人",
+    "region": "guiyun_city",
+    "description": "将沉河证据交官府后，衙门安排人手护送关键证人。",
+    "text": "捕头安排巡捕护送旧案证人离城，并将一份巡防令交给你。归云城的官府巡查更加有序。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "sunken_ruins:evidence_to_officials"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:guiyun:old_case_witness_safe": true,
+        "world:guiyun:official_patrol_strengthened": true
+      },
+      "increment_variables": {
+        "guiyun_official_support": 1,
+        "region_ecology:guiyun_city:security": 5
+      },
+      "faction_relations": {
+        "官府:黑市": 2,
+        "江湖:官府": 1
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "old_case_witness_safe",
+          "text": "沉河旧案证人已被妥善安置，若有人追查，可先向官府核实。",
+          "confidence": 95,
+          "ttl": 30,
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 25,
+      "item": "清心散",
+      "relations": {
+        "捕头": 2
+      }
+    }
+  },
+  "sunken_blackmarket_deal": {
+    "title": "黑市收购沉河秘闻",
+    "region": "sunken_ruins",
+    "description": "若把沉河线索卖给黑市，掮客会试图进一步收购遗址情报。",
+    "text": "黑市掮客付清余款，并透露一条暗渠捷径；但遗址的私下交易也因此更难追查。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "sunken_ruins:evidence_to_black_market"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:sunken:blackmarket_network_open": true,
+        "sunken_ruins:secret_route_known": true
+      },
+      "increment_variables": {
+        "sunken_blackmarket_deals": 1,
+        "region_ecology:sunken_ruins:commerce": 3
+      },
+      "faction_relations": {
+        "官府:黑市": -2,
+        "江湖:黑市": 1
+      }
+    },
+    "rewards": {
+      "gold": 35,
+      "item": "沉河铜钱",
+      "relations": {
+        "守祠残僧": -1
+      }
+    }
+  },
+  "northfront_merchant_recovery": {
+    "title": "商会重开河埠货线",
+    "region": "northfront_town",
+    "description": "选择保护商队后，商会组织护卫恢复河埠货运。",
+    "text": "商会护卫重新接管河埠装卸区，几家货栈恢复营业，商旅愿意重新走这条水路。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "northfront:merchant_route_chosen"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:merchant_route_reopened": true,
+        "northfront:trade_route_safe": true
+      },
+      "increment_variables": {
+        "northfront_trade_security": 2,
+        "northfront_trade_volume": 1,
+        "region_ecology:northfront_town:commerce": 5
+      },
+      "faction_relations": {
+        "江湖:商会": 2,
+        "商会:黑市": -1
+      },
+      "npc_information": [
+        {
+          "npc": "北境货栈掌柜",
+          "topic": "merchant_route_reopened",
+          "text": "商会护卫已经接管河埠，近期货运会逐步恢复，但仍需防范私运。",
+          "confidence": 92,
+          "ttl": 24,
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 30,
+      "item": "行军干粮",
+      "relations": {
+        "北境货栈掌柜": 2
+      }
+    }
+  },
+  "northfront_smuggler_backlash": {
+    "title": "私下和解的代价",
+    "region": "northfront_town",
+    "description": "接受黑市私下和解后，商路表面平静，却有货栈报告短少。",
+    "text": "黑市掮客兑现部分承诺，但货栈发现一批货物被暗中扣留。你得到额外酬金，商会对你却冷淡了几分。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "northfront:smuggler_deal_made"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:smuggler_backlash_seen": true,
+        "northfront:merchant_route_compromised": true
+      },
+      "increment_variables": {
+        "northfront_trade_security": -1,
+        "northfront_trade_losses": 1,
+        "region_ecology:northfront_town:commerce": -4
+      },
+      "faction_relations": {
+        "江湖:黑市": 1,
+        "江湖:商会": -2
+      },
+      "npc_information": [
+        {
+          "npc": "北境货栈掌柜",
+          "topic": "smuggler_backlash",
+          "text": "这次和解并没有追回所有货物，商会已将部分账目封存。",
+          "confidence": 90,
+          "ttl": 24,
+          "sentiment": "negative"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 20,
+      "item": "行军干粮",
+      "relations": {
+        "北境货栈掌柜": -2
+      }
+    }
+  },
+  "three_region_trade_audit": {
+    "title": "三地商路账册会审",
+    "region": "guiyun_city",
+    "description": "沉河旧商队与北境失货案均已查明后，归云城可将两地账册合并核验。",
+    "text": "捕头将沉河旧商队遗证与北境货栈账册并列核验，确认两案存在同一条转运链。无论你此前选择官府追查还是黑市交易，账册都留下了可供后续追索的共同线索。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:sunken_caravan:resolved",
+        "quest:northfront_missing_cargo:resolved"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:three_region_audited": true
+      },
+      "increment_variables": {
+        "trade_network:case_links_confirmed": 1,
+        "guiyun_official_support": 1
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "three_region_trade_audit",
+          "text": "沉河旧商队与北境失货案已出现相互印证的账册线索，后续追查可从转运链入手。",
+          "confidence": 96,
+          "ttl": 36,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "北境货栈掌柜",
+          "topic": "three_region_trade_audit",
+          "text": "归云城已经核对过北境账册，若要追查货物流向，可向捕头询问转运线索。",
+          "confidence": 88,
+          "ttl": 24,
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 40,
+      "item": "清心散",
+      "relations": {
+        "捕头": 3,
+        "北境货栈掌柜": 2
+      }
+    }
+  },
+  "guiyun_trade_transfer_chain_trace": {
+    "title": "三地转运链追索",
+    "region": "guiyun_city",
+    "description": "沉河旧商队与北境失货案完成会审，且雾林药材已安全送达后，可在归云城继续追查共同转运链。",
+    "text": "府衙文书把沉河遗证、北境账册与雾林药材交接记录摊在案上。三份记录指向一处反复更换名目的中转仓。你将线索交给捕头备案，官府与商会终于有了共同追索的凭据；真正的幕后主使仍未现身。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "world:trade_network:three_region_audited",
+        "world:northfront:mistwood_supply_delivered"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:transfer_chain_traced": true,
+        "world:trade_network:followup_open": true
+      },
+      "increment_variables": {
+        "trade_network:transfer_chain_evidence": 1,
+        "guiyun_official_support": 1,
+        "merchant_reputation": 2
+      },
+      "faction_relations": {
+        "官府:商会": 2,
+        "官府:黑市": -1
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "trade_transfer_chain_traced",
+          "text": "沉河遗证、北境账册和雾林药材交接记录已经互相印证，中转仓是下一步追查重点。",
+          "confidence": 97,
+          "ttl": 40,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "府衙文书",
+          "topic": "trade_transfer_chain_traced",
+          "text": "三地转运链证据已归档。后续若取得中转仓的实证，可据此继续追索。",
+          "confidence": 96,
+          "ttl": 40,
+          "sentiment": "neutral"
+        },
+        {
+          "npc": "万商会会长",
+          "topic": "trade_transfer_chain_traced",
+          "text": "商会已收到三地账册的核验结果，愿意协助追查可疑中转仓，但不会仅凭传闻扣押商货。",
+          "confidence": 90,
+          "ttl": 30,
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 55,
+      "item": "清心散",
+      "relations": {
+        "捕头": 3,
+        "府衙文书": 2,
+        "万商会会长": 2
+      }
+    }
+  },
+  "mistwood_herb_supply_northbound": {
+    "title": "雾林药材北送",
+    "region": "northfront_town",
+    "description": "雾隐山林的失药案告一段落后，北境药铺愿意接收一批经过核验的药材。",
+    "text": "北境货栈掌柜核对了药材来源，决定将其中一部分转交沿线药铺。药材没有让商路立刻太平，却让受伤的脚夫和巡河人有了及时用药的机会。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:mistwood_herbs:resolved"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:mistwood_supply_delivered": true
+      },
+      "increment_variables": {
+        "northfront_medical_supply": 1,
+        "region_ecology:northfront_town:commerce": 2
+      },
+      "npc_information": [
+        {
+          "npc": "北境货栈掌柜",
+          "topic": "mistwood_supply_delivered",
+          "text": "雾隐山林送来的药材已核验并转交沿线药铺。若再有药材流向异常，可能与河埠私运有关。",
+          "confidence": 90,
+          "ttl": 30,
+          "sentiment": "positive"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 18,
+      "item": "行军干粮",
+      "relations": {
+        "北境货栈掌柜": 2,
+        "采药人阿芷": 1
+      }
+    }
+  },
+  "guiyun_transfer_warehouse_review": {
+    "title": "暗仓证据会审",
+    "region": "guiyun_city",
+    "description": "查获异常货单并向万商会会长复命后，可将实证交由官府与商会共同会审。",
+    "text": "捕头、府衙文书与万商会会长共同核对了货单、封蜡和三地账册。几条看似无关的私运线终于串在一起，官府暂时封存了涉案暗仓的账目；幕后主使仍藏在更深处，但再也无法轻易抹去这条证据链。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:transfer_warehouse:resolved",
+        "world:trade_network:warehouse_evidence_secured"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:warehouse_reviewed": true,
+        "world:trade_network:next_lead_open": true
+      },
+      "increment_variables": {
+        "trade_network:warehouse_review": 1,
+        "guiyun_official_support": 1,
+        "merchant_reputation": 2
+      },
+      "faction_relations": {
+        "官府:商会": 2,
+        "官府:黑市": -2
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "warehouse_reviewed",
+          "text": "暗仓货单与三地账册已经完成会审，下一步要查清是谁在背后更换货主名目。",
+          "confidence": 98,
+          "ttl": 45,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "府衙文书",
+          "topic": "warehouse_reviewed",
+          "text": "暗仓账目已封存入档，证据链足以继续追查幕后主使。",
+          "confidence": 97,
+          "ttl": 45,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "万商会会长",
+          "topic": "warehouse_reviewed",
+          "text": "商会愿意继续配合追查，但必须以账册和实物证据为准，不能牵连无辜商户。",
+          "confidence": 94,
+          "ttl": 45,
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 65,
+      "item": "清心散",
+      "relations": {
+        "捕头": 3,
+        "府衙文书": 3,
+        "万商会会长": 3
+      }
+    }
+  },
+  "trade_network_public_witness_protected": {
+    "title": "证人安置妥当",
+    "region": "guiyun_city",
+    "description": "官府路线完成证人保护后，相关口供得到安全封存。",
+    "text": "捕头确认，证人已被妥善安置，口供可以与账册进行正式核验。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:resolved",
+        "world:trade_network:route_official",
+        "world:trade_network:witness_statement_secured"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:official_evidence_bundle_ready": true
+      },
+      "increment_variables": {
+        "guiyun_official_support": 1,
+        "region_ecology:guiyun_city:security": 2
+      },
+      "npc_information": [
+        {
+          "npc": "捕头",
+          "topic": "证人安置",
+          "text": "证人已安全安置，供词与暗仓账册可以正式核验。",
+          "confidence": 97,
+          "ttl": 36,
+          "sentiment": "positive"
+        }
+      ]
+    }
+  },
+  "trade_network_blackmarket_channel": {
+    "title": "暗号联络渠道查明",
+    "region": "guiyun_city",
+    "description": "暗查路线确认黑市账册中的时辰暗记与船运交接相互吻合。",
+    "text": "旧账中的暗语与船运记号已经对上，但资金源头仍被层层遮掩。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:resolved",
+        "world:trade_network:route_blackmarket",
+        "world:trade_network:blackmarket_ledger_secured"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:blackmarket_channel_confirmed": true
+      },
+      "increment_variables": {
+        "trade_network:contact_channel_evidence": 1,
+        "black_market_reputation": 1
+      },
+      "npc_information": [
+        {
+          "npc": "黑市接头人",
+          "topic": "联络暗号",
+          "text": "几次交接确实使用同一套时辰暗记，但账上没有留下真正出资者的姓名。",
+          "confidence": 92,
+          "ttl": 32,
+          "sentiment": "neutral"
+        }
+      ]
+    }
+  },
+  "trade_network_joint_audit": {
+    "title": "官商联合复核",
+    "region": "guiyun_city",
+    "description": "官商并查路线集齐多方证据后，可完成一次联合复核。",
+    "text": "官府与商会分别核验后，确认关键中间人利用不同商号转手货物；幕后主谋仍缺少直接证据。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:resolved",
+        "world:trade_network:route_dual",
+        "world:trade_network:intermediary_identified",
+        "world:trade_network:contact_channel_identified"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:joint_audit_complete": true
+      },
+      "increment_variables": {
+        "guiyun_official_support": 2,
+        "merchant_reputation": 2,
+        "trade_network:joint_audit_count": 1
+      },
+      "faction_relations": {
+        "官府:商会": 2
+      },
+      "npc_information": [
+        {
+          "npc": "万商会会长",
+          "topic": "联合复核",
+          "text": "账册与封蜡已经交叉核验。关键中间人的身份可以确认，但幕后主使尚无直接证据。",
+          "confidence": 96,
+          "ttl": 40,
+          "sentiment": "positive"
+        }
+      ]
+    }
+  },
+  "trade_network_intermediary_exposed": {
+    "title": "关键中间人浮出水面",
+    "region": "guiyun_city",
+    "description": "主线证据链完成后，正式记录中间人身份与秘密联络渠道。",
+    "text": "多份证据已经指向同一名经手中间人与固定联络方式。对方的上游仍未现身，案卷暂不作最终定论。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:resolved",
+        "world:trade_network:intermediary_identified",
+        "world:trade_network:contact_channel_identified"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:trade_network:intermediary_recorded": true,
+        "world:trade_network:mastermind_unrevealed": true
+      },
+      "increment_variables": {
+        "trade_network:case_closed_stage": 1
+      },
+      "npc_information": [
+        {
+          "npc": "府衙文书",
+          "topic": "中间人案卷",
+          "text": "关键中间人与联络渠道已经入卷，但其背后出资者仍无可靠证据指认。",
+          "confidence": 98,
+          "ttl": 48,
+          "sentiment": "neutral"
+        },
+        {
+          "npc": "捕头",
+          "topic": "中间人案卷",
+          "text": "现阶段只确认经手中间人与联络方式。真正的主谋暂不揭露，待新证据出现再继续追查。",
+          "confidence": 98,
+          "ttl": 48,
+          "sentiment": "neutral"
+        }
+      ]
+    }
+  },
+  "sunken_cache_seal_review": {
+    "title": "旧商队封蜡印记",
+    "region": "sunken_ruins",
+    "description": "沉河暗库里发现的封蜡印记，或许能让商会辨认失踪货物的来历。",
+    "text": "你将暗库中的封蜡印记仔细拓下。印记与旧商队的货单相符，万商会与北境货栈都可能据此查清一段失落的商路。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "explore:sunken_channel:cache_found"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:sunken:old_seal_found": true
+      },
+      "npc_information": [
+        {
+          "npc": "万商会会长",
+          "topic": "sunken_old_seal",
+          "text": "沉河遗址发现的旧封蜡与失踪商队的货单吻合。若能找到北境货栈的旧账，或可还原当年货物流向。",
+          "confidence": 94,
+          "ttl": 0,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "北境货栈掌柜",
+          "topic": "sunken_old_seal",
+          "text": "有人在沉河暗库找到旧商队封蜡。若印记属实，旧货栈账册或能补全线索。",
+          "confidence": 86,
+          "ttl": 0,
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 20,
+      "relations": {
+        "万商会会长": 3,
+        "北境货栈掌柜": 2
+      }
+    },
+    "unlock_events": [
+      "northfront_old_manifest_review"
+    ]
+  },
+  "northfront_old_manifest_review": {
+    "title": "北境旧账复核",
+    "region": "northfront_town",
+    "description": "带着旧封蜡线索前往北境货栈，核对遗失货物的旧账。",
+    "text": "北境货栈掌柜翻出一册受潮的旧账，封蜡编号与沉河暗库中的印记相互印证。你帮助货栈厘清了旧货损失，也让一条停滞多年的商路重新进入商会视野。",
+    "once": true,
+    "requires": {
+      "flags": [
+        "world:sunken:old_seal_found"
+      ]
+    },
+    "effects": {
+      "set_flags": {
+        "world:northfront:old_manifest_verified": true
+      },
+      "increment_variables": {
+        "world:northfront:trade_route_recovered": 1
+      },
+      "npc_information": [
+        {
+          "npc": "万商会会长",
+          "topic": "northfront_old_manifest",
+          "text": "北境旧账已与沉河封蜡互相印证，旧商路失货案又有了关键进展。",
+          "confidence": 96,
+          "ttl": 0,
+          "sentiment": "positive"
+        },
+        {
+          "npc": "巡河老兵",
+          "topic": "northfront_old_manifest",
+          "text": "旧货账目有了新证据，河埠当年的异常转运记录值得重新核查。",
+          "confidence": 84,
+          "ttl": 0,
+          "sentiment": "neutral"
+        }
+      ]
+    },
+    "rewards": {
+      "gold": 25,
+      "relations": {
+        "万商会会长": 4,
+        "北境货栈掌柜": 4
+      }
+    },
+    "unlock_events": []
+  }
+}

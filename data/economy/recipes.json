@@ -1,0 +1,129 @@
+{
+  "铁匠": {
+    "interval": 5,
+    "inputs": {
+      "铁矿石": 5
+    },
+    "outputs": {
+      "铁剑": 1
+    },
+    "output_capacity": {
+      "铁剑": 8
+    },
+    "room_id": "blacksmith",
+    "trade_prices": {
+      "铁剑": 30
+    },
+    "work_hours": [
+      7,
+      18
+    ],
+    "supplier_routes": [
+      {
+        "item": "铁矿石",
+        "suppliers": [
+          "矿工顾三"
+        ],
+        "unit_price": 3,
+        "max_per_tick": 1,
+        "max_stock": 5,
+        "interval": 8
+      }
+    ]
+  },
+  "百炼铁铺铁匠": {
+    "interval": 5,
+    "inputs": {
+      "铁矿石": 5
+    },
+    "outputs": {
+      "铁剑": 1
+    },
+    "output_capacity": {
+      "铁剑": 8
+    },
+    "room_id": "guiyun_forge",
+    "trade_prices": {
+      "铁剑": 30
+    },
+    "supplier_routes": [
+      {
+        "item": "铁矿石",
+        "suppliers": [
+          "矿工顾三"
+        ],
+        "unit_price": 3,
+        "max_per_tick": 3,
+        "max_stock": 5,
+        "interval": 5
+      }
+    ],
+    "work_hours": [
+      7,
+      18
+    ]
+  },
+  "药铺老板": {
+    "interval": 6,
+    "inputs": {
+      "草药": 3
+    },
+    "outputs": {
+      "疗伤药": 1
+    },
+    "output_capacity": {
+      "疗伤药": 12
+    },
+    "room_id": "medicine_shop",
+    "trade_prices": {
+      "疗伤药": 12
+    },
+    "supplier_routes": [
+      {
+        "item": "草药",
+        "suppliers": [
+          "采药人阿芷"
+        ],
+        "unit_price": 3,
+        "max_per_tick": 2,
+        "max_stock": 12
+      }
+    ],
+    "work_hours": [
+      6,
+      19
+    ]
+  },
+  "木匠老许": {
+    "interval": 4,
+    "inputs": {
+      "木材": 3
+    },
+    "outputs": {
+      "木剑": 1
+    },
+    "output_capacity": {
+      "木剑": 8
+    },
+    "room_id": "village_square",
+    "trade_prices": {
+      "木剑": 8
+    },
+    "supplier_routes": [
+      {
+        "item": "木材",
+        "suppliers": [
+          "樵夫老周"
+        ],
+        "unit_price": 2,
+        "max_per_tick": 3,
+        "max_stock": 3,
+        "interval": 12
+      }
+    ],
+    "work_hours": [
+      6,
+      18
+    ]
+  }
+}

@@ -6,10 +6,3285 @@
     "target_name": "山贼二当家",
     "required_cnt": 1,
     "reward": {
-      "exp": 150,
+      "exp": 228,
       "gold": 100,
-      "item": "玄铁重剑"
+      "item": "玄铁重剑",
+      "honor_delta": 8,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 2
     },
-    "desc": "帮助村长击败黑风山上的山贼二当家，惩奸除恶。"
+    "desc": "帮助村长击败黑风山上的山贼二当家，惩奸除恶。",
+    "requires": {
+      "relations": {
+        "村长": {
+          "gte": 5
+        }
+      },
+      "level": 7,
+      "flags": [
+        "quest_completed:村道巡查·清理残匪"
+      ]
+    },
+    "difficulty": "进阶"
+  },
+  "入城引路": {
+    "title": "初入归云·引路",
+    "npc": "归云城守门校尉",
+    "target_type": "talk",
+    "target_name": "云来客栈掌柜",
+    "required_cnt": 1,
+    "turn_in_npc": "归云城守门校尉",
+    "reward": {
+      "exp": 60,
+      "gold": 20,
+      "honor_delta": 2,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "初入归云城，前往云来客栈与掌柜打个照面，再回来报信。",
+    "requires": {
+      "flags": [
+        "visited_zone:guiyun_city"
+      ]
+    },
+    "difficulty": "入门",
+    "notice": "归云城南门的守门校尉正想找熟悉城中道路的人传个话；入城后可去南门问询。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "城中捕快营的捕头正在查案，可去问问。"
+  },
+  "城内失踪案": {
+    "title": "城内失踪案",
+    "npc": "捕头",
+    "turn_in_npc": "捕头",
+    "requires": {
+      "flags": [
+        "quest_completed:入城引路"
+      ],
+      "level": 4
+    },
+    "on_accept": {
+      "set_flags": {
+        "case:missing_person:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "case:missing_person:finished": true,
+        "black_market:clue_found": true
+      },
+      "increment_variables": {
+        "government_reputation": 10
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 120,
+      "honor_delta": 6,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 2
+    },
+    "desc": "调查归云城失踪人口案，顺着线索找到黑市外围的打手，并向捕头复命。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "沈府管家",
+        "required_cnt": 1,
+        "desc": "前往沈府询问管家，确认失踪人口的线索。",
+        "branch_choices": [
+          {
+            "id": "official_route",
+            "title": "循官府线索",
+            "next_stage": 1,
+            "text": "你决定把沈府线索交给府衙，从卷宗中继续追查。此举会增加官府路线倾向与侠义声望。",
+            "effects": {
+              "set_flags": {
+                "case:missing_person:official_route": true
+              },
+              "increment_variables": {
+                "government_reputation": 2
+              }
+            },
+            "jianghu_action": "assist_officials",
+            "jianghu_amount": 1,
+            "honor_delta": 2
+          },
+          {
+            "id": "black_market_route",
+            "title": "暗查黑市",
+            "next_stage": 2,
+            "requires": {
+              "relations": {
+                "黑市接头人": {
+                  "gte": 5
+                }
+              }
+            },
+            "text": "你决定绕开常规流程，直接追查黑市外围。此举会增加黑市路线倾向与恶名。",
+            "effects": {
+              "set_flags": {
+                "case:missing_person:black_market_route": true
+              },
+              "increment_variables": {
+                "black_market_reputation": 2
+              }
+            },
+            "jianghu_action": "black_market_trade",
+            "jianghu_amount": 1,
+            "infamy_delta": 2
+          }
+        ]
+      },
+      {
+        "target_type": "talk",
+        "target_name": "府衙文书",
+        "required_cnt": 1,
+        "desc": "将沈府线索交给府衙文书查阅卷宗。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "黑市打手",
+        "required_cnt": 2,
+        "desc": "前往黑市外围，击退两名黑市打手。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "回到捕快营向捕头复命。"
+      }
+    ],
+    "npc_interventions": [
+      {
+        "id": "official_case_ahead",
+        "npc": "捕头",
+        "action": "advance_stage",
+        "stage": 1,
+        "next_stage": 2,
+        "delay": 8,
+        "once": true,
+        "branch": "official_route",
+        "min_relation": 20,
+        "text": "捕头抢先查到了黑市外围的关键线索，官府调查直接推进到外围目标。",
+        "effects": {
+          "set_flags": {
+            "case:missing_person:constable_ahead": true
+          },
+          "increment_variables": {
+            "government_reputation": 1
+          }
+        },
+        "remember_player_action": {
+          "npc": "捕头",
+          "id": "quest_ahead_official",
+          "text": "你迟迟未处理案件，捕头只能先替你推进调查。",
+          "sentiment": "neutral",
+          "strength": 30,
+          "ttl": 24
+        }
+      },
+      {
+        "id": "black_market_target_evacuated",
+        "npc": "黑市接头人",
+        "action": "reroute",
+        "stage": 2,
+        "next_stage": 3,
+        "delay": 6,
+        "once": true,
+        "branch": "black_market_route",
+        "requires": {
+          "flags": [
+            "case:missing_person:black_market_route"
+          ]
+        },
+        "text": "黑市接头人发现风声不对，黑市护卫提前撤走，你只能直接带线索回府衙。",
+        "effects": {
+          "set_flags": {
+            "case:missing_person:black_market_evacuated": true
+          },
+          "increment_variables": {
+            "black_market_reputation": 1
+          }
+        }
+      },
+      {
+        "id": "case_stagnation_failure",
+        "npc": "捕头",
+        "action": "fail_quest",
+        "delay": 48,
+        "once": true,
+        "requires": {
+          "flags": [
+            "case:missing_person:started"
+          ]
+        },
+        "text": "案件拖延过久，关键证人已经离开，捕头宣布本轮调查失败。",
+        "reason": "久未推进案件"
+      }
+    ],
+    "npc_competitions": [
+      {
+        "id": "official_evidence_race",
+        "stage": 1,
+        "branch": "official_route",
+        "delay": 4,
+        "once": true,
+        "title": "官府与沈府的线索争夺",
+        "text": "捕头与沈府管家同时追查线索，双方争先掌握下一步主动权。",
+        "contestants": [
+          {
+            "npc": "捕头",
+            "base_score": 10,
+            "relation_weight": 1,
+            "memory_weight": 0.15,
+            "priority": 2,
+            "action": "advance_stage",
+            "next_stage": 2,
+            "effects": {
+              "set_flags": {
+                "case:missing_person:constable_won_race": true
+              },
+              "increment_variables": {
+                "government_reputation": 2
+              }
+            },
+            "memory": {
+              "id": "competition:official_race:won",
+              "text": "捕头在调查竞争中替你抢先掌握了线索。",
+              "sentiment": "helpful",
+              "strength": 45
+            },
+            "faction_weight": 0.1,
+            "influence_weight": 0.05
+          },
+          {
+            "npc": "沈府管家",
+            "base_score": 8,
+            "relation_weight": 1,
+            "memory_weight": 0.15,
+            "priority": 1,
+            "action": "world_intervention",
+            "effects": {
+              "set_flags": {
+                "case:missing_person:shen_manor_won_race": true
+              },
+              "increment_variables": {
+                "shen_mansion_pressure": 1
+              }
+            },
+            "memory": {
+              "id": "competition:official_race:won",
+              "text": "沈府管家在调查竞争中抢先控制了一条线索。",
+              "sentiment": "neutral",
+              "strength": 35
+            },
+            "faction_weight": 0.1,
+            "influence_weight": 0.05
+          }
+        ]
+      },
+      {
+        "id": "black_market_evidence_race",
+        "stage": 2,
+        "branch": "black_market_route",
+        "delay": 4,
+        "once": true,
+        "title": "黑市与捕快争夺证据",
+        "text": "黑市接头人与捕头同时行动，谁先控制证据将决定案件走向。",
+        "contestants": [
+          {
+            "npc": "黑市接头人",
+            "base_score": 11,
+            "relation_weight": 1.2,
+            "memory_weight": 0.2,
+            "priority": 2,
+            "action": "world_intervention",
+            "effects": {
+              "set_flags": {
+                "case:missing_person:black_market_won_race": true
+              },
+              "increment_variables": {
+                "black_market_reputation": 2
+              }
+            },
+            "memory": {
+              "id": "competition:black_market_race:won",
+              "text": "黑市接头人在争夺证据时抢先一步。",
+              "sentiment": "helpful",
+              "strength": 40
+            },
+            "faction_weight": 0.1,
+            "influence_weight": 0.05
+          },
+          {
+            "npc": "捕头",
+            "base_score": 9,
+            "relation_weight": 1.1,
+            "memory_weight": 0.2,
+            "priority": 1,
+            "action": "reroute",
+            "next_stage": 3,
+            "effects": {
+              "set_flags": {
+                "case:missing_person:constable_recovered_evidence": true
+              },
+              "increment_variables": {
+                "government_reputation": 2
+              }
+            },
+            "memory": {
+              "id": "competition:black_market_race:won",
+              "text": "捕头在黑市争夺中抢回了关键证据。",
+              "sentiment": "helpful",
+              "strength": 50
+            },
+            "faction_weight": 0.1,
+            "influence_weight": 0.05
+          }
+        ]
+      }
+    ],
+    "difficulty": "高难",
+    "notice": "捕快营的捕头近日为城中失踪案奔走，愿意相助的人可去捕快营了解详情。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "府衙文书或许知道黑市入口，可去府衙大堂找他。"
+  },
+  "沉星黑市": {
+    "title": "沉星黑市",
+    "npc": "府衙文书",
+    "turn_in_npc": "府衙文书",
+    "requires": {
+      "flags": [
+        "case:missing_person:finished"
+      ],
+      "relations": {
+        "黑市接头人": {
+          "gte": 5
+        }
+      },
+      "level": 8
+    },
+    "on_complete": {
+      "set_flags": {
+        "black_market:unlocked": true
+      },
+      "increment_variables": {
+        "black_market_reputation": 5,
+        "government_reputation": 5
+      }
+    },
+    "reward": {
+      "exp": 400,
+      "gold": 180,
+      "item": "大还丹",
+      "honor_delta": 4,
+      "infamy_delta": 1,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 1
+    },
+    "desc": "顺着失踪案线索深入沉星黑市，击败黑市头目并取得关键证据。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "黑市接头人",
+        "required_cnt": 1,
+        "desc": "找到沉星黑市接头人，确认黑市头目的位置。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "黑市护卫",
+        "required_cnt": 2,
+        "desc": "击退黑市护卫，进入黑市内堂。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "黑市头目",
+        "required_cnt": 1,
+        "desc": "击败黑市头目，取得失踪案关键证据。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "府衙文书",
+        "required_cnt": 1,
+        "desc": "带着证据回府衙卷宗室复命。"
+      }
+    ],
+    "difficulty": "重大",
+    "follow_up_hint": "黑市已清，可回捕快营向捕头复命或留意后续消息。"
+  },
+  "震远镖局": {
+    "title": "震远镖局·清路",
+    "npc": "震远镖局总镖头",
+    "turn_in_npc": "震远镖局总镖头",
+    "requires": {
+      "flags": [
+        "visited_zone:guiyun_city",
+        "quest_completed:入城引路"
+      ],
+      "relations": {
+        "震远镖局总镖头": {
+          "gte": 5
+        }
+      },
+      "level": 6
+    },
+    "on_complete": {
+      "set_flags": {
+        "dart_agency:trusted": true
+      },
+      "increment_variables": {
+        "jianghu_reputation": 8
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 130,
+      "item": "精铁剑",
+      "honor_delta": 4,
+      "jianghu_action": "escort_trade",
+      "jianghu_amount": 2
+    },
+    "desc": "替震远镖局清理潜伏在城内的劫镖势力，并取得总镖头信任。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "震远镖局总镖头",
+        "required_cnt": 1,
+        "desc": "向总镖头了解最近的劫镖动静。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2,
+        "desc": "清理城内潜伏的劫镖山贼。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "震远镖局总镖头",
+        "required_cnt": 1,
+        "desc": "回镖局向总镖头复命。"
+      }
+    ],
+    "difficulty": "高难",
+    "notice": "震远镖局近来押镖人手吃紧，总镖头正在物色可靠的帮手。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "镖局商路已通，可回万商坊与会长谈谈后续。"
+  },
+  "万商会商路": {
+    "title": "万商会·商路核验",
+    "npc": "万商会会长",
+    "turn_in_npc": "万商会会长",
+    "requires": {
+      "flags": [
+        "quest_completed:入城引路"
+      ],
+      "level": 3
+    },
+    "on_complete": {
+      "set_flags": {
+        "merchant_guild:trusted": true
+      },
+      "increment_variables": {
+        "merchant_reputation": 10
+      }
+    },
+    "reward": {
+      "exp": 100,
+      "gold": 150
+    },
+    "desc": "按照万商会会长安排核验商账，并处理一处异常账目。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "四海钱庄掌柜",
+        "required_cnt": 1,
+        "desc": "前往四海钱庄核验商账。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商坊掌柜",
+        "required_cnt": 1,
+        "desc": "向万商坊掌柜核对货单。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "回万商会馆复命。"
+      }
+    ],
+    "choices": [
+      {
+        "id": "public_audit",
+        "title": "秉公核账",
+        "requires": {
+          "any": [
+            {
+              "relations": {
+                "万商会会长": {
+                  "gte": 5
+                }
+              }
+            },
+            {
+              "jianghu_paths": {
+                "商会": {
+                  "gte": 5
+                }
+              }
+            }
+          ]
+        },
+        "reward": {
+          "exp": 120,
+          "gold": 140,
+          "honor_delta": 5,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "merchant_guild:public_audit": true
+          },
+          "increment_variables": {
+            "merchant_reputation": 12
+          }
+        }
+      },
+      {
+        "id": "private_deal",
+        "title": "私下和解",
+        "requires": {
+          "relations": {
+            "万商会会长": {
+              "gte": 15
+            }
+          },
+          "any": [
+            {
+              "infamy": {
+                "gte": 5
+              }
+            },
+            {
+              "jianghu_paths": {
+                "黑市": {
+                  "gte": 5
+                }
+              }
+            }
+          ]
+        },
+        "reward": {
+          "exp": 90,
+          "gold": 280,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "merchant_guild:private_deal": true
+          },
+          "increment_variables": {
+            "merchant_reputation": 6
+          }
+        }
+      }
+    ],
+    "difficulty": "普通",
+    "notice": "万商会会长正在核对城中商路，缺人手跑腿问价；可去万商坊拜访。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "万商会会长手中还有别的商路委托，可继续找他。"
+  },
+  "少林历练·黑风除恶": {
+    "title": "少林历练·黑风除恶",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 292,
+      "gold": 30,
+      "sect_reputation": {
+        "少林": 30
+      },
+      "item": "少林戒棍"
+    },
+    "desc": "少林弟子初入江湖，由传功师兄安排外出历练，击退三名黑风山贼，以实战磨炼心性。",
+    "requires": {
+      "sect": "少林"
+    },
+    "npc": "少林传功师兄",
+    "difficulty": "普通",
+    "follow_up_hint": "少林传功师兄还有巡山历练，可继续向他请教。"
+  },
+  "武当历练·以静制动": {
+    "title": "武当历练·以静制动",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 292,
+      "gold": 30,
+      "sect_reputation": {
+        "武当": 30
+      },
+      "item": "武当云纹剑"
+    },
+    "desc": "武当弟子以战悟道，击退三名黑风山贼。",
+    "requires": {
+      "sect": "武当"
+    },
+    "npc": "武当传功师兄",
+    "difficulty": "普通",
+    "follow_up_hint": "武当传功师兄还有松径历练，可继续向他请教。"
+  },
+  "华山历练·磨剑黑风": {
+    "title": "华山历练·磨剑黑风",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 292,
+      "gold": 30,
+      "sect_reputation": {
+        "华山": 30
+      },
+      "item": "华山松纹剑"
+    },
+    "desc": "华山弟子以战磨剑，击退三名黑风山贼。",
+    "requires": {
+      "sect": "华山"
+    },
+    "npc": "华山传功师兄",
+    "difficulty": "普通",
+    "follow_up_hint": "华山传功师兄还有险道试剑，可继续向他请教。"
+  },
+  "黑风限时追缉": {
+    "title": "黑风限时追缉",
+    "npc": "村长",
+    "target_type": "kill",
+    "target_name": "山贼",
+    "required_cnt": 2,
+    "time_limit": 8,
+    "retryable": true,
+    "requires": {
+      "relations": {
+        "村长": {
+          "gte": 8
+        }
+      },
+      "skills": {
+        "罗汉拳": {
+          "level": {
+            "gte": 1
+          }
+        }
+      },
+      "level": 5
+    },
+    "on_fail": {
+      "increment_variables": {
+        "village_reputation": -5
+      }
+    },
+    "reward": {
+      "exp": 90,
+      "gold": 60
+    },
+    "desc": "村长得到黑风山贼近期动向，但只给你八个行动机会。限时清掉两名山贼，证明你已能独当一面。",
+    "difficulty": "普通"
+  },
+  "雾隐失药案": {
+    "title": "雾隐失药案·追踪山径",
+    "npc": "采药人阿芷",
+    "turn_in_npc": "采药人阿芷",
+    "target_type": "talk",
+    "target_name": "失踪猎户的同伴",
+    "required_cnt": 1,
+    "desc": "阿芷采药时发现药篓与脚印都被搅乱。先询问猎户同伴，再清除溪谷毒蛛，最后回到林道查明药材去向。",
+    "on_accept": {
+      "set_flags": {
+        "quest:mistwood_herbs:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:mistwood_herbs:resolved": true
+      },
+      "increment_variables": {
+        "mistwood_helped": 1
+      }
+    },
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "失踪猎户的同伴",
+        "required_cnt": 1,
+        "desc": "向猎户同伴询问采药路线与野兽踪迹。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "迷雾毒蛛",
+        "required_cnt": 2,
+        "desc": "清除溪谷附近的迷雾毒蛛，找回被拖走的药篓。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "采药人阿芷",
+        "required_cnt": 1,
+        "desc": "回到阿芷身边说明调查结果。"
+      }
+    ],
+    "reward": {
+      "exp": 100,
+      "gold": 45,
+      "item": "雾露草",
+      "honor_delta": 3,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "requires": {
+      "level": 2
+    },
+    "difficulty": "普通",
+    "follow_up_hint": "雾隐林道深处与沉河旧道似乎还留着旧商队的线索。"
+  },
+  "沉河旧商队遗证": {
+    "title": "沉河旧商队遗证",
+    "npc": "守祠残僧",
+    "turn_in_npc": "守祠残僧",
+    "target_type": "kill",
+    "target_name": "遗祠守墓人",
+    "required_cnt": 1,
+    "desc": "废祠残僧请你查明旧商队沉没的真相。遗址危险，备足药物后再深入。",
+    "requires": {
+      "flags": [
+        "quest:mistwood_herbs:resolved"
+      ],
+      "level": 5
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:sunken_caravan:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:sunken_caravan:resolved": true,
+        "sunken_ruins:caravan_truth_known": true
+      },
+      "increment_variables": {
+        "sunken_evidence": 1,
+        "black_market_reputation": 1
+      }
+    },
+    "stages": [
+      {
+        "target_type": "kill",
+        "target_name": "遗祠守墓人",
+        "required_cnt": 1,
+        "desc": "击退守墓人，检查废祠供台附近的遗物。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "将锈蚀令牌的来历交由熟悉水路的小满辨认。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "守祠残僧",
+        "required_cnt": 1,
+        "desc": "把查到的商队线索带回废祠。"
+      }
+    ],
+    "reward": {
+      "exp": 130,
+      "gold": 70,
+      "item": "沉河铜钱",
+      "honor_delta": 4,
+      "jianghu_action": "solo_explore",
+      "jianghu_amount": 1
+    },
+    "choices": [
+      {
+        "id": "return_evidence",
+        "title": "将证据交给官府",
+        "requires": {},
+        "reward": {
+          "exp": 180,
+          "gold": 70,
+          "item": "沉河护腕",
+          "honor_delta": 8,
+          "jianghu_action": "assist_officials",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "sunken_ruins:evidence_to_officials": true,
+            "sunken_ruins:black_market_route_closed": true
+          },
+          "increment_variables": {
+            "faction_route:officials": 2,
+            "sunken_ruins:order": 1
+          },
+          "faction_relations": {
+            "江湖:官府": 3,
+            "江湖:黑市": -3
+          }
+        }
+      },
+      {
+        "id": "sell_evidence",
+        "title": "将线索卖给黑市",
+        "requires": {},
+        "reward": {
+          "exp": 180,
+          "gold": 105,
+          "item": "沉河铜钱",
+          "honor_delta": 0,
+          "jianghu_action": "black_market_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "sunken_ruins:evidence_to_black_market": true,
+            "sunken_ruins:black_market_route_open": true
+          },
+          "increment_variables": {
+            "faction_route:black_market": 2,
+            "sunken_ruins:profit": 1
+          },
+          "faction_relations": {
+            "江湖:黑市": 4,
+            "江湖:官府": -3
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "北境河埠或许还有人记得这支旧商队。"
+  },
+  "北境失货追查": {
+    "title": "北境失货追查",
+    "npc": "巡河老兵",
+    "turn_in_npc": "巡河老兵",
+    "target_type": "talk",
+    "target_name": "北境货栈掌柜",
+    "required_cnt": 1,
+    "desc": "北境商镇接连丢失货物。沿河埠追查劫货客，确认封蜡线索后向巡河老兵复命。",
+    "requires": {
+      "flags": [
+        "sunken_ruins:caravan_truth_known",
+        "visited_zone:northfront_town"
+      ],
+      "level": 6
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:northfront_missing_cargo:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:northfront_missing_cargo:resolved": true,
+        "northfront:trade_route_safe": true
+      },
+      "increment_variables": {
+        "northfront_trade_security": 2
+      }
+    },
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "北境货栈掌柜",
+        "required_cnt": 1,
+        "desc": "核对失货清单与商队封蜡。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "北境劫货客",
+        "required_cnt": 2,
+        "desc": "在北境河埠击退劫货客，找回被劫货物。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "向小满核实河埠上的船只动向。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "巡河老兵",
+        "required_cnt": 1,
+        "desc": "向巡河老兵报告调查结果，恢复商路巡查。"
+      }
+    ],
+    "reward": {
+      "exp": 230,
+      "gold": 100,
+      "item": "北境肉干",
+      "honor_delta": 5,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 2
+    },
+    "choices": [
+      {
+        "id": "protect_merchants",
+        "title": "优先保护商队",
+        "requires": {},
+        "reward": {
+          "exp": 220,
+          "gold": 100,
+          "item": "北境巡河刀",
+          "honor_delta": 7,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "northfront:merchant_route_chosen": true,
+            "northfront:smuggling_route_exposed": true
+          },
+          "increment_variables": {
+            "northfront_trade_security": 2,
+            "faction_route:merchant": 2
+          },
+          "faction_relations": {
+            "江湖:商会": 4,
+            "江湖:黑市": -2
+          }
+        }
+      },
+      {
+        "id": "take_smuggler_deal",
+        "title": "接受私下和解",
+        "requires": {},
+        "reward": {
+          "exp": 220,
+          "gold": 145,
+          "item": "行商软甲",
+          "honor_delta": -3,
+          "jianghu_action": "black_market_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "northfront:smuggler_deal_made": true,
+            "northfront:merchant_route_compromised": true
+          },
+          "increment_variables": {
+            "faction_route:black_market": 2,
+            "northfront_trade_security": -1
+          },
+          "faction_relations": {
+            "江湖:黑市": 4,
+            "江湖:商会": -4
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "万商会会长正在追查暗仓转运，可回城找他。"
+  },
+  "暗仓转运疑云": {
+    "title": "暗仓转运疑云·截查私运",
+    "npc": "万商会会长",
+    "turn_in_npc": "万商会会长",
+    "target_type": "talk",
+    "target_name": "北境货栈掌柜",
+    "required_cnt": 1,
+    "desc": "三地账册已经互相印证，万商会会长请你前往北境核对一批反复更换封蜡的货箱，截住私运者，再把实证带回归云城。",
+    "requires": {
+      "flags": [
+        "world:trade_network:transfer_chain_traced",
+        "northfront:trade_route_safe",
+        "visited_zone:northfront_town"
+      ],
+      "level": 8
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:transfer_warehouse:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:transfer_warehouse:resolved": true,
+        "world:trade_network:warehouse_evidence_secured": true
+      },
+      "increment_variables": {
+        "trade_network:warehouse_evidence": 1,
+        "merchant_reputation": 3,
+        "guiyun_official_support": 1
+      }
+    },
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "北境货栈掌柜",
+        "required_cnt": 1,
+        "desc": "核对封蜡纹样与货箱清单，确认可疑货箱的去向。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "河埠私枭",
+        "required_cnt": 1,
+        "desc": "前往北境河埠截住私枭，夺回带有异常封蜡的货单。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "请小满辨认断裂封绳与货单上的船运记号。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "带着货单回归云城，向万商会会长交代查获经过。"
+      }
+    ],
+    "reward": {
+      "exp": 300,
+      "gold": 135,
+      "item": "清心散",
+      "honor_delta": 6,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 2
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "捕头似乎已经盯上了这条暗线，可去捕快营问询。"
+  },
+  "暗潮·江湖棋局": {
+    "title": "暗潮·江湖棋局",
+    "npc": "捕头",
+    "turn_in_npc": "捕头",
+    "requires": {
+      "flags": [
+        "quest:transfer_warehouse:resolved",
+        "world:trade_network:warehouse_evidence_secured",
+        "world:trade_network:warehouse_reviewed"
+      ],
+      "level": 10,
+      "completed_quests": [
+        "暗仓转运疑云"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:jianghu_chessboard:started": true
+      }
+    },
+    "desc": "暗仓实证已经封存，捕头请你继续追查账目背后的关键中间人和隐秘联络方式。证据不足时可以回头补查，真正的主谋暂时仍藏在暗处。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "与捕头核对暗仓会审结果，再决定如何推进调查。",
+        "branch_choices": [
+          {
+            "id": "public_route",
+            "title": "公开呈证",
+            "next_stage": 1,
+            "text": "你决定先将证据交由官府核验，保护证人并推动正式调查。行动更稳妥，但也更容易引起对方警觉。",
+            "effects": {
+              "set_flags": {
+                "world:trade_network:route_official": true
+              },
+              "increment_variables": {
+                "government_reputation": 3,
+                "guiyun_official_support": 1
+              }
+            },
+            "honor_delta": 2,
+            "jianghu_action": "assist_officials",
+            "jianghu_amount": 1
+          },
+          {
+            "id": "covert_route",
+            "title": "暗中追踪",
+            "next_stage": 1,
+            "text": "你决定循着黑市旧账与暗号追查转运链，尽量不惊动明面上的商户，但官府信任会受到影响。",
+            "effects": {
+              "set_flags": {
+                "world:trade_network:route_blackmarket": true
+              },
+              "increment_variables": {
+                "black_market_reputation": 2,
+                "government_reputation": -1
+              },
+              "faction_relations": {
+                "江湖:黑市": 2
+              }
+            },
+            "infamy_delta": 1,
+            "jianghu_action": "black_market_trade",
+            "jianghu_amount": 1
+          },
+          {
+            "id": "dual_route",
+            "title": "官商并查",
+            "next_stage": 1,
+            "text": "你决定让官府与商会各自核验一部分线索，再交叉比对。需要更多奔走，但更有机会保住证据与人证。",
+            "effects": {
+              "set_flags": {
+                "world:trade_network:route_dual": true
+              },
+              "increment_variables": {
+                "government_reputation": 2,
+                "merchant_reputation": 2,
+                "guiyun_official_support": 1
+              },
+              "faction_relations": {
+                "官府:商会": 2
+              }
+            },
+            "honor_delta": 2,
+            "jianghu_action": "assist_officials",
+            "jianghu_amount": 1
+          }
+        ]
+      },
+      {
+        "target_type": "talk",
+        "target_name": "府衙文书",
+        "required_cnt": 1,
+        "desc": "核对封存账册上的货主更名记录，确认有人长期利用不同商号遮掩同一条转运链。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "根据断裂封绳与船运记号，查明私下联络使用的暗记和交接时段。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "向会长核实账目中反复出现的中间商身份，避免将无辜商户误作主谋。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "带回互相印证的账册、封蜡与联络暗记，确认关键中间人及联络渠道；真正的幕后主谋仍缺乏直接证据。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:jianghu_chessboard:resolved": true,
+        "world:trade_network:intermediary_identified": true,
+        "world:trade_network:contact_channel_identified": true,
+        "world:trade_network:mastermind_unrevealed": true
+      },
+      "increment_variables": {
+        "trade_network:intermediary_evidence": 1,
+        "trade_network:contact_channel_evidence": 1,
+        "guiyun_official_support": 1
+      }
+    },
+    "reward": {
+      "exp": 360,
+      "gold": 180,
+      "item": "联络暗记",
+      "honor_delta": 7,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 2
+    },
+    "npc_interventions": [
+      {
+        "id": "false_lead_recovered",
+        "npc": "捕头",
+        "requires": {
+          "flags": [
+            "quest:jianghu_chessboard:started"
+          ]
+        },
+        "effects": {
+          "set_flags": {
+            "world:trade_network:false_lead_cleared": true
+          }
+        },
+        "text": "捕头提醒你，先前那条可疑线索已被证实是烟幕；重新核对封蜡与船运记号即可继续追查。",
+        "stage": 2,
+        "delay": 3,
+        "once": true
+      }
+    ],
+    "difficulty": "重大",
+    "follow_up_hint": "城中善后已了，可继续探索周边或回门派历练。"
+  },
+  "商队夜行": {
+    "title": "商队夜行·护送货单",
+    "npc": "万商会会长",
+    "turn_in_npc": "巡河老兵",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ],
+      "any": [
+        {
+          "flags": [
+            "world:trade_network:route_official"
+          ]
+        },
+        {
+          "flags": [
+            "world:trade_network:route_dual"
+          ]
+        }
+      ]
+    },
+    "desc": "护送一支夜行商队通过河埠，确保封存货单不再被调包。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "北境货栈掌柜",
+        "required_cnt": 1,
+        "desc": "领取夜行商队的货单与路线。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "北境劫货客",
+        "required_cnt": 2,
+        "desc": "击退埋伏在河埠附近的劫货客，护住货单。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "巡河老兵",
+        "required_cnt": 1,
+        "desc": "将商队安全抵达的消息交给巡河老兵。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:trade_night_escort:resolved": true,
+        "world:trade_network:night_caravan_safe": true,
+        "world:trade_network:night_caravan_failed": false
+      },
+      "increment_variables": {
+        "northfront_trade_security": 2,
+        "merchant_reputation": 2
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 90,
+      "item": "护送回执",
+      "honor_delta": 4,
+      "jianghu_action": "escort_trade",
+      "jianghu_amount": 2
+    },
+    "time_limit": 10,
+    "retryable": true,
+    "on_fail": {
+      "set_flags": {
+        "world:trade_network:night_caravan_failed": true
+      },
+      "increment_variables": {
+        "merchant_reputation": -2,
+        "northfront_trade_security": -1
+      }
+    },
+    "difficulty": "高难"
+  },
+  "失约证人": {
+    "title": "失约证人·守住口供",
+    "npc": "捕头",
+    "turn_in_npc": "捕头",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ],
+      "any": [
+        {
+          "flags": [
+            "world:trade_network:route_official"
+          ]
+        },
+        {
+          "flags": [
+            "world:trade_network:route_dual"
+          ]
+        }
+      ]
+    },
+    "desc": "原定出面作证的沈府旧账房迟迟未到。先确认其留下的线索，再把证词妥善归档。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "沈府管家",
+        "required_cnt": 1,
+        "desc": "向沈府管家核实证人失约前留下的口信。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "府衙文书",
+        "required_cnt": 1,
+        "desc": "将口信与暗仓账册对照，排除错误指认。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "把整理后的证词交由捕头封存。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:missed_witness:resolved": true,
+        "world:trade_network:witness_statement_secured": true
+      },
+      "increment_variables": {
+        "guiyun_official_support": 1,
+        "government_reputation": 2
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 65,
+      "item": "证人供词",
+      "honor_delta": 4,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 1
+    },
+    "difficulty": "进阶"
+  },
+  "残缺货单": {
+    "title": "残缺货单·拼合缺页",
+    "npc": "北境货栈掌柜",
+    "turn_in_npc": "万商会会长",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ]
+    },
+    "desc": "一张被撕去半页的货单留在货栈。找回缺页，并用船运记号核对货物流向。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "北境货栈掌柜",
+        "required_cnt": 1,
+        "desc": "查看货栈留存的残缺货单。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "河埠私枭",
+        "required_cnt": 1,
+        "desc": "从河埠私枭手中夺回被藏起的货单缺页。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "请小满辨认缺页上的船运记号。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "将拼合后的货单交给会长复核。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:damaged_manifest:resolved": true,
+        "world:trade_network:manifest_reconstructed": true,
+        "world:trade_network:night_caravan_recovered": true,
+        "world:trade_network:night_caravan_failed": false
+      },
+      "increment_variables": {
+        "trade_network:manifest_evidence": 1,
+        "merchant_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 85,
+      "item": "残缺货单",
+      "honor_delta": 3,
+      "jianghu_action": "solo_explore",
+      "jianghu_amount": 1
+    },
+    "difficulty": "高难"
+  },
+  "黑市旧账": {
+    "title": "黑市旧账·辨认暗号",
+    "npc": "黑市接头人",
+    "turn_in_npc": "黑市接头人",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ],
+      "any": [
+        {
+          "flags": [
+            "world:trade_network:route_blackmarket"
+          ]
+        },
+        {
+          "flags": [
+            "world:trade_network:route_dual"
+          ]
+        }
+      ]
+    },
+    "desc": "黑市旧账里有几笔用暗语记下的转运款。你必须分清可核实的交易与故意留下的假线索。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "黑市接头人",
+        "required_cnt": 1,
+        "desc": "询问旧账的记号规矩，避免把暗语当成真实姓名。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市商人",
+        "required_cnt": 1,
+        "desc": "核实旧账中重复出现的货主代称。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "黑市打手",
+        "required_cnt": 1,
+        "desc": "有人试图抢走旧账，击退黑市打手并保住抄本。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:black_market_ledger:resolved": true,
+        "world:trade_network:blackmarket_ledger_secured": true
+      },
+      "increment_variables": {
+        "black_market_reputation": 2,
+        "trade_network:ledger_evidence": 1
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 110,
+      "item": "黑市旧账",
+      "honor_delta": 0,
+      "infamy_delta": 1,
+      "jianghu_action": "black_market_trade",
+      "jianghu_amount": 2
+    },
+    "difficulty": "高难"
+  },
+  "仓外伏击": {
+    "title": "仓外伏击·护住实证",
+    "npc": "万商会会长",
+    "turn_in_npc": "万商会会长",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ]
+    },
+    "desc": "暗仓外围仍有人盯梢。击退伏击者，取回被丢弃的封蜡拓印，再由会长确认其真伪。",
+    "stages": [
+      {
+        "target_type": "kill",
+        "target_name": "河埠私枭",
+        "required_cnt": 1,
+        "desc": "击退守在河埠暗处的私枭，夺回封蜡拓印。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "请会长核验封蜡拓印与商号印记。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:warehouse_ambush:resolved": true,
+        "world:trade_network:wax_imprint_verified": true
+      },
+      "increment_variables": {
+        "merchant_reputation": 2,
+        "trade_network:wax_evidence": 1
+      }
+    },
+    "reward": {
+      "exp": 160,
+      "gold": 95,
+      "item": "封蜡拓印",
+      "honor_delta": 3,
+      "jianghu_action": "escort_trade",
+      "jianghu_amount": 1
+    },
+    "difficulty": "进阶"
+  },
+  "失踪信使": {
+    "title": "失踪信使·寻回交接记录",
+    "npc": "货船伙计小满",
+    "turn_in_npc": "捕头",
+    "requires": {
+      "flags": [
+        "quest:jianghu_chessboard:started"
+      ],
+      "any": [
+        {
+          "flags": [
+            "world:trade_network:route_blackmarket"
+          ]
+        },
+        {
+          "flags": [
+            "world:trade_network:route_dual"
+          ]
+        }
+      ]
+    },
+    "desc": "负责传递船运记号的信使失踪，只留下一个交接时段。循着现有线索找回记录，不必强行追逐已经断掉的踪迹。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "货船伙计小满",
+        "required_cnt": 1,
+        "desc": "从小满处确认信使最后一次出现的河埠位置。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市接头人",
+        "required_cnt": 1,
+        "desc": "核实黑市是否收到过同一时段的联络暗记。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "将确认过的交接时段交由捕头登记。"
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "quest:missing_messenger:resolved": true,
+        "world:trade_network:handoff_record_secured": true
+      },
+      "increment_variables": {
+        "trade_network:handoff_evidence": 1,
+        "guiyun_official_support": 1
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 80,
+      "item": "交接记录",
+      "honor_delta": 2,
+      "jianghu_action": "solo_explore",
+      "jianghu_amount": 1
+    },
+    "difficulty": "进阶"
+  },
+  "青锋疑云": {
+    "title": "青锋疑云",
+    "npc": "华山接引执事",
+    "turn_in_npc": "华山接引执事",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "华山",
+      "level": 3
+    },
+    "desc": "华山近期送往山门的药材与铁料屡有短缺。核实山路消息与门内记录，再决定如何处理这桩疑案。调查不要求你无端伤人，选择不同，后续影响也会不同。",
+    "on_accept": {
+      "set_flags": {
+        "quest:huashan_green_sword_mystery:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:huashan_green_sword_mystery:resolved": true
+      },
+      "increment_variables": {
+        "huashan_supply_cases_resolved": 1
+      }
+    },
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "华山守门弟子",
+        "required_cnt": 1,
+        "desc": "向山门守门弟子询问近期送货的异常与山路动静。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "华山接引执事",
+        "required_cnt": 1,
+        "desc": "把山路消息与访客簿记录对照，查明药材和铁料短缺的线索。",
+        "branch_choices": [
+          {
+            "id": "public_report",
+            "title": "公开呈报证据",
+            "next_stage": 2,
+            "text": "你选择将现有证据正式呈报，要求门派按规矩核查。",
+            "effects": {
+              "set_flags": {
+                "quest:huashan_green_sword_mystery:route_public": true
+              },
+              "increment_variables": {
+                "huashan_supply_public_reports": 1
+              },
+              "faction_relations": {
+                "江湖:商会": 2
+              }
+            },
+            "honor_delta": 2,
+            "jianghu_action": "help_people",
+            "jianghu_amount": 1
+          },
+          {
+            "id": "private_trace",
+            "title": "私下继续追查",
+            "next_stage": 3,
+            "text": "你决定先核实运输环节，不急于公开指责任何人。",
+            "effects": {
+              "set_flags": {
+                "quest:huashan_green_sword_mystery:route_private": true
+              },
+              "increment_variables": {
+                "huashan_supply_private_inquiries": 1
+              },
+              "faction_relations": {
+                "江湖:商会": 1
+              }
+            },
+            "honor_delta": 1
+          },
+          {
+            "id": "hold_report",
+            "title": "暂缓上报，先稳住局面",
+            "next_stage": 4,
+            "text": "你决定暂时不扩大此事，先确认门内是否还有遗漏。",
+            "effects": {
+              "set_flags": {
+                "quest:huashan_green_sword_mystery:route_cautious": true
+              },
+              "increment_variables": {
+                "huashan_supply_deferred_reports": 1
+              }
+            }
+          }
+        ]
+      },
+      {
+        "target_type": "talk",
+        "target_name": "华山守门弟子",
+        "required_cnt": 1,
+        "desc": "你将调查结果与证据正式交代给守门弟子，请他按门规登记并留意后续山路异常。",
+        "effects": {
+          "set_flags": {
+            "quest:huashan_green_sword_mystery:public_route_confirmed": true
+          }
+        },
+        "next_stage": 5
+      },
+      {
+        "target_type": "talk",
+        "target_name": "华山传功师兄",
+        "required_cnt": 1,
+        "desc": "你请传功师兄核对门内训练物资记录，先把运输环节的疑点查清。",
+        "effects": {
+          "set_flags": {
+            "quest:huashan_green_sword_mystery:private_route_confirmed": true
+          }
+        },
+        "next_stage": 5
+      },
+      {
+        "target_type": "talk",
+        "target_name": "华山接引执事",
+        "required_cnt": 1,
+        "desc": "你向接引执事说明暂缓上报的决定，并约定继续观察后续送货情况。",
+        "effects": {
+          "set_flags": {
+            "quest:huashan_green_sword_mystery:cautious_route_confirmed": true
+          }
+        },
+        "next_stage": 5
+      },
+      {
+        "target_type": "talk",
+        "target_name": "华山接引执事",
+        "required_cnt": 1,
+        "desc": "回到迎客厅，将调查结果登记归档，完成此次门派差事。"
+      }
+    ],
+    "reward": {
+      "exp": 150,
+      "gold": 50,
+      "sect_reputation": {
+        "华山": 20
+      }
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "华山剑理仍待请益，可回华山找传功师兄。"
+  },
+  "铁衣门历练·护路除匪": {
+    "title": "铁衣门历练·护路除匪",
+    "npc": "铁衣门接引执事",
+    "turn_in_npc": "铁衣门接引执事",
+    "target_type": "kill",
+    "target_name": "劫镖山贼",
+    "required_cnt": 2,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "sect": "铁衣门"
+    },
+    "desc": "官道上的护运队伍接连遭到劫掠。铁衣门不要求你滥杀无辜，只需查明并击退两名劫镖山贼，保障往来商旅安全。",
+    "reward": {
+      "exp": 162,
+      "gold": 45,
+      "sect_reputation": {
+        "铁衣门": 25
+      },
+      "honor_delta": 1
+    },
+    "repeat_cooldown_ticks": 48,
+    "repeat_reward": {
+      "exp": 40,
+      "gold": 22
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "铁衣门护运执事还有清除巡哨的委托，可去外院找他。"
+  },
+  "新手跑腿·送信": {
+    "title": "初入江湖·替村民送信",
+    "npc": "青石村接引人",
+    "turn_in_npc": "青石村接引人",
+    "target_type": "talk",
+    "target_name": "村长",
+    "required_cnt": 1,
+    "reward": {
+      "exp": 80,
+      "gold": 20
+    },
+    "desc": "先与青石村接引人领取传话委托，再去村长处说明来意，之后回接引人处复命。",
+    "notice": "村中有些跑腿传话的杂事需要人手，可向青石村接引人打听。",
+    "notice_location": "村中广场",
+    "difficulty": "入门",
+    "follow_up_hint": "村中广场的公告栏常有新的求助线索，可去看看。"
+  },
+  "新手采药·认识资源": {
+    "title": "初入江湖·采药识草",
+    "npc": "药铺老板",
+    "turn_in_npc": "药铺老板",
+    "target_type": "collect",
+    "target_name": "草药",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 90,
+      "gold": 25
+    },
+    "desc": "前往黄土官道、村后荒野或雾隐林道北面的采药溪谷，先用“搜索”发现草药，再用“采集”取得至少两份，最后回百草堂向药铺老板交付。",
+    "notice": "百草堂药铺老板急需常用药材，正寻找熟悉山野的帮手；有意相助，可去百草堂向药铺老板问询。",
+    "notice_location": "村中广场",
+    "difficulty": "入门",
+    "follow_up_hint": "百草堂老板还在为常用药材发愁，可再问问他。"
+  },
+  "新手伐木·备料": {
+    "title": "初入江湖·备些木料",
+    "npc": "铁匠",
+    "turn_in_npc": "铁匠",
+    "target_type": "collect",
+    "target_name": "木材",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 90,
+      "gold": 25
+    },
+    "desc": "前往雾隐林道或西侧竹影幽谷，先确认此处有林木，再用“伐木”取得两份木材，最后回村中铁匠铺向王打铁交付。",
+    "notice": "村中铁匠缺少木料与铁矿石，正为备料发愁；愿意帮忙，可到铁匠铺向王打铁详谈。",
+    "notice_location": "村中广场",
+    "difficulty": "入门",
+    "follow_up_hint": "雾隐林道的樵夫老周正为修补栈道缺木料，可去找他。"
+  },
+  "新手采矿·寻铁": {
+    "title": "初入江湖·寻找铁矿",
+    "npc": "铁匠",
+    "turn_in_npc": "铁匠",
+    "target_type": "collect",
+    "target_name": "铁矿石",
+    "required_cnt": 2,
+    "reward": {
+      "exp": 90,
+      "gold": 30
+    },
+    "desc": "前往雾隐林道深处的废弃铁矿，使用“搜索”查看矿点，再用“采矿”取得两份铁矿石，最后回铁匠铺向王打铁交付。",
+    "notice": "村中铁匠缺少木料与铁矿石，正为备料发愁；愿意帮忙，可到铁匠铺向王打铁详谈。",
+    "notice_location": "村中广场",
+    "difficulty": "入门",
+    "follow_up_hint": "废弃铁矿的矿工顾三缺少矿料，可去问问他。"
+  },
+  "新手狩猎·野外除害": {
+    "title": "初入江湖·野外除害",
+    "npc": "村长",
+    "turn_in_npc": "村长",
+    "target_type": "kill",
+    "target_name": "野猪",
+    "required_cnt": 1,
+    "reward": {
+      "exp": 36,
+      "gold": 35,
+      "item": "野猪肉"
+    },
+    "desc": "从村口进入村后荒野，寻找野猪并击败一头，熟悉战斗与战利品，再回村中向村长交付。",
+    "notice": "村外野猪近日滋扰村民，村长正在打听处理此事的人选；想了解详情，可去找村长问询。",
+    "notice_location": "村中广场",
+    "difficulty": "入门",
+    "follow_up_hint": "村道仍有山贼拦路，可回村长宅院问问后续。"
+  },
+  "村道巡查·清理残匪": {
+    "title": "村道巡查·清理残匪",
+    "npc": "村长",
+    "turn_in_npc": "村长",
+    "target_type": "kill",
+    "target_name": "山贼",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:新手狩猎·野外除害"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:village_road_patrol:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:village_road_patrol:resolved": true,
+        "world:main:village_road_safe": true
+      },
+      "increment_variables": {
+        "village_reputation": 2
+      }
+    },
+    "reward": {
+      "exp": 90,
+      "gold": 75,
+      "item": "疗伤药",
+      "honor_delta": 2,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "野猪之患稍平，村长又收到采药人与行商的消息：黑风山道上仍有山贼拦路。前往山道击退两名山贼，再回村中复命。",
+    "notice": "黑风山道仍有山贼拦路，采药人与行商不敢独自经过；村长正在寻找能清理残匪的人手，可去村长宅院问询。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "村道安稳后，可再去村长宅院问问百草堂收药的生意是否恢复。",
+    "difficulty": "普通"
+  },
+  "村道回暖·药铺复业": {
+    "title": "村道回暖·药铺复业",
+    "npc": "村长",
+    "turn_in_npc": "村长",
+    "target_type": "talk",
+    "target_name": "药铺老板",
+    "required_cnt": 1,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:村道巡查·清理残匪"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:village_road_herb_trade:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:village_road_herb_trade:resolved": true,
+        "world:main:herb_trade_resumed": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 70,
+      "gold": 40,
+      "honor_delta": 1,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "黑风山道安稳下来后，村长想确认百草堂能否恢复收药。先去百草堂与药铺老板谈谈，再回村长处交代结果。",
+    "notice": "黑风山道近来安稳了些，村长想确认百草堂收药的生意能否恢复；愿意帮忙的人，可去村长宅院问问。",
+    "notice_location": "村中广场",
+    "stages": [
+      {
+        "desc": "前往百草堂，询问药铺老板是否恢复收药。",
+        "target_type": "talk",
+        "target_name": "药铺老板",
+        "required_cnt": 1
+      }
+    ],
+    "difficulty": "入门",
+    "follow_up_hint": "百草堂重新收药后仍需补货，可去药铺找老板。"
+  },
+  "百草备货·补齐药材": {
+    "title": "百草备货·补齐药材",
+    "npc": "药铺老板",
+    "turn_in_npc": "药铺老板",
+    "target_type": "collect",
+    "target_name": "草药",
+    "required_cnt": 3,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:村道回暖·药铺复业",
+        "world:main:herb_trade_resumed"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:village_herb_restock:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:village_herb_restock:resolved": true,
+        "world:main:herb_stock_replenished": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 90,
+      "gold": 55,
+      "item": "疗伤药",
+      "honor_delta": 1,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "百草堂恢复收药后，药铺老板需要补足常用药材。带回三份草药交给药铺老板，让村里的药材供应真正恢复。",
+    "notice": "百草堂重新收药后，常用药材仍有缺口；若手头有草药，可去药铺问问老板是否需要补货。",
+    "notice_location": "村中广场",
+    "difficulty": "普通",
+    "follow_up_hint": "药材补齐后，可继续留意雾隐林道采药人阿芷的难处。"
+  },
+  "雾林伐木·修补栈道": {
+    "title": "雾林伐木·修补栈道",
+    "npc": "樵夫老周",
+    "turn_in_npc": "樵夫老周",
+    "target_type": "collect",
+    "target_name": "木材",
+    "required_cnt": 4,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:新手伐木·备料"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:mistwood_boardwalk:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:mistwood_boardwalk:resolved": true,
+        "world:main:mistwood_boardwalk_repaired": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 120,
+      "gold": 50,
+      "item": "疗伤药",
+      "honor_delta": 1,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "雾林林道的木栈道有几处腐朽，采药人与樵夫往来不便。前往雾隐林道或竹影幽谷伐取四份木材，再交给雾隐林道的樵夫老周。",
+    "notice": "雾隐林道的木栈道年久失修，采药人和樵夫走起来颇不方便；可去雾隐林道找樵夫老周，问问是否需要木料。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "栈道修好后，雾林深处的采药人与行商往来会方便一些。",
+    "difficulty": "普通"
+  },
+  "废矿寻铁·补足矿料": {
+    "title": "废矿寻铁·补足矿料",
+    "npc": "矿工顾三",
+    "turn_in_npc": "矿工顾三",
+    "target_type": "collect",
+    "target_name": "铁矿石",
+    "required_cnt": 4,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:新手采矿·寻铁"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:abandoned_mine_supply:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:abandoned_mine_supply:resolved": true,
+        "world:main:abandoned_mine_supply_secured": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 130,
+      "gold": 60,
+      "item": "疗伤药",
+      "honor_delta": 1,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "废弃铁矿近来的矿料储备不足，矿工顾三想补足四份铁矿石，以便继续修整矿道。就在废弃铁矿、铁脉长廊或坍塌采石坑采矿，凑齐后交给顾三。",
+    "notice": "废弃铁矿的矿工缺少修整矿道的铁料；若已经帮铁匠找过铁矿，可去废弃铁矿找矿工顾三，问问矿料储备的事。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "矿道恢复供应后，附近更深处的矿脉也能继续勘探。",
+    "difficulty": "普通"
+  },
+  "雾溪除蛛·护药浅滩": {
+    "title": "雾溪除蛛·护药浅滩",
+    "npc": "采药人阿芷",
+    "turn_in_npc": "采药人阿芷",
+    "target_type": "kill",
+    "target_name": "迷雾毒蛛",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:新手采药·认识资源",
+        "world:main:mistwood_boardwalk_repaired"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:mistwood_spider_clearance:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:mistwood_spider_clearance:resolved": true,
+        "world:main:mistwood_herb_route_safe": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 110,
+      "gold": 65,
+      "item": "疗伤药",
+      "honor_delta": 1,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "雾隐林道的栈道修好后，采药人阿芷想趁机恢复药香浅滩的采药路线。前往采药溪谷与药香浅滩，击退两只迷雾毒蛛，再回雾隐林道向阿芷复命。",
+    "notice": "药香浅滩近来毒蛛增多，采药人不敢再往深处采药；若栈道已经修好，可去雾隐林道找阿芷商量清理蛛患。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "蛛患清除后，药香浅滩的草药会逐渐恢复，采药人也愿意透露更深处的药材线索。",
+    "difficulty": "普通"
+  },
+  "铁脉清障·深处探矿": {
+    "title": "铁脉清障·深处探矿",
+    "npc": "矿工顾三",
+    "turn_in_npc": "矿工顾三",
+    "target_type": "kill",
+    "target_name": "铁背矿獾",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "world:main:abandoned_mine_supply_secured"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:deep_iron_gallery_clearance:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:deep_iron_gallery_clearance:resolved": true,
+        "world:main:deep_iron_gallery_cleared": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "reward": {
+      "exp": 108,
+      "gold": 75,
+      "item": "疗伤药",
+      "honor_delta": 2,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "desc": "矿料补齐后，顾三准备继续勘探铁脉长廊，却发现铁背矿獾刨松了支撑木梁。前往铁脉长廊击退两只铁背矿獾，再回废弃铁矿向顾三复命。",
+    "notice": "矿工顾三准备继续勘探铁脉长廊，却被两只铁背矿獾挡住去路；若先前已帮他补足矿料，可去废弃铁矿问问后续勘探的事。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "铁脉长廊已清出一段安全矿道，深处矿脉恢复得更快；顾三也能更稳定地向铁匠供料。",
+    "difficulty": "普通"
+  },
+  "少林历练·巡山护戒": {
+    "title": "少林历练·巡山护戒",
+    "npc": "少林传功师兄",
+    "turn_in_npc": "少林传功师兄",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林历练·黑风除恶"
+      ],
+      "level": 3
+    },
+    "desc": "初次下山历练后，传功师兄让你再查一遍山道。击退两名盘踞在山路附近的看守山贼，确认往来行人可以安全通行。",
+    "reward": {
+      "exp": 292,
+      "gold": 35,
+      "sect_reputation": {
+        "少林": 20
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "少林戒律僧正在查问门中戒律，可去拜访。"
+  },
+  "武当历练·松径清扰": {
+    "title": "武当历练·松径清扰",
+    "npc": "武当传功师兄",
+    "turn_in_npc": "武当传功师兄",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "武当",
+      "completed_quests": [
+        "武当历练·以静制动"
+      ],
+      "level": 3
+    },
+    "desc": "巡山弟子发现黑风寨巡哨开始窥探通往武当的山道。循着松径找到两名巡哨并将其击退，再回报巡山情况。",
+    "reward": {
+      "exp": 292,
+      "gold": 35,
+      "sect_reputation": {
+        "武当": 20
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "可回武当向传功师兄请教剑理。"
+  },
+  "华山历练·险道试剑": {
+    "title": "华山历练·险道试剑",
+    "npc": "华山传功师兄",
+    "turn_in_npc": "华山传功师兄",
+    "target_type": "kill",
+    "target_name": "黑风寨刀阵头目",
+    "required_cnt": 1,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "华山",
+      "completed_quests": [
+        "华山历练·磨剑黑风"
+      ],
+      "level": 3
+    },
+    "desc": "普通山贼已不足以检验剑招。传功师兄命你前往险道迎战一名山贼精英，取胜后回来复盘招式得失。",
+    "reward": {
+      "exp": 188,
+      "gold": 45,
+      "sect_reputation": {
+        "华山": 25
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "可回华山向传功师兄请教剑理。"
+  },
+  "铁衣门历练·清除巡哨": {
+    "title": "铁衣门历练·清除巡哨",
+    "npc": "铁衣门护运执事",
+    "turn_in_npc": "铁衣门护运执事",
+    "target_type": "kill",
+    "target_name": "黑风寨精锐",
+    "required_cnt": 2,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "铁衣门",
+      "completed_quests": [
+        "铁衣门历练·护路除匪"
+      ],
+      "level": 3
+    },
+    "desc": "护运执事复核近期行商记录后，发现黑风寨巡哨仍在观察货队路线。清除两名巡哨，确保下一批货物能按约出发。",
+    "reward": {
+      "exp": 292,
+      "gold": 50,
+      "sect_reputation": {
+        "铁衣门": 25
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "铁衣门护运执事还有商路问价的委托，可继续找他。"
+  },
+  "少林戒律·问心持戒": {
+    "title": "少林戒律·问心持戒",
+    "npc": "少林传功师兄",
+    "turn_in_npc": "少林戒律僧",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林历练·巡山护戒"
+      ]
+    },
+    "desc": "巡山之后，传功师兄认为你已见过江湖险恶，便让你去讲经堂向戒律僧问心：守戒不是退缩，护人也须有分寸。",
+    "stages": [
+      {
+        "desc": "前往少林讲经堂，向戒律僧请教少林戒律，说明自己愿守的门规。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1,
+        "branch_choices": [
+          {
+            "id": "precepts_first",
+            "title": "先守戒律，再谈护人",
+            "next_stage": 1,
+            "text": "你选择先守住戒律：不妄杀、不逞强，遇事先问是非。戒律僧微微颔首。",
+            "effects": {
+              "set_flags": {
+                "sect:shaolin:discipline:precepts": true
+              }
+            }
+          },
+          {
+            "id": "guard_first",
+            "title": "护寺为先，戒在行中",
+            "next_stage": 1,
+            "text": "你认为护住山门与香客同样是持戒。戒律僧提醒你：护人时更要不失分寸。",
+            "effects": {
+              "set_flags": {
+                "sect:shaolin:discipline:guard": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "desc": "黑风寨巡哨在山门外窥探，驱离两名巡哨，护住来往香客。",
+        "target_type": "kill",
+        "target_name": "黑风寨精锐",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回讲经堂向戒律僧复命，说明你如何在守戒与护人之间作出取舍。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:shaolin:questline:discipline_done": true
+      }
+    },
+    "reward": {
+      "exp": 180,
+      "gold": 45,
+      "item": "金创药",
+      "sect_reputation": {
+        "少林": 15
+      },
+      "honor_delta": 2,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "少林护寺尚有山门谍影未清，可再找戒律僧。"
+  },
+  "少林护寺·山门驱谍": {
+    "title": "少林护寺·山门驱谍",
+    "npc": "少林戒律僧",
+    "turn_in_npc": "少林戒律僧",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林戒律·问心持戒"
+      ]
+    },
+    "desc": "戒律僧从守山僧处得知，黑风寨巡哨近来在山门外窥探香客与寺中作息。护寺不只在佛前，也在山门与山道之间。",
+    "stages": [
+      {
+        "desc": "到少林山门向守山僧询问近日可疑动静，核对巡哨出现的时段。",
+        "target_type": "talk",
+        "target_name": "少林守山僧",
+        "required_cnt": 1
+      },
+      {
+        "desc": "循着山道线索驱离两名黑风寨巡哨，护住来往香客。",
+        "target_type": "kill",
+        "target_name": "黑风寨精锐",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回讲经堂向戒律僧禀明护寺经过，并交回巡哨留下的记号。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:shaolin:questline:temple_guard_done": true
+      }
+    },
+    "reward": {
+      "exp": 200,
+      "gold": 60,
+      "item": "菩提念珠",
+      "sect_reputation": {
+        "少林": 20
+      },
+      "honor_delta": 2,
+      "jianghu_action": "help_people",
+      "jianghu_amount": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "受戒听经的时机已经成熟，可去找戒律僧。"
+  },
+  "少林受戒·入室听经": {
+    "title": "少林受戒·入室听经",
+    "npc": "少林戒律僧",
+    "turn_in_npc": "少林戒律僧",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林护寺·山门驱谍"
+      ],
+      "level": 3,
+      "sect_reputation": {
+        "少林": {
+          "gte": 20
+        }
+      },
+      "skills": {
+        "罗汉拳": {
+          "mastery": {
+            "gte": 10
+          }
+        }
+      }
+    },
+    "desc": "护寺差事已了，戒律僧认为你已可受入门戒。先请传功师兄验看拳法根基，再回讲经堂完成受戒仪礼。",
+    "stages": [
+      {
+        "desc": "前往少林罗汉场，请传功师兄验看拳法根基，领取受戒前的考评。",
+        "target_type": "talk",
+        "target_name": "少林传功师兄",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回讲经堂，在戒律僧主持下完成入门受戒，正式成为沙弥。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:shaolin:questline:ordination_done": true
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 70,
+      "item": "清心散",
+      "sect_reputation": {
+        "少林": 15
+      },
+      "honor_delta": 2,
+      "effects": {
+        "set_flags": {
+          "sect:shaolin:ordination:novice": true
+        },
+        "relations": {
+          "少林戒律僧": 5
+        }
+      }
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "沙弥日课需向传功师兄报到。"
+  },
+  "少林沙弥·日课初行": {
+    "title": "少林沙弥·日课初行",
+    "npc": "少林传功师兄",
+    "turn_in_npc": "少林传功师兄",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林受戒·入室听经"
+      ],
+      "flags": [
+        "sect:shaolin:rank:1"
+      ],
+      "level": 4
+    },
+    "desc": "受戒并晋升沙弥后，寺中开始把日常事务交到你手上。随戒律僧做晨课、到前院分担知客杂务，再回罗汉场复命。",
+    "stages": [
+      {
+        "desc": "到讲经堂随戒律僧做一次晨课，学习沙弥日常的持戒与自省。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1
+      },
+      {
+        "desc": "到前院向知客师兄报到，分担一日知客杂务，熟悉寺中待客礼数。",
+        "target_type": "talk",
+        "target_name": "少林知客师兄",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回罗汉场向传功师兄复命，领取沙弥阶段的修习指引。",
+        "target_type": "talk",
+        "target_name": "少林传功师兄",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:shaolin:questline:novice_daily_done": true
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 50,
+      "item": "行军干粮",
+      "sect_reputation": {
+        "少林": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "门派日常已毕，可继续修习武学或外出历练。"
+  },
+  "武当剑理·松间问道": {
+    "title": "武当剑理·松间问道",
+    "npc": "武当传功师兄",
+    "turn_in_npc": "武当传功师父",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "武当",
+      "completed_quests": [
+        "武当历练·松径清扰"
+      ],
+      "skills": {
+        "太极剑": {
+          "mastery": {
+            "gte": 10
+          }
+        }
+      }
+    },
+    "desc": "松径清扰之后，传功师兄认为你已见过山道上的动静，便让你向传功师父请教武当剑理。剑不在快，而在知进退、明虚实；先问剑理，再以剑势验证所学。",
+    "stages": [
+      {
+        "desc": "到太和演武场向传功师父请教剑理，听其讲解以静制动、后发制人的要旨。",
+        "target_type": "talk",
+        "target_name": "武当传功师父",
+        "required_cnt": 1,
+        "branch_choices": [
+          {
+            "id": "observe_sword",
+            "title": "先观剑势，再问剑理",
+            "next_stage": 1,
+            "text": "你先请师父演一遍剑势，再逐式请教其中的虚实变化。传功师父点头道：“知其所止，方能后发先至。”",
+            "effects": {
+              "set_flags": {
+                "sect:wudang:sword_principle:observe": true
+              }
+            }
+          },
+          {
+            "id": "ask_principle",
+            "title": "直问剑理，以意驭剑",
+            "next_stage": 1,
+            "text": "你直接请教剑理，传功师父以指代剑，点出“以意驭剑、以静制动”的根本。你记下要旨，准备在剑势中印证。",
+            "effects": {
+              "set_flags": {
+                "sect:wudang:sword_principle:direct": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "desc": "到外院解剑池旁，将方才所悟剑势演给执事弟子看，请他指出剑路中的滞涩。",
+        "target_type": "talk",
+        "target_name": "武当执事弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回太和演武场向传功师父复述剑理与演剑所得，完成松间问道。",
+        "target_type": "talk",
+        "target_name": "武当传功师父",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:wudang:questline:sword_principle_done": true,
+        "sect:wudang:sword_principle": true
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 40,
+      "item": "太极剑穗",
+      "sect_reputation": {
+        "武当": 15
+      },
+      "honor_delta": 2
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "武当内功尚待请益，可找传功师父。"
+  },
+  "武当内功·紫霄听息": {
+    "title": "武当内功·紫霄听息",
+    "npc": "武当传功师父",
+    "turn_in_npc": "武当传功师父",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "武当",
+      "completed_quests": [
+        "武当剑理·松间问道"
+      ],
+      "level": 3,
+      "sect_reputation": {
+        "武当": {
+          "gte": 20
+        }
+      }
+    },
+    "desc": "剑理既明，还需内功根基相承。传功师父让你先向外院执事领取静修功课，在弟子静修院调息听息，再回演武场复述所得。",
+    "stages": [
+      {
+        "desc": "到外院向执事弟子领取静修功课，问明弟子静修院的作息与禁忌。",
+        "target_type": "talk",
+        "target_name": "武当执事弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回太和演武场向传功师父复述听息所得，请其纠正呼吸与行气。",
+        "target_type": "talk",
+        "target_name": "武当传功师父",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:wudang:questline:inner_breath_done": true
+      }
+    },
+    "reward": {
+      "exp": 170,
+      "gold": 50,
+      "item": "清心散",
+      "sect_reputation": {
+        "武当": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "外门晨钟暮鼓的日课，可向执事弟子报到。"
+  },
+  "武当外门·晨钟暮鼓": {
+    "title": "武当外门·晨钟暮鼓",
+    "npc": "武当执事弟子",
+    "turn_in_npc": "武当执事弟子",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "武当",
+      "completed_quests": [
+        "武当内功·紫霄听息"
+      ],
+      "flags": [
+        "sect:wudang:rank:1"
+      ],
+      "level": 4
+    },
+    "desc": "正式晋升外门弟子后，寺中日常事务也落到你肩上。随执事弟子整理功课名册、到山门协助值守，再回演武场向传功师兄复命。",
+    "stages": [
+      {
+        "desc": "清晨到外院向执事弟子报到，随其整理当日功课名册。",
+        "target_type": "talk",
+        "target_name": "武当执事弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "到山门协助守山弟子值守半日，核对来访香客与山道动静。",
+        "target_type": "talk",
+        "target_name": "武当守山弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回太和演武场向传功师兄复命，领取外门弟子的日常修习指引。",
+        "target_type": "talk",
+        "target_name": "武当传功师兄",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:wudang:questline:outer_daily_done": true
+      }
+    },
+    "reward": {
+      "exp": 150,
+      "gold": 50,
+      "item": "行军干粮",
+      "sect_reputation": {
+        "武当": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "门派日常已毕，可继续修习武学或外出历练。"
+  },
+  "华山剑理·松风听剑": {
+    "title": "华山剑理·松风听剑",
+    "npc": "华山传功师兄",
+    "turn_in_npc": "华山传功师兄",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "华山",
+      "completed_quests": [
+        "华山历练·险道试剑"
+      ],
+      "skills": {
+        "华山剑法": {
+          "mastery": {
+            "gte": 10
+          }
+        }
+      }
+    },
+    "desc": "险道试剑之后，传功师兄认为你已见过实战中的进退，便让你向授业师父请教华山剑理。剑路要快，也要有守；先明取舍，再到山门印证所学。",
+    "stages": [
+      {
+        "desc": "到演武场向授业师父请教剑理，选择先练快剑抢机，还是先守中门再寻破绽。",
+        "target_type": "talk",
+        "target_name": "华山授业师父",
+        "required_cnt": 1,
+        "branch_choices": [
+          {
+            "id": "speed_first",
+            "title": "先练快剑，抢得先机",
+            "next_stage": 1,
+            "text": "你选择先练快剑。授业师父点头道：“快不是乱，出剑之前先看清对手重心。”你记下要旨，准备到山门印证剑路。",
+            "effects": {
+              "set_flags": {
+                "sect:huashan:sword_principle:speed": true
+              }
+            }
+          },
+          {
+            "id": "steady_first",
+            "title": "先守中门，再寻破绽",
+            "next_stage": 1,
+            "text": "你选择先守中门。授业师父以剑脊轻点你的门户：“守住中门，才有后手。”你记下要旨，准备到山门印证剑路。",
+            "effects": {
+              "set_flags": {
+                "sect:huashan:sword_principle:steady": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "desc": "到山门与守门弟子拆解几式，请其从旁观角度指出你剑路中的迟疑。",
+        "target_type": "talk",
+        "target_name": "华山守门弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "回演武场向传功师兄复述剑理与山门试剑所得，完成松风听剑。",
+        "target_type": "talk",
+        "target_name": "华山传功师兄",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:huashan:questline:sword_principle_done": true,
+        "sect:huashan:sword_principle": true
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 40,
+      "item": "华山剑穗",
+      "sect_reputation": {
+        "华山": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "晋升外门后，可向传功师兄领取巡剑清障。"
+  },
+  "华山巡剑·古道清障": {
+    "title": "华山巡剑·古道清障",
+    "npc": "华山传功师兄",
+    "turn_in_npc": "华山传功师兄",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "华山",
+      "completed_quests": [
+        "华山剑理·松风听剑"
+      ],
+      "flags": [
+        "sect:huashan:rank:1"
+      ],
+      "level": 4
+    },
+    "desc": "正式晋升外门弟子后，山门外的古道便由你随守门弟子一同巡查。先问明近日动静，再清退窥伺古道的黑风寨巡哨，回演武场复命。",
+    "stages": [
+      {
+        "desc": "到山门向守门弟子问明近日古道上的异常动静与巡山路线。",
+        "target_type": "talk",
+        "target_name": "华山守门弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "沿古道清退两名窥伺山路的黑风寨巡哨，保障往来山民安全。",
+        "target_type": "kill",
+        "target_name": "黑风寨精锐",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回演武场向传功师兄复命，交代古道巡查与清障经过。",
+        "target_type": "talk",
+        "target_name": "华山传功师兄",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:huashan:questline:patrol_done": true
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 50,
+      "item": "行军干粮",
+      "sect_reputation": {
+        "华山": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "古道已清，可继续向传功师兄请教。"
+  },
+  "铁衣门护运·商路问价": {
+    "title": "铁衣门护运·商路问价",
+    "npc": "铁衣门护运执事",
+    "turn_in_npc": "铁衣门护运执事",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "铁衣门",
+      "completed_quests": [
+        "铁衣门历练·清除巡哨"
+      ],
+      "level": 3,
+      "skills": {
+        "铁衣功": {
+          "mastery": {
+            "gte": 10
+          }
+        }
+      }
+    },
+    "desc": "清退巡哨后，护运执事让你先摸清商路近况。到山门问守门弟子车次，再向接引执事核对货单，最后回外院商定护运章程。",
+    "stages": [
+      {
+        "desc": "到山门向守门弟子询问近日商队车次、来路与异常动静。",
+        "target_type": "talk",
+        "target_name": "铁衣门守门弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "到接待堂与接引执事核对货单，选择按行规公价，还是先保路线安全。",
+        "target_type": "talk",
+        "target_name": "铁衣门接引执事",
+        "required_cnt": 1,
+        "branch_choices": [
+          {
+            "id": "fair_price",
+            "title": "按行规公价，稳住商路",
+            "next_stage": 2,
+            "text": "你选择按行规公价结算。接引执事把货单誊清：“价格稳，商队才愿意再走这条路。”",
+            "effects": {
+              "set_flags": {
+                "sect:tieyi:trade_route:fair": true
+              }
+            }
+          },
+          {
+            "id": "secure_route",
+            "title": "先保路线安全，再谈价钱",
+            "next_stage": 2,
+            "text": "你选择先保路线安全。接引执事点头：“护运先护人，价钱可以再议。”",
+            "effects": {
+              "set_flags": {
+                "sect:tieyi:trade_route:secure": true
+              }
+            }
+          }
+        ]
+      },
+      {
+        "desc": "回外院向护运执事交代车次与货单，商定下一步护运安排。",
+        "target_type": "talk",
+        "target_name": "铁衣门护运执事",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:tieyi:questline:trade_route_done": true,
+        "sect:tieyi:trade_route": true
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 45,
+      "item": "行军干粮",
+      "sect_reputation": {
+        "铁衣门": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "晋升外堂后，可向护运执事领取短途护送。"
+  },
+  "铁衣门守约·短途护送": {
+    "title": "铁衣门守约·短途护送",
+    "npc": "铁衣门护运执事",
+    "turn_in_npc": "铁衣门护运执事",
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "sect": "铁衣门",
+      "completed_quests": [
+        "铁衣门护运·商路问价"
+      ],
+      "flags": [
+        "sect:tieyi:rank:1"
+      ],
+      "level": 4
+    },
+    "desc": "正式晋升外堂弟子后，护运执事把一趟短途护送货交给你。到山门领取旗号，清退劫镖山贼，再回外院交还旗号并复命。",
+    "stages": [
+      {
+        "desc": "到山门向守门弟子领取护送旗号，确认商队集合时辰。",
+        "target_type": "talk",
+        "target_name": "铁衣门守门弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "护送商队通过官道岔口，击退两名劫镖山贼。",
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回外院向护运执事交还旗号，交代护送经过。",
+        "target_type": "talk",
+        "target_name": "铁衣门护运执事",
+        "required_cnt": 1
+      }
+    ],
+    "on_complete": {
+      "set_flags": {
+        "sect:tieyi:questline:escort_done": true
+      }
+    },
+    "reward": {
+      "exp": 220,
+      "gold": 55,
+      "item": "铁衣护腕",
+      "sect_reputation": {
+        "铁衣门": 15
+      },
+      "honor_delta": 1
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "商路已稳，可继续在铁衣门中历练。"
+  },
+  "药囊递送·雾林问诊": {
+    "title": "药囊递送·雾林问诊",
+    "npc": "药铺老板",
+    "turn_in_npc": "采药人阿芷",
+    "target_type": "collect",
+    "target_name": "草药",
+    "required_cnt": 2,
+    "difficulty": "入门",
+    "reward": {
+      "exp": 90,
+      "gold": 30
+    },
+    "desc": "百草堂药铺老板备好一包药囊，想请人送往雾隐林道交给采药人阿芷；先备齐两份草药，再亲自送到阿芷手中。",
+    "requires": {
+      "level": 2,
+      "completed_quests": [
+        "村道回暖·药铺复业",
+        "新手采药·认识资源"
+      ]
+    },
+    "notice": "百草堂有药囊要送往雾隐林道，药铺老板正在找可靠的人跑一趟。",
+    "notice_location": "村中广场",
+    "follow_up_hint": "药囊送到后，阿芷或许会提起雾隐林道更深处的采药与蛛患。",
+    "on_complete": {
+      "set_flags": {
+        "world:main:medicinal_pouch_delivered": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    }
+  },
+  "断魂岭·岭道清剿": {
+    "title": "断魂岭·岭道清剿",
+    "npc": "守岭猎户",
+    "turn_in_npc": "守岭猎户",
+    "target_type": "kill",
+    "target_name": "断魂岭马贼",
+    "required_cnt": 3,
+    "requires": {
+      "level": 12,
+      "flags": [
+        "quest_completed:清剿黑风山"
+      ]
+    },
+    "reward": {
+      "exp": 500,
+      "gold": 120,
+      "item": "苍脊刀",
+      "honor_delta": 6
+    },
+    "desc": "断魂岭栈道上的马贼截杀往来猎户与行商。守岭猎户请你清理三名马贼，为岭上重新开出一条可走的路。",
+    "difficulty": "高难",
+    "follow_up_hint": "栈道清出后，守岭猎户会告诉你断魂堡内厅的守备情况。"
+  },
+  "断魂岭·破堡除凶": {
+    "title": "断魂岭·破堡除凶",
+    "npc": "守岭猎户",
+    "turn_in_npc": "守岭猎户",
+    "target_type": "kill",
+    "target_name": "断魂堡主",
+    "required_cnt": 1,
+    "requires": {
+      "level": 13,
+      "flags": [
+        "quest_completed:断魂岭·岭道清剿"
+      ]
+    },
+    "reward": {
+      "exp": 680,
+      "gold": 220,
+      "items": [
+        {
+          "item": "断魂刀",
+          "quantity": 1
+        },
+        {
+          "item": "苍脊重甲",
+          "quantity": 1
+        }
+      ],
+      "honor_delta": 10
+    },
+    "on_complete": {
+      "set_flags": {
+        "duanhun_ridge:fort_cleared": true
+      }
+    },
+    "desc": "断魂堡主收拢黑风寨残部，继续劫掠岭上商路。守岭猎户请你攻入断魂堡内厅，击败堡主，断了这股残匪的根。",
+    "difficulty": "重大",
+    "follow_up_hint": "断魂堡已破，岭上暂得安宁；巡道委托仍可反复接取。"
+  },
+  "断魂岭·巡道除匪": {
+    "title": "断魂岭·巡道除匪",
+    "npc": "守岭猎户",
+    "turn_in_npc": "守岭猎户",
+    "target_type": "kill",
+    "target_name": "断魂岭马贼",
+    "required_cnt": 2,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 12,
+      "flags": [
+        "quest_completed:断魂岭·岭道清剿"
+      ]
+    },
+    "reward": {
+      "exp": 300,
+      "gold": 90,
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "exp": 160,
+      "gold": 60
+    },
+    "repeat_cooldown_ticks": 48,
+    "desc": "岭道刚清出不久，又有马贼摸回栈道。守岭猎户请你再走一趟，击退两名马贼，护住往来行商。",
+    "difficulty": "高难",
+    "follow_up_hint": "巡道委托可反复接取，冷却结束后可再向守岭猎户询问。"
+  },
+  "少林·伏魔护寺": {
+    "title": "少林·伏魔护寺",
+    "npc": "少林戒律僧",
+    "turn_in_npc": "少林戒律僧",
+    "target_type": "kill",
+    "target_name": "断魂堡死卫",
+    "required_cnt": 2,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "sect": "少林",
+      "level": 15,
+      "completed_quests": [
+        "断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 260,
+      "gold": 110,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ],
+      "sect_reputation": {
+        "少林": 8
+      },
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "exp": 200,
+      "gold": 90,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 48,
+    "desc": "断魂堡虽破，逃散的死卫仍在岭上截杀香客。戒律僧请你再上断魂岭，击退两名死卫，护住往来行人。",
+    "difficulty": "高难",
+    "follow_up_hint": "护寺委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向戒律僧询问。"
+  },
+  "武当·夜巡断魂": {
+    "title": "武当·夜巡断魂",
+    "npc": "武当执事弟子",
+    "turn_in_npc": "武当执事弟子",
+    "target_type": "kill",
+    "target_name": "枯骨涧刀客",
+    "required_cnt": 2,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "sect": "武当",
+      "level": 15,
+      "completed_quests": [
+        "断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 260,
+      "gold": 110,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ],
+      "sect_reputation": {
+        "武当": 8
+      },
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "exp": 200,
+      "gold": 90,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 48,
+    "desc": "枯骨涧的刀客借夜色掩护劫掠行商，武当执事弟子请你夜巡断魂岭，击退两名刀客，守住山道清明。",
+    "difficulty": "高难",
+    "follow_up_hint": "夜巡委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向执事弟子询问。"
+  },
+  "华山·绝壁试锋": {
+    "title": "华山·绝壁试锋",
+    "npc": "华山授业师父",
+    "turn_in_npc": "华山授业师父",
+    "target_type": "kill",
+    "target_name": "断魂堡守卫长",
+    "required_cnt": 1,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "sect": "华山",
+      "level": 15,
+      "completed_quests": [
+        "断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 260,
+      "gold": 110,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ],
+      "sect_reputation": {
+        "华山": 8
+      },
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "exp": 200,
+      "gold": 90,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 48,
+    "desc": "断魂堡残部退守岭上，守卫长仍在堡门前聚拢人手。授业师父要你去绝壁前试锋，斩下守卫长，验一验华山剑法。",
+    "difficulty": "高难",
+    "follow_up_hint": "试锋委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向授业师父询问。"
+  },
+  "铁衣门·断魂护镖": {
+    "title": "铁衣门·断魂护镖",
+    "npc": "铁衣门护运执事",
+    "turn_in_npc": "铁衣门护运执事",
+    "target_type": "kill",
+    "target_name": "断魂岭马贼",
+    "required_cnt": 3,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "sect": "铁衣门",
+      "level": 15,
+      "completed_quests": [
+        "断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 260,
+      "gold": 110,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ],
+      "sect_reputation": {
+        "铁衣门": 8
+      },
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "exp": 200,
+      "gold": 90,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 48,
+    "desc": "堡破之后，零散马贼又摸上岭道劫镖。护运执事请你随镖走一趟断魂岭，击退三名马贼，把商路重新稳住。",
+    "difficulty": "高难",
+    "follow_up_hint": "护镖委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向护运执事询问。"
+  },
+  "断魂岭·精铁换药": {
+    "title": "断魂岭·精铁换药",
+    "npc": "守岭猎户",
+    "turn_in_npc": "守岭猎户",
+    "target_type": "collect",
+    "target_name": "断魂精铁",
+    "required_cnt": 3,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 15,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "gold": 30,
+      "item": "大还丹"
+    },
+    "repeat_reward": {
+      "gold": 30,
+      "item": "大还丹"
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "守岭猎户认得夜行客兵刃上的精铁，愿用一丸大还丹换三块精铁，算是替岭上行人谢你。",
+    "difficulty": "进阶",
+    "follow_up_hint": "精铁可在断魂崖夜行客身上取得；凑够三块后可再来找守岭猎户兑换。"
   }
 }

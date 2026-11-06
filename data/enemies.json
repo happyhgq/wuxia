@@ -1,9 +1,9 @@
 {
   "野狼": {
-    "hp": 40,
-    "atk": 8,
+    "hp": 55,
+    "atk": 9,
     "defense": 2,
-    "exp": 20,
+    "exp": 30,
     "gold": 5,
     "skills": [
       {
@@ -17,13 +17,21 @@
         "item": "野猪肉",
         "chance": 0.5
       }
-    ]
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "level": 1,
+    "tier": "normal",
+    "desc": "野狼常在野外出没，依靠本能寻找猎物。它的动作难以用江湖人的招式套路判断，贸然靠近容易吃亏。",
+    "combat_hint": "留意其扑击、冲撞或毒性攻击的前兆，保持体力，不要只顾连续强攻。"
   },
   "野猪": {
-    "hp": 55,
-    "atk": 11,
+    "hp": 72,
+    "atk": 12,
     "defense": 4,
-    "exp": 30,
+    "exp": 38,
     "gold": 10,
     "skills": [
       {
@@ -31,7 +39,11 @@
         "chance": 0.3,
         "power": 1.5,
         "effect": "stun",
-        "turns": 1
+        "turns": 1,
+        "ai": {
+          "priority": 20,
+          "player_hp_below": 0.75
+        }
       }
     ],
     "drops": [
@@ -39,13 +51,21 @@
         "item": "野猪肉",
         "chance": 0.8
       }
-    ]
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "level": 2,
+    "tier": "normal",
+    "desc": "野猪常在野外出没，依靠本能寻找猎物。它的动作难以用江湖人的招式套路判断，贸然靠近容易吃亏。",
+    "combat_hint": "留意其扑击、冲撞或毒性攻击的前兆，保持体力，不要只顾连续强攻。"
   },
   "毒蛇": {
-    "hp": 35,
-    "atk": 13,
-    "defense": 1,
-    "exp": 32,
+    "hp": 100,
+    "atk": 16,
+    "defense": 5,
+    "exp": 46,
     "gold": 12,
     "skills": [
       {
@@ -54,7 +74,13 @@
         "power": 1.2,
         "effect": "poison",
         "turns": 4,
-        "value": 5
+        "value": 5,
+        "ai": {
+          "priority": 25,
+          "target_status_absent": [
+            "poison"
+          ]
+        }
       }
     ],
     "drops": [
@@ -62,13 +88,21 @@
         "item": "蛇胆",
         "chance": 0.55
       }
-    ]
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "beast"
+    },
+    "level": 3,
+    "tier": "normal",
+    "desc": "毒蛇常在野外出没，依靠本能寻找猎物。它的动作难以用江湖人的招式套路判断，贸然靠近容易吃亏。",
+    "combat_hint": "留意其扑击、冲撞或毒性攻击的前兆，保持体力，不要只顾连续强攻。"
   },
   "山贼": {
-    "hp": 65,
-    "atk": 13,
-    "defense": 4,
-    "exp": 38,
+    "hp": 100,
+    "atk": 16,
+    "defense": 5,
+    "exp": 46,
     "gold": 18,
     "skills": [
       {
@@ -80,21 +114,62 @@
     "drops": [
       {
         "item": "铁矿石",
-        "chance": 0.4
+        "chance": 0.4,
+        "min_qty": 1,
+        "max_qty": 2
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "level": 3,
+    "tier": "normal",
+    "desc": "山贼在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "布衣"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 0.72,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "布衣"
+        }
+      },
+      {
+        "weight": 0.28,
+        "equipment": {
+          "weapon": "木剑",
+          "armor": "布衣"
+        },
+        "skills": [
+          {
+            "name": "猛砍",
+            "chance": 0.26,
+            "power": 1.35
+          }
+        ]
       }
     ]
   },
   "山贼头目": {
-    "hp": 120,
-    "atk": 18,
+    "hp": 182,
+    "atk": 22,
     "defense": 8,
-    "exp": 80,
+    "exp": 99,
     "gold": 50,
     "skills": [
       {
         "name": "狂暴斩",
         "chance": 0.3,
-        "power": 1.6
+        "power": 1.6,
+        "ai": {
+          "priority": 10
+        }
       }
     ],
     "drops": [
@@ -102,37 +177,105 @@
         "item": "铁矿石",
         "chance": 0.7
       }
+    ],
+    "ai": {
+      "style": "elite",
+      "faction": "bandit"
+    },
+    "level": 4,
+    "tier": "elite",
+    "desc": "山贼头目显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 0.75,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 0.25,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "皮甲"
+        },
+        "skills": [
+          {
+            "name": "狂暴斩",
+            "chance": 0.28,
+            "power": 1.55
+          }
+        ]
+      }
     ]
   },
   "山贼二当家": {
-    "hp": 160,
-    "atk": 22,
-    "defense": 11,
-    "exp": 130,
-    "gold": 90,
+    "hp": 423,
+    "atk": 38,
+    "defense": 12,
+    "exp": 264,
+    "gold": 110,
     "skills": [
       {
         "name": "夺命三刀",
         "chance": 0.35,
-        "power": 1.8
+        "power": 1.8,
+        "ai": {
+          "priority": 15
+        }
       }
     ],
     "drops": [
       {
-        "item": "精铁剑",
-        "chance": 0.35
+        "item": "金创药",
+        "chance": 1.0,
+        "guaranteed": true
       },
       {
-        "item": "金创药",
-        "chance": 0.7
+        "item": "铁矿石",
+        "chance": 0.6
+      }
+    ],
+    "ai": {
+      "style": "elite"
+    },
+    "level": 7,
+    "tier": "boss",
+    "desc": "山贼二当家显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "精铁剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.12,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        }
       }
     ]
   },
   "山贼弓手": {
-    "hp": 50,
-    "atk": 16,
-    "defense": 2,
-    "exp": 35,
+    "hp": 130,
+    "atk": 20,
+    "defense": 6,
+    "exp": 55,
     "gold": 20,
     "skills": [
       {
@@ -146,13 +289,48 @@
         "item": "金创药",
         "chance": 0.4
       }
+    ],
+    "ai": {
+      "style": "ranged"
+    },
+    "level": 4,
+    "tier": "ranged",
+    "desc": "山贼弓手擅长拉开距离伺机放箭，通常会寻找视野开阔的位置。",
+    "combat_hint": "尽量缩短距离，并注意其远程攻击节奏。",
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "布衣"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 0.8,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "布衣"
+        }
+      },
+      {
+        "weight": 0.2,
+        "equipment": {
+          "weapon": "木剑",
+          "armor": "布衣"
+        },
+        "skills": [
+          {
+            "name": "冷箭",
+            "chance": 0.36,
+            "power": 1.5
+          }
+        ]
+      }
     ]
   },
   "看守山贼": {
-    "hp": 80,
-    "atk": 14,
-    "defense": 6,
-    "exp": 45,
+    "hp": 231,
+    "atk": 26,
+    "defense": 10,
+    "exp": 117,
     "gold": 25,
     "skills": [
       {
@@ -161,7 +339,13 @@
         "power": 1.3,
         "effect": "bleed",
         "turns": 3,
-        "value": 4
+        "value": 4,
+        "ai": {
+          "priority": 20,
+          "target_status_absent": [
+            "bleed"
+          ]
+        }
       }
     ],
     "drops": [
@@ -169,13 +353,41 @@
         "item": "铁矿石",
         "chance": 0.6
       }
+    ],
+    "ai": {
+      "style": "boss"
+    },
+    "level": 5,
+    "tier": "elite",
+    "desc": "看守山贼在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "雾行短刃",
+          "armor": "布衣"
+        }
+      }
     ]
   },
   "山贼精英": {
-    "hp": 100,
-    "atk": 18,
-    "defense": 8,
-    "exp": 60,
+    "hp": 280,
+    "atk": 31,
+    "defense": 11,
+    "exp": 137,
     "gold": 35,
     "skills": [
       {
@@ -186,68 +398,2054 @@
     ],
     "drops": [
       {
-        "item": "锁子甲",
-        "chance": 0.15
-      },
-      {
         "item": "金创药",
         "chance": 0.5
+      }
+    ],
+    "ai": {
+      "style": "elite"
+    },
+    "level": 6,
+    "tier": "elite",
+    "desc": "山贼精英显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "精铁剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        }
       }
     ]
   },
   "宝库大总管": {
-    "hp": 180,
-    "atk": 24,
-    "defense": 12,
-    "exp": 150,
+    "hp": 378,
+    "atk": 40,
+    "defense": 14,
+    "exp": 182,
     "gold": 120,
     "skills": [
       {
         "name": "金钱镖",
         "chance": 0.4,
-        "power": 1.7
+        "power": 1.7,
+        "ai": {
+          "priority": 15,
+          "player_hp_above": 0.35
+        }
       }
     ],
     "drops": [
       {
         "item": "大还丹",
         "chance": 0.5
+      }
+    ],
+    "ai": {
+      "style": "elite"
+    },
+    "level": 8,
+    "tier": "elite",
+    "desc": "宝库大总管显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "精铁剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "锁子甲"
+        }
       },
       {
-        "item": "锁子甲",
-        "chance": 0.3
+        "weight": 2,
+        "equipment": {
+          "weapon": "玄铁重剑",
+          "armor": "锁子甲"
+        }
       }
     ]
   },
   "山贼大当家": {
-    "hp": 240,
-    "atk": 30,
-    "defense": 15,
-    "exp": 220,
-    "gold": 200,
+    "hp": 545,
+    "atk": 49,
+    "defense": 16,
+    "exp": 390,
+    "gold": 240,
     "skills": [
       {
         "name": "开山霸刀",
         "chance": 0.3,
-        "power": 2.0
+        "power": 2.0,
+        "ai": {
+          "priority": 10
+        }
       },
       {
         "name": "咆哮震慑",
         "chance": 0.25,
         "power": 1.2,
         "effect": "stun",
+        "turns": 1,
+        "ai": {
+          "priority": 30,
+          "player_hp_below": 0.7
+        }
+      },
+      {
+        "name": "横扫千军",
+        "chance": 0.4,
+        "power": 1.65,
+        "ai": {
+          "priority": 35,
+          "phase_at_least": 2
+        }
+      },
+      {
+        "name": "困兽狂斩",
+        "id": "bandit_chief_feral_slash",
+        "telegraph": true,
+        "chance": 0.45,
+        "power": 2.35,
+        "ai": {
+          "priority": 55,
+          "phase_at_least": 3,
+          "player_hp_below": 0.85
+        }
+      }
+    ],
+    "drops": [
+      {
+        "item": "大还丹",
+        "chance": 0.8,
+        "guaranteed": true
+      }
+    ],
+    "ai": {
+      "style": "boss"
+    },
+    "phases": [
+      {
+        "threshold": 0.7,
+        "message": "【山贼大当家】被逼退半步，怒喝一声，战意暴涨！",
+        "atk_mult": 1.15,
+        "defense_bonus": 1
+      },
+      {
+        "threshold": 0.35,
+        "message": "【山贼大当家】已陷入狂怒，索性舍弃防守，准备拼死一搏！",
+        "atk_mult": 1.35,
+        "defense_bonus": -2,
+        "heal_percent": 0.05
+      }
+    ],
+    "level": 10,
+    "tier": "boss",
+    "desc": "山贼大当家显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "玄铁重剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.12,
+    "manual_drop": {
+      "item": "黑风刀法秘笈",
+      "chance": 0.002
+    }
+  },
+  "劫镖山贼": {
+    "hp": 255,
+    "atk": 36,
+    "defense": 11,
+    "exp": 101,
+    "gold": 35,
+    "skills": [
+      {
+        "name": "劫镖猛砍",
+        "chance": 0.32,
+        "power": 1.55
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.55
+      },
+      {
+        "item": "金创药",
+        "chance": 0.2
+      }
+    ],
+    "ai": {
+      "style": "aggressive"
+    },
+    "level": 8,
+    "tier": "normal",
+    "desc": "劫镖山贼在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "北境巡河刀",
+      "armor": "行商软甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "北境巡河刀",
+          "armor": "行商软甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        }
+      }
+    ]
+  },
+  "黑市打手": {
+    "hp": 300,
+    "atk": 40,
+    "defense": 12,
+    "exp": 115,
+    "gold": 40,
+    "skills": [
+      {
+        "name": "短棍横扫",
+        "chance": 0.32,
+        "power": 1.45
+      }
+    ],
+    "drops": [
+      {
+        "item": "金创药",
+        "chance": 0.25
+      },
+      {
+        "item": "铁矿石",
+        "chance": 0.2
+      }
+    ],
+    "ai": {
+      "style": "aggressive"
+    },
+    "level": 9,
+    "tier": "normal",
+    "desc": "黑市打手在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "雾行短刃",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "雾行短刃",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "布衣"
+        }
+      }
+    ]
+  },
+  "黑市护卫": {
+    "hp": 462,
+    "atk": 48,
+    "defense": 16,
+    "exp": 234,
+    "gold": 55,
+    "skills": [
+      {
+        "name": "护卫重击",
+        "chance": 0.35,
+        "power": 1.55
+      }
+    ],
+    "drops": [
+      {
+        "item": "金创药",
+        "chance": 0.4
+      }
+    ],
+    "ai": {
+      "style": "elite"
+    },
+    "level": 10,
+    "tier": "elite",
+    "desc": "黑市护卫在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "行商软甲"
+        }
+      }
+    ]
+  },
+  "黑市头目": {
+    "hp": 725,
+    "atk": 61,
+    "defense": 20,
+    "exp": 489,
+    "gold": 160,
+    "skills": [
+      {
+        "name": "黑风掌",
+        "chance": 0.32,
+        "power": 1.7,
+        "ai": {
+          "priority": 10
+        }
+      },
+      {
+        "name": "阴狠点穴",
+        "chance": 0.22,
+        "power": 1.25,
+        "effect": "stun",
+        "turns": 1,
+        "ai": {
+          "priority": 35,
+          "player_hp_below": 0.6,
+          "target_status_absent": [
+            "stun"
+          ]
+        }
+      },
+      {
+        "name": "断脉掌",
+        "chance": 0.38,
+        "power": 1.55,
+        "effect": "stun",
+        "turns": 1,
+        "ai": {
+          "priority": 48,
+          "phase_at_least": 2,
+          "target_status_absent": [
+            "stun"
+          ]
+        }
+      },
+      {
+        "name": "黑市绝命掌",
+        "id": "black_market_fatal_palm",
+        "telegraph": true,
+        "chance": 0.5,
+        "power": 2.15,
+        "ai": {
+          "priority": 60,
+          "phase_at_least": 3
+        }
+      }
+    ],
+    "drops": [
+      {
+        "item": "大还丹",
+        "chance": 0.55,
+        "guaranteed": true
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "phases": [
+      {
+        "threshold": 0.65,
+        "message": "【黑市头目】冷笑收起试探，黑市规矩在此刻变成了杀人的规矩！",
+        "atk_mult": 1.12,
+        "defense_bonus": 1
+      },
+      {
+        "threshold": 0.3,
+        "message": "【黑市头目】见势不妙，猛提真气，准备以伤换命！",
+        "atk_mult": 1.3,
+        "defense_bonus": -1,
+        "heal_percent": 0.04
+      }
+    ],
+    "level": 12,
+    "tier": "boss",
+    "desc": "黑市头目显然不是寻常喽啰，气势与临敌经验都更胜一筹，出手时往往留有后招。",
+    "combat_hint": "先观察其攻势与阶段变化，留足疗伤和恢复内力的余地。",
+    "equipment": {
+      "weapon": "玄铁重剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.12,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "玄铁重剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        }
+      }
+    ]
+  },
+  "雾林野猿": {
+    "hp": 130,
+    "atk": 20,
+    "defense": 6,
+    "exp": 55,
+    "gold": 12,
+    "skills": [
+      {
+        "name": "攀枝突袭",
+        "chance": 0.28,
+        "power": 1.35
+      }
+    ],
+    "drops": [
+      {
+        "item": "山獐肉",
+        "chance": 0.35
+      },
+      {
+        "item": "雾露草",
+        "chance": 0.25
+      }
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "level": 4,
+    "tier": "normal",
+    "desc": "雾林野猿在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。"
+  },
+  "迷雾毒蛛": {
+    "hp": 165,
+    "atk": 24,
+    "defense": 8,
+    "exp": 65,
+    "gold": 15,
+    "skills": [
+      {
+        "name": "毒丝缠身",
+        "chance": 0.24,
+        "power": 1.2,
+        "effect": "poison",
+        "turns": 2
+      }
+    ],
+    "drops": [
+      {
+        "item": "雾露草",
+        "chance": 0.4
+      }
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "level": 5,
+    "tier": "normal",
+    "desc": "迷雾毒蛛在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。"
+  },
+  "沉河尸傀": {
+    "hp": 200,
+    "atk": 28,
+    "defense": 9,
+    "exp": 76,
+    "gold": 24,
+    "skills": [
+      {
+        "name": "湿骨重击",
+        "chance": 0.32,
+        "power": 1.5
+      }
+    ],
+    "drops": [
+      {
+        "item": "沉河铜钱",
+        "chance": 0.45
+      },
+      {
+        "item": "沉河铁片",
+        "chance": 0.25
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "ruins"
+    },
+    "level": 6,
+    "tier": "normal",
+    "desc": "沉河尸傀在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。"
+  },
+  "遗祠守墓人": {
+    "hp": 329,
+    "atk": 35,
+    "defense": 12,
+    "exp": 158,
+    "gold": 38,
+    "skills": [
+      {
+        "name": "守祠横斩",
+        "chance": 0.3,
+        "power": 1.55
+      }
+    ],
+    "drops": [
+      {
+        "item": "潮纹石片",
+        "chance": 0.2
+      },
+      {
+        "item": "锈蚀令牌",
+        "chance": 0.35
+      }
+    ],
+    "ai": {
+      "style": "elite",
+      "faction": "ruins"
+    },
+    "level": 7,
+    "tier": "elite",
+    "desc": "遗祠守墓人在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。"
+  },
+  "北境劫货客": {
+    "hp": 235,
+    "atk": 32,
+    "defense": 10,
+    "exp": 88,
+    "gold": 48,
+    "skills": [
+      {
+        "name": "断货刀",
+        "chance": 0.32,
+        "power": 1.5
+      }
+    ],
+    "drops": [
+      {
+        "item": "商队封蜡",
+        "chance": 0.35
+      },
+      {
+        "item": "北境肉干",
+        "chance": 0.3
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "level": 7,
+    "tier": "normal",
+    "desc": "北境劫货客在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "北境巡河刀",
+      "armor": "行商软甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "北境巡河刀",
+          "armor": "行商软甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        }
+      }
+    ]
+  },
+  "河埠私枭": {
+    "hp": 378,
+    "atk": 40,
+    "defense": 14,
+    "exp": 182,
+    "gold": 95,
+    "skills": [
+      {
+        "name": "回潮刀势",
+        "chance": 0.38,
+        "power": 1.75
+      },
+      {
+        "name": "封喉短打",
+        "chance": 0.22,
+        "power": 1.25,
+        "effect": "stun",
         "turns": 1
       }
     ],
     "drops": [
       {
-        "item": "玄铁重剑",
+        "item": "商队封蜡",
+        "chance": 0.6,
+        "guaranteed": true
+      },
+      {
+        "item": "精制护腕",
+        "chance": 0.12
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "level": 8,
+    "tier": "elite",
+    "desc": "河埠私枭在此地活动已久，对周围环境颇为熟悉，见到外人便会提高戒备。",
+    "combat_hint": "先评估自身气血、装备与武学，再决定是否交手。",
+    "equipment": {
+      "weapon": "北境巡河刀",
+      "armor": "行商软甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "北境巡河刀",
+          "armor": "行商软甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "锁子甲"
+        }
+      }
+    ]
+  },
+  "小偷": {
+    "hp": 55,
+    "atk": 9,
+    "defense": 2,
+    "exp": 30,
+    "gold": 5,
+    "tier": "normal",
+    "hit": 0.78,
+    "crit": 0.03,
+    "dodge": 0.1,
+    "drops": [],
+    "desc": "治安混乱时在街巷中伺机行窃，发现被人盯上后可能转而拼命逃窜。",
+    "combat_hint": "身手不强但善于躲闪，尽量稳住命中，不要让其轻易脱身。",
+    "level": 1
+  },
+  "流氓": {
+    "hp": 55,
+    "atk": 9,
+    "defense": 2,
+    "exp": 30,
+    "gold": 8,
+    "tier": "normal",
+    "hit": 0.82,
+    "crit": 0.04,
+    "dodge": 0.06,
+    "drops": [],
+    "desc": "常在街巷欺压行人，仗着蛮力滋事，治安恶化时更容易现身。",
+    "combat_hint": "攻击直接、招式粗糙，留意气血消耗，优先稳妥压制。",
+    "level": 1
+  },
+  "黑风寨巡哨": {
+    "hp": 165,
+    "atk": 24,
+    "defense": 8,
+    "exp": 65,
+    "gold": 22,
+    "level": 5,
+    "tier": "normal",
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨巡哨沿山道轮番巡查，手持制式铁剑，出招直接但颇有章法。",
+    "combat_hint": "留意巡哨的试探劈砍；其装备比普通山贼齐整。",
+    "skills": [
+      {
+        "name": "巡山斩",
+        "chance": 0.26,
+        "power": 1.35
+      }
+    ],
+    "equipment": {
+      "weapon": "铁剑",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 0.75,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 0.25,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "布衣"
+        },
+        "skills": [
+          {
+            "name": "横刀封路",
+            "chance": 0.22,
+            "power": 1.4
+          }
+        ]
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.22,
+        "min_qty": 1,
+        "max_qty": 1
+      }
+    ]
+  },
+  "黑风刀手": {
+    "hp": 200,
+    "atk": 28,
+    "defense": 9,
+    "exp": 76,
+    "gold": 30,
+    "level": 6,
+    "tier": "normal",
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨刀手专练近身刀法，厚背腰刀虽不名贵，却颇有杀伤力。",
+    "combat_hint": "横刀封路后不宜贪攻，注意留存内力与气血。",
+    "skills": [
+      {
+        "name": "横刀封路",
+        "chance": 0.28,
+        "power": 1.42
+      },
+      {
+        "name": "猛砍",
+        "chance": 0.18,
+        "power": 1.25
+      }
+    ],
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 0.7,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 0.3,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "横刀封路",
+            "chance": 0.24,
+            "power": 1.38
+          }
+        ]
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.25
+      }
+    ]
+  },
+  "黑风寨精锐": {
+    "hp": 378,
+    "atk": 40,
+    "defense": 14,
+    "exp": 182,
+    "gold": 46,
+    "level": 8,
+    "tier": "elite",
+    "ai": {
+      "style": "elite",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨精锐经过多年厮杀，精铁兵刃与锁子甲均保养得当，出手狠辣。",
+    "combat_hint": "精锐会在连续攻势间寻找破绽，宜观察其招式节奏。",
+    "skills": [
+      {
+        "name": "连环砍",
+        "chance": 0.3,
+        "power": 1.48
+      },
+      {
+        "name": "破门斩",
+        "chance": 0.2,
+        "power": 1.62,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 3
+      }
+    ],
+    "equipment": {
+      "weapon": "精铁剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 0.8,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 0.2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "破门斩",
+            "chance": 0.24,
+            "power": 1.58,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 3
+          }
+        ]
+      }
+    ],
+    "drops": [
+      {
+        "item": "金创药",
+        "chance": 0.16
+      }
+    ]
+  },
+  "黑风寨执法头目": {
+    "hp": 420,
+    "atk": 44,
+    "defense": 15,
+    "exp": 207,
+    "gold": 72,
+    "level": 9,
+    "tier": "elite",
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨执法头目专管寨中刑罚与巡查，刀法凌厉，善于封堵退路。",
+    "combat_hint": "其断腕刀势重且带流血，气血不足时应优先稳住局面。",
+    "skills": [
+      {
+        "name": "断腕刀",
+        "chance": 0.24,
+        "power": 1.58,
+        "effect": "bleed",
+        "turns": 3,
+        "value": 4
+      },
+      {
+        "name": "横刀封路",
+        "chance": 0.28,
+        "power": 1.42
+      }
+    ],
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 0.8,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 0.2,
+        "equipment": {
+          "weapon": "精铁剑",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "破门斩",
+            "chance": 0.22,
+            "power": 1.6,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      }
+    ],
+    "drops": [
+      {
+        "item": "金创药",
+        "chance": 0.22
+      }
+    ]
+  },
+  "黑风寨伏击手": {
+    "level": 9,
+    "tier": "normal",
+    "hp": 285,
+    "defense": 12,
+    "exp": 115,
+    "gold": 35,
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "山寨护肩"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 7,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "伏身突斩",
+            "chance": 0.26,
+            "power": 1.45
+          },
+          {
+            "name": "封路横刀",
+            "chance": 0.18,
+            "power": 1.25
+          }
+        ]
+      },
+      {
+        "weight": 3,
+        "equipment": {
+          "weapon": "雾隐短刃",
+          "armor": "皮甲"
+        },
+        "skills": [
+          {
+            "name": "贴身短刺",
+            "chance": 0.25,
+            "power": 1.35
+          },
+          {
+            "name": "伏身突斩",
+            "chance": 0.18,
+            "power": 1.45
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "伏身突斩",
+        "chance": 0.26,
+        "power": 1.45
+      },
+      {
+        "name": "封路横刀",
+        "chance": 0.18,
+        "power": 1.25
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.2,
+        "min_qty": 1,
+        "max_qty": 2
+      }
+    ],
+    "desc": "黑风寨外围的伏击者，擅长藏在树后突袭，装备轻便，常在对手反应不及前封住退路。",
+    "combat_hint": "留意其突然贴近与横刀封路；保持气血，避免被连续压制。",
+    "atk": 40
+  },
+  "黑风寨刀阵头目": {
+    "level": 10,
+    "tier": "elite",
+    "hp": 462,
+    "defense": 16,
+    "exp": 234,
+    "gold": 60,
+    "equipment": {
+      "weapon": "断岳刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "三步压阵",
+            "chance": 0.28,
+            "power": 1.58
+          },
+          {
+            "name": "断岳重斩",
+            "chance": 0.2,
+            "power": 1.75,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "三步压阵",
+            "chance": 0.28,
+            "power": 1.5
+          },
+          {
+            "name": "封路横刀",
+            "chance": 0.22,
+            "power": 1.4
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "三步压阵",
+        "chance": 0.28,
+        "power": 1.58
+      },
+      {
+        "name": "断岳重斩",
+        "chance": 0.2,
+        "power": 1.75,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.28,
+        "min_qty": 1,
+        "max_qty": 2
+      }
+    ],
+    "desc": "负责指挥外围刀阵的悍匪头目，使用厚背重刀，善于用步法逼迫来敌进入狭窄位置。",
+    "combat_hint": "重刀招式蓄势较明显；尽量避免在狭窄地形中硬接连续劈斩。",
+    "atk": 48
+  },
+  "黑风寨守关首领": {
+    "level": 11,
+    "tier": "boss",
+    "hp": 710,
+    "defense": 18,
+    "exp": 438,
+    "gold": 160,
+    "equipment": {
+      "weapon": "断岳刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.12,
+    "skills": [
+      {
+        "name": "断岳重斩",
+        "chance": 0.25,
+        "power": 1.85,
+        "effect": "bleed",
+        "turns": 3,
+        "value": 5,
+        "ai": {
+          "priority": 20
+        }
+      },
+      {
+        "name": "横刀封关",
+        "chance": 0.32,
+        "power": 1.55,
+        "ai": {
+          "priority": 10
+        }
+      },
+      {
+        "name": "困兽回斩",
+        "id": "blackwind_pass_feral_counter",
+        "telegraph": true,
+        "chance": 0.35,
+        "power": 2.0,
+        "ai": {
+          "priority": 35,
+          "phase_at_least": 2
+        }
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 1.0,
+        "guaranteed": true,
+        "quantity": 1
+      },
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.5,
+        "quantity": 1
+      }
+    ],
+    "manual_drop": {
+      "item": "黑风刀法秘笈",
+      "chance": 0.002
+    },
+    "desc": "镇守山脊旧烽台的黑风寨首领，身披锁子甲，手持断岳刀，擅长以重斩和回身刀封锁进退。",
+    "combat_hint": "其重斩与回身刀威力很高；准备疗伤物品，抓住其强招落空后的间隙反击。",
+    "atk": 56
+  },
+  "铁背矿獾": {
+    "hp": 165,
+    "atk": 24,
+    "defense": 8,
+    "exp": 65,
+    "gold": 18,
+    "level": 5,
+    "tier": "normal",
+    "skills": [
+      {
+        "name": "掘地冲撞",
+        "chance": 0.24,
+        "power": 1.35,
+        "effect": "stun",
+        "turns": 1
+      }
+    ],
+    "drops": [
+      {
+        "item": "铁矿石",
+        "chance": 0.45,
+        "min_qty": 1,
+        "max_qty": 1
+      }
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "desc": "铁背矿獾常在矿脉深处刨掘矿石，背甲坚硬，受惊后会低头猛撞。它并非凶猛异兽，但在狭窄矿道里很难闪避。",
+    "combat_hint": "留意它伏低身子准备冲撞的动作；体力不足时不要在狭窄矿道里硬拼。"
+  },
+  "黑风寨游骑": {
+    "hp": 310,
+    "atk": 44,
+    "defense": 13,
+    "exp": 130,
+    "gold": 58,
+    "level": 10,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 7,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "皮甲"
+        }
+      },
+      {
+        "weight": 3,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "游骑突斩",
+            "chance": 0.24,
+            "power": 1.5
+          },
+          {
+            "name": "回马刀",
+            "chance": 0.16,
+            "power": 1.3
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "游骑突斩",
+        "chance": 0.28,
+        "power": 1.45
+      },
+      {
+        "name": "回马刀",
+        "chance": 0.18,
+        "power": 1.3
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.2,
+        "min_qty": 1,
+        "max_qty": 2
+      },
+      {
+        "item": "金创药",
+        "chance": 0.15
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨的游动骑哨，沿山道来回巡弋，借地势俯冲突袭，得手后迅速拨马回身。",
+    "combat_hint": "游骑善用回马刀，追击时留意其突然折返；先稳住阵脚再图反击。"
+  },
+  "黑风寨悍卒": {
+    "hp": 335,
+    "atk": 48,
+    "defense": 14,
+    "exp": 146,
+    "gold": 66,
+    "level": 11,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "断岳刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "悍勇劈砍",
+            "chance": 0.24,
+            "power": 1.42
+          },
+          {
+            "name": "重刀劈山",
+            "chance": 0.16,
+            "power": 1.58
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "悍勇劈砍",
+        "chance": 0.28,
+        "power": 1.5
+      },
+      {
+        "name": "重刀劈山",
+        "chance": 0.2,
+        "power": 1.65,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.25
+      },
+      {
+        "item": "金创药",
+        "chance": 0.18
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "黑风寨中久经厮杀的悍卒，披锁子甲、持厚背刀，招式不求花巧，只求一刀压住来敌。",
+    "combat_hint": "悍卒重刀势沉，硬接容易受创；留意其劈砍后的短暂收势。"
+  },
+  "黑市死士": {
+    "hp": 345,
+    "atk": 52,
+    "defense": 15,
+    "exp": 163,
+    "gold": 82,
+    "level": 12,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "玄铁重剑",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "玄铁重剑",
+          "armor": "锁子甲"
+        }
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "死士短打",
+            "chance": 0.22,
+            "power": 1.32
+          },
+          {
+            "name": "搏命一击",
+            "chance": 0.2,
+            "power": 1.55
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "搏命一击",
+        "chance": 0.26,
+        "power": 1.6,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      },
+      {
+        "name": "死士短打",
+        "chance": 0.2,
+        "power": 1.3
+      }
+    ],
+    "drops": [
+      {
+        "item": "大还丹",
+        "chance": 0.12
+      },
+      {
+        "item": "铁矿石",
+        "chance": 0.3
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "desc": "黑市豢养的死士，行事不留余地，出手便以伤换命，寻常江湖客不愿与之纠缠。",
+    "combat_hint": "死士招招拼命，气血被压低后攻势更急；备好疗伤药，避免与其对拼。"
+  },
+  "断魂岭马贼": {
+    "hp": 420,
+    "atk": 56,
+    "defense": 16,
+    "exp": 181,
+    "gold": 88,
+    "level": 13,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "断岳刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "岭道截杀",
+            "chance": 0.28,
+            "power": 1.5
+          },
+          {
+            "name": "回马刀",
+            "chance": 0.18,
+            "power": 1.32
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "岭道截杀",
+            "chance": 0.24,
+            "power": 1.42
+          },
+          {
+            "name": "夺路横斩",
+            "chance": 0.16,
+            "power": 1.36
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "岭道截杀",
+        "chance": 0.28,
+        "power": 1.5
+      },
+      {
+        "name": "回马刀",
+        "chance": 0.18,
+        "power": 1.32
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.25
+      },
+      {
+        "item": "金创药",
+        "chance": 0.18
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "断魂岭上的游散马贼，熟悉栈道每一处拐角，惯于借山势截杀落单的行商与猎户。",
+    "combat_hint": "马贼出刀急而散，留意其回马刀；被逼到崖边时不宜恋战。"
+  },
+  "岭道弩手": {
+    "hp": 420,
+    "atk": 56,
+    "defense": 16,
+    "exp": 181,
+    "gold": 80,
+    "level": 13,
+    "tier": "ranged",
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "皮甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "皮甲"
+        },
+        "skills": [
+          {
+            "name": "弩矢连射",
+            "chance": 0.3,
+            "power": 1.45
+          },
+          {
+            "name": "穿甲弩矢",
+            "chance": 0.18,
+            "power": 1.55,
+            "effect": "armor_break",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "铁剑",
+          "armor": "皮甲"
+        },
+        "skills": [
+          {
+            "name": "弩矢连射",
+            "chance": 0.26,
+            "power": 1.4
+          },
+          {
+            "name": "短刀护身",
+            "chance": 0.18,
+            "power": 1.3
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "弩矢连射",
+        "chance": 0.3,
+        "power": 1.45
+      },
+      {
+        "name": "穿甲弩矢",
+        "chance": 0.18,
+        "power": 1.55,
+        "effect": "armor_break",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.2
+      },
+      {
+        "item": "金创药",
+        "chance": 0.15
+      }
+    ],
+    "ai": {
+      "style": "ranged",
+      "faction": "bandit"
+    },
+    "desc": "躲在断崖与石缝后的弩手，背一具旧弩、腰悬短刀，专挑来敌换气时放箭。",
+    "combat_hint": "弩手不与你硬拼，却会用穿甲弩矢破开护具；近身前先稳住气血。"
+  },
+  "枯骨涧刀客": {
+    "hp": 450,
+    "atk": 60,
+    "defense": 17,
+    "exp": 200,
+    "gold": 96,
+    "level": 14,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "苍脊刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "苍脊刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "枯骨刀法",
+            "chance": 0.3,
+            "power": 1.52
+          },
+          {
+            "name": "断筋斩",
+            "chance": 0.18,
+            "power": 1.45,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "枯骨刀法",
+            "chance": 0.26,
+            "power": 1.46
+          },
+          {
+            "name": "涧底回斩",
+            "chance": 0.16,
+            "power": 1.38
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "枯骨刀法",
+        "chance": 0.3,
+        "power": 1.52
+      },
+      {
+        "name": "断筋斩",
+        "chance": 0.18,
+        "power": 1.45,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
         "chance": 0.3
       },
       {
-        "item": "大还丹",
-        "chance": 0.8
+        "item": "金创药",
+        "chance": 0.2
       }
-    ]
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "在枯骨涧里试刀度日的亡命刀客，刀路直来直去，却比岭道马贼更沉更狠。",
+    "combat_hint": "刀客的断筋斩会留下流血伤势；若气血不足，先退开一步再图反击。"
+  },
+  "断魂堡守卫长": {
+    "hp": 630,
+    "atk": 66,
+    "defense": 21,
+    "exp": 360,
+    "gold": 140,
+    "level": 14,
+    "tier": "elite",
+    "equipment": {
+      "weapon": "苍脊刀",
+      "armor": "苍脊重甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "苍脊刀",
+          "armor": "苍脊重甲"
+        },
+        "skills": [
+          {
+            "name": "堡门拒敌",
+            "chance": 0.28,
+            "power": 1.55
+          },
+          {
+            "name": "裂甲重斩",
+            "chance": 0.2,
+            "power": 1.7,
+            "effect": "armor_break",
+            "turns": 2,
+            "value": 5
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "堡门拒敌",
+            "chance": 0.26,
+            "power": 1.48
+          },
+          {
+            "name": "死守横斩",
+            "chance": 0.18,
+            "power": 1.4
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "堡门拒敌",
+        "chance": 0.28,
+        "power": 1.55
+      },
+      {
+        "name": "裂甲重斩",
+        "chance": 0.2,
+        "power": 1.7,
+        "effect": "armor_break",
+        "turns": 2,
+        "value": 5
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.35
+      },
+      {
+        "item": "大还丹",
+        "chance": 0.1
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "desc": "断魂堡的守门悍将，身披重甲、手持苍脊刀，退路被断后反而越战越稳。",
+    "combat_hint": "守卫长擅以裂甲重斩削弱护具；不要与其在堡门狭窄处久战。"
+  },
+  "断魂堡死卫": {
+    "hp": 480,
+    "atk": 64,
+    "defense": 18,
+    "exp": 220,
+    "gold": 100,
+    "level": 15,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "苍脊刀",
+      "armor": "锁子甲"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "苍脊刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "死战刀",
+            "chance": 0.3,
+            "power": 1.55
+          },
+          {
+            "name": "搏命回斩",
+            "chance": 0.16,
+            "power": 1.45,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "锁子甲"
+        },
+        "skills": [
+          {
+            "name": "死战刀",
+            "chance": 0.26,
+            "power": 1.48
+          },
+          {
+            "name": "舍身劈砍",
+            "chance": 0.15,
+            "power": 1.6
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "死战刀",
+        "chance": 0.3,
+        "power": 1.55
+      },
+      {
+        "name": "搏命回斩",
+        "chance": 0.16,
+        "power": 1.45,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.3
+      },
+      {
+        "item": "金创药",
+        "chance": 0.2
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "断魂堡主豢养的死卫，早已不把生死放在心上，出手只求拖住来敌。",
+    "combat_hint": "死卫攻势连绵且不畏伤，速战速决比拖延更稳妥。"
+  },
+  "断魂岭夜行客": {
+    "hp": 672,
+    "atk": 70,
+    "defense": 22,
+    "exp": 396,
+    "gold": 160,
+    "level": 15,
+    "tier": "elite",
+    "respawn_seconds": 240,
+    "equipment": {
+      "weapon": "苍脊刀",
+      "armor": "苍脊重甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "苍脊刀",
+          "armor": "苍脊重甲"
+        },
+        "skills": [
+          {
+            "name": "夜袭斩",
+            "chance": 0.28,
+            "power": 1.6
+          },
+          {
+            "name": "夺路翻刀",
+            "chance": 0.18,
+            "power": 1.5,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "苍脊重甲"
+        },
+        "skills": [
+          {
+            "name": "夜袭斩",
+            "chance": 0.24,
+            "power": 1.52
+          },
+          {
+            "name": "断崖回锋",
+            "chance": 0.16,
+            "power": 1.46
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "夜袭斩",
+        "chance": 0.28,
+        "power": 1.6
+      },
+      {
+        "name": "夺路翻刀",
+        "chance": 0.18,
+        "power": 1.5,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "断魂精铁",
+        "chance": 1.0,
+        "guaranteed": true
+      },
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.45
+      },
+      {
+        "item": "大还丹",
+        "chance": 0.12
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "desc": "常在断魂崖夜色里出没的独行刀客，专挑落单行商下手。他熟悉崖上每条窄道，来去无声。",
+    "combat_hint": "夜行客身法灵活且会借崖势游斗，稳住气血再寻机反击。"
+  },
+  "断魂堡主": {
+    "hp": 864,
+    "atk": 76,
+    "defense": 22,
+    "exp": 660,
+    "gold": 260,
+    "level": 15,
+    "tier": "boss",
+    "equipment": {
+      "weapon": "断魂刀",
+      "armor": "苍脊重甲"
+    },
+    "equipment_drop_chance": 0.12,
+    "skills": [
+      {
+        "name": "断魂斩",
+        "chance": 0.28,
+        "power": 1.9,
+        "effect": "bleed",
+        "turns": 3,
+        "value": 5,
+        "ai": {
+          "priority": 15
+        }
+      },
+      {
+        "name": "慑魂刀风",
+        "chance": 0.22,
+        "power": 1.3,
+        "effect": "stun",
+        "turns": 1,
+        "ai": {
+          "priority": 30,
+          "player_hp_below": 0.75,
+          "target_status_absent": [
+            "stun"
+          ]
+        }
+      },
+      {
+        "name": "绝命三连",
+        "chance": 0.35,
+        "power": 1.8,
+        "ai": {
+          "priority": 40,
+          "phase_at_least": 2
+        }
+      },
+      {
+        "name": "断魂绝刀",
+        "id": "duanhun_fortress_soul_sever",
+        "telegraph": true,
+        "chance": 0.45,
+        "power": 2.25,
+        "ai": {
+          "priority": 60,
+          "phase_at_least": 3
+        }
+      }
+    ],
+    "drops": [
+      {
+        "item": "大还丹",
+        "chance": 0.6,
+        "guaranteed": true
+      },
+      {
+        "item": "黑风寨军械残片",
+        "chance": 1.0,
+        "guaranteed": true,
+        "quantity": 2
+      }
+    ],
+    "ai": {
+      "style": "boss",
+      "faction": "bandit"
+    },
+    "phases": [
+      {
+        "threshold": 0.65,
+        "message": "【断魂堡主】缓缓起身，刀锋拖过地面，堡内寒意骤盛！",
+        "atk_mult": 1.12,
+        "defense_bonus": 1
+      },
+      {
+        "threshold": 0.3,
+        "message": "【断魂堡主】双目赤红，舍了守势，要以断魂刀做最后一搏！",
+        "atk_mult": 1.28,
+        "defense_bonus": -1,
+        "heal_percent": 0.04
+      }
+    ],
+    "desc": "收拢黑风寨残部、盘踞断魂堡的悍匪首领，刀法狠辣，最善在对手气竭时连出杀招。",
+    "combat_hint": "堡主阶段变化明显，留足疗伤药与内力；不要在其气势正盛时硬拼。"
   }
 }

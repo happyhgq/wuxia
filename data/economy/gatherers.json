@@ -1,0 +1,54 @@
+{
+  "采药人阿芷": {
+    "room_id": "mistwood_trail",
+    "item": "草药",
+    "interval": 3,
+    "amount": 2,
+    "capacity": 16,
+    "resource_room_id": "mistwood_stream",
+    "action": "gather",
+    "work_hours": [
+      6,
+      17
+    ]
+  },
+  "守祠残僧": {
+    "room_id": "sunken_shrine",
+    "item": "雾露草",
+    "interval": 4,
+    "amount": 1,
+    "capacity": 8,
+    "resource_room_id": "sunken_shrine",
+    "action": "gather",
+    "work_hours": [
+      7,
+      16
+    ]
+  },
+  "樵夫老周": {
+    "room_id": "mistwood_trail",
+    "resource_room_id": "mistwood_trail",
+    "item": "木材",
+    "interval": 4,
+    "amount": 2,
+    "capacity": 16,
+    "action": "chop",
+    "work_hours": [
+      5,
+      17
+    ]
+  },
+  "矿工顾三": {
+    "room_id": "abandoned_iron_mine",
+    "resource_room_id": "deep_iron_gallery",
+    "item": "铁矿石",
+    "interval": 5,
+    "amount": 3,
+    "capacity": 10,
+    "action": "mine",
+    "work_hours": [
+      6,
+      19
+    ]
+  }
+}
