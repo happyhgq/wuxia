@@ -175,8 +175,23 @@ def test_four_sect_quests_are_gated_l15_repeatables_without_permanent_repeat_gro
             "exp": 260,
             "gold": 110,
             "items": [{"item": "断魂精铁", "quantity": 1}],
-            "sect_reputation": {expected["sect"]: 8},
+            "sect_reputation": {
+                "少林": 8 if expected["sect"] == "少林" else -2,
+                "武当": 8 if expected["sect"] == "武当" else -2,
+                "华山": 8 if expected["sect"] == "华山" else -2,
+                "铁衣门": 8 if expected["sect"] == "铁衣门" else -2,
+            },
             "honor_delta": 1,
+        }
+        assert quest["on_complete"] == {
+            "set_flags": {
+                {
+                    "少林": "world:sect_l15:shaolin",
+                    "武当": "world:sect_l15:wudang",
+                    "华山": "world:sect_l15:huashan",
+                    "铁衣门": "world:sect_l15:tieyi",
+                }[expected["sect"]]: True
+            }
         }
         assert quest["repeat_reward"] == {
             "exp": 200,
@@ -203,6 +218,9 @@ def test_first_sect_completion_pays_reputation_and_honor_but_repeat_does_not(mon
     assert first._jianghu_profile()["honor"] == honor_before + 1
     assert first.inventory.count("断魂精铁") == 1
     assert name in first.completed_quests
+    assert first.get_sect_reputation("武当") == -2
+    assert first.get_flag("world:sect_l15:shaolin", False) is True
+    assert "武当 门派声望 -2" in output
 
     repeat = _ready_player()
     repeat.completed_quests.append(name)
@@ -211,11 +229,13 @@ def test_first_sect_completion_pays_reputation_and_honor_but_repeat_does_not(mon
     repeat.active_quests[name] = 2
     honor_before = repeat._jianghu_profile()["honor"]
     rep_before = repeat.get_sect_reputation("少林")
+    other_before = repeat.get_sect_reputation("武当")
     _deliver(repeat, name)
     assert repeat.exp == 200
     assert repeat.gold == 190
     assert repeat.inventory.count("断魂精铁") == 1
     assert repeat.get_sect_reputation("少林") == rep_before
+    assert repeat.get_sect_reputation("武当") == other_before
     assert repeat._jianghu_profile()["honor"] == honor_before
     assert repeat.get_var(f"quest_repeat_last_completed:{name}") == repeat.get_quest_clock()
 

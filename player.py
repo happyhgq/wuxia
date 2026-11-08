@@ -991,7 +991,20 @@ class Player:
                 entry["learned"] = True
                 entry["mastery"] = max(1, int(entry.get("mastery", 0)))
                 break
-        return True, f"正式拜入【{sect_name}】门下。"
+        message = f"正式拜入【{sect_name}】门下。"
+        served_prefixes = {"少林": "shaolin", "武当": "wudang", "华山": "huashan", "铁衣门": "tieyi"}
+        served_elsewhere = any(
+            self.get_flag(f"world:sect_l15:{prefix}", False)
+            for other, prefix in served_prefixes.items()
+            if other != sect_name
+        )
+        reputation = self.get_sect_reputation(sect_name)
+        if served_elsewhere and reputation < 0:
+            message += (
+                f" 门中翻过你的旧档：你曾替别派在断魂岭出手，{sect_name}对你的声望为 {reputation:+d}；"
+                "入门后需先修复这段嫌隙。"
+            )
+        return True, message
 
     def leave_sect(self):
         current = self.get_sect()
@@ -1023,7 +1036,24 @@ class Player:
             ]
             for key in rank_flags:
                 self.set_flag(key, False)
-        return True, f"你已离开【{current}】，恢复江湖散人身份。本门正式职位与师承已解除；既往声望和历练记录仍予保留。"
+        message = f"你已离开【{current}】，恢复江湖散人身份。本门正式职位与师承已解除；既往声望和历练记录仍予保留。"
+        served_prefixes = {"少林": "shaolin", "武当": "wudang", "华山": "huashan", "铁衣门": "tieyi"}
+        served = [
+            name for name, prefix in served_prefixes.items()
+            if self.get_flag(f"world:sect_l15:{prefix}", False)
+        ]
+        if served:
+            marks = [
+                f"{name}{self.get_sect_reputation(name):+d}"
+                for name in ("少林", "武当", "华山", "铁衣门")
+                if name != current
+            ]
+            message += (
+                f" 你替【{'、'.join(served)}】在断魂岭出手的立场，江湖各门都记着："
+                + "、".join(marks)
+                + "。转投他门时，这些旧账不会随退门一笔勾销。"
+            )
+        return True, message
 
     def get_sect_summary(self, sect_name=None):
         sect_name = sect_name or self.get_sect()

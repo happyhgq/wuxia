@@ -12,7 +12,7 @@
 ```text
 Wuxia · 武侠文字 RPG
 仓库：happyhgq/wuxia
-版本：P3.2 BL1.0 Alpha307
+版本：P3.2 BL1.0 Alpha308
 存档：SAVE_VERSION = 12
 ```
 

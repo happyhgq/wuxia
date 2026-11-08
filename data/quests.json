@@ -986,6 +986,210 @@
     "difficulty": "高难",
     "follow_up_hint": "万商会会长正在追查暗仓转运，可回城找他。"
   },
+  "北境暗线·了断": {
+    "title": "北境暗线·了断",
+    "npc": "巡河老兵",
+    "turn_in_npc": "巡河老兵",
+    "target_type": "talk",
+    "target_name": "北境货栈掌柜",
+    "required_cnt": 1,
+    "desc": "北境失货案与沉星黑市在河埠交汇，私枭手里还扣着最后一批货。巡河老兵要你先清点货箱、截住私枭，再到黑市传话，最后定下这条暗线是封、是留，还是设卡查验。",
+    "requires": {
+      "flags": [
+        "quest_completed:北境失货追查",
+        "quest_completed:沉星黑市"
+      ],
+      "level": 8
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:northfront_blackmarket_settlement:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:northfront_blackmarket_settlement:resolved": true
+      }
+    },
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "北境货栈掌柜",
+        "required_cnt": 1,
+        "desc": "清点货栈封存的货箱，确认最后一批私货的去向。"
+      },
+      {
+        "target_type": "kill",
+        "target_name": "河埠私枭",
+        "required_cnt": 1,
+        "desc": "在河埠截住接货的私枭，夺回最后一批私货。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市接头人",
+        "required_cnt": 1,
+        "desc": "到沉星黑市当面传话，看对方肯不肯收手。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "巡河老兵",
+        "required_cnt": 1,
+        "desc": "回北境镇门复命，把这条暗线的处置定下来。"
+      }
+    ],
+    "reward": {
+      "exp": 380,
+      "gold": 140
+    },
+    "choices": [
+      {
+        "id": "seal_the_line",
+        "title": "封死暗线",
+        "requires": {
+          "any": [
+            {
+              "flags": [
+                "northfront:smuggling_route_exposed"
+              ]
+            },
+            {
+              "flags": [
+                "sunken_ruins:evidence_to_officials"
+              ]
+            }
+          ]
+        },
+        "reward": {
+          "exp": 380,
+          "gold": 140,
+          "honor_delta": 7,
+          "jianghu_action": "assist_officials",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:northfront:blackmarket_line_closed": true,
+            "world:northfront:blackmarket_line_settled": true
+          },
+          "region_effects": {
+            "northfront_town": {
+              "security": 10,
+              "commerce": -6,
+              "travel": -2
+            },
+            "guiyun_city": {
+              "security": 4,
+              "commerce": -3
+            }
+          },
+          "faction_relations": {
+            "江湖:官府": 4,
+            "江湖:商会": 2,
+            "江湖:黑市": -5
+          },
+          "relations": {
+            "巡河老兵": 4,
+            "北境货栈掌柜": 2,
+            "黑市接头人": -3
+          }
+        }
+      },
+      {
+        "id": "keep_the_line",
+        "title": "留一线暗路",
+        "requires": {
+          "any": [
+            {
+              "flags": [
+                "northfront:smuggler_deal_made"
+              ]
+            },
+            {
+              "flags": [
+                "sunken_ruins:evidence_to_black_market"
+              ]
+            }
+          ]
+        },
+        "reward": {
+          "exp": 380,
+          "gold": 240,
+          "infamy_delta": 2,
+          "jianghu_action": "black_market_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:northfront:blackmarket_line_tolerated": true,
+            "world:northfront:blackmarket_line_settled": true
+          },
+          "region_effects": {
+            "northfront_town": {
+              "security": -7,
+              "commerce": 9,
+              "travel": 4
+            },
+            "guiyun_city": {
+              "security": -3,
+              "commerce": 5
+            }
+          },
+          "faction_relations": {
+            "江湖:黑市": 5,
+            "江湖:商会": -3,
+            "江湖:官府": -2
+          },
+          "relations": {
+            "黑市接头人": 4,
+            "巡河老兵": -3,
+            "北境货栈掌柜": -1
+          }
+        }
+      },
+      {
+        "id": "joint_checkpoint",
+        "title": "设卡查验",
+        "requires": {},
+        "reward": {
+          "exp": 360,
+          "gold": 180,
+          "honor_delta": 5,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:northfront:blackmarket_line_supervised": true,
+            "world:northfront:blackmarket_line_settled": true
+          },
+          "region_effects": {
+            "northfront_town": {
+              "security": 4,
+              "commerce": 2,
+              "travel": -3
+            },
+            "guiyun_city": {
+              "security": 2,
+              "commerce": 1,
+              "travel": -1
+            }
+          },
+          "faction_relations": {
+            "江湖:官府": 2,
+            "江湖:商会": 2,
+            "江湖:黑市": -2
+          },
+          "relations": {
+            "巡河老兵": 2,
+            "北境货栈掌柜": 2,
+            "黑市接头人": -1
+          }
+        }
+      }
+    ],
+    "difficulty": "重大",
+    "follow_up_hint": "北境—黑市这条暗线已经了断；若账目背后还有主谋，可去捕快营问询捕头的打算。"
+  },
   "暗仓转运疑云": {
     "title": "暗仓转运疑云·截查私运",
     "npc": "万商会会长",
@@ -2606,6 +2810,187 @@
     "difficulty": "进阶",
     "follow_up_hint": "门派日常已毕，可继续修习武学或外出历练。"
   },
+  "少林收束·戒律与慈悲": {
+    "title": "少林收束·戒律与慈悲",
+    "npc": "少林戒律僧",
+    "turn_in_npc": "少林戒律僧",
+    "target_type": "talk",
+    "target_name": "少林守山僧",
+    "required_cnt": 1,
+    "desc": "山门外聚起流民，也有人借机混入山道。戒律僧要你先问清来路、清退混入的巡哨，再回讲经堂定下寺门往后是严守戒律，还是以慈悲为先。",
+    "requires": {
+      "sect": "少林",
+      "completed_quests": [
+        "少林戒律·问心持戒",
+        "少林护寺·山门驱谍"
+      ],
+      "level": 6,
+      "sect_reputation": {
+        "少林": {
+          "gte": 30
+        }
+      }
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:shaolin_closure:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:shaolin_closure:resolved": true
+      }
+    },
+    "stages": [
+      {
+        "desc": "到山门向守山僧问明流民与可疑香客的来路。",
+        "target_type": "talk",
+        "target_name": "少林守山僧",
+        "required_cnt": 1
+      },
+      {
+        "desc": "沿山道清除混入流民中的两名黑风寨巡哨。",
+        "target_type": "kill",
+        "target_name": "黑风寨精锐",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回讲经堂向戒律僧复命，定下寺门往后持守的分寸。",
+        "target_type": "talk",
+        "target_name": "少林戒律僧",
+        "required_cnt": 1
+      }
+    ],
+    "reward": {
+      "exp": 260,
+      "gold": 90
+    },
+    "choices": [
+      {
+        "id": "precepts_line",
+        "title": "守住戒律",
+        "requires": {
+          "flags": [
+            "sect:shaolin:discipline:precepts"
+          ]
+        },
+        "reward": {
+          "exp": 280,
+          "gold": 100,
+          "item": "菩提念珠",
+          "sect_reputation": {
+            "少林": 28
+          },
+          "honor_delta": 4,
+          "jianghu_action": "assist_officials",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:shaolin:closure_precepts": true
+          },
+          "region_effects": {
+            "shaolin_mountain": {
+              "security": 6,
+              "commerce": -2,
+              "travel": -3
+            }
+          },
+          "faction_relations": {
+            "少林:官府": 3,
+            "少林:江湖": -2
+          },
+          "relations": {
+            "少林戒律僧": 4,
+            "少林守山僧": 2
+          }
+        }
+      },
+      {
+        "id": "guard_line",
+        "title": "护人即持戒",
+        "requires": {
+          "flags": [
+            "sect:shaolin:discipline:guard"
+          ]
+        },
+        "reward": {
+          "exp": 270,
+          "gold": 80,
+          "items": [
+            {
+              "item": "金创药",
+              "quantity": 2
+            }
+          ],
+          "sect_reputation": {
+            "少林": 22
+          },
+          "honor_delta": 6,
+          "jianghu_action": "help_people",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:shaolin:closure_guard": true
+          },
+          "region_effects": {
+            "shaolin_mountain": {
+              "security": -2,
+              "commerce": 5,
+              "travel": 6
+            }
+          },
+          "faction_relations": {
+            "少林:江湖": 4,
+            "少林:商会": 2
+          },
+          "relations": {
+            "少林戒律僧": 5,
+            "少林守山僧": 3
+          }
+        }
+      },
+      {
+        "id": "middle_line",
+        "title": "戒护并重",
+        "requires": {},
+        "reward": {
+          "exp": 260,
+          "gold": 90,
+          "item": "清心散",
+          "sect_reputation": {
+            "少林": 20
+          },
+          "honor_delta": 5,
+          "jianghu_action": "help_people",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:shaolin:closure_middle": true
+          },
+          "region_effects": {
+            "shaolin_mountain": {
+              "security": 3,
+              "commerce": 2,
+              "travel": 2
+            }
+          },
+          "faction_relations": {
+            "少林:江湖": 2,
+            "少林:官府": 2
+          },
+          "relations": {
+            "少林戒律僧": 4,
+            "少林守山僧": 2
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "少林这条路已经选定；正式受戒之后，可向传功师兄申请更高身份。"
+  },
   "武当剑理·松间问道": {
     "title": "武当剑理·松间问道",
     "npc": "武当传功师兄",
@@ -2792,6 +3177,187 @@
     "difficulty": "进阶",
     "follow_up_hint": "门派日常已毕，可继续修习武学或外出历练。"
   },
+  "武当收束·剑理与内功": {
+    "title": "武当收束·剑理与内功",
+    "npc": "武当传功师父",
+    "turn_in_npc": "武当传功师父",
+    "target_type": "talk",
+    "target_name": "武当守山弟子",
+    "required_cnt": 1,
+    "desc": "山下商队被劫，门中为如何应对起了分歧。传功师父要你先问明守山弟子的见闻、清退动手的山贼，再回太和演武场定下武当此后的应对。",
+    "requires": {
+      "sect": "武当",
+      "completed_quests": [
+        "武当剑理·松间问道",
+        "武当内功·紫霄听息"
+      ],
+      "level": 6,
+      "sect_reputation": {
+        "武当": {
+          "gte": 30
+        }
+      }
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:wudang_closure:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:wudang_closure:resolved": true
+      }
+    },
+    "stages": [
+      {
+        "desc": "到山门向守山弟子问明劫案经过与山道动静。",
+        "target_type": "talk",
+        "target_name": "武当守山弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "在山道截住两名动手的劫镖山贼。",
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回太和演武场向传功师父复命，定下武当的应对。",
+        "target_type": "talk",
+        "target_name": "武当传功师父",
+        "required_cnt": 1
+      }
+    ],
+    "reward": {
+      "exp": 260,
+      "gold": 90
+    },
+    "choices": [
+      {
+        "id": "observe_line",
+        "title": "以静观变",
+        "requires": {
+          "flags": [
+            "sect:wudang:sword_principle:observe"
+          ]
+        },
+        "reward": {
+          "exp": 280,
+          "gold": 95,
+          "item": "太极剑穗",
+          "sect_reputation": {
+            "武当": 28
+          },
+          "honor_delta": 3,
+          "jianghu_action": "solo_explore",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:wudang:closure_observe": true
+          },
+          "region_effects": {
+            "wudang_mountain": {
+              "security": 4,
+              "commerce": 1,
+              "travel": 3
+            }
+          },
+          "faction_relations": {
+            "武当:江湖": 3,
+            "武当:黑市": -2
+          },
+          "relations": {
+            "武当传功师父": 4,
+            "武当守山弟子": 2
+          }
+        }
+      },
+      {
+        "id": "direct_line",
+        "title": "以意驭剑",
+        "requires": {
+          "flags": [
+            "sect:wudang:sword_principle:direct"
+          ]
+        },
+        "reward": {
+          "exp": 290,
+          "gold": 70,
+          "items": [
+            {
+              "item": "清心散",
+              "quantity": 2
+            }
+          ],
+          "sect_reputation": {
+            "武当": 22
+          },
+          "honor_delta": 5,
+          "jianghu_action": "rescue_npc",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:wudang:closure_direct": true
+          },
+          "region_effects": {
+            "wudang_mountain": {
+              "security": 7,
+              "commerce": 3,
+              "travel": -2
+            }
+          },
+          "faction_relations": {
+            "武当:官府": 3,
+            "武当:商会": -2
+          },
+          "relations": {
+            "武当传功师父": 3,
+            "武当守山弟子": 4
+          }
+        }
+      },
+      {
+        "id": "middle_line",
+        "title": "剑理合一",
+        "requires": {},
+        "reward": {
+          "exp": 270,
+          "gold": 85,
+          "item": "清心散",
+          "sect_reputation": {
+            "武当": 20
+          },
+          "honor_delta": 4,
+          "jianghu_action": "help_people",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:wudang:closure_middle": true
+          },
+          "region_effects": {
+            "wudang_mountain": {
+              "security": 5,
+              "commerce": 2,
+              "travel": 1
+            }
+          },
+          "faction_relations": {
+            "武当:江湖": 2,
+            "武当:官府": 2
+          },
+          "relations": {
+            "武当传功师父": 3,
+            "武当守山弟子": 3
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "武当这条路已经选定；根基稳固后，可向传功师兄申请更高身份。"
+  },
   "华山剑理·松风听剑": {
     "title": "华山剑理·松风听剑",
     "npc": "华山传功师兄",
@@ -2927,6 +3493,188 @@
     },
     "difficulty": "高难",
     "follow_up_hint": "古道已清，可继续向传功师兄请教。"
+  },
+  "华山收束·剑锋与古道": {
+    "title": "华山收束·剑锋与古道",
+    "npc": "华山传功师兄",
+    "turn_in_npc": "华山传功师兄",
+    "target_type": "talk",
+    "target_name": "华山守门弟子",
+    "required_cnt": 1,
+    "desc": "古道商旅来求华山出面，山门为是否拔剑争论不休。传功师兄要你先问守门弟子、清退劫道山贼，再回演武场定下剑锋所指。",
+    "requires": {
+      "sect": "华山",
+      "completed_quests": [
+        "华山剑理·松风听剑",
+        "华山巡剑·古道清障"
+      ],
+      "level": 6,
+      "sect_reputation": {
+        "华山": {
+          "gte": 30
+        }
+      }
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:huashan_closure:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:huashan_closure:resolved": true
+      }
+    },
+    "stages": [
+      {
+        "desc": "到山门向守门弟子问明商旅求助与古道上的匪情。",
+        "target_type": "talk",
+        "target_name": "华山守门弟子",
+        "required_cnt": 1
+      },
+      {
+        "desc": "沿古道清退两名劫道山贼，护住来往商旅。",
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回演武场向传功师兄复命，定下华山剑锋所指。",
+        "target_type": "talk",
+        "target_name": "华山传功师兄",
+        "required_cnt": 1
+      }
+    ],
+    "reward": {
+      "exp": 260,
+      "gold": 90
+    },
+    "choices": [
+      {
+        "id": "speed_line",
+        "title": "快剑立威",
+        "requires": {
+          "flags": [
+            "sect:huashan:sword_principle:speed"
+          ]
+        },
+        "reward": {
+          "exp": 295,
+          "gold": 110,
+          "item": "华山剑穗",
+          "sect_reputation": {
+            "华山": 28
+          },
+          "honor_delta": 2,
+          "infamy_delta": 1,
+          "jianghu_action": "solo_explore",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:huashan:closure_speed": true
+          },
+          "region_effects": {
+            "huashan_mountain": {
+              "security": 4,
+              "commerce": 3,
+              "travel": -2
+            }
+          },
+          "faction_relations": {
+            "华山:商会": 4,
+            "华山:黑市": -2
+          },
+          "relations": {
+            "华山传功师兄": 3,
+            "华山守门弟子": 2
+          }
+        }
+      },
+      {
+        "id": "steady_line",
+        "title": "守剑护道",
+        "requires": {
+          "flags": [
+            "sect:huashan:sword_principle:steady"
+          ]
+        },
+        "reward": {
+          "exp": 270,
+          "gold": 85,
+          "items": [
+            {
+              "item": "行军干粮",
+              "quantity": 2
+            }
+          ],
+          "sect_reputation": {
+            "华山": 23
+          },
+          "honor_delta": 6,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:huashan:closure_steady": true
+          },
+          "region_effects": {
+            "huashan_mountain": {
+              "security": 6,
+              "commerce": 1,
+              "travel": 4
+            }
+          },
+          "faction_relations": {
+            "华山:官府": 3,
+            "华山:商会": 2
+          },
+          "relations": {
+            "华山传功师兄": 4,
+            "华山守门弟子": 4
+          }
+        }
+      },
+      {
+        "id": "middle_line",
+        "title": "快守相济",
+        "requires": {},
+        "reward": {
+          "exp": 280,
+          "gold": 95,
+          "item": "行军干粮",
+          "sect_reputation": {
+            "华山": 20
+          },
+          "honor_delta": 4,
+          "jianghu_action": "help_people",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:huashan:closure_middle": true
+          },
+          "region_effects": {
+            "huashan_mountain": {
+              "security": 5,
+              "commerce": 2,
+              "travel": 1
+            }
+          },
+          "faction_relations": {
+            "华山:商会": 2,
+            "华山:官府": 2
+          },
+          "relations": {
+            "华山传功师兄": 3,
+            "华山守门弟子": 3
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "华山这条路已经选定；剑路既明，可继续向传功师兄请教更高深的剑法。"
   },
   "铁衣门护运·商路问价": {
     "title": "铁衣门护运·商路问价",
@@ -3064,6 +3812,189 @@
     },
     "difficulty": "高难",
     "follow_up_hint": "商路已稳，可继续在铁衣门中历练。"
+  },
+  "铁衣门收束·行规与义护": {
+    "title": "铁衣门收束·行规与义护",
+    "npc": "铁衣门护运执事",
+    "turn_in_npc": "铁衣门护运执事",
+    "target_type": "talk",
+    "target_name": "铁衣门接引执事",
+    "required_cnt": 1,
+    "desc": "一桩赔本镖压在案上：按行规收足价，还是为义护减价。护运执事要你先与接引执事核价、清退劫镖山贼，再回外院定下铁衣门在商路上的规矩。",
+    "requires": {
+      "sect": "铁衣门",
+      "completed_quests": [
+        "铁衣门护运·商路问价",
+        "铁衣门守约·短途护送"
+      ],
+      "level": 6,
+      "sect_reputation": {
+        "铁衣门": {
+          "gte": 30
+        }
+      }
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:tieyi_closure:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:tieyi_closure:resolved": true
+      }
+    },
+    "stages": [
+      {
+        "desc": "到接待堂与接引执事核对这桩赔本镖的货单与价钱。",
+        "target_type": "talk",
+        "target_name": "铁衣门接引执事",
+        "required_cnt": 1
+      },
+      {
+        "desc": "护送商队通过官道岔口，击退两名劫镖山贼。",
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2
+      },
+      {
+        "desc": "回外院向护运执事复命，定下商路上的规矩。",
+        "target_type": "talk",
+        "target_name": "铁衣门护运执事",
+        "required_cnt": 1
+      }
+    ],
+    "reward": {
+      "exp": 260,
+      "gold": 90
+    },
+    "choices": [
+      {
+        "id": "fair_line",
+        "title": "行规为先",
+        "requires": {
+          "flags": [
+            "sect:tieyi:trade_route:fair"
+          ]
+        },
+        "reward": {
+          "exp": 290,
+          "gold": 150,
+          "item": "铁衣护腕",
+          "sect_reputation": {
+            "铁衣门": 28
+          },
+          "honor_delta": 1,
+          "infamy_delta": 1,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:tieyi:closure_fair": true
+          },
+          "region_effects": {
+            "tieyi_mountain": {
+              "security": 2,
+              "commerce": 6,
+              "travel": 1
+            }
+          },
+          "faction_relations": {
+            "铁衣门:商会": 5,
+            "铁衣门:江湖": -2
+          },
+          "relations": {
+            "铁衣门护运执事": 3,
+            "铁衣门接引执事": 3
+          }
+        }
+      },
+      {
+        "id": "secure_line",
+        "title": "义护为先",
+        "requires": {
+          "flags": [
+            "sect:tieyi:trade_route:secure"
+          ]
+        },
+        "reward": {
+          "exp": 270,
+          "gold": 60,
+          "items": [
+            {
+              "item": "金创药",
+              "quantity": 2
+            }
+          ],
+          "sect_reputation": {
+            "铁衣门": 22
+          },
+          "honor_delta": 6,
+          "jianghu_action": "help_people",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:tieyi:closure_secure": true
+          },
+          "region_effects": {
+            "tieyi_mountain": {
+              "security": 5,
+              "commerce": -2,
+              "travel": 4
+            }
+          },
+          "faction_relations": {
+            "铁衣门:江湖": 4,
+            "铁衣门:青石村": 2,
+            "铁衣门:商会": -2
+          },
+          "relations": {
+            "铁衣门护运执事": 5,
+            "铁衣门接引执事": 1
+          }
+        }
+      },
+      {
+        "id": "middle_line",
+        "title": "行义两全",
+        "requires": {},
+        "reward": {
+          "exp": 280,
+          "gold": 100,
+          "item": "行军干粮",
+          "sect_reputation": {
+            "铁衣门": 20
+          },
+          "honor_delta": 3,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:tieyi:closure_middle": true
+          },
+          "region_effects": {
+            "tieyi_mountain": {
+              "security": 4,
+              "commerce": 2,
+              "travel": 3
+            }
+          },
+          "faction_relations": {
+            "铁衣门:商会": 2,
+            "铁衣门:江湖": 2
+          },
+          "relations": {
+            "铁衣门护运执事": 4,
+            "铁衣门接引执事": 2
+          }
+        }
+      }
+    ],
+    "difficulty": "高难",
+    "follow_up_hint": "铁衣门这条路已经选定；商路上的名声，会随你往后每一趟镖慢慢累积。"
   },
   "药囊递送·雾林问诊": {
     "title": "药囊递送·雾林问诊",
@@ -3212,7 +4143,10 @@
         }
       ],
       "sect_reputation": {
-        "少林": 8
+        "少林": 8,
+        "武当": -2,
+        "华山": -2,
+        "铁衣门": -2
       },
       "honor_delta": 1
     },
@@ -3227,9 +4161,14 @@
       ]
     },
     "repeat_cooldown_ticks": 48,
+    "on_complete": {
+      "set_flags": {
+        "world:sect_l15:shaolin": true
+      }
+    },
     "desc": "断魂堡虽破，逃散的死卫仍在岭上截杀香客。戒律僧请你再上断魂岭，击退两名死卫，护住往来行人。",
     "difficulty": "高难",
-    "follow_up_hint": "护寺委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向戒律僧询问。"
+    "follow_up_hint": "护寺委托可反复接取，复做只结经验、银两与断魂精铁；但替少林出手会让别派对你有几分戒心，冷却结束后可再向戒律僧询问。"
   },
   "武当·夜巡断魂": {
     "title": "武当·夜巡断魂",
@@ -3257,7 +4196,10 @@
         }
       ],
       "sect_reputation": {
-        "武当": 8
+        "武当": 8,
+        "少林": -2,
+        "华山": -2,
+        "铁衣门": -2
       },
       "honor_delta": 1
     },
@@ -3272,9 +4214,14 @@
       ]
     },
     "repeat_cooldown_ticks": 48,
+    "on_complete": {
+      "set_flags": {
+        "world:sect_l15:wudang": true
+      }
+    },
     "desc": "枯骨涧的刀客借夜色掩护劫掠行商，武当执事弟子请你夜巡断魂岭，击退两名刀客，守住山道清明。",
     "difficulty": "高难",
-    "follow_up_hint": "夜巡委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向执事弟子询问。"
+    "follow_up_hint": "夜巡委托可反复接取，复做只结经验、银两与断魂精铁；但替武当出手会让别派对你有几分戒心，冷却结束后可再向执事弟子询问。"
   },
   "华山·绝壁试锋": {
     "title": "华山·绝壁试锋",
@@ -3302,7 +4249,10 @@
         }
       ],
       "sect_reputation": {
-        "华山": 8
+        "华山": 8,
+        "少林": -2,
+        "武当": -2,
+        "铁衣门": -2
       },
       "honor_delta": 1
     },
@@ -3317,9 +4267,14 @@
       ]
     },
     "repeat_cooldown_ticks": 48,
+    "on_complete": {
+      "set_flags": {
+        "world:sect_l15:huashan": true
+      }
+    },
     "desc": "断魂堡残部退守岭上，守卫长仍在堡门前聚拢人手。授业师父要你去绝壁前试锋，斩下守卫长，验一验华山剑法。",
     "difficulty": "高难",
-    "follow_up_hint": "试锋委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向授业师父询问。"
+    "follow_up_hint": "试锋委托可反复接取，复做只结经验、银两与断魂精铁；但替华山出手会让别派对你有几分戒心，冷却结束后可再向授业师父询问。"
   },
   "铁衣门·断魂护镖": {
     "title": "铁衣门·断魂护镖",
@@ -3347,7 +4302,10 @@
         }
       ],
       "sect_reputation": {
-        "铁衣门": 8
+        "铁衣门": 8,
+        "少林": -2,
+        "武当": -2,
+        "华山": -2
       },
       "honor_delta": 1
     },
@@ -3362,9 +4320,14 @@
       ]
     },
     "repeat_cooldown_ticks": 48,
+    "on_complete": {
+      "set_flags": {
+        "world:sect_l15:tieyi": true
+      }
+    },
     "desc": "堡破之后，零散马贼又摸上岭道劫镖。护运执事请你随镖走一趟断魂岭，击退三名马贼，把商路重新稳住。",
     "difficulty": "高难",
-    "follow_up_hint": "护镖委托可反复接取，复做只结经验、银两与断魂精铁，冷却结束后可再向护运执事询问。"
+    "follow_up_hint": "护镖委托可反复接取，复做只结经验、银两与断魂精铁；但替铁衣门出手会让别派对你有几分戒心，冷却结束后可再向护运执事询问。"
   },
   "断魂岭·精铁换药": {
     "title": "断魂岭·精铁换药",
@@ -3393,5 +4356,362 @@
     "desc": "守岭猎户认得夜行客与堡门守卫长兵刃上的精铁，愿用一丸大还丹换三块精铁，算是替岭上行人谢你。",
     "difficulty": "进阶",
     "follow_up_hint": "精铁可在断魂崖夜行客与断魂堡门守卫长身上取得；凑够三块后可再来找守岭猎户兑换。"
+  },
+  "归云三方·探风": {
+    "title": "归云三方·探风",
+    "npc": "万商会会长",
+    "turn_in_npc": "万商会会长",
+    "requires": {
+      "completed_quests": [
+        "沉星黑市"
+      ],
+      "level": 9
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:guiyun_threeway:probe_started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:guiyun_threeway:probe_done": true
+      },
+      "relations": {
+        "万商会会长": 2,
+        "府衙文书": 1,
+        "黑市管事": 1
+      }
+    },
+    "desc": "沉星黑市清剿之后，归云城要重订市易行规。万商会会长请你先去府衙与黑市各探一次口风，再回来商议三方底线。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "府衙文书",
+        "required_cnt": 1,
+        "desc": "去府衙大堂探问官府对巡夜、查验与抽税的态度。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市管事",
+        "required_cnt": 1,
+        "desc": "去沉星黑市内堂探口风，确认黑市是否愿意接受明面行规。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "把官府与黑市的口风带回万商会馆，向会长复命。"
+      }
+    ],
+    "reward": {
+      "exp": 220,
+      "gold": 75,
+      "item": "清心散",
+      "honor_delta": 1
+    },
+    "difficulty": "进阶",
+    "follow_up_hint": "捕快营似乎另有动作，可去问询捕头。"
+  },
+  "归云三方·暗流交锋": {
+    "title": "归云三方·暗流交锋",
+    "npc": "捕头",
+    "turn_in_npc": "捕头",
+    "requires": {
+      "flags": [
+        "quest:guiyun_threeway:probe_done"
+      ],
+      "completed_quests": [
+        "归云三方·探风"
+      ],
+      "level": 10
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:guiyun_threeway:clash_started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:guiyun_threeway:clash_done": true,
+        "world:guiyun:threeway_incident_cleared": true
+      },
+      "relations": {
+        "捕头": 2,
+        "震远镖局总镖头": 2
+      },
+      "increment_variables": {
+        "government_reputation": 1
+      }
+    },
+    "desc": "三方立约前夜，一支商队在镖局后院被劫，商会怪官府巡夜不力，黑市又被指暗中放行。捕头请你先平息冲突，再查清是谁在挑拨。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "震远镖局总镖头",
+        "required_cnt": 1,
+        "desc": "向震远镖局总镖头问明劫镖经过，再决定从哪一方入手。",
+        "branch_choices": [
+          {
+            "id": "official_lean",
+            "title": "先封街查问",
+            "next_stage": 1,
+            "text": "你让捕快先封住镖局一带街口，逐一核对当夜出入人等。动静不小，但官府会记住你的配合。",
+            "effects": {
+              "set_flags": {
+                "world:guiyun:threeway_lean_official": true
+              },
+              "increment_variables": {
+                "government_reputation": 1
+              }
+            },
+            "honor_delta": 1
+          },
+          {
+            "id": "merchant_lean",
+            "title": "先核货单",
+            "next_stage": 1,
+            "text": "你先调来商队货单与镖局交接簿，想从失货清单里找出劫匪真正要拿的东西。商会会承你的情。",
+            "effects": {
+              "set_flags": {
+                "world:guiyun:threeway_lean_merchant": true
+              },
+              "increment_variables": {
+                "merchant_reputation": 1
+              }
+            }
+          },
+          {
+            "id": "underworld_lean",
+            "title": "先问暗线",
+            "next_stage": 1,
+            "text": "你绕开明面衙门，先去黑市打听谁最近买过镖局路线。消息来得快，官面上的观感却会差一些。",
+            "effects": {
+              "set_flags": {
+                "world:guiyun:threeway_lean_underworld": true
+              },
+              "increment_variables": {
+                "black_market_reputation": 1
+              }
+            },
+            "infamy_delta": 1
+          }
+        ]
+      },
+      {
+        "target_type": "kill",
+        "target_name": "劫镖山贼",
+        "required_cnt": 2,
+        "desc": "循线追到镖局后院，击退两名劫镖山贼，夺回被动过手脚的货箱。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市管事",
+        "required_cnt": 1,
+        "desc": "拿货箱上的记号去黑市内堂问管事：是谁把镖局路线卖给了山贼。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "回捕快营向捕头交代劫镖真相，说明有人故意挑动三方互疑。"
+      }
+    ],
+    "reward": {
+      "exp": 300,
+      "gold": 110,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 2
+        }
+      ],
+      "honor_delta": 4,
+      "jianghu_action": "assist_officials",
+      "jianghu_amount": 1
+    },
+    "difficulty": "高难",
+    "follow_up_hint": "三方已同意在天衡广场立下行规，可去找游学书生陆文清。"
+  },
+  "归云三方·定局三择": {
+    "title": "归云三方·定局三择",
+    "npc": "书生陆文清",
+    "turn_in_npc": "书生陆文清",
+    "requires": {
+      "flags": [
+        "quest:guiyun_threeway:clash_done"
+      ],
+      "completed_quests": [
+        "归云三方·暗流交锋"
+      ],
+      "level": 11
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:guiyun_threeway:accord_started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:guiyun_threeway:resolved": true
+      }
+    },
+    "desc": "三方各自拿出条件，陆文清受托在天衡广场记录新行规。你的落笔将决定归云城往后偏向商路、治安还是黑市。",
+    "stages": [
+      {
+        "target_type": "talk",
+        "target_name": "万商会会长",
+        "required_cnt": 1,
+        "desc": "回万商会馆听取商会对货税与夜航的条件。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "捕头",
+        "required_cnt": 1,
+        "desc": "去捕快营听取官府对巡夜、查验与人手的要求。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "黑市管事",
+        "required_cnt": 1,
+        "desc": "去沉星黑市内堂听取黑市对夜市与暗线的条件。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "书生陆文清",
+        "required_cnt": 1,
+        "desc": "回天衡广场，在陆文清面前落笔定下行规。"
+      }
+    ],
+    "reward": {
+      "exp": 360,
+      "gold": 140
+    },
+    "choices": [
+      {
+        "id": "merchant_accord",
+        "title": "扶商宽市",
+        "requires": {},
+        "reward": {
+          "exp": 380,
+          "gold": 180,
+          "item": "大还丹",
+          "honor_delta": 2,
+          "jianghu_action": "escort_trade",
+          "jianghu_amount": 1
+        },
+        "effects": {
+          "set_flags": {
+            "world:guiyun:threeway_merchant": true
+          },
+          "increment_variables": {
+            "merchant_reputation": 4,
+            "government_reputation": -1
+          },
+          "faction_relations": {
+            "江湖:商会": 4,
+            "官府:商会": 2,
+            "江湖:黑市": -1
+          },
+          "relations": {
+            "万商会会长": 5,
+            "捕头": -2,
+            "黑市管事": -1,
+            "书生陆文清": 2
+          },
+          "region_effects": {
+            "guiyun_city": {
+              "security": -3,
+              "commerce": 10,
+              "travel": 5
+            }
+          }
+        }
+      },
+      {
+        "id": "official_accord",
+        "title": "严法安城",
+        "requires": {},
+        "reward": {
+          "exp": 380,
+          "gold": 130,
+          "item": "金创药",
+          "honor_delta": 6,
+          "jianghu_action": "assist_officials",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:guiyun:threeway_official": true
+          },
+          "increment_variables": {
+            "government_reputation": 4,
+            "merchant_reputation": -1,
+            "black_market_reputation": -1
+          },
+          "faction_relations": {
+            "江湖:官府": 4,
+            "官府:商会": 1,
+            "官府:黑市": -2
+          },
+          "relations": {
+            "捕头": 5,
+            "府衙文书": 3,
+            "万商会会长": -2,
+            "黑市管事": -2,
+            "书生陆文清": 2
+          },
+          "region_effects": {
+            "guiyun_city": {
+              "security": 10,
+              "commerce": -4,
+              "travel": 2
+            }
+          }
+        }
+      },
+      {
+        "id": "underworld_accord",
+        "title": "夜市通融",
+        "requires": {},
+        "reward": {
+          "exp": 360,
+          "gold": 200,
+          "item": "清心散",
+          "infamy_delta": 2,
+          "jianghu_action": "black_market_trade",
+          "jianghu_amount": 2
+        },
+        "effects": {
+          "set_flags": {
+            "world:guiyun:threeway_underworld": true
+          },
+          "increment_variables": {
+            "black_market_reputation": 4,
+            "government_reputation": -2,
+            "merchant_reputation": 1
+          },
+          "faction_relations": {
+            "江湖:黑市": 5,
+            "江湖:商会": 1,
+            "江湖:官府": -2
+          },
+          "relations": {
+            "黑市管事": 5,
+            "万商会会长": 1,
+            "捕头": -3,
+            "书生陆文清": 1
+          },
+          "region_effects": {
+            "guiyun_city": {
+              "security": -7,
+              "commerce": 3,
+              "travel": 6
+            }
+          }
+        }
+      }
+    ],
+    "difficulty": "重大",
+    "follow_up_hint": "行规已立，商会、衙门与黑市都会按你的落笔行事；后续可分别回万商会馆、捕快营与沉星黑市探问新委托。"
   }
 }

@@ -2849,11 +2849,59 @@
       "暗潮": "暗仓证据已经封存。接下来要确认经手账册的关键中间人，以及货船与黑市之间使用的联络暗记。切记只追证据，不要轻率指认主谋。",
       "证人": "证人若临时失约，先核实口信和账册，不可仅凭传闻定案。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_official"
+          ]
+        },
+        "text": "行规里巡夜与查验都写实了，街面总算有章法。商会那边会嘀咕一阵，但案子少了，值得。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_underworld"
+          ]
+        },
+        "text": "夜市一开，三教九流都往城里涌。你若觉得这样能换太平，我记着这句话；出了案子，也别怪衙门先找黑市。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_merchant"
+          ]
+        },
+        "text": "商路放宽之后，镖局和货栈都忙了起来。巡夜的担子压在我们这边，你落笔时该想到这一层。"
+      },
+      {
+        "priority": 35,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·定局三择"
+          ]
+        },
+        "text": "三方条件都摆到桌面上了。你要听哪一家的，我不拦你，但别把衙门当成摆设。"
+      },
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·暗流交锋"
+          ]
+        },
+        "text": "劫镖的人不像寻常山贼，倒像有人故意把水搅浑。先去镖局问清经过，再决定从哪一头查。"
+      }
+    ],
     "quests": [
       "城内失踪案",
       "暗潮·江湖棋局",
       "失约证人",
-      "失踪信使"
+      "失踪信使",
+      "归云三方·暗流交锋"
     ],
     "faction": "官府",
     "talk_relation_delta": 1,
@@ -3127,6 +3175,44 @@
       "暗仓": "封蜡、货单与旧账必须彼此印证。单凭传闻不能定案，取得实物后才能封存证据。",
       "暗潮": "账册里反复出现同一批货物更换商号的记录。封蜡、货单与证人口供互相印证后，才能确认中间人的身份。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_official"
+          ]
+        },
+        "text": "行规以安民为先，卷宗里记得清清楚楚。往后府衙巡夜与查验，也算有名有据了。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_merchant"
+          ]
+        },
+        "text": "行规宽了，府衙的巡夜却不能松。卷宗里我把这一条记在最后。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_underworld"
+          ]
+        },
+        "text": "夜市开了口子，府衙的案子只会更多。这份卷宗，往后怕是要常翻。"
+      },
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·探风"
+          ]
+        },
+        "text": "府衙的态度写在卷宗里：巡夜不能减，抽税可以谈。你把这些话带给会长，他自然明白。"
+      }
+    ],
     "quests": [
       "沉星黑市",
       "暗潮·江湖棋局",
@@ -3805,12 +3891,60 @@
       "暗仓": "三地转运链已有凭据，但还须核验北境货栈的封蜡，夺回货单，才能证明中转仓确实参与私运。",
       "暗潮": "会中账目显示，几家表面无关的商号曾在同一时段交接货箱。可疑的只是经手中间人，不能因此牵连所有商户。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_merchant"
+          ]
+        },
+        "text": "行规按商路重订，货税减了一成，码头也放宽了夜航。归云城的买卖，总算又活络起来。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_official"
+          ]
+        },
+        "text": "巡夜加了两班，市面安稳了，货税却也跟着紧。商会不能只算眼前账，只能先照行规做。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_underworld"
+          ]
+        },
+        "text": "夜市开了口子，摊贩多了，明面上的商会却少了几分说话的分量。这笔账，往后还得慢慢算。"
+      },
+      {
+        "priority": 35,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·定局三择"
+          ]
+        },
+        "text": "三方条件都摆在这里了。你落笔之前，再去听听捕头和黑市管事怎么说。"
+      },
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·探风"
+          ]
+        },
+        "text": "市易行规要重订，官府、商会、黑市各有各的算盘。你先去探探两边口风，再回来商议。"
+      }
+    ],
     "quests": [
       "万商会商路",
       "暗仓转运疑云",
       "暗潮·江湖棋局",
       "商队夜行",
-      "仓外伏击"
+      "仓外伏击",
+      "归云三方·探风"
     ],
     "faction": "商会",
     "talk_relation_delta": 2,
@@ -4135,6 +4269,62 @@
     "type": "master",
     "dialogue": [
       "这里的规矩只有一条：不要问不该问的事。"
+    ],
+    "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_underworld"
+          ]
+        },
+        "text": "口子一开，夜里的货和人都有了去处。你这份人情，管事记下了。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_official"
+          ]
+        },
+        "text": "衙门的手伸到巷子里来了。管事不拦你，但往后这条街的规矩，得重新谈。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_merchant"
+          ]
+        },
+        "text": "行规要明，黑市的生意就得往暗处再收一收。商会面子上好看，我们可没占到便宜。"
+      },
+      {
+        "priority": 35,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·定局三择"
+          ]
+        },
+        "text": "商会要明面行规，衙门要巡夜查验。管事只问一句：黑市的兄弟往后靠什么吃饭？"
+      },
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·暗流交锋"
+          ]
+        },
+        "text": "货箱上的记号是从镖局后门流出去的。你要查，就去问镖局自己的人。"
+      },
+      {
+        "priority": 25,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·探风"
+          ]
+        },
+        "text": "行规的事，管事可以谈。但先说说，官府打算拿什么来换？"
+      }
     ],
     "state_profile": {
       "default": "normal",
@@ -4669,6 +4859,44 @@
       "商队封蜡": "北境几家商号各有纹样，封蜡对不上，货物多半有问题。",
       "暗潮": "残缺货单显示货物多次换名，却总在河埠交接。若要追查，最好让封蜡拓印与旧账互相核对。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_closed"
+          ]
+        },
+        "text": "封了暗线，货栈少了几笔见不得光的买卖，账倒是干净了。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_tolerated"
+          ]
+        },
+        "text": "水路照旧通着，只是有几箱货，我连账都不敢往明面上写。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_supervised"
+          ]
+        },
+        "text": "查验虽慢，可封蜡总算不会再被人偷偷换掉。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:北境暗线·了断"
+          ]
+        },
+        "text": "那批反复换封蜡的货箱还在河埠，等你了断这条线，我再重新记账。"
+      }
+    ],
     "faction": "商会",
     "autonomy_profile": {
       "enabled": true,
@@ -4751,6 +4979,44 @@
     "info": {
       "河埠": "河埠西侧有货栈，东侧浅滩能绕到旧装卸台。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_closed"
+          ]
+        },
+        "text": "暗线封了，河埠这几日清净不少，只是往来的船也少了。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_tolerated"
+          ]
+        },
+        "text": "河埠的买卖照旧，可我心里总不踏实。那几条船，我不会再看第二眼。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:northfront:blackmarket_line_supervised"
+          ]
+        },
+        "text": "关卡立起来后，往来慢了些，可至少每箱货都经得起查验。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:北境暗线·了断"
+          ]
+        },
+        "text": "那批货还扣在河埠，接头人也在等你的话。了断之前，别急着回来复命。"
+      }
+    ],
     "faction": "官府",
     "autonomy_profile": {
       "enabled": true,
@@ -6050,6 +6316,47 @@
       "江湖传闻": "传闻常夹杂夸大之词，最好找不同的人核实，再判断真假。",
       "天衡广场": "广场石碑记着归云城旧事，附近的告示墙也常贴出寻人和招募消息。"
     },
+    "quests": [
+      "归云三方·定局三择"
+    ],
+    "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_merchant"
+          ]
+        },
+        "text": "我把行规誊清了：先通商，再议事。归云城往后会热闹些，也难免更杂些。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_official"
+          ]
+        },
+        "text": "这一版行规以安民为先，查验条款写得最细。商人会埋怨，但夜里走路的人会安心。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:guiyun:threeway_underworld"
+          ]
+        },
+        "text": "夜市一条写进去了。纸面上是通融，纸面下要担的干系，也一并记在卷末。"
+      },
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "quest_active:归云三方·定局三择"
+          ]
+        },
+        "text": "行规的每一条我都照实记下。三方各有道理，最后落笔的人得自己担这份干系。"
+      }
+    ],
     "faction": "江湖",
     "talk_relation_delta": 1,
     "dialogue_choices": [
@@ -6178,6 +6485,35 @@
       "山门试剑": "剑理不是只在演武场里讲。若传功师兄让你来山门印证剑路，我会从守门与拆招的角度替你看一看。",
       "古道巡剑": "古道是华山弟子每日巡看的地方。若奉命清障，先问明巡山路线，别让巡哨绕到山民身后。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_speed"
+          ]
+        },
+        "text": "师兄让咱们把剑亮出来，匪人果然退了。只是山门前的商队也谨慎了许多。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_steady"
+          ]
+        },
+        "text": "咱们按段护送，商队走得慢，可一趟也没少人。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_middle"
+          ]
+        },
+        "text": "该快时快，该守时守。山门这班，反倒比从前好当。"
+      }
+    ],
     "faction": "华山",
     "talk_relation_delta": 1,
     "dialogue_choices": [
@@ -6474,6 +6810,44 @@
       "剑理问道": "完成《华山历练·险道试剑》且华山剑法熟练度达到 10 后，可接取《华山剑理·松风听剑》，先向授业师父请教剑理。",
       "古道巡剑": "晋升外门弟子并完成剑理问道后，可接取《华山巡剑·古道清障》，随守门弟子巡查山门古道。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_speed"
+          ]
+        },
+        "text": "快剑立威，古道上的匪人这几日绕道走。只是来往商旅也少了些。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_steady"
+          ]
+        },
+        "text": "你守住了古道，也守住了华山的名声。慢一些，却走得长。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:huashan:closure_middle"
+          ]
+        },
+        "text": "快慢本无定法，能护住该护的人，便是华山剑路。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:华山收束·剑锋与古道"
+          ]
+        },
+        "text": "古道上的商旅还在等华山的答复。先去问守门弟子，再回来定夺。"
+      }
+    ],
     "faction": "华山",
     "talk_relation_delta": 1,
     "dialogue_choices": [
@@ -6568,7 +6942,8 @@
       "华山历练·磨剑黑风",
       "华山历练·险道试剑",
       "华山剑理·松风听剑",
-      "华山巡剑·古道清障"
+      "华山巡剑·古道清障",
+      "华山收束·剑锋与古道"
     ],
     "gear_display": [
       {
@@ -6820,6 +7195,35 @@
       "门规": "少林重戒律、根基与实修，不以一时口舌论高下。",
       "山门动静": "近来山门外偶有生面孔徘徊，像在数香客来往的时辰。若寺中弟子来问，便把这些踪迹如实相告。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_precepts"
+          ]
+        },
+        "text": "今日起入寺先验度牒，流民另走偏门。清苦些，却少了许多是非。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_guard"
+          ]
+        },
+        "text": "山门没有关，粥棚也支起来了。来往的人多了，我得多巡两趟。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_middle"
+          ]
+        },
+        "text": "验牒照旧，粥棚也留。累是累些，心里踏实。"
+      }
+    ],
     "faction": "少林",
     "sect_profile": {
       "preferred": [
@@ -7370,10 +7774,49 @@
       "受戒入室": "问心与护寺都办妥后，先请传功师兄验看拳法根基，再回讲经堂受入门戒。受戒不是终点，而是承担门规的开始。",
       "沙弥日课": "晋升沙弥后，先随我做一次晨课，再去前院帮知客师兄分担杂务。日常小事最能看出一个人是否守得住规矩。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_precepts"
+          ]
+        },
+        "text": "寺门重归清规，流民另设棚舍安置。戒律不是把人拒在门外，是先把分寸守住。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_guard"
+          ]
+        },
+        "text": "你护住了山门，也护住了那些走投无路的人。戒在行中，我记下了。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:shaolin:closure_middle"
+          ]
+        },
+        "text": "戒律与慈悲并非两条路。山门开着，规矩也立着，如此才好。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:少林收束·戒律与慈悲"
+          ]
+        },
+        "text": "流民还在山门外，混进来的人也没走远。先去问守山僧，再回来定夺。"
+      }
+    ],
     "quests": [
       "少林护寺·山门驱谍",
       "少林受戒·入室听经",
-      "少林·伏魔护寺"
+      "少林·伏魔护寺",
+      "少林收束·戒律与慈悲"
     ],
     "faction": "少林",
     "sect_profile": {
@@ -7737,6 +8180,35 @@
     "info": {
       "山门值守": "若有门内弟子奉执事之命来协防，须一同核对来访香客与山道动静，不可擅离岗位。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_observe"
+          ]
+        },
+        "text": "师父让我们先盯住山道，不急着动手。这几日倒是没再出事。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_direct"
+          ]
+        },
+        "text": "你带人主动清了一趟山道，商队这才能按时下山。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_middle"
+          ]
+        },
+        "text": "巡山照旧，商队也护了。两头都顾上，才算稳妥。"
+      }
+    ],
     "faction": "武当",
     "talk_relation_delta": 1,
     "state_profile": {
@@ -8048,6 +8520,44 @@
       "内功听息": "剑理既明，还需内功根基。完成《武当剑理·松间问道》后，若等级与门派声望达标，可接取《武当内功·紫霄听息》。",
       "晋升指点": "正式晋升前，须先完成本门剑理与内功历练；武当重根基，不会只看声望与年限。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_observe"
+          ]
+        },
+        "text": "你先看清了局势才出剑，合了以静制动的剑理。山道往后由守山弟子多走几趟。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_direct"
+          ]
+        },
+        "text": "以意驭剑，先发也能制人。只是出剑之前，仍要记得为何出剑。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:wudang:closure_middle"
+          ]
+        },
+        "text": "剑理与内功本是一体。能静能动，才算真正入门。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:武当收束·剑理与内功"
+          ]
+        },
+        "text": "商队还在山下等着说法。先去问守山弟子，再回来告诉我你的决定。"
+      }
+    ],
     "faction": "武当",
     "talk_relation_delta": 1,
     "state_profile": {
@@ -8127,7 +8637,8 @@
       "share_to_player_min_relation": 0
     },
     "quests": [
-      "武当内功·紫霄听息"
+      "武当内功·紫霄听息",
+      "武当收束·剑理与内功"
     ]
   },
   "武当传功师兄": {
@@ -8430,6 +8941,35 @@
       "历练": "可接取《铁衣门历练·护路除匪》，协助清理官道上的劫镖山贼。",
       "商路货单": "护运执事若让你来核对货单，先把车次、货主与随行人数对上。价格可以谈，路线安全却不能含糊。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_fair"
+          ]
+        },
+        "text": "货单照公价誊清了，掌柜们没再还价。账目干净。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_secure"
+          ]
+        },
+        "text": "减价的单子我也记了。护运先护人，这账不亏。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_middle"
+          ]
+        },
+        "text": "公价照旧，遇到难处另开一栏。这样两边都交代得过去。"
+      }
+    ],
     "faction": "铁衣门",
     "talk_relation_delta": 1,
     "dialogue_choices": [
@@ -8663,6 +9203,44 @@
       "商路问价": "清退巡哨后，可接取《铁衣门护运·商路问价》，先到山门与接待堂核对车次和货单。",
       "短途护送": "正式晋升为外堂弟子并完成商路问价后，可接取《铁衣门守约·短途护送》，随商队走一趟短途。"
     },
+    "conditional_dialogue": [
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_fair"
+          ]
+        },
+        "text": "按行规收价，商队无话可说。铁衣门的招牌，靠的就是一个准字。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_secure"
+          ]
+        },
+        "text": "这趟少收的银子，换回了整支商队。行里有人不服，我替你担着。"
+      },
+      {
+        "priority": 45,
+        "requires": {
+          "flags": [
+            "world:tieyi:closure_middle"
+          ]
+        },
+        "text": "该收的收，该让的让。商路要长，靠的不是一次买卖。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "quest_active:铁衣门收束·行规与义护"
+          ]
+        },
+        "text": "那桩赔本镖还压在案上。先去接待堂核价，再回来给我个准话。"
+      }
+    ],
     "faction": "铁衣门",
     "talk_relation_delta": 1,
     "dialogue_choices": [
@@ -8761,7 +9339,8 @@
       "铁衣门历练·清除巡哨",
       "铁衣门护运·商路问价",
       "铁衣门守约·短途护送",
-      "铁衣门·断魂护镖"
+      "铁衣门·断魂护镖",
+      "铁衣门收束·行规与义护"
     ],
     "relation_dialogue": [],
     "event_reactions": [],
