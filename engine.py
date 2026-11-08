@@ -1207,13 +1207,16 @@ def _condition_value_matches(value, rule):
     return value == rule
 
 
-def apply_world_effects(world_state, effects):
-    """执行任务/剧情世界效果，并防止异常配置导致状态只写入一半。"""
+def apply_world_effects(world_state, effects, report=None):
+    """执行任务/剧情世界效果，并防止异常配置导致状态只写入一半。
+
+    report 传入 dict 时记录本次实际生效的 region_effects，供结算反馈使用。
+    """
     if not effects:
         return world_state
     if not isinstance(effects, dict):
         return world_state
-    for field in ("set_flags", "set_variables", "increment_variables", "faction_relations", "relations"):
+    for field in ("set_flags", "set_variables", "increment_variables", "faction_relations", "relations", "region_effects"):
         value = effects.get(field, {})
         if value is not None and not isinstance(value, dict):
             return world_state
@@ -1263,6 +1266,18 @@ def apply_world_effects(world_state, effects):
                 relation_map[npc_name] = max(-100, min(100, int(relation_map.get(npc_name, 0)) + int(delta)))
             except (TypeError, ValueError):
                 continue
+    region_effects = effects.get("region_effects", {}) or {}
+    if region_effects:
+        from region_activity import apply_region_effects
+        applied = apply_region_effects(state, region_effects)
+        if applied and isinstance(report, dict):
+            recorded = report.setdefault("region_effects", {})
+            if isinstance(recorded, dict):
+                for zone, changes in applied.items():
+                    zone_changes = recorded.setdefault(zone, {})
+                    if isinstance(zone_changes, dict):
+                        for field, delta in changes.items():
+                            zone_changes[field] = zone_changes.get(field, 0) + delta
     world_state.clear()
     world_state.update(state)
     return world_state

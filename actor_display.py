@@ -153,12 +153,12 @@ def find_npc(target, npc_names):
     return None
 
 
-def format_room_label(npc_name, npc_data=None):
+def format_room_label(npc_name, npc_data=None, include_id=False):
     data = npc_data if isinstance(npc_data, dict) else _npc_data(npc_name)
     if not data:
         return npc_name
     _name, _rank, _nickname, display_id, label = _label_parts(npc_name, data)
-    if display_id:
+    if include_id and display_id:
         label = f"{label}({display_id})"
     return label or npc_name
 

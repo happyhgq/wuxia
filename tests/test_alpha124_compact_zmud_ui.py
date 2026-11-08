@@ -21,7 +21,7 @@ class Alpha124CompactZmudUiTests(unittest.TestCase):
         player = Player("界面测试侠客", "散人")
         player.location = "village_square"
         output = _ANSI_RE.sub("", self.capture(look, player, None, True))
-        self.assertRegex(output, r"【区域局势】\s*平静\s*\|\s*危险度：一般")
+        self.assertRegex(output, r"【区域局势】\s*势力动向：平静\s*\|\s*危险度：一般")
         self.assertNotIn("区域指标：", output)
         self.assertNotIn("安全 72/100", output)
 

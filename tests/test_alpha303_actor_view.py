@@ -50,8 +50,9 @@ def test_every_item_has_display_id_and_buyi_is_clothing():
 
 def test_room_label_uses_rank_nickname_name_and_id():
     data = {"rank_title": "青石村", "nickname": "铁面", "name": "守卫", "id": "shou wei"}
-    assert actor_display.format_room_label("守卫", data) == "青石村「铁面」守卫(shou wei)"
-    assert actor_display.format_room_label("守卫", read("npcs.json")["守卫"]) == "青石村守卫(shou wei)"
+    assert actor_display.format_room_label("守卫", data) == "青石村「铁面」守卫"
+    assert actor_display.format_room_label("守卫", data, include_id=True) == "青石村「铁面」守卫(shou wei)"
+    assert actor_display.format_room_label("守卫", read("npcs.json")["守卫"]) == "青石村守卫"
     assert actor_display.format_room_label("路人甲", {}) == "路人甲"
 
 
@@ -151,8 +152,8 @@ def test_room_npc_list_uses_display_label_and_single_period():
     player.location = "medicine_shop"
     output = render(player)
     people = output.split("【人物】", 1)[1]
-    assert "百草堂主(yao pu lao ban)：" in people
-    assert "药铺老板(yao pu lao ban)" not in people
+    assert "百草堂主：" in people
+    assert "药铺老板" not in people
     assert "。。" not in people
 
 

@@ -7,6 +7,7 @@ import random
 from copy import deepcopy
 import engine
 from ui_output import BODY_WIDTH, safe_print as print, wrap_player_text
+from player import request_autosave
 
 Color = engine.Color
 color_text = engine.color_text
@@ -653,7 +654,7 @@ def _finish_combat_victory(player, room_id, enemy_name, e_data):
         pass
     if not rewards["drops"]:
         print(f"{Color.WHITE}此战没有搜到额外战利品。{Color.RESET}")
-    player.save_to_file()
+    request_autosave(player)
 
 
 def combat(player, enemy_name):
@@ -702,18 +703,18 @@ def combat(player, enemy_name):
 
     while player.hp > 0 and e_hp > 0:
         print("\n--------------------------------------------")
-        print(f"{player.name}: 气血 {draw_bar(player.hp, player.max_hp, fill_color=Color.RED)} "
+        print(f"{player.name}：气血 {draw_bar(player.hp, player.max_hp, fill_color=Color.RED)} "
               f"内力 {draw_bar(player.mp, player.max_mp, fill_color=Color.BLUE)}")
-        print(f"{enemy_name}: 气血 {draw_bar(e_hp, e_max_hp, fill_color=Color.BRIGHT_RED)}")
-        print(f"自身状态： {format_statuses(p_statuses)} | 敌人状态: {format_statuses(e_statuses)}")
+        print(f"{enemy_name}：气血 {draw_bar(e_hp, e_max_hp, fill_color=Color.BRIGHT_RED)}")
+        print(f"自身状态：{format_statuses(p_statuses)} | 敌人状态：{format_statuses(e_statuses)}")
 
         p_dmg, p_stun, p_msgs = process_status_effects(p_statuses)
         e_dmg, e_stun, e_msgs = process_status_effects(e_statuses)
         player.hp = max(0, player.hp + p_dmg)
         e_hp = max(0, e_hp + e_dmg)
 
-        for m in p_msgs: print(f"你: {m}")
-        for m in e_msgs: print(f"{enemy_name}: {m}")
+        for m in p_msgs: print(f"你：{m}")
+        for m in e_msgs: print(f"{enemy_name}：{m}")
 
         if player.hp <= 0 or e_hp <= 0: break
 
@@ -738,7 +739,7 @@ def combat(player, enemy_name):
             # 非法指令、取消选择、物品/武学选择无效或内力不足时，重新选择，敌人不会趁机攻击。
             player_action_committed = False
             while not player_action_committed:
-                print("\n行动选项: [1] 普通攻击  [2] 武学招式  [3] 使用物品  [4] 尝试逃跑")
+                print("\n行动选项：[1] 普通攻击  [2] 武学招式  [3] 使用物品  [4] 尝试逃跑")
                 act = input(make_combat_prompt(player, enemy_name, e_hp, e_max_hp)).strip().lower()
 
                 if act == "1":
@@ -763,7 +764,7 @@ def combat(player, enemy_name):
                     if random.random() < 0.55:
                         print(f"{Color.GREEN}你拔腿施展轻功，成功摆脱敌人！{Color.RESET}")
                         engine.clear_statuses()
-                        player.save_to_file()
+                        request_autosave(player)
                         return
                     print(f"{Color.RED}逃跑失败，被对方一把拦住去路！{Color.RESET}")
                     # 逃跑尝试本身消耗回合。
@@ -781,7 +782,7 @@ def combat(player, enemy_name):
 
                     for idx, item in enumerate(consumables, 1):
                         print(f"  {idx}. {item}")
-                    use_c = input("使用物品序号 (0取消)：").strip()
+                    use_c = input("使用物品序号（0取消）：").strip()
                     if use_c == "0":
                         print("已取消使用物品，请重新选择行动。")
                         continue
@@ -808,7 +809,7 @@ def combat(player, enemy_name):
                     for idx, sk in enumerate(avail, 1):
                         hint = f"；{sk.get('combat_hint')}" if sk.get('combat_hint') else ""
                         print(f"  {idx}. {sk['name']} (耗内 {sk['mp_cost']} / 威力 {int(sk['power']*100)}%){hint}")
-                    sk_c = input("选择招式序号 (0取消)：").strip()
+                    sk_c = input("选择招式序号（0取消）：").strip()
                     if sk_c == "0":
                         print("已取消施展武学，请重新选择行动。")
                         continue
@@ -909,19 +910,19 @@ def combat(player, enemy_name):
                 ph = get_enemy_phase_data(e_data, battle_phase)
                 phase_atk_mult = max(0.1, float(ph.get("atk_mult", 1.0)))
                 raw_dmg = calculate_damage(e_atk * phase_atk_mult, player.get_total_defense(), p_pwr)
-                _emit(f"{engine.style(enemy_name, 'enemy')} 施展出技能{engine.style('【' + e_skill['name'] + '】', 'skill')}！")
+                _emit(f"{engine.style(enemy_name, 'enemy')}施展出技能{engine.style('【' + e_skill['name'] + '】', 'skill')}！")
                 dmg, outcome = resolve_attack(
                     raw_dmg, e_hit, p_dodge, e_crit, float(e_skill.get("crit_bonus", 0.0))
                 )
                 if outcome == "miss":
-                    print(f"{enemy_name} 的技能被你闪开了！")
+                    print(f"{enemy_name}的【{e_skill['name']}】被你闪开了！")
                 else:
                     dmg = apply_damage_reduction(p_statuses, dmg)
                     dmg = apply_shield(p_statuses, dmg)
                     if dmg > 0:
                         player.hp = max(0, player.hp - dmg)
                         label = "暴击！" if outcome == "crit" else ""
-                        print(f"{label}技能对你造成 {Color.RED}{dmg}{Color.RESET} 点伤害！")
+                        print(f"{label}{enemy_name}的【{e_skill['name']}】对你造成 {Color.RED}{dmg}{Color.RESET} 点伤害！")
                 if "effect" in e_skill and outcome != "miss":
                     add_status(p_statuses, e_skill["effect"], e_skill.get("turns", 2), e_skill.get("value", 3))
             elif decision.get("action") == "telegraph":

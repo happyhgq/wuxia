@@ -278,11 +278,19 @@ def apply_reward_bundle(player, reward, source="奖励", announce=True):
                     label = {"upgrade": "推荐装备", "build_upgrade": "推荐：契合当前流派",
                              "sidegrade": "同级装备", "build_tradeoff": "流派变化型装备", "downgrade": "暂不推荐"}.get(evaluation["recommendation"], "装备")
                     print(f"{Color.BRIGHT_YELLOW}  └─ {label} | 评分 {evaluation['score']} "
-                          f"(当前 {evaluation['current_score']}, {evaluation['score_delta']:+d}){Color.RESET}")
+                          f"（当前 {evaluation['current_score']}，{evaluation['score_delta']:+d}）{Color.RESET}")
+                    if evaluation["recommendation"] in ("upgrade", "build_upgrade"):
+                        print(f"{Color.BRIGHT_CYAN}  └─ 输入“装备 {item_name}”即可换上。{Color.RESET}")
                     before = evaluation.get("build_before") or {}
                     after = evaluation.get("build_after") or {}
                     if after.get("name") != before.get("name") and after.get("name"):
                         print(f"{Color.BRIGHT_CYAN}  └─ 流派预览：{before.get('name', '无流派')} → {after['name']}{Color.RESET}")
+        # 收集类任务按实际获得的物品推进：战利品、任务奖励与世界事件奖励共用此入口，
+        # 商店购买和玩家交易不经过奖励结算，因此不会被计入。
+        updater = getattr(player, "update_quest_progress", None)
+        if updater:
+            for _ in range(max(0, quantity)):
+                updater(item_name, event_type="collect")
 
     sect_rep_result = {}
     for sect_name, delta in (reward.get("sect_reputation", {}) or {}).items():

@@ -616,6 +616,24 @@
     "behavior_hint": "若你礼数周全、基础扎实，便更愿意指点武学门道。",
     "conditional_dialogue": [
       {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:main:herb_sold_to_merchant"
+          ]
+        },
+        "text": "行商的车队今早已出了村，村里账上多了笔银子。只是这批药材一走，老夫心里总有些空落落的。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:main:herb_kept_for_village"
+          ]
+        },
+        "text": "药材都留在村里了，老人们这个冬天总算不用硬扛。商队那边怕是要记上一笔，可老夫不后悔。"
+      },
+      {
         "priority": 30,
         "requires": {
           "flags": [
@@ -859,6 +877,34 @@
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
     "conditional_dialogue": [
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:main:herb_sold_to_merchant"
+          ]
+        },
+        "text": "行商把货拉走了，柜上清爽不少。可乡亲来抓药时，我还得先掂量库存，这买卖做得不算踏实。"
+      },
+      {
+        "priority": 40,
+        "requires": {
+          "flags": [
+            "world:main:herb_kept_for_village"
+          ]
+        },
+        "text": "这批药材留在村里，我夜里配药也踏实些。村长那边虽有些不快，可救人要紧。"
+      },
+      {
+        "priority": 35,
+        "requires": {
+          "flags": [
+            "world:main:herb_stock_replenished",
+            "quest_active:百草堂·药材去向"
+          ]
+        },
+        "text": "归云城行商开的价不低，想把整批药材都收走；可村长惦记着村里过冬要留些应急。是卖是留，你替乡亲拿个主意吧。"
+      },
       {
         "priority": 30,
         "requires": {

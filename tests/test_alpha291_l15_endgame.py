@@ -88,6 +88,27 @@ def test_duanhun_iron_is_a_normal_material_with_exchange_hint():
     assert item["desc"] and item["craft_note"]
 
 
+def test_guard_captain_is_a_second_deterministic_iron_source():
+    """终局减负：堡门守卫长 60 秒刷新且必掉断魂精铁，与夜行客形成两条稳定来源。"""
+    guard = engine.ENEMIES["断魂堡守卫长"]
+    assert "断魂堡守卫长" in engine.ROOMS["duanhun_fort_gate"]["enemies"]
+    assert guard.get("respawn_seconds") is None
+    assert world_lifecycle.NORMAL_SECONDS == 60
+    assert guard["level"] == 14 and guard["tier"] == "elite"
+
+    iron = [drop for drop in guard["drops"] if drop["item"] == "断魂精铁"]
+    assert len(iron) == 1
+    assert iron[0]["chance"] == 1.0
+    assert iron[0]["guaranteed"] is True
+    for _ in range(5):
+        rewards = combat.resolve_enemy_rewards(guard)
+        assert {"item": "断魂精铁", "quantity": 1} in rewards["drops"]
+
+    quest = engine.QUESTS[EXCHANGE_QUEST]
+    assert "守卫长" in quest["follow_up_hint"]
+    assert "守卫长" in engine.ITEMS["断魂精铁"]["desc"]
+
+
 def test_night_walker_uses_l15_elite_template_and_low_frequency_respawn():
     enemy = engine.ENEMIES["断魂岭夜行客"]
     assert (enemy["hp"], enemy["atk"], enemy["defense"]) == (672, 70, 22)
@@ -244,7 +265,8 @@ def test_endgame_panel_reports_progress_without_mutating_player():
     assert "门派终局委托：" in output and "已完成 2/4（复做冷却 48 刻）" in output
     assert "断魂精铁：" in output and "4 块（3 块可在守岭猎户处换大还丹）" in output
     assert "装备强化：" in output and "兵刃 +0 / 防具 +0" in output
-    assert "L15 为当前内容封顶" in output
+    assert "已达设计上限，可继续积累经验" in output
+    assert "L15 为当前内容封顶" not in output
     assert snapshot == (player.completed_quests, player.inventory, player.world_state["flags"])
 
     no_flag = Player("终局面板验收", "华山")
@@ -252,6 +274,8 @@ def test_endgame_panel_reports_progress_without_mutating_player():
     assert "尚未攻破" in output
     assert "已完成 0/4" in output
     assert "0 块" in output
+    assert "L15 为当前设计上限，达到后可继续积累经验" in output
+    assert "已达设计上限" not in output
 
 
 def test_endgame_panel_navigation_prompt_and_width():

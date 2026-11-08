@@ -236,6 +236,6 @@ def test_status_messages_and_enemy_action_are_printed(monkeypatch, capsys):
     combat.combat(player, "试炼傀儡")
     output = capsys.readouterr().out
 
-    assert "你: 旧伤隐隐作痛，损失 5 点气血。" in output
-    assert "试炼傀儡: 敌人屏息凝神，气息渐沉。" in output
+    assert "你：旧伤隐隐作痛，损失 5 点气血。" in output
+    assert "试炼傀儡：敌人屏息凝神，气息渐沉。" in output
     assert "试炼傀儡 发起攻击，对你造成 25 点伤害！" in output

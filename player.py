@@ -5,6 +5,7 @@ player.py - 玩家类、属性计算、经验成长与存档持久化
 
 import os
 import json
+import inspect
 import tempfile
 import engine
 import npc_behavior
@@ -13,6 +14,27 @@ from ui_output import safe_print as print
 from world_time import world_hour
 
 SAVE_PATH = engine.SAVE_PATH
+
+# 自动存档按世界时刻节流：同一时刻内的多项结算只落盘一次，最多每 3 个时刻写一次。
+AUTO_SAVE_INTERVAL_TICKS = 3
+
+
+def request_autosave(player, verbose=True):
+    """统一自动存档入口；只有真实玩家具备按 Tick 节流的 autosave。"""
+    autosave = getattr(player, "autosave", None)
+    if not callable(autosave):
+        return player.save_to_file()
+    try:
+        parameters = inspect.signature(autosave).parameters
+    except (TypeError, ValueError):
+        parameters = {}
+    accepts_verbose = "verbose" in parameters or any(
+        parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+    )
+    if accepts_verbose:
+        return autosave(verbose=verbose)
+    return autosave()
+
 
 
 # Alpha285 成长节奏：Lv1–15 采用分阶段经验曲线，Lv16 起沿用 1.35 倍增长。
@@ -4217,8 +4239,12 @@ class Player:
                 if expected_type != event_type or stage.get("target_name") != target_name:
                     continue
                 state = self.quest_states.setdefault(q_name, {"stage": 0, "progress": 0})
-                req = stage.get("required_cnt", 1)
-                state["progress"] = min(req, state.get("progress", 0) + 1)
+                req = _safe_int_value(stage.get("required_cnt"), 1, 1)
+                progress_before = _safe_int_value(state.get("progress"), 0, 0)
+                # 已达标或等待分支选择时，重复触发同一目标不得再次结算阶段效果。
+                if progress_before >= req or state.get("branch_pending"):
+                    continue
+                state["progress"] = min(req, progress_before + 1)
                 self.active_quests[q_name] = state["progress"]
                 print(f"{engine.Color.BRIGHT_YELLOW}[任务更新] 【{public_title}】阶段 {state['stage']+1}/{len(full_info['stages'])}：({state['progress']}/{req}){engine.Color.RESET}")
                 if state["progress"] >= req:
@@ -4740,10 +4766,64 @@ class Player:
 
             if verbose:
                 print(f"{engine.Color.BRIGHT_GREEN}[存档成功] 游戏进度已保存。{engine.Color.RESET}")
+            self._autosave_tick = self._autosave_clock()
+            self._clear_autosave_pending()
             return True
         except Exception as e:
             print(f"{engine.Color.RED}[存档失败] 无法保存当前进度，请检查存储空间和游戏目录权限。{engine.Color.RESET}")
             return False
+
+    def _autosave_clock(self):
+        try:
+            return int(self.get_quest_clock())
+        except (AttributeError, TypeError, ValueError, OverflowError):
+            return 0
+
+    def _autosave_due(self):
+        last = getattr(self, "_autosave_tick", None)
+        return last is None or self._autosave_clock() - last >= AUTO_SAVE_INTERVAL_TICKS
+
+    def _clear_autosave_pending(self):
+        self._autosave_pending = False
+        self._autosave_pending_filename = None
+        self._autosave_pending_verbose = True
+
+    def _write_save(self, filename, verbose):
+        saver = self.save_to_file
+        try:
+            parameters = inspect.signature(saver).parameters
+        except (TypeError, ValueError):
+            parameters = {}
+        accepts_verbose = "verbose" in parameters or any(
+            parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+        )
+        if accepts_verbose:
+            saved = saver(filename, verbose)
+        else:
+            saved = saver(filename)
+        if saved:
+            self._autosave_tick = self._autosave_clock()
+            self._clear_autosave_pending()
+        return saved
+
+    def autosave(self, filename=SAVE_PATH, verbose=True):
+        """自动存档：距上次落盘不足 3 个世界时刻时先挂起，等主循环补写。"""
+        if not self._autosave_due():
+            self._autosave_pending = True
+            self._autosave_pending_filename = filename
+            self._autosave_pending_verbose = verbose
+            return True
+        return self._write_save(filename, verbose)
+
+    def flush_autosave(self):
+        """世界时刻推进后补写挂起的自动存档。"""
+        if not getattr(self, "_autosave_pending", False):
+            return False
+        if not self._autosave_due():
+            return False
+        filename = getattr(self, "_autosave_pending_filename", SAVE_PATH) or SAVE_PATH
+        verbose = getattr(self, "_autosave_pending_verbose", True)
+        return self._write_save(filename, verbose)
 
     def begin_deferred_save(self):
         """延迟动作内触发的自动存档，等世界时钟推进后再落盘。"""
@@ -4759,7 +4839,7 @@ class Player:
         self._save_pending = False
         self._save_pending_filename = None
         if pending:
-            return self.save_to_file(filename)
+            return self.autosave(filename)
         return False
 
     @classmethod

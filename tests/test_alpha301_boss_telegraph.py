@@ -137,6 +137,7 @@ def test_warning_turn_deals_no_damage_and_next_turn_casts_original_skill(monkeyp
     assert warning in output
     assert output.index(warning) < output.index(cast) < output.index(flee)
     assert "【困兽狂斩】" in output
+    assert "试炼傀儡的【困兽狂斩】对你造成" in output
     # 预警回合不掉血，下一回合按原技能数值结算一次：100 × 2.0 × 100 / 100 = 200。
     assert player.hp == 300
     assert engine.Color.YELLOW in output and engine.Color.RESET in output

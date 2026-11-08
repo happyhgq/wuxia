@@ -96,6 +96,43 @@ def test_separate_turn_in_npc_can_complete_quest_through_dialogue(monkeypatch):
     assert quest_name in player.completed_quests
 
 
+def test_duanhun_iron_collect_quest_advances_from_reward_items(monkeypatch):
+    """战利品或任务奖励获得的物品也必须推进收集类任务，断魂精铁换药才能完成。"""
+    from rewards import apply_reward_bundle
+
+    quest_name = "断魂岭·精铁换药"
+    quest = engine.QUESTS[quest_name]
+    player = Player("精铁换药验收", "散人")
+    player.location = next(
+        room_id for room_id, room in engine.ROOMS.items()
+        if quest["turn_in_npc"] in room.get("npcs", [])
+    )
+    player.completed_quests.append("断魂岭·破堡除凶")
+    player.active_quests[quest_name] = 0
+    player.quest_states[quest_name] = {"stage": 0, "progress": 0}
+    monkeypatch.setattr(Player, "save_to_file", lambda self, filename=None: True)
+
+    output = StringIO()
+    with redirect_stdout(output):
+        result = apply_reward_bundle(
+            player, {"items": [{"item": "断魂精铁", "quantity": 3}]}, source="战斗奖励"
+        )
+
+    assert result["ok"] is True
+    assert player.active_quests[quest_name] == 3
+    assert player.inventory.count("断魂精铁") == 3
+    assert "[任务更新]" in output.getvalue()
+
+    turn_in = StringIO()
+    with redirect_stdout(turn_in):
+        handle_quest(player, "jiaofu", [quest_name])
+
+    assert "恭喜完成任务" in turn_in.getvalue()
+    assert quest_name not in player.active_quests
+    assert player.inventory.count("断魂精铁") == 0
+    assert player.inventory.count("大还丹") >= 1
+
+
 def test_collect_quest_state_survives_save_load_and_cannot_be_rewarded_twice(monkeypatch, tmp_path):
     """交付前读档保留进度；交付后读档保留完成状态，不能重复领取。"""
     original_save = Player.save_to_file

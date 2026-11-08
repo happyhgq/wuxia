@@ -1971,6 +1971,113 @@
     "difficulty": "普通",
     "follow_up_hint": "药材补齐后，可继续留意雾隐林道采药人阿芷的难处。"
   },
+  "百草堂·药材去向": {
+    "title": "百草堂·药材去向",
+    "npc": "村长",
+    "turn_in_npc": "村长",
+    "target_type": "talk",
+    "target_name": "药铺老板",
+    "required_cnt": 1,
+    "repeatable": false,
+    "retryable": true,
+    "requires": {
+      "flags": [
+        "quest_completed:百草备货·补齐药材",
+        "world:main:herb_stock_replenished"
+      ]
+    },
+    "on_accept": {
+      "set_flags": {
+        "quest:village_herb_destination:started": true
+      }
+    },
+    "on_complete": {
+      "set_flags": {
+        "quest:village_herb_destination:resolved": true
+      },
+      "increment_variables": {
+        "village_reputation": 1
+      }
+    },
+    "stages": [
+      {
+        "desc": "去百草堂问清这批药材的出价与去处，再回村长处拿主意。",
+        "target_type": "talk",
+        "target_name": "药铺老板",
+        "required_cnt": 1
+      }
+    ],
+    "reward": {
+      "exp": 100,
+      "gold": 50,
+      "honor_delta": 2
+    },
+    "choices": [
+      {
+        "id": "sell_to_merchant",
+        "title": "卖给归云城行商",
+        "requires": {},
+        "reward": {
+          "exp": 120,
+          "gold": 180
+        },
+        "effects": {
+          "set_flags": {
+            "world:main:herb_sold_to_merchant": true
+          },
+          "region_effects": {
+            "main": {
+              "commerce": 12,
+              "travel": 4,
+              "security": -3
+            }
+          },
+          "faction_relations": {
+            "青石村:商会": 4
+          },
+          "relations": {
+            "村长": 5,
+            "药铺老板": -4
+          }
+        }
+      },
+      {
+        "id": "keep_for_village",
+        "title": "留作村中备药",
+        "requires": {},
+        "reward": {
+          "exp": 120,
+          "gold": 60,
+          "item": "疗伤药",
+          "honor_delta": 4
+        },
+        "effects": {
+          "set_flags": {
+            "world:main:herb_kept_for_village": true
+          },
+          "region_effects": {
+            "main": {
+              "security": 8,
+              "commerce": -4
+            }
+          },
+          "faction_relations": {
+            "青石村:商会": -2,
+            "青石村:官府": 2
+          },
+          "relations": {
+            "药铺老板": 5,
+            "村长": -2
+          }
+        }
+      }
+    ],
+    "desc": "百草堂的药材备齐后，归云城行商开价收走这批药材，村长却想留一部分给村里应急。先去百草堂听药铺老板的说法，再回村长处定下这批药材的去向。",
+    "notice": "百草堂药材备齐后，归云城行商与村长对这批药材的去向各有打算；愿意替村里拿主意的人，可去村长宅院问问。",
+    "notice_location": "村中广场",
+    "difficulty": "普通",
+    "follow_up_hint": "这批药材的去向已定，村中风气与商路上的往来会慢慢显出不同。"
+  },
   "雾林伐木·修补栈道": {
     "title": "雾林伐木·修补栈道",
     "npc": "樵夫老周",
@@ -3283,8 +3390,8 @@
       "item": "大还丹"
     },
     "repeat_cooldown_ticks": 12,
-    "desc": "守岭猎户认得夜行客兵刃上的精铁，愿用一丸大还丹换三块精铁，算是替岭上行人谢你。",
+    "desc": "守岭猎户认得夜行客与堡门守卫长兵刃上的精铁，愿用一丸大还丹换三块精铁，算是替岭上行人谢你。",
     "difficulty": "进阶",
-    "follow_up_hint": "精铁可在断魂崖夜行客身上取得；凑够三块后可再来找守岭猎户兑换。"
+    "follow_up_hint": "精铁可在断魂崖夜行客与断魂堡门守卫长身上取得；凑够三块后可再来找守岭猎户兑换。"
   }
 }

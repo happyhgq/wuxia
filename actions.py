@@ -7,7 +7,6 @@ import random
 import re
 import json
 import os
-import inspect
 import unicodedata
 from collections import Counter
 import engine
@@ -15,6 +14,7 @@ import actor_display
 from ui_output import BODY_WIDTH, safe_print as print, wrap_player_text, format_action_feedback, format_labeled_fields
 from world_time import format_world_clock, ticks_until_next_dawn, world_hour
 from item_feedback import add_inventory_items, format_item_change, remove_inventory_items
+from player import request_autosave
 
 Color = engine.Color
 
@@ -84,20 +84,7 @@ def _remember_use_candidates(player, item_names):
 
 def _save_without_success_message(player):
     """保存进度但不显示成功提示；存档失败仍由 save_to_file 正常提示。"""
-    saver = getattr(player, "save_to_file", None)
-    if not callable(saver):
-        return
-    try:
-        parameters = inspect.signature(saver).parameters
-    except (TypeError, ValueError):
-        parameters = {}
-    accepts_verbose = "verbose" in parameters or any(
-        parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
-    )
-    if accepts_verbose:
-        saver(verbose=False)
-    else:
-        saver()
+    request_autosave(player, verbose=False)
 
 
 def _use_inventory_item(player, item_name):
@@ -594,7 +581,7 @@ def look(player, args=None, show_guidance=False):
         else:
             level_text = level_labels.get(ecology.get("level"), str(ecology.get("level")))
             danger_text = danger_labels.get(ecology.get("danger"), str(ecology.get("danger")))
-            print(f"{Color.BOLD}【区域局势】{Color.RESET} {level_text} | 危险度：{danger_text}")
+            print(f"{Color.BOLD}【区域局势】{Color.RESET} 势力动向：{level_text} | 危险度：{danger_text}")
         visible_exits = list((room.get("exits", {}) or {}).items())
         exit_notes = room.get("exit_notes", {}) if isinstance(room.get("exit_notes"), dict) else {}
         hidden_exits = room.get("hidden_exits", {}) if isinstance(room, dict) else {}
@@ -690,7 +677,7 @@ def look(player, args=None, show_guidance=False):
             active_enemies, corpses = visible_enemies(player, player.location, room.get("enemies", []))
             if active_enemies:
                 print(f"{Color.BOLD}【危险与遗留】{Color.RESET}")
-                print(f"出没的威胁：{engine.style(', '.join(active_enemies), 'enemy')}")
+                print(f"出没的威胁：{engine.style('、'.join(active_enemies), 'enemy')}")
             if corpses:
                 if not active_enemies:
                     print(f"{Color.BOLD}【危险与遗留】{Color.RESET}")
@@ -794,6 +781,21 @@ def look(player, args=None, show_guidance=False):
             return
 
     print(f"周围和行囊里并没有找到与【{target}】相关的目标。")
+
+
+def _conditional_dialogue_text(player, npc_data):
+    """返回当前世界状态下优先级最高的条件对白；没有则返回 None。"""
+    matched = []
+    for index, entry in enumerate(npc_data.get("conditional_dialogue", []) or []):
+        if not isinstance(entry, dict) or not entry.get("text"):
+            continue
+        if engine.check_conditions(entry.get("requires"), player.world_state, player.completed_quests, player):
+            try:
+                priority = int(entry.get("priority", 0))
+            except (TypeError, ValueError):
+                priority = 0
+            matched.append((priority, -index, str(entry["text"])))
+    return max(matched)[2] if matched else None
 
 
 def handle_talk_and_ask(player, args):
@@ -1234,28 +1236,22 @@ def handle_talk_and_ask(player, args):
             else:
                 player.change_relation(target_npc, delta)
         else:
-            print(f"{target_npc} 摇了摇头：“关于‘{topic}’，老夫并不知道什么信息。”")
-            player.change_relation(target_npc, int(npc_data.get("failed_ask_relation_delta", 0)))
+            # 没有对应情报时，若人物有当前世界状态对白，就用它回应，避免
+            # “不知道”与随后完成交谈目标互相矛盾。
+            conditional_line = _conditional_dialogue_text(player, npc_data)
+            if conditional_line:
+                print(f"{target_npc} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{conditional_line}{Color.RESET}”")
+            else:
+                print(f"{target_npc} 摇了摇头：“关于‘{topic}’，老夫并不知道什么信息。”")
+                player.change_relation(target_npc, int(npc_data.get("failed_ask_relation_delta", 0)))
         player.update_quest_progress(target_npc, event_type="talk")
         return
 
     print(f"{Color.CYAN}{npc_data.get('desc', '一言不发。')}{Color.RESET}")
     # Alpha241：固定 NPC 可按世界进展切换日常对白，让已完成的任务在场景中留下可感知的结果。
     # 条件按 priority 从高到低选择；没有满足条件的对白时，完全沿用原有随机对白。
-    conditional_dialogues = npc_data.get("conditional_dialogue", []) or []
-    matched_dialogues = []
-    for index, entry in enumerate(conditional_dialogues):
-        if not isinstance(entry, dict) or not entry.get("text"):
-            continue
-        if engine.check_conditions(entry.get("requires"), player.world_state, player.completed_quests, player):
-            try:
-                priority = int(entry.get("priority", 0))
-            except (TypeError, ValueError):
-                priority = 0
-            matched_dialogues.append((priority, -index, str(entry["text"])))
-    if matched_dialogues:
-        line = max(matched_dialogues)[2]
-    else:
+    line = _conditional_dialogue_text(player, npc_data)
+    if line is None:
         dialogues = npc_data.get("dialogue", ["……"])
         line = random.choice(dialogues) if isinstance(dialogues, list) else dialogues
     print(f"\n{target_npc} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{line}{Color.RESET}”")
@@ -1402,6 +1398,8 @@ def _quest_npc_status(player, quest_name):
         return "已结束", "这件事已经错过时机，暂时不能再接。"
     if not engine.check_conditions(info.get("requires"), player.world_state, player.completed_quests, player):
         failures = engine.explain_condition_failures(info.get("requires"), player.world_state, player.completed_quests, player)
+        # 多项未满足条件可能落到同一句泛化说明，去重后再拼接，避免重复刷屏。
+        failures = list(dict.fromkeys(failures))
         if not failures:
             failures = ["尚有未满足的剧情条件（当前条件配置无法进一步说明）"]
         return "未开放", "接取条件未满足：" + "；".join(failures) + "。"
@@ -1416,6 +1414,25 @@ def _quest_delivery_guidance(player, quest_name, fallback_npc=""):
         return f"交付方式：回到【{npc_name}】处，输入“交谈 {npc_name} 交付委托 {_quest_title(quest_name)}”。"
     place = f"前往【{guide['location']}】" if guide.get("location") else "回到委托人处"
     return f"交付方式：{place}找【{guide['npc']}】，输入“{guide['command']}”。"
+
+
+def _print_region_effect_changes(region_changes):
+    """结算时直接展示任务选择对区域的实际影响。"""
+    if not isinstance(region_changes, dict):
+        return
+    regions = getattr(engine, "WORLD_REGIONS", {}) or {}
+    for zone, changes in region_changes.items():
+        if not isinstance(changes, dict):
+            continue
+        parts = []
+        for field, label in (("security", "安全度"), ("commerce", "商路"), ("travel", "通行")):
+            delta = changes.get(field)
+            if isinstance(delta, bool) or not isinstance(delta, int) or delta == 0:
+                continue
+            parts.append(f"{label} {delta:+d}")
+        if parts:
+            name = str((regions.get(zone) or {}).get("name", zone))
+            print(f"{Color.CYAN}区域变化：{name} {'、'.join(parts)}{Color.RESET}")
 
 
 def _quest_difficulty_text(info):
@@ -2146,7 +2163,7 @@ def handle_region_ecology(player, args=None):
     for zone in zones:
         info = player.get_region_ecology(zone)
         print(f"\n{Color.BRIGHT_CYAN}【区域局势：{info['name']}】{Color.RESET}")
-        print(f"局势：{level_labels.get(info.get('level'), '未知')} | 安全度：{info['security']}/100 | 商路：{info['commerce']}/100 | 通行：{info['travel']}/100 | 危险度：{danger_labels.get(info.get('danger'), '未知')}")
+        print(f"势力动向：{level_labels.get(info.get('level'), '未知')} | 安全度：{info['security']}/100 | 商路：{info['commerce']}/100 | 通行：{info['travel']}/100 | 危险度：{danger_labels.get(info.get('danger'), '未知')}")
         print(f"局势压力：{info['tension']}")
         # Alpha83：将区域指标翻译成玩家可理解的实际影响提示，避免只显示数字。
         security = int(info.get("security", 70))
@@ -2252,7 +2269,7 @@ def handle_relations(player, args=None):
         }
         identity = str(npc_data.get("title") or npc_data.get("name") or npc_name)
         type_label = type_labels.get(npc_data.get("type"), "江湖人物")
-        print(f"【{actor_display.format_room_label(npc_name, npc_data)}】")
+        print(f"【{actor_display.format_room_label(npc_name, npc_data, include_id=True)}】")
         print(f"身份：{identity}（{type_label}）")
         print(f"势力：{npc_data.get('faction') or '无'}")
         print(f"关系：{player.get_relation_status(npc_name)} ({player.get_relation(npc_name):+d})")
@@ -2399,8 +2416,6 @@ def handle_quest(player, cmd, args):
             if q_info.get("difficulty"):
                 print(f"难度：{q_info.get('difficulty')}")
             print(f"{q_info.get('desc', '暂无描述。')}")
-            if q_info.get('requires') and not engine.check_conditions(q_info.get('requires'), player.world_state, player.completed_quests, player):
-                print("接取条件：当前尚未满足相关剧情条件。")
             stages = q_info.get('stages') or []
             if q_name in player.active_quests:
                 state = player.quest_states.get(q_name, {"stage": 0, "progress": player.active_quests[q_name]})
@@ -2424,8 +2439,11 @@ def handle_quest(player, cmd, args):
                 retryable = q_info.get("retryable", True)
                 print(f"当前状态：已失败{'（可重试）' if retryable else '（不可重试）'}")
             else:
-                can_accept = engine.check_conditions(q_info.get('requires'), player.world_state, player.completed_quests, player)
-                print(f"当前状态：{'可接取' if can_accept else '条件未满足'}")
+                # 与 NPC 对话共用同一判定：未开放时列出具体前置，而不是只说“条件未满足”。
+                offer_state, offer_detail = _quest_npc_status(player, q_name)
+                print(f"当前状态：{'可接取' if offer_state == '未领取' else '条件未满足'}")
+                if offer_state == "未开放":
+                    print(offer_detail)
             if q_name in player.active_quests and player.quest_states.get(q_name, {}).get("branch_pending"):
                 options = player.get_quest_branch_options(q_name)
                 print(f"  {Color.BRIGHT_CYAN}待选择路线：{' / '.join(f"{i + 1}. {c.get('title', '分支选项')}" for i, c in enumerate(options)) or '无'}；输入“选择 {_quest_title(q_name)}|序号”继续。{Color.RESET}")
@@ -2439,7 +2457,7 @@ def handle_quest(player, cmd, args):
             reward = q_info.get('reward', {})
             if reward:
                 sect_rep = reward.get("sect_reputation", {}) or {}
-                sect_text = " / 门派声望 " + ", ".join(f"{k}{int(v):+d}" for k, v in sect_rep.items()) if sect_rep else ""
+                sect_text = " / 门派声望 " + "、".join(f"{k}{int(v):+d}" for k, v in sect_rep.items()) if sect_rep else ""
                 print(f"奖励：经验 {reward.get('exp', 0)} / 银两 {reward.get('gold', 0)} / 物品 {reward.get('item', reward.get('items', '无'))}{sect_text}")
             print(f"{Color.CYAN}----------------------------------{Color.RESET}")
             return True
@@ -2543,7 +2561,7 @@ def handle_quest(player, cmd, args):
             return False
         if not engine.check_conditions(q_info.get("requires"), player.world_state, player.completed_quests, player):
             failures = engine.explain_condition_failures(q_info.get("requires"), player.world_state, player.completed_quests, player)
-            reason = "; ".join(failures) if failures else "尚有未满足的剧情条件，当前配置无法进一步说明。"
+            reason = "；".join(failures) if failures else "尚有未满足的剧情条件，当前配置无法进一步说明。"
             print(f"{Color.RED}接取失败：目前不满足接取任务【{_quest_title(q_name)}】的条件。{reason}{Color.RESET}")
             return False
         quest_npc = q_info.get("npc")
@@ -2649,9 +2667,10 @@ def handle_quest(player, cmd, args):
                 return False
 
         # 可重复任务允许再次领取基础报酬，但复做奖励由数据单独定义，避免
-        # 门派声望、侠义值等永久成长奖励被无限重复刷取。
+        # 门派声望、侠义值等永久成长奖励被无限重复刷取。缺少 repeat_reward 时
+        # 也不回退到首做奖励，宁可本轮不发奖也不让永久成长可被刷取。
         repeat_completion = q_name in player.completed_quests and bool(q_info.get("repeatable", False))
-        reward = q_info.get("repeat_reward", q_info.get("reward", {})) if repeat_completion else q_info.get("reward", {})
+        reward = (q_info.get("repeat_reward") or {}) if repeat_completion else q_info.get("reward", {})
         choices = q_info.get("choices") or []
         if choices:
             eligible = [c for c in choices if isinstance(c, dict) and engine.check_conditions(c.get("requires"), player.world_state, player.completed_quests, player)]
@@ -2717,18 +2736,20 @@ def handle_quest(player, cmd, args):
             player.set_var(f"quest_repeat_last_completed:{q_name}", player.get_quest_clock())
         player.set_flag(f"quest_active:{q_name}", False)
         player.set_flag(f"quest_completed:{q_name}", True)
-        engine.apply_world_effects(player.world_state, q_info.get("on_complete"))
+        world_report = {}
+        engine.apply_world_effects(player.world_state, q_info.get("on_complete"), report=world_report)
         if choices and chosen.get("effects"):
-            engine.apply_world_effects(player.world_state, chosen.get("effects"))
+            engine.apply_world_effects(player.world_state, chosen.get("effects"), report=world_report)
         player.react_npcs_to_quest(q_name, "complete")
         public_title = _quest_title(q_name)
         print(f"\n{Color.BRIGHT_YELLOW}🎉 恭喜完成任务【{public_title}】！已向委托人交代清楚，奖励已结算。{Color.RESET}")
+        _print_region_effect_changes(world_report.get("region_effects"))
         follow_up = q_info.get("follow_up_hint")
         if follow_up:
             print(f"后续指引：{follow_up}")
         else:
             print("后续指引：可继续探索周边、查看公告栏，或与人物交谈了解新的消息。")
-        player.save_to_file()
+        request_autosave(player)
         return True
 
 
@@ -2996,7 +3017,7 @@ def _handle_caravan_trading(player, cmd, args, caravan_id, caravan_config):
         print(message)
         return False
     print(message)
-    player.save_to_file()
+    request_autosave(player)
     return True
 
 
@@ -3116,12 +3137,12 @@ def handle_trading(player, cmd, args):
     if cmd not in ("buy", "sell"):
         return False
     if not args:
-        print(f"请指定要{'购买' if cmd == 'buy' else '出售'}的物品名称，并可追加数量，例如：{cmd} 金创药 3。")
+        print(f"请指定要{'购买' if cmd == 'buy' else '出售'}的物品名称，并可追加数量，例如：{'购买' if cmd == 'buy' else '出售'} 金创药 3。")
         return False
 
     quantity = _parse_trade_quantity(args)
     if quantity is None:
-        print("交易数量必须是正整数，例如：buy 金创药 3。")
+        print("交易数量必须是正整数，例如：购买 金创药 3。")
         return False
 
     item_input = args[0]
@@ -3163,7 +3184,7 @@ def handle_trading(player, cmd, args):
         print(f"{Color.GREEN}{feedback[0]}{Color.RESET}")
         for line in feedback[1:]:
             print(line)
-        player.save_to_file()
+        request_autosave(player)
         return True
 
     matching = [i for i in player.inventory if item_input in i or i in item_input]
@@ -3199,7 +3220,7 @@ def handle_trading(player, cmd, args):
     print(f"{Color.GREEN}{feedback[0]}{Color.RESET}")
     for line in feedback[1:]:
         print(line)
-    player.save_to_file()
+    request_autosave(player)
     return True
 
 
@@ -3306,7 +3327,7 @@ def handle_equipment_and_items(player, cmd, args):
         if ok:
             for line in format_action_feedback("卸下装备", True, msg, detail="装备栏已更新，卸下的物品已放回行囊。"):
                 print(f"{Color.GREEN}{line}{Color.RESET}")
-            player.save_to_file()
+            request_autosave(player)
         else:
             for line in format_action_feedback("卸下装备", False, msg, next_step="检查当前装备部位后重试。"):
                 print(f"{Color.RED}{line}{Color.RESET}")
@@ -3341,7 +3362,7 @@ def handle_equipment_and_items(player, cmd, args):
                       f"总防御 {before_defense} → {after_defense}（{after_defense - before_defense:+d}）。")
             for line in format_action_feedback("装备", True, msg, detail=detail):
                 print(f"{Color.GREEN}{line}{Color.RESET}")
-            player.save_to_file()
+            request_autosave(player)
         else:
             for line in format_action_feedback("装备", False, msg, next_step="确认物品类型与装备部位后重试。"):
                 print(f"{Color.RED}{line}{Color.RESET}")
@@ -3433,14 +3454,14 @@ def handle_attributes(player, args):
         ok, msg = player.allocate_attribute(args[1], amount)
         print(f"{Color.GREEN if ok else Color.RED}{msg}{Color.RESET}")
         if ok:
-            player.save_to_file()
+            request_autosave(player)
         return
     # 允许直接输入“属性 力量 2”作为简写。
     amount = args[1] if len(args) >= 2 else "1"
     ok, msg = player.allocate_attribute(args[0], amount)
     print(f"{Color.GREEN if ok else Color.RED}{msg}{Color.RESET}")
     if ok:
-        player.save_to_file()
+        request_autosave(player)
 
 def _print_forge_preview(player):
     print(f"\n{Color.BRIGHT_YELLOW}============= 强化预览 ============={Color.RESET}")
@@ -3538,5 +3559,5 @@ def handle_forge(player, args):
     print(f"\n{Color.BRIGHT_GREEN}锤打叮当，火花四溅！你的【{target_name}】成功强化至 +{new_lv}！{Color.RESET}")
     print(f"强化属性：{before_stat} → {after_stat}（+{after_stat - before_stat}）")
     print(f"剩余材料：铁矿石 {player.inventory.count('铁矿石')} 块 | 银两 {player.gold} 两")
-    player.save_to_file()
+    request_autosave(player)
     return True

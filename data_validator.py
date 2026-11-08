@@ -18,7 +18,35 @@ EVENT_CONDITION_KEYS = {
     "faction_relations", "skills", "items", "relations", "npc_memory",
     "npc_memory_attitude", "npc_information", "npc_states",
 }
-EVENT_EFFECT_KEYS = {"set_flags", "set_variables", "increment_variables", "faction_relations", "relations"}
+EVENT_EFFECT_KEYS = {"set_flags", "set_variables", "increment_variables", "faction_relations", "relations", "region_effects"}
+REGION_EFFECT_FIELDS = {"security", "commerce", "travel"}
+REGION_EFFECT_RANGE = (-60, 30)
+
+
+def check_region_effects(effects, label, zone_names, errors):
+    """region_effects 写入持久治安记录，区域名与夹紧范围必须和运行时一致。"""
+    if not isinstance(effects, dict):
+        return
+    region_effects = effects.get("region_effects")
+    if region_effects is None:
+        return
+    if not isinstance(region_effects, dict):
+        errors.append(f"{label}: region_effects 必须为对象")
+        return
+    low, high = REGION_EFFECT_RANGE
+    for zone, delta in region_effects.items():
+        if zone not in zone_names:
+            errors.append(f"{label}: region_effects 引用不存在的区域 {zone}")
+        if not isinstance(delta, dict):
+            errors.append(f"{label}: region_effects.{zone} 必须为对象")
+            continue
+        for key, amount in delta.items():
+            if key not in REGION_EFFECT_FIELDS:
+                errors.append(f"{label}: region_effects.{zone} 不支持字段 {key}")
+            elif isinstance(amount, bool) or not isinstance(amount, int):
+                errors.append(f"{label}: region_effects.{zone}.{key} 必须为整数")
+            elif not low <= amount <= high:
+                errors.append(f"{label}: region_effects.{zone}.{key} 超出 {low}~{high}")
 
 def schedule_hours(start, end):
     """返回日程条目覆盖的整点集合；左闭右开，支持跨午夜。"""
@@ -153,6 +181,7 @@ def main():
                             errors.append(f"事件 {event_id}: 不支持的效果 {key}")
                         elif not isinstance(value, dict):
                             errors.append(f"事件 {event_id}: effects.{key} 必须为对象")
+                    check_region_effects(effects, f"事件 {event_id}", zone_names, errors)
     if not isinstance(factions, dict) or not factions:
         errors.append("factions.json 必须为非空对象")
     else:
@@ -1325,9 +1354,61 @@ def main():
         for field in ("repeatable", "retryable"):
             if field in qinfo and not isinstance(qinfo[field], bool):
                 errors.append(f"任务 {q}: {field} 必须为布尔值")
+        if qinfo.get("repeatable") is True:
+            repeat_reward = qinfo.get("repeat_reward")
+            if not isinstance(repeat_reward, dict) or not repeat_reward:
+                errors.append(f"任务 {q}: 可重复任务必须定义非空的 repeat_reward")
+            else:
+                for field in ("sect_reputation", "honor_delta", "infamy_delta", "jianghu_action", "jianghu_amount"):
+                    if field in repeat_reward:
+                        errors.append(f"任务 {q}: repeat_reward 不得包含永久成长字段 {field}")
+                repeat_effects = repeat_reward.get("effects") or {}
+                if isinstance(repeat_effects, dict):
+                    for field in ("increment_variables", "relations", "faction_relations", "region_effects"):
+                        if repeat_effects.get(field):
+                            errors.append(f"任务 {q}: repeat_reward.effects 不得包含可累积字段 {field}")
+                repeat_entries = []
+                if repeat_reward.get("item"):
+                    repeat_entries.append({"item": repeat_reward.get("item"), "quantity": repeat_reward.get("item_quantity", 1)})
+                repeat_entries.extend(repeat_reward.get("items", []) or [])
+                for idx, entry in enumerate(repeat_entries, 1):
+                    if isinstance(entry, str):
+                        item_name, qty = entry, 1
+                    elif isinstance(entry, dict):
+                        item_name = entry.get("item") or entry.get("name")
+                        qty = entry.get("quantity", 1)
+                    else:
+                        errors.append(f"任务 {q}: repeat_reward items[{idx}] 格式非法")
+                        continue
+                    if item_name and item_name not in items:
+                        errors.append(f"任务 {q}: repeat_reward 奖励物品不存在 {item_name}")
+                    if not isinstance(qty, int) or isinstance(qty, bool) or qty < 1:
+                        errors.append(f"任务 {q}: repeat_reward items[{idx}] quantity 必须为正整数")
+                for field in ("exp", "gold"):
+                    if field in repeat_reward:
+                        value = repeat_reward[field]
+                        if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+                            errors.append(f"任务 {q}: repeat_reward.{field} 必须为非负数值")
+            cooldown = qinfo.get("repeat_cooldown_ticks")
+            if not isinstance(cooldown, int) or isinstance(cooldown, bool) or cooldown < 1:
+                errors.append(f"任务 {q}: 可重复任务必须设置正整数 repeat_cooldown_ticks")
+            if qinfo.get("choices"):
+                errors.append(f"任务 {q}: 可重复任务不支持 choices（选择奖励会绕过 repeat_reward）")
+            for effect_field in ("on_accept", "on_complete"):
+                effects = qinfo.get(effect_field) or {}
+                if not isinstance(effects, dict):
+                    continue
+                for field in ("increment_variables", "relations", "faction_relations", "region_effects"):
+                    if effects.get(field):
+                        errors.append(f"任务 {q}: 可重复任务的 {effect_field} 不得包含可累积字段 {field}")
         for effect_field in ("on_accept", "on_complete", "on_fail", "on_abandon"):
-            if effect_field in qinfo and not isinstance(qinfo[effect_field], dict):
+            if effect_field not in qinfo:
+                continue
+            field_effects = qinfo.get(effect_field)
+            if not isinstance(field_effects, dict):
                 errors.append(f"任务 {q}: {effect_field} 必须为对象")
+                continue
+            check_region_effects(field_effects, f"任务 {q}: {effect_field}", zone_names, errors)
         choices = qinfo.get("choices", []) or []
         if not isinstance(choices, list):
             errors.append(f"任务 {q}: choices 必须是数组")
@@ -1345,6 +1426,8 @@ def main():
                     errors.append(f"任务 {q}: choices[{idx}] requires 必须为对象")
                 if "effects" in choice and not isinstance(choice.get("effects"), dict):
                     errors.append(f"任务 {q}: choices[{idx}] effects 必须为对象")
+                elif isinstance(choice.get("effects"), dict):
+                    check_region_effects(choice.get("effects"), f"任务 {q}: choices[{idx}]", zone_names, errors)
                 if "reward" in choice and not isinstance(choice.get("reward"), dict):
                     errors.append(f"任务 {q}: choices[{idx}] reward 必须为对象")
         target=qinfo.get("target_name")

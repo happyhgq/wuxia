@@ -365,6 +365,18 @@ def movement_block_reason(player, room, cmd):
     return ""
 
 
+_DIRECTION_WORDS = {"n", "s", "e", "w", "u", "d", "北", "南", "东", "西", "上", "下", "内", "外", "前", "后"}
+
+
+def is_movement_command(cmd, room):
+    """判断指令是否只是一步移动；移动命令的环境播报要等抵达后再取词。"""
+    if cmd in _DIRECTION_WORDS:
+        return True
+    exits = room.get("exits", {}) if isinstance(room, dict) else {}
+    hidden = room.get("hidden_exits", {}) if isinstance(room, dict) else {}
+    return cmd in exits or (isinstance(hidden, dict) and cmd in hidden)
+
+
 def command_suggestions(raw, limit=5):
     token = raw.strip().split()[0] if raw.strip() else ""
     if not token:
@@ -749,7 +761,11 @@ def show_status(player, panel="main"):
         weapon = player.get_equipment_stats("weapon")
         armor = player.get_equipment_stats("armor")
         line("装备强化：", f"兵刃 +{weapon.get('enhance', 0)} / 防具 +{armor.get('enhance', 0)}")
-        line("终局提示：", "L15 为当前内容封顶；可继续巡道、门派委托与断魂崖夜行客。")
+        if player.level >= 15:
+            endgame_hint = "已达设计上限，可继续积累经验；仍可巡道、门派委托与断魂崖夜行客。"
+        else:
+            endgame_hint = "L15 为当前设计上限，达到后可继续积累经验；可继续巡道、门派委托与断魂崖夜行客。"
+        line("终局提示：", endgame_hint)
     divider()
     print("0 返回状态面板    9 关闭面板")
     print(f"{Color.CYAN}=============================={Color.RESET}")
@@ -1148,6 +1164,9 @@ def main():
             curr_room = engine.ROOMS.get(player.location, {})
             # 上一轮若因失败分支未走到延迟存档收尾，在这里清理遗留的存档请求。
             player.flush_deferred_save()
+            flush_autosave = getattr(player, "flush_autosave", None)
+            if callable(flush_autosave):
+                flush_autosave()
             if pending_commands:
                 raw_in = pending_commands.pop(0)
             else:
@@ -1213,7 +1232,9 @@ def main():
                 # 确定性失败不影响世界：预检命中时保留处理器提示，但不推进时钟。
                 if not preflight_guaranteed_failure(player, cmd, args, curr_room):
                     player.tick_quest_clock(1)
-                    announce_pending_npc_movement(player)
+                    # 移动的环境播报改到抵达后，避免用出发地的声响描述目的地。
+                    if not is_movement_command(cmd, curr_room):
+                        announce_pending_npc_movement(player)
                     announce_pending_caravan_arrivals(player)
 
             if cmd == "quit":
@@ -1571,6 +1592,8 @@ def main():
                         _residence_invites(player).pop(destination, None)
                 player.location = destination
                 player.mark_visited(player.location)
+                # 先按目的地取词播报环境，再渲染新场景。
+                announce_pending_npc_movement(player)
                 look(player)
                 trigger_entry_events(player, player.location)
 

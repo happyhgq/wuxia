@@ -57,7 +57,7 @@ def test_new_character_guide_reaches_rain_within_twenty_actions():
         messages, _output = _capture(player)
         seen.extend(messages)
     assert weather.current_kind(player, 16) == "rain"
-    assert "细雨落了下来，檐角很快有了水声。" in seen
+    assert "细雨落了下来，四下很快有了水声。" in seen
 
 
 def test_guide_realigns_weather_changes_to_dawn_after_the_first_day():
@@ -238,6 +238,6 @@ def test_window_room_weather_transition_uses_window_view():
 
 
 def test_outdoor_and_eave_wording_remain_distinct_from_window_wording():
-    assert world_ambience._weather_message(_player(tick=9), "rain") == "细雨落了下来，檐角很快有了水声。"
+    assert world_ambience._weather_message(_player(tick=9), "rain") == "细雨落了下来，四下很快有了水声。"
     assert world_ambience._weather_message(_player(room="general_shop"), "rain") == "檐外传来细密的雨声。"
     assert world_ambience._weather_message(_player(room="inn_upper_hall"), "rain") == "窗外落着细雨，檐角滴着水。"

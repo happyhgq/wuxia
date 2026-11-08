@@ -6,6 +6,9 @@ import os
 import engine
 
 _CONFIG_CACHE = None
+_REGION_FIELDS = ("security", "commerce", "travel")
+_REGION_DELTA_MIN = -60
+_REGION_DELTA_MAX = 30
 
 
 def get_config():
@@ -21,8 +24,7 @@ def get_config():
     return _CONFIG_CACHE
 
 
-def _variables(player):
-    world = getattr(player, "world_state", None)
+def _variables_from_world(world):
     if not isinstance(world, dict):
         return {}
     variables = world.setdefault("variables", {})
@@ -32,13 +34,21 @@ def _variables(player):
     return variables
 
 
-def _state(player):
-    variables = _variables(player)
+def _variables(player):
+    return _variables_from_world(getattr(player, "world_state", None))
+
+
+def _state_from_world(world):
+    variables = _variables_from_world(world)
     state = variables.setdefault("region_activity", {})
     if not isinstance(state, dict):
         state = {}
         variables["region_activity"] = state
     return state
+
+
+def _state(player):
+    return _state_from_world(getattr(player, "world_state", None))
 
 
 def get_permanent_region_delta(player, zone):
@@ -94,8 +104,7 @@ def get_region_delta(player, zone):
     return {key: max(-60, min(30, value)) for key, value in result.items()}
 
 
-def _ensure_row(player, zone):
-    state = _state(player)
+def _ensure_row_in(state, zone):
     row = state.get(zone)
     if not isinstance(row, dict):
         row = {"security": 0, "commerce": 0, "travel": 0, "last_recovery": 0, "events": {}}
@@ -104,15 +113,50 @@ def _ensure_row(player, zone):
     return row
 
 
-def _change(player, zone, *, security=0, commerce=0, travel=0):
-    row = _ensure_row(player, zone)
-    for key, amount in (("security", security), ("commerce", commerce), ("travel", travel)):
+def _ensure_row(player, zone):
+    return _ensure_row_in(_state(player), zone)
+
+
+def _apply_row_delta(row, delta):
+    """把单个区域的变化量写入记录并夹紧到持久上限，返回实际生效的差值。"""
+    changes = {}
+    for key in _REGION_FIELDS:
+        raw = delta.get(key, 0)
+        if isinstance(raw, bool) or not isinstance(raw, (int, float)):
+            continue
+        amount = int(raw)
+        if not amount:
+            continue
         try:
             old = int(row.get(key, 0))
-            row[key] = max(-60, min(30, old + int(amount)))
         except (TypeError, ValueError, OverflowError):
-            row[key] = max(-60, min(30, int(amount)))
+            old = 0
+        new = max(_REGION_DELTA_MIN, min(_REGION_DELTA_MAX, old + amount))
+        row[key] = new
+        if new != old:
+            changes[key] = new - old
+    return changes
+
+
+def _change(player, zone, *, security=0, commerce=0, travel=0):
+    row = _ensure_row(player, zone)
+    _apply_row_delta(row, {"security": security, "commerce": commerce, "travel": travel})
     return row
+
+
+def apply_region_effects(world_state, region_effects):
+    """任务与剧情的地区后果；直接写持久治安记录，返回各区域实际变动量。"""
+    if not isinstance(world_state, dict) or not isinstance(region_effects, dict):
+        return {}
+    state = _state_from_world(world_state)
+    applied = {}
+    for zone, delta in region_effects.items():
+        if not isinstance(zone, str) or not zone or not isinstance(delta, dict):
+            continue
+        changes = _apply_row_delta(_ensure_row_in(state, zone), delta)
+        if changes:
+            applied[zone] = changes
+    return applied
 
 
 def record_criminal_defeat(player, room_id, enemy_name, enemy_data=None):

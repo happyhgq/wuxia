@@ -190,7 +190,7 @@ def test_indoor_dawn_reports_time_phase_then_indoor_weather():
     kind = weather._state(player, 24)["kind"]
     assert kind != "clear"
     assert messages == [
-        world_ambience.PHASE_MESSAGES["dawn"],
+        world_ambience._INDOOR_PHASE_MESSAGES["dawn"],
         world_ambience._WEATHER_TRANSITIONS[kind][1],
     ]
 
@@ -207,7 +207,7 @@ def test_weather_deferred_at_five_messages_reports_latest_once_next_turn():
     assert len(messages) == 5
     assert weather_text not in messages
     follow_up, _output = _capture(player)
-    assert follow_up == [world_ambience.PHASE_MESSAGES["dawn"], weather_text]
+    assert follow_up == [world_ambience._INDOOR_PHASE_MESSAGES["dawn"], weather_text]
     assert _capture(player)[0] == []
 
 

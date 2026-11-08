@@ -20,7 +20,7 @@ def capture(fn, *args, **kwargs):
 def test_all_quest_definitions_have_valid_giver_and_turn_in_locations():
     quests = json.loads(Path("data/quests.json").read_text(encoding="utf-8"))
     rooms = json.loads(Path("data/rooms.json").read_text(encoding="utf-8"))
-    assert len(quests) == 59
+    assert len(quests) == 60
     for qid, info in quests.items():
         giver = info.get("npc")
         turn_in = info.get("turn_in_npc") or giver
