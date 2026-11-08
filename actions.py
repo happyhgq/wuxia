@@ -2458,7 +2458,12 @@ def handle_quest(player, cmd, args):
             if reward:
                 sect_rep = reward.get("sect_reputation", {}) or {}
                 sect_text = " / 门派声望 " + "、".join(f"{k}{int(v):+d}" for k, v in sect_rep.items()) if sect_rep else ""
-                print(f"奖励：经验 {reward.get('exp', 0)} / 银两 {reward.get('gold', 0)} / 物品 {reward.get('item', reward.get('items', '无'))}{sect_text}")
+                from rewards import normalize_reward_items
+                item_entries = normalize_reward_items(reward)
+                item_text = "、".join(
+                    f"{name}×{quantity}" if quantity > 1 else name for name, quantity in item_entries
+                ) or "无"
+                print(f"奖励：经验 {reward.get('exp', 0)} / 银两 {reward.get('gold', 0)} / 物品 {item_text}{sect_text}")
             print(f"{Color.CYAN}----------------------------------{Color.RESET}")
             return True
 

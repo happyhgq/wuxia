@@ -14,10 +14,16 @@ DIRECTION_VECTORS = {"北": (0, 1), "南": (0, -1), "东": (1, 0), "西": (-1, 0
 
 DUANHUN_ROOMS = {
     "duanhun_camp": ("断魂岭猎户棚", [3, 5], {"南": "bandit_old_beacon", "北": "duanhun_trail"}),
-    "duanhun_trail": ("断魂岭栈道", [3, 6], {"南": "duanhun_camp", "北": "duanhun_ravine", "东": "duanhun_cliff"}),
-    "duanhun_cliff": ("断魂崖", [4, 6], {"西": "duanhun_trail"}),
-    "duanhun_ravine": ("枯骨涧", [3, 7], {"南": "duanhun_trail", "北": "duanhun_fort_gate"}),
-    "duanhun_fort_gate": ("断魂堡门", [3, 8], {"南": "duanhun_ravine", "北": "duanhun_keep"}),
+    "duanhun_trail": ("断魂岭栈道", [3, 6], {"南": "duanhun_camp", "北": "duanhun_ravine", "东": "duanhun_cliff", "西": "duanhun_wolf_den"}),
+    "duanhun_cliff": ("断魂崖", [4, 6], {"西": "duanhun_trail", "北": "duanhun_sword_grave", "东": "duanhun_watchtower"}),
+    "duanhun_wolf_den": ("狼谷", [2, 6], {"东": "duanhun_trail", "北": "duanhun_old_camp"}),
+    "duanhun_old_camp": ("黑风旧营", [2, 7], {"南": "duanhun_wolf_den", "东": "duanhun_ravine", "北": "duanhun_rain_shrine"}),
+    "duanhun_ravine": ("枯骨涧", [3, 7], {"南": "duanhun_trail", "北": "duanhun_fort_gate", "西": "duanhun_old_camp"}),
+    "duanhun_rain_shrine": ("岭雨祠", [2, 8], {"南": "duanhun_old_camp"}),
+    "duanhun_fort_gate": ("断魂堡门", [3, 8], {"南": "duanhun_ravine", "北": "duanhun_keep", "东": "duanhun_supply_cave"}),
+    "duanhun_supply_cave": ("堡后粮道", [4, 8], {"西": "duanhun_fort_gate"}),
+    "duanhun_watchtower": ("断魂哨塔", [5, 6], {"西": "duanhun_cliff"}),
+    "duanhun_sword_grave": ("断魂剑冢", [4, 7], {"南": "duanhun_cliff"}),
     "duanhun_keep": ("断魂堡内厅", [3, 9], {"南": "duanhun_fort_gate"}),
 }
 
@@ -88,8 +94,14 @@ def test_duanhun_ridge_topology_connects_to_bandit_pass_without_breaking_vectors
         "duanhun_camp": 13,
         "duanhun_trail": 13,
         "duanhun_cliff": 13,
+        "duanhun_watchtower": 13,
+        "duanhun_wolf_den": 14,
+        "duanhun_old_camp": 14,
+        "duanhun_rain_shrine": 14,
+        "duanhun_supply_cave": 14,
         "duanhun_ravine": 14,
         "duanhun_fort_gate": 14,
+        "duanhun_sword_grave": 15,
         "duanhun_keep": 15,
     }
     for room_id, level in level_by_room.items():
@@ -176,7 +188,13 @@ def test_duanhun_npc_and_quest_chain_form_a_gated_progression():
 
     hunter = npcs["守岭猎户"]
     assert hunter["home_room"] == "duanhun_camp"
-    assert hunter["quests"] == list(DUANHUN_QUESTS) + ["断魂岭·精铁换药"]
+    assert hunter["quests"] == [
+        "断魂岭·岭道清剿",
+        "断魂岭·破堡除凶",
+        "断魂岭·巡道除匪",
+        "断魂岭·狼谷除患",
+        "断魂岭·精铁换药",
+    ]
     assert "守岭猎户" in rooms["duanhun_camp"]["npcs"]
     assert hunter["autonomy_profile"]["route"] == ["duanhun_camp"]
 

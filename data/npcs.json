@@ -9581,11 +9581,385 @@
       "断魂岭·岭道清剿",
       "断魂岭·破堡除凶",
       "断魂岭·巡道除匪",
+      "断魂岭·狼谷除患",
       "断魂岭·精铁换药"
     ],
     "relation_dialogue": [],
     "event_reactions": [],
     "npc_bonds": {},
-    "home_room": "duanhun_camp"
+    "home_room": "duanhun_camp",
+    "conditional_dialogue": [
+      {
+        "priority": 25,
+        "requires": {
+          "flags": [
+            "duanhun_ridge:wolf_cleared"
+          ]
+        },
+        "text": "狼谷安静了，栈道上又能听见人声。旧营那边的残兵却还没散，你路过时留神些。"
+      }
+    ]
+  },
+  "落难镖师": {
+    "id": "luo nan biao shi",
+    "talk_verb": "喘着气道",
+    "name": "落难镖师",
+    "rank_title": "震远镖局",
+    "gender": "male",
+    "power_tier": 2,
+    "age_desc": "三十出头",
+    "face_attire": "他左臂用布条吊着，肩头裹着渗血的旧绷带，腰间木牌上刻着“震远”二字，镖服已磨得看不出本色。",
+    "martial_style": "刀法扎实，如今伤重难展",
+    "gear_display": [
+      {
+        "name": "断刀",
+        "id": "duan dao"
+      },
+      {
+        "name": "镖局腰牌",
+        "id": "biao ju yao pai"
+      }
+    ],
+    "title": "震远镖局镖师",
+    "desc": "一名左臂吊着布条的中年镖师，靠在粮道石壁上喘气，脚边放着半只被撬坏的镖箱。",
+    "type": "villager",
+    "dialogue": [
+      "这趟镖在岭上折了……兄弟们没剩下几个。",
+      "镖箱被黑风寨的残兵拖进了旧营，你若肯替我取回，这份人情我记着。"
+    ],
+    "info": {
+      "镖货": "三只镖箱被残兵拖进黑风旧营，就堆在火塘边。箱角包铁上刻着震远的记号，错不了。",
+      "黑风旧营": "旧营在枯骨涧西边，从狼谷北面也能绕进去。残兵夜里轮守，别在火塘边和他们硬拼。",
+      "伤": "肋下挨了一刀，走不动远路。等镖货回来，我就下山回局里复命。"
+    },
+    "faction": "江湖",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "biao_shi_cargo",
+        "keywords": [
+          "镖",
+          "镖箱",
+          "镖货",
+          "震远"
+        ],
+        "response": "箱子是黑漆包铁的，箱盖上有震远的火印。残兵不识货，只当是抢来的家当。",
+        "relation_delta": 1,
+        "once": true
+      },
+      {
+        "id": "biao_shi_old_camp",
+        "keywords": [
+          "旧营",
+          "残兵",
+          "黑风寨"
+        ],
+        "response": "他们退进旧营还按寨规轮值，火塘边总留人守夜。先拆散阵形，再逐个收拾。",
+        "relation_delta": 1,
+        "once": true
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "duanhun_supply_cave"
+      ]
+    },
+    "appearance": "左臂吊着布条，肩头绷带渗着血，镖服磨得发白。",
+    "voice": "说话带着喘息，提到失落的镖货时语速会快起来。",
+    "demeanor": "谨慎而急切，先谢过援手才肯细说旧营的守备。",
+    "behavior_hint": "在堡后粮道向落难镖师询问镖货、黑风旧营与伤势。",
+    "quests": [
+      "断魂岭·寻回镖货"
+    ],
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "home_room": "duanhun_supply_cave",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "靠在堡后粮道的石壁边养伤，等失落的镖货有个下落"
+  },
+  "守冢老人": {
+    "id": "shou zhong lao ren",
+    "talk_verb": "缓缓道",
+    "name": "守冢老人",
+    "rank_title": "断魂剑冢",
+    "gender": "male",
+    "power_tier": 1,
+    "age_desc": "七十来岁",
+    "face_attire": "他穿一件洗得发白的灰布短褐，手里拄着磨亮的木杖，腰间系着一串铜铃。",
+    "martial_style": "不通武艺，却记着冢中每一柄断剑的来历",
+    "gear_display": [
+      {
+        "name": "木杖",
+        "id": "mu zhang"
+      },
+      {
+        "name": "铜铃",
+        "id": "tong ling"
+      }
+    ],
+    "title": "断魂剑冢守冢人",
+    "desc": "一位守着剑冢的瘦削老人，暂居岭雨祠，正把捡回的断剑一柄柄擦净，嘴里低声念着名字。",
+    "type": "villager",
+    "dialogue": [
+      "这些剑都是没能回家的人留下的，剑柄朝着山下，是让他们看着回家的路。",
+      "近来有个剑客在冢间翻找好剑，说是要带走重铸。我拦不住他，只能先把名字记下来。"
+    ],
+    "info": {
+      "剑冢": "断魂崖北面的乱石坡，几十柄断剑插在石缝里。每柄剑原来都刻着主人随身的记号。",
+      "守冢剑客": "他在冢间翻找成色最好的断剑，谁拦在冢前，他就把谁当作旧誓的一部分。",
+      "旧誓": "护镖人埋剑时立过誓：剑留在冢里，名字留给后来人。剑被带走，誓就断了。"
+    },
+    "faction": "江湖",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "sword_grave_story",
+        "keywords": [
+          "剑冢",
+          "断剑",
+          "镖"
+        ],
+        "response": "早年过岭的镖队折在谷里，活下来的人把同伴的断剑插在坡上。剑柄都朝着山下，好认路。",
+        "relation_delta": 1,
+        "once": true
+      },
+      {
+        "id": "sword_grave_thief",
+        "keywords": [
+          "剑客",
+          "守冢剑客",
+          "偷剑"
+        ],
+        "response": "他起手极快，收势时却会停一停。别抢着攻，先挡下第一轮，再寻他收势的空当。",
+        "relation_delta": 1,
+        "once": true
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "duanhun_rain_shrine"
+      ]
+    },
+    "appearance": "灰布短褐洗得发白，木杖磨得发亮，腰间铜铃轻响。",
+    "voice": "语速很慢，念剑名时一字一顿。",
+    "demeanor": "寡言而固执，只在意冢中的剑和剑上的名字。",
+    "behavior_hint": "在岭雨祠向守冢老人询问剑冢、守冢剑客与旧誓。",
+    "quests": [
+      "断魂岭·剑冢旧誓"
+    ],
+    "conditional_dialogue": [
+      {
+        "priority": 30,
+        "requires": {
+          "flags": [
+            "duanhun_ridge:sword_oath_kept"
+          ]
+        },
+        "text": "剑都扶正了，名字也重新描过。往后过岭的人看见这些剑，会记得有人替他们守着路。"
+      }
+    ],
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "home_room": "duanhun_rain_shrine",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "暂居岭雨祠，擦拭从剑冢捡回的断剑"
+  },
+  "守祠老妪": {
+    "id": "shou ci lao yu",
+    "talk_verb": "低声念道",
+    "name": "守祠老妪",
+    "rank_title": "岭雨祠",
+    "gender": "female",
+    "power_tier": 0,
+    "age_desc": "六十上下",
+    "face_attire": "她裹着深色头巾，袖口缝着补丁，手里总攥着一串念珠，衣襟上别着半旧的灯芯。",
+    "martial_style": "不会武功，只懂些草药与缝补",
+    "gear_display": [
+      {
+        "name": "念珠",
+        "id": "nian zhu"
+      }
+    ],
+    "title": "岭雨祠守祠人",
+    "desc": "一位守着岭雨祠的老妇人，正在神龛前添灯油，动作慢而稳。",
+    "type": "villager",
+    "dialogue": [
+      "过岭的人常在这里躲雨，能歇一刻是一刻。",
+      "灯油快见底了，若从岭下带些上来，老婆子替你念叨两句好话。"
+    ],
+    "info": {
+      "岭雨祠": "岭上第二处能安稳歇脚的地方，供着山神和一块无字木牌，过岭人都来添一炷香。",
+      "过岭人": "近来栈道不太平，来歇脚的人少了，留下的草鞋倒还堆在神龛前。",
+      "灯油": "祠里的灯要整夜亮着，好让夜里过岭的人看见方向。"
+    },
+    "faction": "江湖",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "shrine_rest",
+        "keywords": [
+          "歇脚",
+          "避雨",
+          "岭雨祠"
+        ],
+        "response": "祠里挡风，灶上常有热水。赶路累了就坐一坐，不必客气。",
+        "relation_delta": 1,
+        "once": true
+      },
+      {
+        "id": "shrine_lamps",
+        "keywords": [
+          "灯",
+          "灯油",
+          "山神"
+        ],
+        "response": "灯亮着，走夜路的人心里就有底。灯油不多了，老婆子正愁这个。",
+        "relation_delta": 1,
+        "once": true
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "duanhun_rain_shrine"
+      ]
+    },
+    "appearance": "深色头巾包得整齐，袖口补丁层层叠叠，手里一串旧念珠。",
+    "voice": "声音低而缓，像在自言自语地念经。",
+    "demeanor": "和气少言，只留人歇脚添灯。",
+    "behavior_hint": "在岭雨祠向守祠老妪询问歇脚、过岭人与灯油。",
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "home_room": "duanhun_rain_shrine",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "守在岭雨祠神龛前添灯油，留过岭人歇脚"
   }
 }

@@ -12,7 +12,7 @@ from ui_output import BODY_WIDTH
 CATEGORY_NAMES = [
     "查看与移动", "交谈与人物", "任务与委托", "门派与师承", "武学与招式",
     "状态与成长", "背包与装备", "采集与生产", "战斗与恢复", "商店与交易",
-    "客栈与休息", "江湖与消息", "系统与帮助",
+    "客栈与休息", "江湖与消息", "系统与帮助", "世界规则",
 ]
 
 
@@ -29,7 +29,7 @@ def assert_clean_output(text, label):
         assert help_system.visible_width(line) <= BODY_WIDTH, (label, line, help_system.visible_width(line))
 
 
-def test_main_page_has_thirteen_categories_in_two_columns():
+def test_main_page_has_fourteen_categories_in_two_columns():
     text = render()
     assert "【江湖帮助】" in text
     for number, name in enumerate(CATEGORY_NAMES, 1):
@@ -178,8 +178,8 @@ def test_zero_and_error_pages_are_actionable():
     assert "【一 查看与移动】" in render("1 0")
     assert "【新手引导】" in render("13 13")
 
-    invalid_top = render("14")
-    assert "没有第 14 个分类" in invalid_top
+    invalid_top = render("15")
+    assert "没有第 15 个分类" in invalid_top
     assert "【江湖帮助】" in invalid_top
 
     invalid_index = render("1 99")

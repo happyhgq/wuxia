@@ -3604,11 +3604,12 @@
   "duanhun_trail": {
     "name": "断魂岭栈道",
     "zone": "duanhun_ridge",
-    "desc": "栈道贴着山壁向北延伸，木板被马蹄与刀鞘磨得发亮。东侧有一处突出的断魂崖，北面是枯骨涧。马贼与弩手常在此截往来行人。",
+    "desc": "栈道贴着山壁向北延伸，木板被马蹄与刀鞘磨得发亮。东侧有一处突出的断魂崖，西面是狼群盘踞的狼谷，北面是枯骨涧。马贼与弩手常在此截过往行人。",
     "exits": {
       "南": "duanhun_camp",
       "北": "duanhun_ravine",
-      "东": "duanhun_cliff"
+      "东": "duanhun_cliff",
+      "西": "duanhun_wolf_den"
     },
     "enemies": [
       "断魂岭马贼",
@@ -3632,9 +3633,11 @@
   "duanhun_cliff": {
     "name": "断魂崖",
     "zone": "duanhun_ridge",
-    "desc": "断魂崖向外突出，脚下是看不见底的深涧。崖边散落着折断的弩矢和旧绳，东来西往的马贼常在这里放哨，夜里偶尔还能遇见独行的夜行客。西边回到栈道。",
+    "desc": "断魂崖向外突出，脚下是看不见底的深涧。崖边散落着折断的弩矢和旧绳，马贼常在这里放哨，夜里偶尔还能遇见独行的夜行客。北面是插满断剑的剑冢，东侧哨塔仍有人借高望远；西边回到栈道。",
     "exits": {
-      "西": "duanhun_trail"
+      "西": "duanhun_trail",
+      "北": "duanhun_sword_grave",
+      "东": "duanhun_watchtower"
     },
     "enemies": [
       "岭道弩手",
@@ -3659,10 +3662,11 @@
   "duanhun_ravine": {
     "name": "枯骨涧",
     "zone": "duanhun_ridge",
-    "desc": "山涧里堆着被雨水冲下的枯骨与破甲，风穿过石缝时发出低沉的呜咽。南边是断魂岭栈道，北边通往断魂堡门。刀客们把这里当作试刀的地方。",
+    "desc": "山涧里堆着被雨水冲下的枯骨与破甲，风穿过石缝时发出低沉的呜咽。南边是断魂岭栈道，北边通往断魂堡门，西边可绕进黑风寨留下的旧营。刀客们把这里当作试刀的地方。",
     "exits": {
       "南": "duanhun_trail",
-      "北": "duanhun_fort_gate"
+      "北": "duanhun_fort_gate",
+      "西": "duanhun_old_camp"
     },
     "enemies": [
       "枯骨涧刀客",
@@ -3686,10 +3690,11 @@
   "duanhun_fort_gate": {
     "name": "断魂堡门",
     "zone": "duanhun_ridge",
-    "desc": "断魂堡的门楼建在两块巨岩之间，门板包着厚铁，箭孔后仍有人影晃动。南边退回枯骨涧，北边是堡内厅。守卫长带着残部死守此处。",
+    "desc": "断魂堡的门楼建在两块巨岩之间，门板包着厚铁，箭孔后仍有人影晃动。南边退回枯骨涧，北边是堡内厅，东侧有一条囤粮的堡后粮道。守卫长带着残部死守此处。",
     "exits": {
       "南": "duanhun_ravine",
-      "北": "duanhun_keep"
+      "北": "duanhun_keep",
+      "东": "duanhun_supply_cave"
     },
     "enemies": [
       "断魂堡守卫长",
@@ -3736,6 +3741,158 @@
       "断魂堡主的目光始终落在门口，像是在等一个敢进来的人。"
     ],
     "indoor": true
+  },
+  "duanhun_wolf_den": {
+    "name": "狼谷",
+    "zone": "duanhun_ridge",
+    "desc": "断魂岭栈道西侧的一条干涸谷地，谷口堆着被啃剩的兽骨。狼群在乱石间筑窝，近来少了猎户制衡，愈发敢往栈道边靠近。东边回到栈道，北边能绕到黑风寨留下的旧营。",
+    "exits": {
+      "东": "duanhun_trail",
+      "北": "duanhun_old_camp"
+    },
+    "enemies": [
+      "断魂岭恶狼"
+    ],
+    "coord": [
+      2,
+      6
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "狼谷·极危",
+    "recommended_level": 14,
+    "danger": "high",
+    "exploration_events": [
+      "谷底散着一具被撕开的鹿骨，骨缝间还留着新鲜的牙印。",
+      "乱石后有一处被压平的草窝，四周的土被爪子刨得很深。",
+      "你在谷口捡到半截镖旗绳，绳结是镖局惯用的打法。"
+    ]
+  },
+  "duanhun_old_camp": {
+    "name": "黑风旧营",
+    "zone": "duanhun_ridge",
+    "desc": "黑风寨撤走后留下的旧营，木栅塌了半边，营帐只剩骨架。残兵把抢来的箱笼堆在火塘边，夜里仍有人轮守。南边是狼谷，东边可绕回枯骨涧，北面半坡上有一座岭雨祠。",
+    "exits": {
+      "南": "duanhun_wolf_den",
+      "东": "duanhun_ravine",
+      "北": "duanhun_rain_shrine"
+    },
+    "enemies": [
+      "黑风寨残兵"
+    ],
+    "coord": [
+      2,
+      7
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "黑风旧营·极危",
+    "recommended_level": 14,
+    "danger": "extreme",
+    "exploration_events": [
+      "火塘里埋着没烧尽的账页，字迹被烟熏得只剩几个地名。",
+      "营帐骨架下压着一只撬开的镖箱，箱底刻着震远镖局的记号。",
+      "木栅上钉着几块新削的哨牌，残兵显然还在按旧规矩轮值。"
+    ]
+  },
+  "duanhun_rain_shrine": {
+    "name": "岭雨祠",
+    "zone": "duanhun_ridge",
+    "desc": "半山腰的小小祠庙，供着山神与一块无字木牌。过岭人常在此避雨，守祠人把残破的门板补了又补。南边下山可回黑风旧营，是岭上第二处能安稳歇脚的地方。",
+    "exits": {
+      "南": "duanhun_old_camp"
+    },
+    "npcs": [
+      "守冢老人",
+      "守祠老妪"
+    ],
+    "coord": [
+      2,
+      8
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "岭雨祠·暂歇",
+    "recommended_level": 14,
+    "danger": "normal",
+    "safe": true,
+    "indoor": true,
+    "exploration_events": [
+      "神龛前摆着几双磨破的草鞋，是过岭人留下的谢礼。",
+      "梁上悬着一口小铜钟，钟身刻着历年重修祠庙的年份。",
+      "墙角靠着几柄锈死的旧剑，剑柄都朝着剑冢的方向。"
+    ]
+  },
+  "duanhun_watchtower": {
+    "name": "断魂哨塔",
+    "zone": "duanhun_ridge",
+    "desc": "断魂崖东侧的木制哨塔，梯子被刀斧砍断了一半，塔顶仍留着放哨的位置。弩手惯在这里借高望远，把栈道上的人影报给堡里。西边回到断魂崖。",
+    "exits": {
+      "西": "duanhun_cliff"
+    },
+    "enemies": [
+      "岭道弩手",
+      "断魂岭马贼"
+    ],
+    "coord": [
+      5,
+      6
+    ],
+    "difficulty_level": 13,
+    "difficulty_label": "断魂哨塔·高危",
+    "recommended_level": 13,
+    "danger": "high",
+    "exploration_events": [
+      "塔板上刻着几道横线，每道旁边都记着时辰，像是报信的暗记。",
+      "塔角堆着几捆备用的弩矢，箭杆上缠着不同颜色的布条。",
+      "从塔顶望下去，栈道的每一处拐弯都看得清清楚楚。"
+    ]
+  },
+  "duanhun_sword_grave": {
+    "name": "断魂剑冢",
+    "zone": "duanhun_ridge",
+    "desc": "断魂崖北面的一片乱石坡，几十柄断剑插在石缝里，剑柄朝向山下。这里是旧日护镖人没能归乡的埋剑处，近来却有人在冢间翻找。南边回到断魂崖。",
+    "exits": {
+      "南": "duanhun_cliff"
+    },
+    "enemies": [
+      "守冢剑客"
+    ],
+    "coord": [
+      4,
+      7
+    ],
+    "difficulty_level": 15,
+    "difficulty_label": "断魂剑冢·绝险",
+    "recommended_level": 15,
+    "danger": "extreme",
+    "exploration_events": [
+      "石缝里插着半截断剑，剑脊上刻着一个被磨平的“镖”字。",
+      "剑冢中央的土被翻开过，几柄好剑只剩下空空的剑鞘。",
+      "风穿过剑丛时带着细响，像是许多人在低声报数。"
+    ]
+  },
+  "duanhun_supply_cave": {
+    "name": "堡后粮道",
+    "zone": "duanhun_ridge",
+    "desc": "断魂堡东侧的一条石洞，原本是堡里囤粮的暗道，如今只剩空桶和劈碎的箱盖。洞壁挡风，受伤的人躲在这里，暂避岭上的刀兵。西边回到断魂堡门。",
+    "exits": {
+      "西": "duanhun_fort_gate"
+    },
+    "npcs": [
+      "落难镖师"
+    ],
+    "coord": [
+      4,
+      8
+    ],
+    "difficulty_level": 14,
+    "difficulty_label": "堡后粮道·极危",
+    "recommended_level": 14,
+    "danger": "extreme",
+    "indoor": true,
+    "exploration_events": [
+      "洞壁上有几道新划的记号，像是有人数着日子等伤好。",
+      "碎箱板下压着半张镖局路引，墨迹被水浸开了。",
+      "洞里堆着几只空粮桶，桶底还留着发霉的谷壳。"
+    ]
   },
   "inn_upper_hall": {
     "name": "客栈二楼走廊",

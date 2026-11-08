@@ -762,9 +762,9 @@ def show_status(player, panel="main"):
         armor = player.get_equipment_stats("armor")
         line("装备强化：", f"兵刃 +{weapon.get('enhance', 0)} / 防具 +{armor.get('enhance', 0)}")
         if player.level >= 15:
-            endgame_hint = "已达设计上限，可继续积累经验；仍可巡道、门派委托与断魂崖夜行客。"
+            endgame_hint = "已达设计上限，可继续积累经验；仍可巡道、门派委托与断魂崖夜行客，狼谷与剑冢也还有旧账未清。"
         else:
-            endgame_hint = "L15 为当前设计上限，达到后可继续积累经验；可继续巡道、门派委托与断魂崖夜行客。"
+            endgame_hint = "L15 为当前设计上限，达到后可继续积累经验；可继续巡道、门派委托与断魂崖夜行客，狼谷与剑冢也还有旧账未清。"
         line("终局提示：", endgame_hint)
     divider()
     print("0 返回状态面板    9 关闭面板")

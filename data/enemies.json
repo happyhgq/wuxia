@@ -2452,5 +2452,221 @@
     ],
     "desc": "收拢黑风寨残部、盘踞断魂堡的悍匪首领，刀法狠辣，最善在对手气竭时连出杀招。",
     "combat_hint": "堡主阶段变化明显，留足疗伤药与内力；不要在其气势正盛时硬拼。"
+  },
+  "断魂岭恶狼": {
+    "hp": 450,
+    "atk": 60,
+    "defense": 17,
+    "exp": 200,
+    "gold": 60,
+    "level": 14,
+    "tier": "normal",
+    "skills": [
+      {
+        "name": "扑咬",
+        "chance": 0.3,
+        "power": 1.45
+      },
+      {
+        "name": "狼群撕扯",
+        "chance": 0.18,
+        "power": 1.3,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 3
+      }
+    ],
+    "drops": [
+      {
+        "item": "狼皮",
+        "chance": 0.6
+      },
+      {
+        "item": "野猪肉",
+        "chance": 0.15
+      }
+    ],
+    "ai": {
+      "style": "beast",
+      "faction": "beast"
+    },
+    "desc": "狼谷里领头的灰背恶狼，肩高及腰，左耳缺了一角。它带着狼群在谷口伏击落单的过岭人，得手后会拖回乱石间慢慢啃食。",
+    "combat_hint": "恶狼惯于轮番扑咬后再退开，胸口露出破绽往往是在诱你追击；留意流血状态，别让伤口叠太深。"
+  },
+  "黑风寨残兵": {
+    "hp": 450,
+    "atk": 60,
+    "defense": 17,
+    "exp": 200,
+    "gold": 100,
+    "level": 14,
+    "tier": "normal",
+    "equipment": {
+      "weapon": "黑风刀",
+      "armor": "山寨护肩"
+    },
+    "equipment_drop_chance": 0.02,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "黑风刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "残寨死战",
+            "chance": 0.28,
+            "power": 1.48
+          },
+          {
+            "name": "夺路横斩",
+            "chance": 0.18,
+            "power": 1.34
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "山寨护肩"
+        },
+        "skills": [
+          {
+            "name": "残寨死战",
+            "chance": 0.24,
+            "power": 1.42
+          },
+          {
+            "name": "困兽回刀",
+            "chance": 0.16,
+            "power": 1.38
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "残寨死战",
+        "chance": 0.28,
+        "power": 1.48
+      },
+      {
+        "name": "夺路横斩",
+        "chance": 0.18,
+        "power": 1.34
+      }
+    ],
+    "drops": [
+      {
+        "item": "镖局镖箱",
+        "chance": 1.0,
+        "guaranteed": true
+      },
+      {
+        "item": "黑风寨军械残片",
+        "chance": 0.3
+      },
+      {
+        "item": "金创药",
+        "chance": 0.15
+      }
+    ],
+    "ai": {
+      "style": "aggressive",
+      "faction": "bandit"
+    },
+    "desc": "堡破后没有下山的一伙残兵，退进黑风旧营仍按寨规轮值。他们把抢来的镖箱堆在火塘边，不肯承认黑风寨已经散了。",
+    "combat_hint": "残兵彼此照应，常在你追击一人时从侧后补刀；先拆散阵形，再逐个收拾。"
+  },
+  "守冢剑客": {
+    "hp": 672,
+    "atk": 70,
+    "defense": 22,
+    "exp": 396,
+    "gold": 150,
+    "level": 15,
+    "tier": "elite",
+    "respawn_seconds": 240,
+    "equipment": {
+      "weapon": "苍脊刀",
+      "armor": "苍脊重甲"
+    },
+    "equipment_drop_chance": 0.05,
+    "loadout_variants": [
+      {
+        "weight": 8,
+        "equipment": {
+          "weapon": "苍脊刀",
+          "armor": "苍脊重甲"
+        },
+        "skills": [
+          {
+            "name": "守冢剑式",
+            "chance": 0.28,
+            "power": 1.58
+          },
+          {
+            "name": "回锋断影",
+            "chance": 0.18,
+            "power": 1.5,
+            "effect": "bleed",
+            "turns": 2,
+            "value": 4
+          }
+        ]
+      },
+      {
+        "weight": 2,
+        "equipment": {
+          "weapon": "断岳刀",
+          "armor": "苍脊重甲"
+        },
+        "skills": [
+          {
+            "name": "守冢剑式",
+            "chance": 0.24,
+            "power": 1.5
+          },
+          {
+            "name": "冢前旧誓",
+            "chance": 0.16,
+            "power": 1.44
+          }
+        ]
+      }
+    ],
+    "skills": [
+      {
+        "name": "守冢剑式",
+        "chance": 0.28,
+        "power": 1.58
+      },
+      {
+        "name": "回锋断影",
+        "chance": 0.18,
+        "power": 1.5,
+        "effect": "bleed",
+        "turns": 2,
+        "value": 4
+      }
+    ],
+    "drops": [
+      {
+        "item": "断剑残锋",
+        "chance": 0.7
+      },
+      {
+        "item": "大还丹",
+        "chance": 0.1
+      }
+    ],
+    "ai": {
+      "style": "tactical",
+      "faction": "bandit"
+    },
+    "desc": "在剑冢间翻找旧剑的独行剑客，衣袍下摆沾满泥土。他坚信这些断剑该被带走重铸，谁拦在冢前，他就把谁当作旧誓的一部分。",
+    "combat_hint": "守冢剑客起手极快，却会在收势时短暂停顿；与其抢攻，不如先挡下第一轮再还手。"
   }
 }

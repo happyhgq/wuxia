@@ -4357,6 +4357,125 @@
     "difficulty": "进阶",
     "follow_up_hint": "精铁可在断魂崖夜行客与断魂堡门守卫长身上取得；凑够三块后可再来找守岭猎户兑换。"
   },
+  "断魂岭·狼谷除患": {
+    "title": "断魂岭·狼谷除患",
+    "npc": "守岭猎户",
+    "turn_in_npc": "守岭猎户",
+    "target_type": "kill",
+    "target_name": "断魂岭恶狼",
+    "required_cnt": 3,
+    "requires": {
+      "level": 14,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 620,
+      "gold": 180,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 2
+        }
+      ],
+      "honor_delta": 4
+    },
+    "on_complete": {
+      "set_flags": {
+        "duanhun_ridge:wolf_cleared": true
+      },
+      "relations": {
+        "守岭猎户": 3
+      }
+    },
+    "desc": "堡破之后，狼谷的恶狼没了天敌，开始往栈道边扑人。守岭猎户请你进狼谷除掉三只恶狼，替往来行商清出一条路。",
+    "difficulty": "高难",
+    "follow_up_hint": "狼谷安静下来后，黑风旧营的残兵似在往岭雨祠一带张望。"
+  },
+  "断魂岭·寻回镖货": {
+    "title": "断魂岭·寻回镖货",
+    "npc": "落难镖师",
+    "turn_in_npc": "落难镖师",
+    "target_type": "collect",
+    "target_name": "镖局镖箱",
+    "required_cnt": 3,
+    "requires": {
+      "level": 14,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "exp": 200,
+      "gold": 180,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 3
+        }
+      ],
+      "honor_delta": 5
+    },
+    "on_complete": {
+      "set_flags": {
+        "duanhun_ridge:cargo_recovered": true
+      },
+      "relations": {
+        "落难镖师": 8
+      }
+    },
+    "desc": "震远镖局的镖师在岭上遭了黑风寨残兵，镖箱被拖进旧营。他伤重难行，请你从残兵手里取回三只镖箱。",
+    "difficulty": "进阶",
+    "follow_up_hint": "镖货有了下落，岭雨祠的守冢老人或许愿意和你多说几句。"
+  },
+  "断魂岭·剑冢旧誓": {
+    "title": "断魂岭·剑冢旧誓",
+    "npc": "守冢老人",
+    "turn_in_npc": "守冢老人",
+    "target_type": "kill",
+    "target_name": "守冢剑客",
+    "required_cnt": 1,
+    "requires": {
+      "level": 15,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶",
+        "quest_completed:断魂岭·寻回镖货"
+      ]
+    },
+    "reward": {
+      "exp": 340,
+      "gold": 200,
+      "items": [
+        {
+          "item": "断魂精铁",
+          "quantity": 1
+        },
+        {
+          "item": "大还丹",
+          "quantity": 1
+        }
+      ],
+      "honor_delta": 8
+    },
+    "on_complete": {
+      "set_flags": {
+        "duanhun_ridge:sword_oath_kept": true
+      },
+      "relations": {
+        "守冢老人": 5
+      },
+      "region_effects": {
+        "duanhun_ridge": {
+          "security": 4,
+          "travel": 2
+        }
+      }
+    },
+    "desc": "守冢剑客要把剑冢里成色最好的断剑带走重铸，守冢老人拦不住他。老人请你上剑冢，把这段旧誓守住。",
+    "difficulty": "高难",
+    "follow_up_hint": "剑冢重新插好了断剑，岭上的人说起这趟路，语气会松快些。"
+  },
   "归云三方·探风": {
     "title": "归云三方·探风",
     "npc": "万商会会长",

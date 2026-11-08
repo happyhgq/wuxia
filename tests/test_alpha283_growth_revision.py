@@ -186,7 +186,7 @@ def test_difficulty_distribution_and_notice_filter_follow_approved_plan():
         tier = info.get("difficulty")
         assert tier in {"入门", "普通", "进阶", "高难", "重大"}, info.get("title")
         counts[tier] = counts.get(tier, 0) + 1
-    assert counts == {"入门": 8, "普通": 13, "进阶": 19, "高难": 23, "重大": 5}
+    assert counts == {"入门": 8, "普通": 13, "进阶": 20, "高难": 25, "重大": 5}
 
     notice = quests[NEW_QUEST]["notice"]
     low = Player("公告过滤低等级", "散人")

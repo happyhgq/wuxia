@@ -59,6 +59,7 @@
 - `test_alpha121_terminal_layout_consistency.py`、`test_alpha122_terminal_color_wrap.py`、`test_alpha123_terminal_sgr_state.py`、`test_alpha124_compact_zmud_ui.py`、`test_alpha125_terminal_layout_consistency.py`、`test_alpha128_status_panel.py`、`test_alpha130_label_alignment.py`、`test_alpha133_new_player_map_labels.py`、`test_alpha135_scene_action_hints.py`、`test_alpha136_read_only_commands_do_not_tick.py`：终端排版、提示和只读命令行为。
 - `test_alpha278_inventory_stack_use_and_wrapping.py`：同名叠放物品单件消耗与剩余、括号/空白归一化、歧义编号候选与序号使用、候选过期、单行使用反馈无存档噪声、背包标点优先折行、带括号装备匹配及品质变体选择。
 - `test_p32_alpha25_help_navigation_consistency.py`、`test_alpha126_action_feedback.py`、`test_alpha115_action_result_feedback.py`：帮助与动作反馈。
+- `test_help_world_rules.py`：帮助第十四类“世界规则”三页概念说明——门派声望（范围、L15 首次 +8/−2、复做冻结、退门保留）、选择与后果（分支/交付定结局命令、区域变化三项、结局互斥）、终局目标（L15 软上限、3500 经验、状态按 5 打开面板）；名称/别名直达、无 command 字段、行宽与帮助导航。
 
 ## 经济、交易与商队
 - `test_p32_economy_*.py`、`test_p32_alpha*_economy*.py`：经济状态、资金、价格、生产和长期运行。
@@ -86,3 +87,5 @@
 - `test_alpha242_unified_quest_state_help.py`：31 项任务的发布/交付 NPC 与地点审计、条件不足不泄露目标、接取后任务列表、ask/交谈同处理器、忙碌 NPC 可正常交谈与接取、错误 NPC 交付提示、帮助文案及公告栏消息上限。
 
 - `test_alpha244_resource_quest_integration.py`：四类新手任务实际资源/击杀进度、交付与物品消耗；两项新野外后续任务的前置条件、公告线索解锁、奖励与世界对白反馈。
+
+- `test_alpha309_duanhun_expansion.py`：断魂岭 12 房拓扑、反向出口与可达性；L14/L15 新敌人数值与掉落；房间档位不越级；击杀任务经验比；狼皮/镖局镖箱/断剑残锋登记；三名 T3 NPC；三条新委托的门槛、奖励、旗标、关系与 `region_effects`；镖货采集交付与消耗；剑冢交付后果；条件台词；V12 往返。
