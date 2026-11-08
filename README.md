@@ -1,708 +1,327 @@
 # Wuxia · 武侠文字 RPG
 
-> 中文终端武侠 RPG。当前版本采用 Python + JSON 数据驱动，核心玩法包括房间探索、地图移动、NPC 对话、任务、交易、装备、强化、资源采集、回合制战斗、状态效果、角色成长与存档。
+> 中文终端武侠 RPG。Python + JSON 数据驱动，包含地图探索、NPC 与关系、任务与选择、门派与武学、回合制战斗、采集与锻造、区域生态、世界时钟与天气、存档与迁移。
+
+当前版本：`P3.2 BL1.0 Alpha307`（`VERSION.txt`），存档版本 `SAVE_VERSION = 12`。
 
 ---
 
 ## 1. 项目定位
 
-本项目是一个**可持续扩展的中文武侠文字 RPG**。
+本项目是一个**可持续扩展的单机中文武侠文字 MUD**。
 
 当前运行形态：
 
-- 终端 / 命令行
-- Python
+- 终端 / 命令行（推荐 80 列左右终端）
+- Python 3.13
 - JSON 游戏数据
-- 房间式地图
-- Zone（区域）概念
-- NPC / 对话 / 任务
-- 商店 / 买卖
-- 装备 / 强化
-- 采集
-- 回合制战斗
-- 状态效果
-- 角色升级
-- JSON 存档
+- 房间式地图 + Zone 分区
+- NPC、对话、关系与日程
+- 任务、分支选择与世界效果
+- 商店、买卖、商队与城镇经济
+- 装备、强化、采集与锻造
+- 回合制战斗、状态效果、Boss 预警
+- 门派、师承、身份与晋升
+- 世界时钟、天气节气、区域生态
+- JSON 存档（V12）+ 读档迁移
 
-项目目前已经不是单文件原型，但也还不是成熟的通用 RPG 引擎。
+项目已经不是单文件原型，但仍不是通用 RPG 引擎。
 
-**重要：本 README 描述的是当前真实实现，而不是目标架构。**
-
-详细文档：
-
-- `AI_CONTEXT.md`：未来 AI 接手本项目时必须遵守的开发规则。
-- `ARCHITECTURE.md`：当前代码架构、数据流、依赖关系和技术债。
-- `WORLD_DESIGN.md`：本游戏的世界观、地图设计、Zone 设计和内容扩展规则。
+**本 README 描述当前真实实现，而不是目标架构。** 规划内容统一标记为 `[PLANNED]`。
 
 ---
 
-## 2. 当前状态标签
+## 2. 当前状态速览
 
-文档统一使用以下标签：
-
-| 标签 | 含义 |
+| 项目 | 当前值 |
 |---|---|
-| `[CURRENT]` | 当前代码/数据已经存在并可使用 |
-| `[LIMITATION]` | 当前实现存在明确限制 |
-| `[TECH DEBT]` | 已知技术债，后续应重构 |
-| `[PLANNED]` | 规划中的功能，不代表已经实现 |
-| `[RULE]` | 后续开发必须遵守的规则 |
+| 房间 | 173 |
+| 区域（Zone） | 12 |
+| 固定 NPC | 74 |
+| 物品 | 79 |
+| 敌人模板 | 41 |
+| 武学套系 | 6 |
+| 任务 | 60 |
+| 门派 / 出身 | 少林、武当、华山、铁衣门、散人 |
+| 等级设计上限 | L15（软上限，不是硬锁） |
+| 存档版本 | V12 |
+| 自动化测试 | 2042 passed，616 subtests passed |
 
-不要把 `[PLANNED]` 写成 `[CURRENT]`。
-
----
-
-## 3. 当前项目结构
+区域列表：
 
 ```text
-wuxia/
-├── README.md
-├── AI_CONTEXT.md
-├── ARCHITECTURE.md
-├── WORLD_DESIGN.md
-├── main.py
-├── engine.py
-├── player.py
-├── combat.py
-├── actions.py
-├── wuxia.py
-└── data/
-    ├── rooms.json
-    ├── npcs.json
-    ├── items.json
-    ├── enemies.json
-    ├── skills.json
-    ├── quests.json
-    └── save.json
+main               主世界
+bandit_zone        黑风寨
+guiyun_city        归云城
+northfront_town    北境商镇
+mistwood           雾隐山林
+sunken_ruins       沉河遗址
+huashan_mountain   华山群峰
+shaolin_mountain   嵩山少林
+wudang_mountain    武当山
+tieyi_mountain     铁衣门山庄
+duanhun_ridge      断魂岭
+inn_upper          悦来客栈二楼
 ```
-
-### 核心代码
-
-| 文件 | 当前职责 |
-|---|---|
-| `main.py` | 程序入口、主命令循环、移动、保存/读取、部分玩家动作 |
-| `engine.py` | 数据加载、默认数据、地图引擎、状态效果、全局运行时数据 |
-| `player.py` | Player、属性、升级、装备计算、任务进度、存档读写 |
-| `combat.py` | 回合制战斗、技能、敌人技能、状态处理、战斗结算 |
-| `actions.py` | 查看、对话、任务、交易、装备、使用物品、锻造 |
-| `wuxia.py` | `[TECH DEBT]` 旧的/重复的大型实现，不是当前默认扩展入口 |
-| `data/*.json` | 游戏内容数据 |
 
 ---
 
-## 4. 当前启动方式
+## 3. 启动与验收
 
-项目当前以 `main.py` 为主要入口。
+启动：
 
 ```bash
 python main.py
 ```
 
-如果仓库环境使用其他 Python 命令，应以实际环境为准。
+推荐使用 UTF-8 输出（Windows 控制台或设置 `PYTHONIOENCODING=utf-8`）。
+
+一键本地检查（Windows）：双击 `检查游戏.bat`，依次执行：
+
+```text
+pytest -q
+python -m compileall -q .
+python data_validator.py
+```
+
+手动验收：
+
+```bash
+python -m pytest -q
+python -m compileall -q .
+python data_validator.py
+```
+
+`data_validator.py` 为只读校验，当前结果：
+
+```text
+DATA VALIDATION: PASS
+rooms=173 npcs=74 items=79 enemies=41 skills=6 quests=60 regions=12 events=3
+```
 
 ---
 
-## 5. 当前主要命令
-
-主循环目前支持的核心命令包括：
+## 4. 项目结构
 
 ```text
-n / north       北
-s / south       南
-e / east        东
-w / west        西
-
-l / look        查看
-m / map         地图
-search          搜索/采集
-
-i / inventory   背包
-wield           装备武器
-wear            装备防具
-use             使用物品
-
-kill / attack   战斗
-flee            逃跑入口
-
-talk / chat     对话
-ask / 问        询问信息
-
-quest / quests  任务
-jiequ           接取任务
-jiaofu          交付任务
-
-shop / list     商店
-buy             买
-sell            卖
-
-forge           打铁铺强化
-heal / dazuo    恢复
-
-status          状态
-save            保存
-load            读取
-reload          重新加载游戏数据
-help            帮助
-q / quit        退出
+wuxia/
+├── main.py                  入口、命令循环、移动、存读档
+├── engine.py                数据加载、地图引擎、世界效果、状态效果
+├── player.py                玩家、成长、任务状态、存档读写
+├── combat.py                回合制战斗、技能、Boss 预警、奖励结算
+├── actions.py               观察、交谈、任务、交易、装备、使用、锻造
+├── actor_display.py         角色五段式观察视图
+├── command_policy.py        命令准入与世界时钟策略
+├── world_time.py            世界时钟唯一换算入口
+├── world_ambience.py        世界动态消息（NPC 移动/天色/声响）
+├── weather.py               天气与二十四节气
+├── world_lifecycle.py       尸体、复活与敌人刷新
+├── region_activity.py       区域治安、敌人活动池、巡逻与区域效果
+├── entry_events.py          入口事件（进入新场景时触发）
+├── help_system.py           三层帮助（13 类 / 84 条）
+├── ui_output.py             输出防泄漏、折行与颜色开关
+├── npc_behavior.py          NPC 五态微行为（纯函数）
+├── npc_utility.py           NPC 效用行为（日程/营生/需求折算）
+├── random_npcs.py           低密度随机路人
+├── travel_system.py         已探索路线的快速旅行
+├── item_feedback.py         统一的物品增减与提示
+├── rewards.py               统一奖励结算
+├── data_validator.py        数据完整性校验
+├── economy/                 城镇经济、商队、税费与库存
+├── data/                    游戏内容与存档
+└── tests/                   回归测试
 ```
 
-具体命令行为以 `main.py` 当前代码为准。
+数据文件：
+
+```text
+data/rooms.json            房间、出口、区域与坐标
+data/npcs.json             固定 NPC、对话、条件对白、商店与委托
+data/items.json            物品、装备与材料
+data/enemies.json          敌人、技能、掉落与刷新
+data/skills.json           武学套系与招式
+data/quests.json           任务、阶段、前置、选择与效果
+data/factions.json         势力与初始关系
+data/sects.json            门派、身份、师承与专属武学
+data/events.json           入口事件表
+data/world_events.json     世界事件
+data/region_activity.json  区域生态基础值
+data/random_npcs.json      随机路人模板
+data/build_profiles.json   出身/成长配置
+data/economy/*.json        资源、配方、商队与经济事件
+data/save.json             正式存档（V12）
+```
 
 ---
 
-## 6. 当前游戏循环
+## 5. 当前核心系统
 
-当前基本循环为：
+### 5.1 世界时钟
 
-```text
-进入世界
-  ↓
-查看当前位置
-  ↓
-移动 / 查看 / 对话 / 任务 / 商店 / 采集
-  ↓
-遇敌
-  ↓
-回合制战斗
-  ↓
-获得经验、金币、掉落
-  ↓
-角色成长
-  ↓
-继续探索
-  ↓
-保存
-```
+- 1 tick = 1 个世界时辰（1 小时），tick 0 = 卯时 06:00。
+- 世界只在玩家行动后推进；不输入指令时世界不会自行流动。
+- 只读查看命令不耗时；失败的交互也不消耗时间。
+- `停留`（简写 `停`）主动等过一个时辰。
+- 客栈过夜推进到下一次卯时。
 
-当前不是完整开放世界模拟器。
+### 5.2 地图与移动
 
----
+- 房间由 `data/rooms.json` 驱动，出口使用方向或自定义出口（如 `上/下`、`内/外`）。
+- 室内房间标记 `indoor`，安全区标记 `safe_zone`。
+- 已探索路线支持快速旅行；跨 Zone 通过道路、城门、山口、洞口等边界房间连接。
+- 地图引擎负责布局与自动摆放，`data_validator.py` 负责出口、坐标与反向出口校验。
 
-## 7. 当前地图模型
+### 5.3 NPC、交谈与关系
 
-地图由 `data/rooms.json` 驱动。
+- NPC 有五段式观察描述（相貌衣着、年龄、武力、状态、装备）。
+- 交谈支持话题、`ask` 询问、关系面板、记忆与条件对白（`conditional_dialogue`）。
+- NPC 有日程与行为层：按时离场、在岗、巡逻、营生与随机路人。
+- 忙碌 NPC 会给短应答，不推进时间，但仍可接取/交付委托。
+- 势力关系与 NPC 关系写入世界状态，任务与选择可改变它们。
 
-Room 是游戏世界的基本空间单位。
+### 5.4 任务与选择
 
-典型结构包括：
+- 任务支持前置、阶段、计数、可重复（复做冷却与复做奖励）、难度与经验。
+- 交付时可出现分支选择（`交付 <任务> <选项>`），不同选择结算不同奖励与世界效果。
+- 效果统一由 `engine.apply_world_effects` 处理：旗标、变量、势力关系、NPC 关系、区域效果。
+- `region_effects` 会持久改变区域的治安/商路/通行，并夹紧在 -60~30；交付后打印实际区域变化。
+- 未选择分支时会列出选项且不结算。
 
-```json
-{
-  "id": "village_gate",
-  "name": "村口",
-  "zone": "main",
-  "description": "...",
-  "exits": {
-    "北": "south_street"
-  },
-  "npcs": ["guard"],
-  "enemies": [],
-  "safe": true
-}
-```
+### 5.5 战斗
 
-### 当前 Zone
+- 轻量回合制：普攻、招式、物品、逃跑。
+- 状态：中毒、流血、眩晕、护盾。
+- Boss 招牌技能带一回合预警。
+- 战斗奖励、任务进度、击败记录与区域联动共用统一结算。
 
-代码中目前明确存在：
+### 5.6 门派与武学
 
-```text
-main
-bandit_zone
-```
+- 门派：少林、武当、华山、铁衣门；散人为无门派出身。
+- 身份、晋升、师承、门派声望与专属武学均有数据门槛。
+- 武学存在熟练度、内力消耗、威力与特殊效果（护盾、破防等）。
 
-`MapEngine.ZONE_NAMES` 当前也只硬编码了：
+### 5.7 区域生态与经济
 
-```text
-main        → 主世界
-bandit_zone → 黑风寨
-```
+- 每个区域有治安、商路、通行三项持久值，任务、事件与玩家行为可改变它们。
+- 区域状态影响敌人活动、巡逻、商店与商队、传闻与地方面板。
+- 城镇有资金池与商税闭环；商队携带真实库存与报价。
+- 采集、资源、配方与锻造构成基础生产链。
 
-因此：
+### 5.8 天气、节气与氛围
 
-> `[LIMITATION]` 新增 Zone 后，不能只添加 `rooms.json` 数据；当前地图显示名称还需要处理 `MapEngine.ZONE_NAMES`。
+- 六种天气：晴、阴、小雨、雷雨、小雪、雾；一年 360 天，每 15 天一个节气。
+- 天气只在黎明变化，由角色名与世界 tick 确定性驱动，不使用随机数或线程。
+- 动态消息按“NPC 移动 > 车马过客 > 天色 > 天气 > 节气 > 场景声响”推送，每轮最多 5 条。
+- 室内外按房间 `indoor` 与 `window_view` 分别取词。
 
----
+### 5.9 入口事件
 
-## 8. 当前地图机制的重要事实
+- `data/events.json` 按房间/区域、时段、条件、once 与 cooldown 筛选。
+- 只在成功进入新场景时判定，`look`、读档与 NPC 自行移动不触发。
+- 触发记录写入 V12 `world_state.variables`。
 
-### 8.1 坐标
+### 5.10 帮助与界面
 
-Room 可以提供显式坐标。
-
-MapEngine 会根据坐标和出口关系建立地图布局。
-
-### 8.2 自动摆放
-
-对于没有可用坐标的房间，MapEngine 会尝试根据出口关系自动摆放。
-
-### 8.3 重复坐标
-
-`[LIMITATION]` 当前重复坐标不会直接作为地图验证错误阻止加载，而可能进入自动重新摆放流程。
-
-因此：
-
-> 不要把当前 MapEngine 当作完整地图验证器。
-
-### 8.4 出口
-
-当前出口使用：
-
-```text
-北 / 南 / 东 / 西
-```
-
-并映射到坐标方向。
-
-### 8.5 跨 Zone
-
-当前存在跨 Zone 连接，例如：
-
-```text
-cave_entrance
-    ↓
-bandit_courtyard
-
-bandit_back_mountain
-    ↓
-wild_fields
-```
-
-这类连接属于世界地图边界连接。
+- 三层帮助：分类目录 → 分类页 → 单条详情，共 13 类 84 条。
+- 支持序号导航、分类别名、上下文清理。
+- 颜色支持 `auto/on/off`，非 TTY 或 `NO_COLOR` 时自动关闭。
+- 输出层会剥离内部 ID、路径与调试对象。
 
 ---
 
-## 9. 当前数据加载机制
+## 6. 命令入口
 
-`engine.py` 中的 `DataLoader` 负责加载：
-
-```text
-rooms
-npcs
-items
-enemies
-skills
-quests
-```
-
-默认数据也定义在 `engine.py`。
-
-加载逻辑是：
+游戏内输入 `帮助` 查看完整三层帮助（13 类 84 条），常用命令：
 
 ```text
-默认数据
-   ↓
-读取 data/*.json
-   ↓
-deep_merge
-   ↓
-GAME_DATA
-   ↓
-模块使用
+查看与移动    看 / 地图 / 北 南 东 西 / 旅行 / 敲门 / 探索 / 停留
+交谈与人物    交谈 人物 [话题] / 关系 / 记忆 / 人物行动 / 世界动态 / 商情
+任务与委托    任务 / 任务 交付 / 任务 放弃 / 任务 选择
+门派与师承    门派 / 拜师 / 门派 查看|晋升|修习|声望|关系|师徒|受戒|退出
+武学与招式    武学 / 武学 查看|学习|遗忘
+状态与成长    状态 / 属性 / 加点 / 流派 / 天时
+背包与装备    背包 / 装备 / 装备武器 / 穿戴 / 卸下 / 比较 / 使用
+采集与生产    职业 / 搜索 / 采集 / 伐木 / 采矿 / 打造
+战斗与恢复    攻击 / 打坐 / run
+商店与交易    商店 / 货架 / 购买 / 出售
+客栈与休息    住店 / 吃饭 / 喝茶 / 听消息
+江湖与消息    公告 / 信息 / 商队 / 势力 / 冲突 / 区域 / 影响 / 治安 / 事件
+系统与帮助    帮助 / 百科 / 建议 / 颜色 / 保存 / 读档 / 退出 / 别名 / 历史
 ```
 
-### 重要限制
-
-`deep_merge()` 的递归合并主要针对字典。
-
-对于列表和普通标量：
-
-> `[LIMITATION]` 后加载数据会整体替换，而不是智能逐项合并。
-
-因此不要假设两个 JSON 列表会自动合并。
+具体别名、子命令与参数以游戏内帮助和 `main.py` 当前代码为准。
 
 ---
 
-## 10. 当前战斗系统
+## 7. 存档与兼容
 
-当前为轻量回合制战斗。
-
-玩家行动包括：
-
-```text
-普通攻击
-技能
-物品
-逃跑
-```
-
-技能受到：
-
-- 门派
-- 等级
-- MP
-- 技能倍率
-
-影响。
-
-敌人也可以使用技能。
+- 存档路径：`data/save.json`，备份 `data/save.json.bak`。
+- 当前 `SAVE_VERSION = 12`，世界状态集中在 `world_state`（`flags`、`variables`）。
+- 读档时自动迁移旧版本（v10→v11→v12），补齐世界状态、阶段任务与旧地点别名。
+- 迁移只在读档时进行，玩家再次保存后才写回文件。
+- 旧字段缺失使用默认值；无效地点回退 `village_gate`，不会直接崩溃。
+- 新增存档字段时必须同时处理：写入、读取默认值、旧档兼容、版本号是否需要提升。
 
 ---
 
-## 11. 当前状态系统
-
-当前状态包括：
-
-```text
-poison   中毒
-bleed    流血
-stun     眩晕
-shield   护盾
-```
-
-状态会在战斗回合处理中生效。
-
-### 技术限制
-
-`p_statuses_global` 是全局玩家状态容器。
-
-因此：
-
-> `[TECH DEBT]` 当前状态系统并不是可同时支持多个独立战斗实例的通用 CombatState 架构。
-
-未来若加入复杂战斗、队伍、多敌人、多角色，应逐步改造。
-
----
-
-## 12. 当前角色系统
-
-`Player` 当前包含：
-
-- 姓名
-- 门派
-- 等级
-- 经验
-- HP / MP
-- 攻击
-- 防御
-- 金币
-- 背包
-- 武器
-- 防具
-- 装备强化等级
-- 当前地点
-- 当前任务
-- 已完成任务
-
-当前门派：
-
-```text
-少林
-武当
-华山
-```
-
-并存在不同初始属性加成。
-
----
-
-## 13. 当前升级系统
-
-升级会：
-
-- 增加最大 HP
-- 增加最大 MP
-- 增加攻击
-- 增加防御
-- 恢复 HP / MP
-
-经验需求按约 1.5 倍增长。
-
----
-
-## 14. 当前任务系统
-
-当前任务系统属于轻量任务系统。
-
-现有任务数据包含：
-
-```text
-清剿黑风山
-```
-
-其核心目标是击杀指定敌人并领取奖励。
-
-当前任务模型主要支持：
-
-```text
-kill
-target_name
-required_cnt
-reward
-```
-
-因此：
-
-> `[LIMITATION]` 当前还不是完整的多目标、条件链、阶段任务、世界状态任务系统。
-
----
-
-## 15. 当前装备与强化
-
-当前装备分为：
-
-```text
-weapon
-armor
-```
-
-攻击/防御会由基础属性与装备属性共同计算。
-
-强化系统目前在打铁铺进行：
-
-- 上限 +5
-- 每级消耗铁矿石
-- 每级消耗金币
-
-装备新物品时当前会重置对应强化等级。
-
----
-
-## 16. 当前存档
-
-存档：
-
-```text
-data/save.json
-```
-
-当前保存了：
-
-- 玩家属性
-- 背包
-- 装备
-- 地点
-- 任务
-- 存档版本号
-
-当前 `SAVE_VERSION = 10`。
-
-### 非常重要
-
-虽然存在版本号：
-
-> `[LIMITATION]` 当前没有完整的通用 Save Migration / 版本迁移框架。
-
-读取时主要是：
-
-- 缺字段使用默认值
-- 旧地点名称映射
-- 无效地点回退 `village_gate`
-
-未来增加存档字段时必须谨慎。
-
----
-
-## 17. 当前热重载限制
-
-主程序支持：
-
-```text
-reload
-```
-
-用于重新加载 JSON。
-
-但当前架构存在：
-
-```python
-from engine import ROOMS
-from engine import NPCS
-...
-```
-
-这样的模块级导入。
-
-`reload_game_data()` 会重新绑定 `engine.ROOMS` 等对象。
-
-因此：
-
-> `[TECH DEBT]` 某些已经通过 `from engine import ...` 获取的旧引用可能不会自动指向新的数据对象。
-
-所以当前 `reload` 不能被描述为“所有模块完全热更新”。
-
----
-
-## 18. `wuxia.py` 的地位
-
-`wuxia.py` 是项目历史遗留的大型实现。
-
-它包含大量旧逻辑，并与当前模块化实现存在重复。
-
-因此：
-
-> `[RULE]` 新功能默认不得继续向 `wuxia.py` 添加逻辑。
-
-优先修改：
-
-```text
-main.py
-engine.py
-player.py
-combat.py
-actions.py
-data/*.json
-```
-
-除非明确要求迁移/删除旧代码。
-
----
-
-## 19. 开发原则
+## 8. 开发规则
 
 ### [RULE] 不破坏已有 ID
 
-尤其是：
-
-```text
-room id
-npc id
-item id
-enemy id
-skill id
-quest id
-```
-
-不要为了“命名更漂亮”随意改 ID。
-
-因为 ID 可能被：
-
-- Room exit
-- NPC
-- Quest
-- Item
-- Enemy
-- Save
-- Player location
-
-引用。
-
----
+`room / npc / item / enemy / skill / quest` 的 ID 是长期资产，可能被出口、NPC、任务、存档与代码引用。没有迁移计划不得改名。
 
 ### [RULE] 新内容优先数据化
 
-NPC、物品、敌人、技能、任务、房间尽量放入：
+NPC、物品、敌人、武学、任务、房间、事件、区域效果尽量放入 `data/*.json`，不要把大段具体内容硬编码进 Python。
 
-```text
-data/*.json
-```
+### [RULE] 新 Zone 必须有英文 ID
 
-不要把大段具体游戏内容硬编码进 Python。
+Zone ID 稳定、唯一、ASCII 化（如 `guiyun_city`），并同步 `data/world_regions.json` 与 `MapEngine` 的显示名。
 
----
+### [RULE] 跨 Zone 出口双向设计
 
-### [RULE] 新 Zone 必须有明确 Zone ID
+`A → B` 必须在设计中明确 `B → A`，不要依赖玩家找不到路。
 
-例如未来归云城：
+### [RULE] 测试不得覆盖正式存档
 
-```text
-guiyun_city
-```
+`tests/conftest.py` 会把无参 `save_to_file()` 重定向到临时目录；写存档测试必须显式隔离。
 
-而不是使用中文名称作为内部 ID。
+### [RULE] 数据改动必须过校验
+
+修改 JSON 后运行 `data_validator.py`，并跑全量测试。
 
 ---
 
-### [RULE] 跨 Zone 出口必须双向设计
+## 9. 已知限制
 
-如果：
-
-```text
-A → B
-```
-
-逻辑上需要返回：
-
-```text
-B → A
-```
-
-就必须明确设计，不要依赖“玩家以后找不到路”。
+- `[LIMITATION]` 地图引擎不是完整验证器，布局正确性依赖 `data_validator.py` 与测试。
+- `[LIMITATION]` 部分模块仍通过 `from engine import ...` 绑定数据，`reload` 不是严格的热更新。
+- `[LIMITATION]` 没有通用存档迁移框架，迁移是按版本手写并逐步补齐的。
+- `[LIMITATION]` 玩家状态使用全局容器，不支持多场并行战斗或队伍。
+- `[LIMITATION]` L15 是当前内容上限，L16+ 尚未设计。
+- `[TECH DEBT]` `main.py` 与 `engine.py` 责任仍偏多，后续应逐步抽服务，但不做一次性重写。
 
 ---
 
-## 20. 未来世界扩展
+## 10. 文档索引
 
-近期重要扩展方向：
-
-```text
-主世界
- ├── 村庄
- ├── 野外
- ├── 黑风寨
- └── 归云城
-```
-
-归云城将作为独立 Zone：
-
-```text
-guiyun_city
-```
-
-其世界设计详见：
-
-`WORLD_DESIGN.md`
-
-特别需要保持：
-
-- 城市作为独立 Zone
-- 主世界与城市之间通过明确道路/城门连接
-- 两段同名“黄土官道”可以作为不同 Room 存在
-- 内部 ID 必须唯一
-- 地图方向、出口、坐标必须保持可解释
-- 城市内部内容逐步数据化
+- `AI_CONTEXT.md`：接手本项目时必须遵守的开发规则与当前状态。
+- `ARCHITECTURE.md`：模块划分、数据流、依赖关系与技术债。
+- `WORLD_DESIGN.md`：世界观、地图与 Zone 设计、内容扩展规则。
+- `SAVE_MIGRATIONS.md`：存档版本迁移记录。
+- `P4.0_COMMAND_TICK_CONTRACT.md`：命令与世界时钟契约。
+- `开发规范.md`、`开发任务清单.md`、`最新交接记录.md`：本地开发流程与交付记录。
 
 ---
 
-## 21. 给未来 AI 的入口
-
-如果你是第一次接手本项目：
-
-### 第一步
-
-阅读：
-
-```text
-AI_CONTEXT.md
-```
-
-### 第二步
-
-阅读：
-
-```text
-ARCHITECTURE.md
-```
-
-### 第三步
-
-如果修改世界、地图、NPC、城市、剧情：
-
-```text
-WORLD_DESIGN.md
-```
-
-### 第四步
-
-查看实际：
-
-```text
-data/*.json
-```
-
-### 第五步
-
-最后才修改 Python。
-
----
-
-## 22. 最重要的一句话
+## 11. 最重要的一句话
 
 > **先理解当前代码，再修改；不要把规划中的架构当成已经实现的架构。**
 
-本项目目前最重要的目标不是“代码看起来漂亮”，而是：
+当前目标不是“代码看起来漂亮”，而是：
 
 ```text
-保持现有可玩性
+保持可玩性
 +
 保持 ID / 存档兼容
 +
@@ -710,5 +329,5 @@ data/*.json
 +
 逐步扩大世界
 +
-避免新旧架构继续混杂
+保持测试与数据校验通过
 ```
