@@ -21,6 +21,109 @@ EVENT_CONDITION_KEYS = {
 EVENT_EFFECT_KEYS = {"set_flags", "set_variables", "increment_variables", "faction_relations", "relations", "region_effects"}
 REGION_EFFECT_FIELDS = {"security", "commerce", "travel"}
 REGION_EFFECT_RANGE = (-60, 30)
+PERCEPTION_TIME_PHASES = {"dawn", "day", "dusk", "night"}
+PERCEPTION_WEATHERS = {"clear", "cloudy", "rain", "storm", "snow", "fog"}
+PERCEPTION_INJURIES = {"healthy", "wounded", "badly_wounded"}
+PERCEPTION_QUALITIES = {"普通", "精良", "稀有", "史诗"}
+PERCEPTION_QUALITY_OPS = {"eq", "gte", "gt", "lte", "lt"}
+PERCEPTION_NUMBER_OPS = {"eq", "ne", "gte", "gt", "lte", "lt"}
+PERCEPTION_EQUIPMENT_KEYS = {"best", "weapon", "armor", "accessory"}
+
+
+def valid_perception_enum(rule, allowed):
+    if isinstance(rule, str):
+        return rule in allowed
+    if isinstance(rule, (list, tuple)):
+        return bool(rule) and all(isinstance(value, str) and value in allowed for value in rule)
+    if isinstance(rule, dict):
+        if not rule or not set(rule) <= {"in", "not_in"}:
+            return False
+        for values in rule.values():
+            if not isinstance(values, (list, tuple)) or not values:
+                return False
+            if any(not isinstance(value, str) or value not in allowed for value in values):
+                return False
+        return True
+    return False
+
+
+def valid_perception_quality(rule):
+    if isinstance(rule, str):
+        return rule in PERCEPTION_QUALITIES
+    if isinstance(rule, dict):
+        return bool(rule) and set(rule) <= PERCEPTION_QUALITY_OPS and all(
+            value in PERCEPTION_QUALITIES for value in rule.values()
+        )
+    return False
+
+
+def valid_perception_number(rule):
+    if isinstance(rule, dict):
+        return bool(rule) and set(rule) <= PERCEPTION_NUMBER_OPS and all(
+            isinstance(value, (int, float)) and not isinstance(value, bool) and 0 <= value <= 100
+            for value in rule.values()
+        )
+    return isinstance(rule, (int, float)) and not isinstance(rule, bool) and 0 <= rule <= 100
+
+
+def validate_perception_rules(perception, label, errors):
+    if not isinstance(perception, dict) or not perception:
+        errors.append(f"{label} perception 必须为非空对象")
+        return
+    for key, rule in perception.items():
+        if key == "time_phase" and not valid_perception_enum(rule, PERCEPTION_TIME_PHASES):
+            errors.append(f"{label} perception.time_phase 非法")
+        elif key == "weather" and not valid_perception_enum(rule, PERCEPTION_WEATHERS):
+            errors.append(f"{label} perception.weather 非法")
+        elif key == "injury" and not valid_perception_enum(rule, PERCEPTION_INJURIES):
+            errors.append(f"{label} perception.injury 非法")
+        elif key == "hp_percent" and not valid_perception_number(rule):
+            errors.append(f"{label} perception.hp_percent 必须在 0~100")
+        elif key == "equipment_quality":
+            if not isinstance(rule, dict) or not rule:
+                errors.append(f"{label} perception.equipment_quality 必须为非空对象")
+                continue
+            for slot, quality_rule in rule.items():
+                if slot not in PERCEPTION_EQUIPMENT_KEYS:
+                    errors.append(f"{label} perception.equipment_quality 槽位非法 {slot}")
+                elif not valid_perception_quality(quality_rule):
+                    errors.append(f"{label} perception.equipment_quality.{slot} 品质非法")
+        elif key not in {"time_phase", "weather", "injury", "hp_percent", "equipment_quality"}:
+            errors.append(f"{label} perception 未知键 {key}")
+
+
+def validate_conditional_entry(entry, label, errors, require_perception=False):
+    if not isinstance(entry, dict):
+        errors.append(f"{label} 必须为对象")
+        return
+    variants = entry.get("variants")
+    if variants is not None:
+        if not isinstance(variants, list) or not variants:
+            errors.append(f"{label} variants 必须为非空数组")
+        else:
+            seen = set()
+            for vidx, text in enumerate(variants, 1):
+                if not isinstance(text, str) or not text.strip():
+                    errors.append(f"{label} variants[{vidx}] 必须为非空字符串")
+                elif text in seen:
+                    errors.append(f"{label} variants[{vidx}] 重复")
+                else:
+                    seen.add(text)
+    has_text = isinstance(entry.get("text"), str) and bool(entry["text"].strip())
+    if not has_text and variants is None:
+        errors.append(f"{label} 必须提供 text 或 variants")
+    if "priority" in entry:
+        try:
+            int(entry.get("priority"))
+        except (TypeError, ValueError):
+            errors.append(f"{label} priority 必须为整数")
+    if "requires" in entry and not isinstance(entry.get("requires"), dict):
+        errors.append(f"{label} requires 必须为对象")
+    if require_perception and "perception" not in entry:
+        errors.append(f"{label} perception 必须为非空对象")
+        return
+    if "perception" in entry:
+        validate_perception_rules(entry.get("perception"), label, errors)
 
 
 def check_region_effects(effects, label, zone_names, errors):
@@ -61,6 +164,7 @@ def load(name):
 def main():
     rooms=load("rooms.json"); npcs=load("npcs.json"); items=load("items.json"); build_profiles=load("build_profiles.json"); world_regions=load("world_regions.json"); world_events=load("world_events.json")
     enemies=load("enemies.json"); skills=load("skills.json"); quests=load("quests.json"); sects=load("sects.json"); factions=load("factions.json"); entry_events=load("events.json")
+    perception_templates=load("perception_templates.json")
     economy_dir = os.path.join(DATA_DIR, "economy")
     def load_economy(name):
         with open(os.path.join(economy_dir, name), encoding="utf-8") as f:
@@ -68,6 +172,19 @@ def main():
     resources=load_economy("resources.json"); gatherers=load_economy("gatherers.json")
     recipes=load_economy("recipes.json"); caravans=load_economy("caravans.json")
     errors=[]; warnings=[]; coords={}
+    if not isinstance(perception_templates, dict):
+        errors.append("perception_templates.json 顶层必须为对象")
+        perception_templates = {}
+    else:
+        for role, template_entries in perception_templates.items():
+            if not isinstance(role, str) or not role.strip():
+                errors.append("感知模板: 职业名必须为非空字符串")
+                continue
+            if not isinstance(template_entries, list) or not template_entries:
+                errors.append(f"感知模板 {role}: 必须为非空数组")
+                continue
+            for idx, entry in enumerate(template_entries, 1):
+                validate_conditional_entry(entry, f"感知模板 {role}[{idx}]", errors, require_perception=True)
     for rid,r in rooms.items():
         c=r.get("coord")
         if not (isinstance(c,list) and len(c)==2 and all(isinstance(x,(int,float)) for x in c)):
@@ -460,7 +577,7 @@ def main():
             item_display_ids[display_id] = item_name
         if "clothing" in info and not isinstance(info.get("clothing"), bool):
             errors.append(f"物品 {item_name}: clothing 必须为布尔值")
-        if info.get("type") in ("weapon", "armor"):
+        if info.get("type") in ("weapon", "armor", "accessory"):
             expected_slot = info.get("type")
             if info.get("slot") != expected_slot:
                 errors.append(f"物品 {item_name}: 装备 slot 必须为 {expected_slot}")
@@ -960,6 +1077,21 @@ def main():
                             for item_name in reward_items:
                                 if item_name and item_name not in items:
                                     errors.append(f"NPC {n}: relation_dialogue[{idx}] 奖励物品不存在 {item_name}")
+
+        role = info.get("perception_role")
+        if role is not None:
+            if not isinstance(role, str) or not role.strip():
+                errors.append(f"NPC {n}: perception_role 必须为非空字符串")
+            elif role not in perception_templates:
+                errors.append(f"NPC {n}: perception_role 未知职业模板 {role}")
+
+        if "conditional_dialogue" in info:
+            entries = info.get("conditional_dialogue")
+            if not isinstance(entries, list):
+                errors.append(f"NPC {n}: conditional_dialogue 必须为数组")
+            else:
+                for idx, entry in enumerate(entries, 1):
+                    validate_conditional_entry(entry, f"NPC {n}: conditional_dialogue[{idx}]", errors)
     for sect_name, skill_list in skills.items():
         if not isinstance(skill_list, list):
             errors.append(f"武学组 {sect_name}: 必须为数组")
@@ -1041,6 +1173,40 @@ def main():
                     errors.append(f"敌人 {ename}: equipment_drop_chance 必须在 0~0.25")
             except (TypeError, ValueError):
                 errors.append(f"敌人 {ename}: equipment_drop_chance 非法")
+        if "equipment_quality_pool" in einfo:
+            pool = einfo.get("equipment_quality_pool")
+            worn = []
+            if isinstance(equipment, dict):
+                worn = [equipment.get(slot) for slot in ("weapon", "armor") if equipment.get(slot) in items]
+            if not isinstance(pool, list) or not pool:
+                errors.append(f"敌人 {ename}: equipment_quality_pool 必须为非空数组")
+            else:
+                if not worn or not any(items.get(item, {}).get("quality_variants") for item in worn):
+                    errors.append(f"敌人 {ename}: equipment_quality_pool 需要至少一件带品质变体的穿戴装备")
+                try:
+                    if float(einfo.get("equipment_drop_chance", 0)) <= 0:
+                        errors.append(f"敌人 {ename}: equipment_quality_pool 需要 equipment_drop_chance > 0")
+                except (TypeError, ValueError):
+                    pass
+                total = 0.0
+                for qidx, entry in enumerate(pool, 1):
+                    if not isinstance(entry, dict) or entry.get("quality") not in ("精良", "稀有", "史诗"):
+                        errors.append(f"敌人 {ename}: equipment_quality_pool[{qidx}] 品质非法")
+                        continue
+                    try:
+                        chance = float(entry.get("chance", 0))
+                        if not 0 <= chance <= 1:
+                            errors.append(f"敌人 {ename}: equipment_quality_pool[{qidx}] chance 必须在 0~1")
+                        total += max(0.0, chance)
+                    except (TypeError, ValueError):
+                        errors.append(f"敌人 {ename}: equipment_quality_pool[{qidx}] chance 非法")
+                    if not any(
+                        items.get(item, {}).get("quality_variants", {}).get(entry.get("quality")) in items
+                        for item in worn
+                    ):
+                        errors.append(f"敌人 {ename}: equipment_quality_pool[{qidx}] 的 {entry.get('quality')} 品质没有对应变体")
+                if total > 1.0 + 1e-9:
+                    errors.append(f"敌人 {ename}: equipment_quality_pool 总概率不得超过 1")
         for field in ("respawn_seconds", "corpse_seconds"):
             if field in einfo:
                 try:
@@ -1258,7 +1424,7 @@ def main():
                 if not isinstance(stage, dict):
                     errors.append(f"任务 {q}: stages[{idx}] 必须是对象")
                     continue
-                if stage.get("target_type") not in (None, "kill", "talk"):
+                if stage.get("target_type") not in (None, "kill", "talk", "collect"):
                     errors.append(f"任务 {q}: stages[{idx}] target_type 暂不支持该类型")
                 req = stage.get("required_cnt", 1)
                 if not isinstance(req, int) or isinstance(req, bool) or req < 1:
@@ -1718,12 +1884,14 @@ def main():
                 errors.append(f"任务 {quest_id}: 第 {stage_index} 阶段击杀目标不存在 {target_name}")
             elif target_type == "talk" and target_name not in npcs:
                 errors.append(f"任务 {quest_id}: 第 {stage_index} 阶段交谈目标不存在 {target_name}")
+            elif target_type == "collect" and target_name not in items:
+                errors.append(f"任务 {quest_id}: 第 {stage_index} 阶段收集物品不存在 {target_name}")
         for field in ("npc", "turn_in_npc"):
             npc_name = quest_info.get(field)
             if npc_name and npc_name in npcs and not npc_room_placements.get(npc_name) and not npcs[npc_name].get("room"):
                 errors.append(f"任务 {quest_id}: {field} {npc_name} 没有可到达的场景位置")
 
-    valid_statuses = {"poison", "bleed", "stun", "shield", "armor_break", "damage_reduction"}
+    valid_statuses = {"poison", "bleed", "stun", "shield", "armor_break", "damage_reduction", "thorns"}
     valid_skill_effects = {"status", "self_status", "combo", "mp_restore"}
     for sect_name, skill_rows in skills.items():
         for skill_info in skill_rows or []:

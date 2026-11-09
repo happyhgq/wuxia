@@ -70,6 +70,13 @@ def test_only_intended_repeatable_quest_uses_repeat_reward_policy():
         "华山·绝壁试锋",
         "铁衣门·断魂护镖",
         "断魂岭·精铁换药",
+        "断魂岭·皮货换药",
+        "断魂岭·断锋回炉",
+        "沉河·堰口除傀",
+        "百草堂·草药换伤药",
+        "悦来客栈·野味换干粮",
+        "打铁铺·军械回炉",
+        "沉河·铜钱换伤药",
     ]
     for name in repeatable:
         repeat = data[name]["repeat_reward"]

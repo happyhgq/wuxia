@@ -15,6 +15,7 @@ _ASYMMETRIC_EXITS = {
     ("northfront_gate", "南", "guiyun_south_gate"): "北境镇门到归云城南门为道路弯折，回程走东",
     ("guiyun_south_gate", "东", "northfront_gate"): "同一处弯折的另一半",
     ("sunken_cache", "西", "sunken_channel"): "沉河暗库为单向潜入点",
+    ("sunken_weir", "西", "sunken_cache"): "沉河堰口经隐蔽水道返回暗库，来路为隐蔽出口",
 }
 
 

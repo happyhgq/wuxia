@@ -595,9 +595,11 @@ def migrate_save_data(data):
     else:
         equipment = migrated["equipment"]
         # 槽位值也必须是可哈希的物品名；合法 JSON 中的列表/对象会令 ITEMS.get 崩溃。
+        # 饰品槽仅在存档已有时保留，旧档读入后结构保持不变。
+        slots = ["weapon", "armor"] + (["accessory"] if "accessory" in equipment else [])
         migrated["equipment"] = {
             slot: (equipment.get(slot) if isinstance(equipment.get(slot), str) and equipment.get(slot).strip() else None)
-            for slot in ("weapon", "armor")
+            for slot in slots
         }
     if not isinstance(migrated.get("equip_enhance"), dict):
         migrated["equip_enhance"] = {"weapon": 0, "armor": 0}
@@ -1445,6 +1447,7 @@ STATUS_EFFECTS = {
     "shield": {"name": "护体", "color": Color.BLUE},
     "armor_break": {"name": "破防", "color": Color.MAGENTA},
     "damage_reduction": {"name": "卸力", "color": Color.CYAN},
+    "thorns": {"name": "反震", "color": Color.BRIGHT_YELLOW},
 }
 
 
@@ -1520,6 +1523,15 @@ def apply_damage_reduction(statuses, raw_damage):
         return max(0, int(raw_damage))
     pct = max(0, min(90, int(statuses["damage_reduction"].get("value", 0))))
     return max(0, int(raw_damage * (100 - pct) / 100))
+
+
+def apply_thorns(statuses, incoming_damage):
+    """反震状态：按比例把已承受的伤害回敬给攻击者，上限 35%。"""
+    if "thorns" not in statuses:
+        return 0
+    pct = max(0, min(35, int(statuses["thorns"].get("value", 0))))
+    dmg = max(0, int(incoming_damage))
+    return int(dmg * pct / 100)
 
 
 def apply_shield(statuses, raw_damage):
@@ -1829,7 +1841,8 @@ class DataLoader:
             "sects": DEFAULT_SECTS,
             "factions": DEFAULT_FACTIONS,
             "world_events": {},
-            "events": {}
+            "events": {},
+            "perception_templates": {}
         }
 
     def deep_merge(self, default, loaded):
@@ -1882,6 +1895,7 @@ SECTS = GAME_DATA["sects"]
 FACTIONS = GAME_DATA["factions"]
 WORLD_EVENTS = GAME_DATA["world_events"]
 EVENTS = GAME_DATA["events"]
+PERCEPTION_TEMPLATES = GAME_DATA["perception_templates"]
 
 
 # ==================== MapEngine 动态地图引擎 ====================
@@ -2184,7 +2198,7 @@ MAP_ENGINE = MapEngine(ROOMS)
 
 
 def reload_game_data():
-    global GAME_DATA, ROOMS, NPCS, ITEMS, ENEMIES, SKILLS, QUESTS, BUILD_PROFILES, WORLD_REGIONS, SECTS, FACTIONS, WORLD_EVENTS, EVENTS
+    global GAME_DATA, ROOMS, NPCS, ITEMS, ENEMIES, SKILLS, QUESTS, BUILD_PROFILES, WORLD_REGIONS, SECTS, FACTIONS, WORLD_EVENTS, EVENTS, PERCEPTION_TEMPLATES
     GAME_DATA = loader.load_all()
     ROOMS = GAME_DATA["rooms"]
     NPCS = GAME_DATA["npcs"]
@@ -2198,5 +2212,6 @@ def reload_game_data():
     FACTIONS = GAME_DATA["factions"]
     WORLD_EVENTS = GAME_DATA["world_events"]
     EVENTS = GAME_DATA["events"]
+    PERCEPTION_TEMPLATES = GAME_DATA["perception_templates"]
     MAP_ENGINE = MapEngine(ROOMS)
     print(f"{Color.BRIGHT_GREEN}[热重载完成] 游戏配置数据与动态地图引擎已同步刷新！{Color.RESET}\n")

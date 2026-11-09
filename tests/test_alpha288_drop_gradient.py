@@ -12,7 +12,11 @@ from player import Player
 ROOT = Path(__file__).resolve().parents[1]
 
 EQUIPMENT_BANDS = {"normal": 0.02, "ranged": 0.02, "elite": 0.05, "boss": 0.12}
-MANUAL_HOLDERS = {"山贼大当家", "黑风寨守关首领"}
+MANUAL_HOLDERS = {
+    "山贼大当家": {"item": "黑风刀法秘笈", "chance": 0.002},
+    "黑风寨守关首领": {"item": "黑风刀法秘笈", "chance": 0.002},
+    "守冢剑客": {"item": "断魂剑谱", "chance": 0.002},
+}
 MANUAL_ITEM = "黑风刀法秘笈"
 MANUAL_FLAG = "explore:bandit_treasury:manual_found"
 
@@ -29,12 +33,12 @@ def test_alpha288_equipment_drop_chance_is_tiered():
         assert enemy["equipment_drop_chance"] == expected, (name, enemy["equipment_drop_chance"], expected)
 
 
-def test_alpha288_only_bosses_keep_manual_trophies():
+def test_alpha288_only_designated_enemies_keep_manual_trophies():
     holders = {name for name, enemy in engine.ENEMIES.items() if enemy.get("manual_drop")}
-    assert holders == MANUAL_HOLDERS
-    for name in holders:
-        manual = engine.ENEMIES[name]["manual_drop"]
-        assert manual == {"item": MANUAL_ITEM, "chance": 0.002}, name
+    assert holders == set(MANUAL_HOLDERS)
+    for name, expected in MANUAL_HOLDERS.items():
+        assert engine.ENEMIES[name]["manual_drop"] == expected, name
+        assert engine.ITEMS[expected["item"]]["type"] == "manual"
 
 
 def test_alpha288_manual_is_a_one_time_treasury_exploration_reward():

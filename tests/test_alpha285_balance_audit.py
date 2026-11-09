@@ -71,6 +71,8 @@ KILL_QUEST_COMBAT_BASELINE = {
     "武当历练·松径清扰": ("黑风寨精锐", "bandit_treasury", 2),
     "铁衣门历练·清除巡哨": ("黑风寨精锐", "bandit_treasury", 2),
     "铁衣门历练·护路除匪": ("劫镖山贼", "guiyun_dart_yard", 2),
+    "黑风旧卒·外林查哨": ("黑风寨伏击手", "bandit_outer_wood", 3),
+    "沉河·闸口除傀": ("沉河尸傀", "sunken_sluice", 3),
 }
 
 

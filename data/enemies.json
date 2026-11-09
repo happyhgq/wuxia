@@ -191,6 +191,12 @@
       "armor": "皮甲"
     },
     "equipment_drop_chance": 0.05,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.3
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 0.75,
@@ -254,6 +260,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.12,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.4
+      },
+      {
+        "quality": "稀有",
+        "chance": 0.08
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 8,
@@ -466,6 +482,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.05,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.4
+      },
+      {
+        "quality": "稀有",
+        "chance": 0.08
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 8,
@@ -565,6 +591,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.12,
+    "equipment_quality_pool": [
+      {
+        "quality": "稀有",
+        "chance": 0.3
+      },
+      {
+        "quality": "史诗",
+        "chance": 0.04
+      }
+    ],
     "manual_drop": {
       "item": "黑风刀法秘笈",
       "chance": 0.002
@@ -705,6 +741,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.05,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.4
+      },
+      {
+        "quality": "稀有",
+        "chance": 0.06
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 8,
@@ -812,6 +858,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.12,
+    "equipment_quality_pool": [
+      {
+        "quality": "稀有",
+        "chance": 0.3
+      },
+      {
+        "quality": "史诗",
+        "chance": 0.05
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 8,
@@ -1522,6 +1578,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.12,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.45
+      },
+      {
+        "quality": "稀有",
+        "chance": 0.1
+      }
+    ],
     "skills": [
       {
         "name": "断岳重斩",
@@ -2189,6 +2255,16 @@
       "armor": "锁子甲"
     },
     "equipment_drop_chance": 0.02,
+    "equipment_quality_pool": [
+      {
+        "quality": "精良",
+        "chance": 0.5
+      },
+      {
+        "quality": "稀有",
+        "chance": 0.1
+      }
+    ],
     "loadout_variants": [
       {
         "weight": 8,
@@ -2660,8 +2736,16 @@
       {
         "item": "大还丹",
         "chance": 0.1
+      },
+      {
+        "item": "断锋护符",
+        "chance": 0.05
       }
     ],
+    "manual_drop": {
+      "item": "断魂剑谱",
+      "chance": 0.002
+    },
     "ai": {
       "style": "tactical",
       "faction": "bandit"

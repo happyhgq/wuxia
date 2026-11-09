@@ -81,7 +81,7 @@ def test_insufficient_quest_items_do_not_complete_or_reward(monkeypatch):
 
     output = capture(handle_quest, player, "jiaofu", [QUEST])
 
-    assert "交付失败：需要 草药 ×2，当前 1。" in output
+    assert "交付失败：需要 草药 ×2（现有 1）。" in output
     assert "恭喜完成任务" not in output
     assert QUEST in player.active_quests
     assert QUEST not in player.completed_quests

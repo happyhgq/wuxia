@@ -4357,6 +4357,62 @@
     "difficulty": "进阶",
     "follow_up_hint": "精铁可在断魂崖夜行客与断魂堡门守卫长身上取得；凑够三块后可再来找守岭猎户兑换。"
   },
+  "断魂岭·皮货换药": {
+    "title": "断魂岭·皮货换药",
+    "npc": "守祠老妪",
+    "turn_in_npc": "守祠老妪",
+    "target_type": "collect",
+    "target_name": "狼皮",
+    "required_cnt": 3,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 14,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "gold": 15,
+      "item": "护体丹"
+    },
+    "repeat_reward": {
+      "gold": 15,
+      "item": "护体丹"
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "守祠老妪把过岭人留下的旧皮子缝补成护具，见你带着整张狼皮，便想换些伤药给你，也算替岭上添一盏灯。",
+    "difficulty": "进阶",
+    "follow_up_hint": "狼皮可从狼谷的断魂岭恶狼身上剥取；凑够三张后可回岭雨祠找守祠老妪。"
+  },
+  "断魂岭·断锋回炉": {
+    "title": "断魂岭·断锋回炉",
+    "npc": "守冢老人",
+    "turn_in_npc": "守冢老人",
+    "target_type": "collect",
+    "target_name": "断剑残锋",
+    "required_cnt": 1,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 14,
+      "flags": [
+        "quest_completed:断魂岭·破堡除凶"
+      ]
+    },
+    "reward": {
+      "gold": 20,
+      "item": "断魂精铁"
+    },
+    "repeat_reward": {
+      "gold": 20,
+      "item": "断魂精铁"
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "守冢老人认得断锋上的“镖”字，说崩口虽深，回炉还能留下一块精铁。他愿收下断锋，把精铁交给你。",
+    "difficulty": "进阶",
+    "follow_up_hint": "断剑残锋可从剑冢的守冢剑客身上取得；老人每隔一段时间才会再开一次炉。"
+  },
   "断魂岭·狼谷除患": {
     "title": "断魂岭·狼谷除患",
     "npc": "守岭猎户",
@@ -4832,5 +4888,294 @@
     ],
     "difficulty": "重大",
     "follow_up_hint": "行规已立，商会、衙门与黑市都会按你的落笔行事；后续可分别回万商会馆、捕快营与沉星黑市探问新委托。"
+  },
+  "黑风旧卒·外林查哨": {
+    "title": "黑风旧卒·外林查哨",
+    "npc": "守烽老卒",
+    "turn_in_npc": "守烽老卒",
+    "target_type": "kill",
+    "target_name": "黑风寨伏击手",
+    "required_cnt": 3,
+    "requires": {
+      "level": 9
+    },
+    "desc": "守烽老卒倚在后山断烽台下，替过路人盯着外林。他说外林里又踩出几条新暗哨，放冷箭的伏击手正候着过路行商，请你拔掉三个哨探。",
+    "reward": {
+      "exp": 360,
+      "gold": 90,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 2
+        }
+      ],
+      "honor_delta": 3
+    },
+    "on_complete": {
+      "set_flags": {
+        "blackwind_backmountain:watch_cleared": true
+      },
+      "relations": {
+        "守烽老卒": 3
+      }
+    },
+    "difficulty": "进阶",
+    "notice": "黑风后山的守烽老卒在等肯去外林查哨的人。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "外林哨探一除，黑风后山往南的寨道会好走些。"
+  },
+  "沉河·捞药备伤": {
+    "title": "沉河·捞药备伤",
+    "npc": "沉河捞尸人",
+    "turn_in_npc": "沉河捞尸人",
+    "target_type": "collect",
+    "target_name": "雾露草",
+    "required_cnt": 4,
+    "requires": {
+      "level": 10,
+      "flags": [
+        "sunken_ruins:caravan_truth_known",
+        "explore:sunken_cache:deep_found"
+      ]
+    },
+    "desc": "捞尸人想潜进闸口拓下旧闸印，可河底寒气重，下水前得有药压着。他请你凑四株雾露草，废祠与暗库都能采到。",
+    "reward": {
+      "exp": 220,
+      "gold": 70,
+      "item": "清心散",
+      "honor_delta": 2
+    },
+    "on_complete": {
+      "set_flags": {
+        "sunken_ruins:seal_recovered": true
+      },
+      "relations": {
+        "沉河捞尸人": 3
+      }
+    },
+    "difficulty": "进阶",
+    "notice": "沉河堰口的捞尸人在找能凑齐雾露草、陪他下水的人。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "旧闸印已经拓出，闸口那边的尸傀该清一清了。"
+  },
+  "沉河·闸口除傀": {
+    "title": "沉河·闸口除傀",
+    "npc": "沉河捞尸人",
+    "turn_in_npc": "沉河捞尸人",
+    "target_type": "kill",
+    "target_name": "沉河尸傀",
+    "required_cnt": 3,
+    "requires": {
+      "level": 11,
+      "flags": [
+        "sunken_ruins:seal_recovered"
+      ]
+    },
+    "desc": "旧闸印已经拓出，可闸口前堆着尸傀，闸板落不下去。捞尸人请你沿引水槽清掉三具尸傀，好让他把闸重新封死。",
+    "stages": [
+      {
+        "target_type": "kill",
+        "target_name": "沉河尸傀",
+        "required_cnt": 3,
+        "desc": "深入引水槽东头的闸口，清掉堵在闸前的尸傀。"
+      },
+      {
+        "target_type": "talk",
+        "target_name": "沉河捞尸人",
+        "required_cnt": 1,
+        "desc": "带着清出的闸口消息回堰口，让捞尸人落闸。"
+      }
+    ],
+    "reward": {
+      "exp": 340,
+      "gold": 110,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 2
+        }
+      ],
+      "honor_delta": 4
+    },
+    "on_complete": {
+      "set_flags": {
+        "sunken_ruins:sluice_closed": true
+      },
+      "relations": {
+        "沉河捞尸人": 4
+      },
+      "region_effects": {
+        "sunken_ruins": {
+          "security": 3,
+          "travel": 2
+        }
+      }
+    },
+    "difficulty": "高难",
+    "notice": "沉河闸口的尸傀越堆越多，捞尸人想找能下水清障的人。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "石闸落下后，堰口仍会漂上尸傀，捞尸人愿意按趟付些工钱。"
+  },
+  "沉河·堰口除傀": {
+    "title": "沉河·堰口除傀",
+    "npc": "沉河捞尸人",
+    "turn_in_npc": "沉河捞尸人",
+    "target_type": "kill",
+    "target_name": "沉河尸傀",
+    "required_cnt": 2,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 11,
+      "flags": [
+        "sunken_ruins:sluice_closed"
+      ]
+    },
+    "desc": "石闸虽已落下，堰口仍时不时漂上尸傀，缠住捞尸人的绳索。他请你按趟清掉两具尸傀，护住这条水路。",
+    "reward": {
+      "gold": 50,
+      "item": "金创药",
+      "honor_delta": 1
+    },
+    "repeat_reward": {
+      "gold": 55,
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 12,
+    "difficulty": "进阶",
+    "notice": "沉河堰口的捞尸人按趟雇人清理水道里的尸傀。",
+    "notice_location": "天衡广场",
+    "follow_up_hint": "堰口委托可反复接取，冷却结束后再去找捞尸人。"
+  },
+  "百草堂·草药换伤药": {
+    "title": "百草堂·草药换伤药",
+    "npc": "药铺老板",
+    "turn_in_npc": "药铺老板",
+    "target_type": "collect",
+    "target_name": "草药",
+    "required_cnt": 6,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 2
+    },
+    "reward": {
+      "item": "金创药"
+    },
+    "repeat_reward": {
+      "item": "金创药"
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "百草堂的伤药总不够用。药铺老板见你常在山野走动，便说六份草药可换一份金创药，也算是替他省下炮制的工夫。",
+    "difficulty": "入门",
+    "follow_up_hint": "草药可在黄土官道、村后荒野与采药溪谷采集；凑齐六份后可回百草堂找药铺老板兑换。"
+  },
+  "悦来客栈·野味换干粮": {
+    "title": "悦来客栈·野味换干粮",
+    "npc": "掌柜",
+    "turn_in_npc": "掌柜",
+    "target_type": "collect",
+    "target_name": "野猪肉",
+    "required_cnt": 3,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 5
+    },
+    "desc": "客栈后厨正为往来行客备干粮。掌柜收三份野猪肉与两份山獐肉，换你一份行军干粮，上路也能顶饥。",
+    "stages": [
+      {
+        "target_type": "collect",
+        "target_name": "野猪肉",
+        "required_cnt": 3,
+        "desc": "带三份野猪肉回悦来客栈后厨。"
+      },
+      {
+        "target_type": "collect",
+        "target_name": "山獐肉",
+        "required_cnt": 2,
+        "desc": "再带两份山獐肉，凑齐掌柜要的野味。"
+      }
+    ],
+    "reward": {
+      "item": "行军干粮"
+    },
+    "repeat_reward": {
+      "item": "行军干粮"
+    },
+    "repeat_cooldown_ticks": 12,
+    "difficulty": "普通",
+    "follow_up_hint": "野猪肉可从村外野猪身上取得，山獐肉出自雾隐林道的野猿；备齐后可回悦来客栈找掌柜兑换。"
+  },
+  "打铁铺·军械回炉": {
+    "title": "打铁铺·军械回炉",
+    "npc": "铁匠",
+    "turn_in_npc": "铁匠",
+    "target_type": "collect",
+    "target_name": "黑风寨军械残片",
+    "required_cnt": 6,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 9
+    },
+    "reward": {
+      "items": [
+        {
+          "item": "铁矿石",
+          "quantity": 2
+        }
+      ]
+    },
+    "repeat_reward": {
+      "items": [
+        {
+          "item": "铁矿石",
+          "quantity": 2
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "王打铁看中黑风寨兵器上拆下的铁片，回炉重锻能省一道选料工夫。他收六块军械残片，换你两份铁矿石。",
+    "difficulty": "进阶",
+    "follow_up_hint": "军械残片可从黑风寨伏击手、游骑与断魂岭马贼身上取得；凑齐六块后可回铁匠铺找王打铁兑换。"
+  },
+  "沉河·铜钱换伤药": {
+    "title": "沉河·铜钱换伤药",
+    "npc": "沉河捞尸人",
+    "turn_in_npc": "沉河捞尸人",
+    "target_type": "collect",
+    "target_name": "沉河铜钱",
+    "required_cnt": 6,
+    "repeatable": true,
+    "retryable": true,
+    "requires": {
+      "level": 9
+    },
+    "reward": {
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_reward": {
+      "items": [
+        {
+          "item": "金创药",
+          "quantity": 1
+        }
+      ]
+    },
+    "repeat_cooldown_ticks": 12,
+    "desc": "捞尸人从河泥里淘出些旧铜钱，留着也换不了几个钱，愿用六枚兑你一份金创药，好应付水下磕碰。",
+    "difficulty": "进阶",
+    "follow_up_hint": "沉河铜钱可从沉河尸傀身上取得；凑齐六枚后可回堰口找捞尸人兑换。"
   }
 }

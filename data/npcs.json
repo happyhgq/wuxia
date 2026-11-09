@@ -300,7 +300,8 @@
         "name": "红缨枪",
         "id": "hong ying qiang"
       }
-    ]
+    ],
+    "perception_role": "guard"
   },
   "村长": {
     "id": "cun zhang",
@@ -659,6 +660,22 @@
           ]
         },
         "text": "村道安稳下来，采药人与行商总算敢出门了。接下来还得看看百草堂能不能恢复收药。"
+      },
+      {
+        "priority": 25,
+        "perception": {
+          "injury": "badly_wounded"
+        },
+        "text": "少侠怎么伤成这样？快进屋歇歇，我让婆子烧些热水。"
+      },
+      {
+        "priority": 9,
+        "perception": {
+          "equipment_quality": {
+            "best": "精良"
+          }
+        },
+        "text": "看得出你置办了些好行头。村里近来不太平，正需要能办事的人。"
       }
     ]
   },
@@ -931,8 +948,33 @@
           ]
         },
         "text": "近来村道上的山贼少了些，采药人也敢走动了。若能把收药的生意重新做起来，村里就能多一分保障。"
+      },
+      {
+        "priority": 28,
+        "perception": {
+          "injury": "badly_wounded"
+        },
+        "text": "你这伤势拖不得，先坐下，我给你看看。药钱的事缓一缓，命比银子要紧。"
+      },
+      {
+        "priority": 24,
+        "perception": {
+          "injury": "wounded"
+        },
+        "text": "袖口见血了，别硬撑。金创药就在架上，先处理伤口再赶路。"
+      },
+      {
+        "priority": 8,
+        "perception": {
+          "weather": [
+            "rain",
+            "storm"
+          ]
+        },
+        "text": "雨天湿气重，旧伤容易发沉。回去记得煎一副祛湿的，别嫌麻烦。"
       }
-    ]
+    ],
+    "perception_role": "apothecary"
   },
   "铁匠": {
     "id": "tie jiang",
@@ -1083,8 +1125,27 @@
           ]
         },
         "text": "顾三那边补齐了矿料，近来送来的铁矿石也更稳定了。只要原料和银两够，我这炉铁剑就不必总因缺料停下来。"
+      },
+      {
+        "priority": 12,
+        "perception": {
+          "equipment_quality": {
+            "weapon": "稀有"
+          }
+        },
+        "text": "这柄兵刃钢口不凡，看来你走过不少险路。若要再淬炼，得拿稀罕矿料来，我可不敢拿寻常铁料糊弄。"
+      },
+      {
+        "priority": 11,
+        "perception": {
+          "equipment_quality": {
+            "weapon": "精良"
+          }
+        },
+        "text": "这柄剑养得不错，刃口还直。再想往上走，光靠寻常铁矿石可不够。"
       }
-    ]
+    ],
+    "perception_role": "smith"
   },
   "掌柜": {
     "id": "zhang gui",
@@ -1210,7 +1271,34 @@
       "meal_price": 8,
       "city_lodging_price": 35,
       "city_meal_price": 12
-    }
+    },
+    "conditional_dialogue": [
+      {
+        "priority": 20,
+        "perception": {
+          "time_phase": "night"
+        },
+        "text": "夜深了，楼上还留着房。若只是歇脚，大堂也有热汤。"
+      },
+      {
+        "priority": 18,
+        "perception": {
+          "weather": [
+            "storm",
+            "snow"
+          ]
+        },
+        "text": "这种天气赶路不划算，先坐下暖暖身子，等风雪缓一缓再走。"
+      },
+      {
+        "priority": 12,
+        "perception": {
+          "time_phase": "dawn"
+        },
+        "text": "客官起得早，灶上刚热了粥，先垫垫肚子再上路吧。"
+      }
+    ],
+    "perception_role": "innkeeper"
   },
   "店小二": {
     "id": "dian xiao er",
@@ -1291,7 +1379,37 @@
     "appearance": "身形灵活，袖口挽起，肩上总搭着一条半旧白巾；托盘边缘被他擦得干干净净。",
     "voice": "招呼客人时嗓门亮堂，忙起来也能记住每桌点了什么。",
     "demeanor": "眼力见好，嘴快心不坏，最怕客人无故闹事。",
-    "behavior_hint": "问饭菜、客房或最近来往的客人，他往往能给出具体消息。"
+    "behavior_hint": "问饭菜、客房或最近来往的客人，他往往能给出具体消息。",
+    "conditional_dialogue": [
+      {
+        "priority": 20,
+        "perception": {
+          "time_phase": "night"
+        },
+        "text": "客官来得巧，楼上还有空房；再晚些，怕是只剩柴房了。"
+      },
+      {
+        "priority": 18,
+        "perception": {
+          "injury": [
+            "wounded",
+            "badly_wounded"
+          ]
+        },
+        "text": "您这伤得先处理。我给您端盆热水，再拿些干净布条来。"
+      },
+      {
+        "priority": 12,
+        "perception": {
+          "weather": [
+            "rain",
+            "storm"
+          ]
+        },
+        "text": "外头雨大，先把斗篷烘一烘再走吧，湿着赶路最伤身。"
+      }
+    ],
+    "perception_role": "inn_staff"
   },
   "柳三娘": {
     "id": "liu san niang",
@@ -1398,7 +1516,8 @@
         "relation_delta": 1,
         "once": true
       }
-    ]
+    ],
+    "perception_role": "innkeeper"
   },
   "小翠": {
     "id": "xiao cui",
@@ -1505,7 +1624,8 @@
         "relation_delta": 1,
         "once": true
       }
-    ]
+    ],
+    "perception_role": "inn_staff"
   },
   "沈青霜": {
     "id": "shen qing shuang",
@@ -1732,7 +1852,8 @@
         "relation_delta": 1,
         "once": true
       }
-    ]
+    ],
+    "perception_role": "apothecary"
   },
   "阿蘅": {
     "id": "a heng",
@@ -1921,7 +2042,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "被绑村民": {
     "id": "bei bang cun min",
@@ -2110,7 +2232,26 @@
     "appearance": "衣袍收拾得整齐，站姿沉稳，举手投足间透着长期练武留下的规矩。",
     "voice": "吐字清楚，谈到武学时会放慢语速，先讲根基再讲招式。",
     "demeanor": "严谨克制，不轻易夸口，更看重习武者的态度。",
-    "behavior_hint": "若你礼数周全、基础扎实，便更愿意指点武学门道。"
+    "behavior_hint": "若你礼数周全、基础扎实，便更愿意指点武学门道。",
+    "conditional_dialogue": [
+      {
+        "priority": 30,
+        "perception": {
+          "equipment_quality": {
+            "best": "稀有"
+          }
+        },
+        "text": "这一身行头不像寻常行商。城里可以走动，但兵器不得当街出鞘，这条规矩对谁都一样。"
+      },
+      {
+        "priority": 22,
+        "perception": {
+          "injury": "badly_wounded"
+        },
+        "text": "你这身伤，先进城找药铺。城门不是逞强的地方，倒下反倒添乱。"
+      }
+    ],
+    "perception_role": "guard"
   },
   "云来客栈掌柜": {
     "id": "yun lai zhang gui",
@@ -2255,7 +2396,8 @@
       "meal_price": 12,
       "city_lodging_price": 35,
       "city_meal_price": 12
-    }
+    },
+    "perception_role": "innkeeper"
   },
   "云来客栈小二": {
     "id": "yun lai xiao er",
@@ -2333,7 +2475,8 @@
     "voice": "说话利落客气，遇到熟客会主动报上今日的热菜。",
     "demeanor": "精明但不油滑，既懂照顾客人，也懂哪些事不该多问。",
     "behavior_hint": "可向他打听客房、菜色、商旅动向与城中传闻。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "inn_staff"
   },
   "听风茶馆老板": {
     "id": "ting feng cha guan",
@@ -2423,7 +2566,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "百炼铁铺铁匠": {
     "id": "bai lian tie jiang",
@@ -2508,7 +2652,8 @@
     "voice": "嗓音略显粗哑，说起材料、火候和兵器时格外认真。",
     "demeanor": "直爽务实，不爱空谈，做事讲究料足工稳。",
     "behavior_hint": "询问锻造或材料时，可以直接谈需求，不必绕弯子。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "smith"
   },
   "归云武馆馆主": {
     "id": "gui yun wu guan guan zhu",
@@ -3153,7 +3298,8 @@
     "voice": "吐字清楚，谈到武学时会放慢语速，先讲根基再讲招式。",
     "demeanor": "严谨克制，不轻易夸口，更看重习武者的态度。",
     "behavior_hint": "若你礼数周全、基础扎实，便更愿意指点武学门道。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "guard"
   },
   "府衙文书": {
     "id": "fu ya wen shu",
@@ -3456,7 +3602,8 @@
     "voice": "说话带着市井口吻，熟悉的事情讲得细，陌生的事情则会留几分余地。",
     "demeanor": "谨慎而重情，面对陌生人会先观察一阵。",
     "behavior_hint": "多交谈、帮忙或守信，通常比一味追问更容易赢得信任。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "guard"
   },
   "万商坊掌柜": {
     "id": "wan shang fang zhang gui",
@@ -3542,7 +3689,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "宝器阁掌柜": {
     "id": "bao qi ge zhang gui",
@@ -3627,7 +3775,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "百草堂掌柜": {
     "id": "bai cao tang zhang gui",
@@ -3712,7 +3861,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "apothecary"
   },
   "四海钱庄掌柜": {
     "id": "si hai qian zhuang zhang gui",
@@ -4252,7 +4402,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "黑市管事": {
     "id": "hei shi guan shi",
@@ -4470,7 +4621,8 @@
     "voice": "说话圆滑，谈价时语速不快，却很少漏掉关键条件。",
     "demeanor": "精于盘算，重视信誉与实际收益。",
     "behavior_hint": "谈及货物、行情或商路时，往往比闲聊更愿意多说几句。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "说书先生": {
     "id": "shuo shu xian sheng",
@@ -4578,7 +4730,8 @@
     "voice": "说话带着市井口吻，熟悉的事情讲得细，陌生的事情则会留几分余地。",
     "demeanor": "谨慎而重情，面对陌生人会先观察一阵。",
     "behavior_hint": "多交谈、帮忙或守信，通常比一味追问更容易赢得信任。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "villager"
   },
   "采药人阿芷": {
     "id": "cai yao ren a zhi",
@@ -4672,7 +4825,8 @@
         },
         "text": "药香浅滩的毒蛛已经清掉了，采药的路总算能走稳些。如今浅滩草药长得比先前旺些，你若要采药，可以沿溪往西走。"
       }
-    ]
+    ],
+    "perception_role": "apothecary"
   },
   "失踪猎户的同伴": {
     "id": "shou shang lie hu",
@@ -4750,7 +4904,8 @@
     "voice": "说话带着市井口吻，熟悉的事情讲得细，陌生的事情则会留几分余地。",
     "demeanor": "谨慎而重情，面对陌生人会先观察一阵。",
     "behavior_hint": "多交谈、帮忙或守信，通常比一味追问更容易赢得信任。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "hunter"
   },
   "守祠残僧": {
     "id": "shou ci can seng",
@@ -5078,7 +5233,8 @@
     "voice": "语气与身份相称，谈正事时干脆，涉及自身经历时有所保留。",
     "demeanor": "有自己的立场与盘算，不会对所有人一视同仁。",
     "behavior_hint": "交谈内容与过往来往会影响其对你的态度。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "guard"
   },
   "货船伙计小满": {
     "id": "huo chuan xiao man",
@@ -5261,8 +5417,30 @@
           ]
         },
         "text": "栈道修好了，采药人走林道总算不用再绕远路。你若还要伐木，记得留些新枝让林子慢慢长回来。"
+      },
+      {
+        "priority": 16,
+        "perception": {
+          "time_phase": [
+            "dusk",
+            "night"
+          ]
+        },
+        "text": "天快黑了，山道上常有野兽。要回村就走大路，别图近路。"
+      },
+      {
+        "priority": 14,
+        "perception": {
+          "weather": [
+            "rain",
+            "storm",
+            "snow"
+          ]
+        },
+        "text": "这天气进山，脚下最滑。要砍柴也等雨停，命比柴火值钱。"
       }
-    ]
+    ],
+    "perception_role": "hunter"
   },
   "木匠老许": {
     "id": "mu jiang lao xu",
@@ -5373,7 +5551,8 @@
     "voice": "说话带着市井口吻，熟悉的事情讲得细，陌生的事情则会留几分余地。",
     "demeanor": "谨慎而重情，面对陌生人会先观察一阵。",
     "behavior_hint": "多交谈、帮忙或守信，通常比一味追问更容易赢得信任。",
-    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。"
+    "equipment_detail": "装备上的磨痕与修补痕迹，能看出它们经常被使用，而非只作摆设。",
+    "perception_role": "shopkeeper"
   },
   "矿工顾三": {
     "id": "kuang gong gu san",
@@ -5484,7 +5663,8 @@
         },
         "text": "铁脉长廊的矿獾已经赶走，深处那段矿道总算能安全作业了。矿脉恢复需要些时日，但我能更稳定地采出铁料，王打铁也不必总等着缺料。"
       }
-    ]
+    ],
+    "perception_role": "shopkeeper"
   },
   "菜贩孙婶": {
     "id": "cai fan sun shen",
@@ -5629,7 +5809,8 @@
         12,
         18
       ]
-    }
+    },
+    "perception_role": "villager"
   },
   "挑水老邱": {
     "id": "tiao shui lao qiu",
@@ -5771,7 +5952,8 @@
         12,
         18
       ]
-    }
+    },
+    "perception_role": "villager"
   },
   "农家阿禾": {
     "id": "nong jia a he",
@@ -5907,7 +6089,8 @@
         12,
         18
       ]
-    }
+    },
+    "perception_role": "villager"
   },
   "铁匠学徒小石": {
     "id": "tie jiang xue tu xiao shi",
@@ -6043,7 +6226,8 @@
         12,
         18
       ]
-    }
+    },
+    "perception_role": "smith"
   },
   "货郎周四": {
     "id": "huo lang zhou si",
@@ -6175,7 +6359,8 @@
         "abandon": 60,
         "ttl": 0
       }
-    }
+    },
+    "perception_role": "villager"
   },
   "马夫赵六": {
     "id": "ma fu zhao liu",
@@ -6294,7 +6479,8 @@
         "abandon": 60,
         "ttl": 0
       }
-    }
+    },
+    "perception_role": "villager"
   },
   "书生陆文清": {
     "id": "lu wen qing",
@@ -9598,7 +9784,8 @@
         },
         "text": "狼谷安静了，栈道上又能听见人声。旧营那边的残兵却还没散，你路过时留神些。"
       }
-    ]
+    ],
+    "perception_role": "hunter"
   },
   "落难镖师": {
     "id": "luo nan biao shi",
@@ -9829,7 +10016,8 @@
     "demeanor": "寡言而固执，只在意冢中的剑和剑上的名字。",
     "behavior_hint": "在岭雨祠向守冢老人询问剑冢、守冢剑客与旧誓。",
     "quests": [
-      "断魂岭·剑冢旧誓"
+      "断魂岭·剑冢旧誓",
+      "断魂岭·断锋回炉"
     ],
     "conditional_dialogue": [
       {
@@ -9904,6 +10092,9 @@
         "once": true
       }
     ],
+    "quests": [
+      "断魂岭·皮货换药"
+    ],
     "state_profile": {
       "default": "normal",
       "allowed": [
@@ -9961,5 +10152,269 @@
     "schedule_tier": "T3",
     "always_available": true,
     "scene_status": "守在岭雨祠神龛前添灯油，留过岭人歇脚"
+  },
+  "守烽老卒": {
+    "id": "shou feng lao zu",
+    "talk_verb": "哑声道",
+    "name": "守烽老卒",
+    "rank_title": "黑风后山",
+    "gender": "male",
+    "power_tier": 1,
+    "age_desc": "六十上下",
+    "face_attire": "他披着褪成土色的旧号衣，肩头补着粗麻，腰间挂一只缺口的铜哨，腿边立着根削尖的枣木杖。",
+    "martial_style": "腿脚已慢，眼力仍毒，善看山道伏兵",
+    "gear_display": [
+      {
+        "name": "铜哨",
+        "id": "tong shao"
+      },
+      {
+        "name": "枣木杖",
+        "id": "zao mu zhang"
+      }
+    ],
+    "title": "黑风后山守烽老卒",
+    "desc": "一名守过旧烽台的老卒，靠在断烽台残基下，正用布条一圈圈缠着腿上的旧伤。",
+    "type": "villager",
+    "dialogue": [
+      "烽台塌了，眼还得有人替它睁着。",
+      "外林那些伏击手换了三拨，踩点的路子倒一直没变。"
+    ],
+    "info": {
+      "烽台": "黑风后山顶上的旧烽台早塌了半边，老卒就在残基下歇脚，替过路人盯着外林。",
+      "外林": "黑风寨外林在断崖暗哨以东，树密路窄，伏击手和游骑常在那一带巡。",
+      "伏击手": "外林的伏击手先放冷箭再围上来，近身之前最好先逼开他们的弓。",
+      "山道": "后山往北是沉河石阶，往南直通寨子，夜里走这条道，火把别熄。"
+    },
+    "faction": "江湖",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "old_beacon_watch",
+        "keywords": [
+          "烽台",
+          "后山",
+          "哨"
+        ],
+        "response": "烽火早就不点了。我蹲在这儿看脚印，哪条山道新踩出来，我比寨里巡哨还清楚。",
+        "relation_delta": 1,
+        "once": true
+      },
+      {
+        "id": "outer_wood_ambush",
+        "keywords": [
+          "外林",
+          "伏击",
+          "游骑"
+        ],
+        "response": "外林里先动弓的才好对付。你要查哨，就顺着被踩塌的草往东走，别往树深处钻。",
+        "relation_delta": 1,
+        "once": true
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "bandit_back_mountain"
+      ]
+    },
+    "appearance": "旧号衣褪得发土，肩头补着粗麻，腰间的铜哨缺了一角。",
+    "voice": "嗓音沙哑，说话前常先咳一声。",
+    "demeanor": "沉默寡言，只对山道上的脚印和伏击套路话多。",
+    "behavior_hint": "在黑风后山向守烽老卒询问烽台、外林与山道。",
+    "quests": [
+      "黑风旧卒·外林查哨"
+    ],
+    "conditional_dialogue": [
+      {
+        "priority": 25,
+        "requires": {
+          "flags": [
+            "blackwind_backmountain:watch_cleared"
+          ]
+        },
+        "text": "外林的哨探被你拔干净了，这两天草又长回原样。往后过路的，脚步声能轻些。"
+      }
+    ],
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "home_room": "bandit_back_mountain",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "靠在断烽台残基下，替过路人盯着外林的动静"
+  },
+  "沉河捞尸人": {
+    "id": "chen he lao shi ren",
+    "talk_verb": "闷声道",
+    "name": "沉河捞尸人",
+    "rank_title": "沉河堰口",
+    "gender": "male",
+    "power_tier": 1,
+    "age_desc": "四十来岁",
+    "face_attire": "他穿一件浸得发黑的短褂，裤脚高高挽起，腰间缠着长绳与铁钩，脚边搁着半旧的竹篓。",
+    "martial_style": "不善搏杀，却熟水性、识暗流",
+    "gear_display": [
+      {
+        "name": "长绳",
+        "id": "chang sheng"
+      },
+      {
+        "name": "铁钩",
+        "id": "tie gou"
+      }
+    ],
+    "title": "沉河堰口捞尸人",
+    "desc": "一个常年在沉河打捞的汉子，蹲在堰口石墩上整理绳索，手背被水泡得发白。",
+    "type": "villager",
+    "dialogue": [
+      "沉河吞过整支商队，肯下水的人不多。",
+      "闸口堵死的不是水，是那些不肯散的东西。"
+    ],
+    "info": {
+      "堰口": "暗库的东面水道一直通到堰口，水声最响的地方就是断堰。",
+      "闸口": "引水槽东头是两道石闸，尸傀堆在闸前，把整条水路堵死了。",
+      "雾露草": "废祠和暗库都长雾露草，下水前拿它捣碎敷伤，能压住河水的寒气。",
+      "旧闸印": "闸座上有一圈水纹刻印，潮纹石片上的纹路与它同源，合得上就能启闸。"
+    },
+    "faction": "江湖",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "drowned_caravan",
+        "keywords": [
+          "沉河",
+          "商队",
+          "打捞"
+        ],
+        "response": "那年水涨得快，货、人、骡马一齐卷下去。我捞了半个月，只捞上来半船箱子。",
+        "relation_delta": 1,
+        "once": true
+      },
+      {
+        "id": "sluice_gate_advice",
+        "keywords": [
+          "闸口",
+          "石闸",
+          "尸傀"
+        ],
+        "response": "闸前的尸傀别贪多，一只一只引出来打。闸座认闸印，认对了才落得下去。",
+        "relation_delta": 1,
+        "once": true
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "sunken_weir"
+      ]
+    },
+    "appearance": "黑短褂上结着水碱，腰间长绳盘得整整齐齐，铁钩磨得发亮。",
+    "voice": "说话又低又闷，像隔着一层水。",
+    "demeanor": "不爱多话，提到沉河里的东西时眼神会沉下来。",
+    "behavior_hint": "在沉河堰口向沉河捞尸人询问堰口、闸口与雾露草。",
+    "quests": [
+      "沉河·捞药备伤",
+      "沉河·闸口除傀",
+      "沉河·堰口除傀"
+    ],
+    "conditional_dialogue": [
+      {
+        "priority": 25,
+        "requires": {
+          "flags": [
+            "sunken_ruins:sluice_closed"
+          ]
+        },
+        "text": "闸落下去，水声都变了。这半个月堰口干净不少，你过水道时当心脚下就行。"
+      }
+    ],
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "home_room": "sunken_weir",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "蹲在堰口石墩上晾着绳索，守着沉河水路"
   }
 }

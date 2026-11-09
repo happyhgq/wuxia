@@ -127,7 +127,8 @@ def test_new_quest_requires_level_and_two_prerequisites():
     p.level = 2
     accepted = capture(handle_quest, p, "jiequ", [NEW_QUEST])
     assert "已接取任务" in accepted
-    assert p.active_quests[NEW_QUEST] == 0
+    # 接取时按行囊现有材料登记进度，新角色自带一株草药。
+    assert p.active_quests[NEW_QUEST] == min(p.inventory.count("草药"), 2) == 1
 
 
 def test_new_quest_collect_delivery_and_wrong_npc_rejection(monkeypatch):
@@ -175,7 +176,8 @@ def test_new_quest_active_progress_survives_v12_round_trip(tmp_path):
 
     loaded = Player.load_from_file(str(path))
     assert loaded is not None
-    assert loaded.active_quests[NEW_QUEST] == 1
+    # 接取时已按自带草药登记 1/2，再采集一株后应为 2/2。
+    assert loaded.active_quests[NEW_QUEST] == 2
     assert NEW_QUEST not in loaded.completed_quests
 
 
@@ -186,7 +188,7 @@ def test_difficulty_distribution_and_notice_filter_follow_approved_plan():
         tier = info.get("difficulty")
         assert tier in {"入门", "普通", "进阶", "高难", "重大"}, info.get("title")
         counts[tier] = counts.get(tier, 0) + 1
-    assert counts == {"入门": 8, "普通": 13, "进阶": 20, "高难": 25, "重大": 5}
+    assert counts == {"入门": 9, "普通": 14, "进阶": 27, "高难": 26, "重大": 5}
 
     notice = quests[NEW_QUEST]["notice"]
     low = Player("公告过滤低等级", "散人")

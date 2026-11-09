@@ -409,6 +409,7 @@ def resolve_enemy_rewards(enemy_data):
     - drops[].min_qty/max_qty：随机数量
     - drops[].rolls：同一掉落表最多独立判定多次
     - drops[].quality_pool：可选品质池，未命中则掉落基础物品
+    - equipment_quality_pool：穿戴装备掉落命中后，按品质池升级为对应变体
     """
     exp = _roll_reward_amount(enemy_data.get("exp", 10), 10)
     gold = _roll_reward_amount(enemy_data.get("gold", 5), 5)
@@ -438,6 +439,7 @@ def resolve_enemy_rewards(enemy_data):
 
     # 低爆率装备掉落：每次击败最多掉一件，且只能来自敌人当前实际穿戴的装备。
     # 未配置 equipment/equipment_drop_chance 的旧敌人完全保持原行为。
+    # equipment_quality_pool 可选：命中后按品质池把该件装备升级为精良/稀有/史诗变体。
     equipment = enemy_data.get("equipment", {})
     try:
         gear_chance = max(0.0, min(0.25, float(enemy_data.get("equipment_drop_chance", 0.0))))
@@ -450,7 +452,12 @@ def resolve_enemy_rewards(enemy_data):
             if item_name and engine.ITEMS.get(item_name, {}).get("type") in ("weapon", "armor"):
                 worn.append(str(item_name))
     if worn and gear_chance > 0 and random.random() < gear_chance:
-        resolved_drops.append({"item": random.choice(worn), "quantity": 1})
+        chosen = random.choice(worn)
+        quality_pool = enemy_data.get("equipment_quality_pool", []) or []
+        resolved_drops.append({
+            "item": _resolve_drop_item({"item": chosen, "quality_pool": quality_pool}),
+            "quantity": 1,
+        })
 
     # 武学秘籍使用独立、极低概率；只有显式配置了有效秘籍物品的敌人才参与判定。
     manual = enemy_data.get("manual_drop")
@@ -821,7 +828,8 @@ def combat(player, enemy_name):
                         print(f"{Color.RED}内力不足，无法施展【{sk['name']}】；本回合未消耗行动。{Color.RESET}")
                         continue
                     player.mp -= sk["mp_cost"]
-                    if has_skill_effect(sk, "mp_restore"):
+                    # 仅有回气效果的招式（如基础吐纳）作为纯调息处理；带回气又有伤害的招式照常出招。
+                    if has_skill_effect(sk, "mp_restore") and float(sk.get("power", 0) or 0) <= 0:
                         for msg in apply_skill_effect(sk, player, e_statuses):
                             _emit(engine.style(msg, "skill"))
                         progress = player.record_skill_use(sk["name"], True)
@@ -923,6 +931,10 @@ def combat(player, enemy_name):
                         player.hp = max(0, player.hp - dmg)
                         label = "暴击！" if outcome == "crit" else ""
                         print(f"{label}{enemy_name}的【{e_skill['name']}】对你造成 {Color.RED}{dmg}{Color.RESET} 点伤害！")
+                        reflect = engine.apply_thorns(p_statuses, dmg)
+                        if reflect > 0:
+                            e_hp = max(0, e_hp - reflect)
+                            _emit(engine.style(f"【反震】护体真劲将 {reflect} 点劲力震回{enemy_name}身上！", "warning"))
                 if "effect" in e_skill and outcome != "miss":
                     add_status(p_statuses, e_skill["effect"], e_skill.get("turns", 2), e_skill.get("value", 3))
             elif decision.get("action") == "telegraph":
@@ -941,6 +953,10 @@ def combat(player, enemy_name):
                         player.hp = max(0, player.hp - dmg)
                         label = "暴击！" if outcome == "crit" else ""
                         print(f"{label}{enemy_name} 发起攻击，对你造成 {dmg} 点伤害！")
+                        reflect = engine.apply_thorns(p_statuses, dmg)
+                        if reflect > 0:
+                            e_hp = max(0, e_hp - reflect)
+                            _emit(engine.style(f"【反震】护体真劲将 {reflect} 点劲力震回{enemy_name}身上！", "warning"))
         else:
             _emit(f"{engine.style('【' + enemy_name + '】', 'enemy')}身中眩晕，脚步踉跄，本回合无法行动！")
 

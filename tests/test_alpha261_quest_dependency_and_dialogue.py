@@ -90,7 +90,7 @@ def test_all_quest_dependencies_reference_existing_tasks_and_form_a_dag():
             visit(qid)
     assert not cycles, cycles
     edges = {(earlier, later) for earlier, laters in forward.items() for later in laters}
-    assert len(edges) == 66
+    assert len(edges) == 71
 
 
 def test_every_quest_giver_exists_and_is_placed_in_at_least_one_room():

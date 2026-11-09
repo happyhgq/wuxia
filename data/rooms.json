@@ -665,13 +665,16 @@
   "bandit_back_mountain": {
     "name": "黑风后山",
     "zone": "bandit_zone",
-    "desc": "黑风寨后方的隐蔽峭壁密道，灌木丛生，石壁上留着刀劈与攀爬的痕迹。南面通往黑风寨营地，东面可绕回村后荒野，西面沿险峻高脊返回雾林采石坑，北面则通向沉河遗迹的石阶。这里已被黑风寨巡哨和刀手控制，行走时须防备伏击。",
+    "desc": "黑风寨后方的隐蔽峭壁密道，灌木丛生，石壁上留着刀劈与攀爬的痕迹。南面通往黑风寨营地，东面可绕回村后荒野，西面沿险峻高脊返回雾林采石坑，北面则通向沉河遗迹的石阶。这里已被黑风寨巡哨和刀手控制，行走时须防备伏击。一名守烽老卒倚在断烽台残基下，替过路人盯着外林的动静。",
     "exits": {
       "南": "bandit_camp",
       "东": "wild_fields",
       "北": "sunken_stairs",
       "西": "mistwood_ridge_path"
     },
+    "npcs": [
+      "守烽老卒"
+    ],
     "enemies": [
       "黑风寨巡哨",
       "黑风刀手",
@@ -2312,9 +2315,16 @@
   "sunken_cache": {
     "name": "沉河暗库",
     "zone": "sunken_ruins",
-    "desc": "狭小石室里堆着腐朽木箱，墙缝渗出清冷水汽。地面残留着旧商队封蜡碎片，角落长着少量雾露草。向西可返回地下暗渠；先输入“搜索”发现草药，再输入“采集”获取。",
+    "desc": "狭小石室里堆着腐朽木箱，墙缝渗出清冷水汽。地面残留着旧商队封蜡碎片，角落长着少量雾露草。向西可返回地下暗渠；先输入“搜索”发现草药，再输入“采集”获取。东侧石壁后水声更急，似乎还连着更深的水道，输入“探索”可仔细查看。",
     "exits": {
       "西": "sunken_channel"
+    },
+    "hidden_exits": {
+      "东": {
+        "target": "sunken_weir",
+        "flag": "explore:sunken_cache:deep_found",
+        "blocked_text": "东侧裂缝被水汽泡软的碎石堵着，只听得见深处水声。先在沉河暗库输入“探索”，找出可通行的低矮水道。"
+      }
     },
     "npcs": [],
     "safe": false,
@@ -2330,8 +2340,108 @@
       "雾露草": 0.45
     },
     "exploration_events": [
+      {
+        "text": "你贴着石壁细听水声，发现东侧低矮水道能一直通到堰口，弯腰便可钻过。你记下了这条通路的走法。",
+        "requires": {
+          "variables": {
+            "explore:sunken_cache": {
+              "lte": 0
+            }
+          }
+        },
+        "effects": {
+          "set_flags": {
+            "explore:sunken_cache:deep_found": true
+          }
+        }
+      },
       "石箱底部留有一枚褪色的商会印记。",
       "潮湿石缝里传来微弱回声，似乎还有别的暗道，但暂时无法辨认。"
+    ],
+    "indoor": true
+  },
+  "sunken_weir": {
+    "name": "沉河堰口",
+    "zone": "sunken_ruins",
+    "desc": "石堰横过沉河，断口处水声如雷。西面低矮水道通回暗库，北面顺着急流可到引水槽。一名捞尸人蹲在堰口石墩上，手里晾着浸湿的绳索。",
+    "exits": {
+      "西": "sunken_cache",
+      "北": "sunken_flume"
+    },
+    "npcs": [
+      "沉河捞尸人"
+    ],
+    "safe": false,
+    "coord": [
+      3,
+      1
+    ],
+    "difficulty_level": 9,
+    "difficulty_label": "沉河堰口·凶险",
+    "area_level": 8,
+    "recommended_level": 9,
+    "danger": "dangerous",
+    "enemies": [
+      "沉河尸傀"
+    ],
+    "exploration_events": [
+      "你在堰口的淤泥里摸到半枚沉河铜钱，指腹还能辨出商队印记。",
+      "石墩下压着一截旧缆绳，断口平整，像是被人一刀割断。"
+    ],
+    "indoor": true
+  },
+  "sunken_flume": {
+    "name": "沉河引水槽",
+    "zone": "sunken_ruins",
+    "desc": "凿在岩壁里的引水槽只剩半边，槽底积着黑水。南面回堰口，东面水槽尽头的石闸隐约可见。一个守墓人模样的身影立在槽心，挡着去路。",
+    "exits": {
+      "南": "sunken_weir",
+      "东": "sunken_sluice"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      3,
+      2
+    ],
+    "difficulty_level": 10,
+    "difficulty_label": "沉河引水槽·凶险",
+    "area_level": 8,
+    "recommended_level": 10,
+    "danger": "dangerous",
+    "enemies": [
+      "遗祠守墓人"
+    ],
+    "exploration_events": [
+      "槽壁上留着一排旧闸工的凿痕，最后一处刻着一个“封”字。",
+      "你从黑水里捞出一片锈蚀铁楔，榫口还合得住。"
+    ],
+    "indoor": true
+  },
+  "sunken_sluice": {
+    "name": "沉河闸口",
+    "zone": "sunken_ruins",
+    "desc": "两道石闸卡在河床上，闸板半启，死水从缝里涌出。尸傀在闸前堆成一片，把水路堵死。西面沿引水槽退回堰口；没有旧闸印，这道闸谁也动不了。",
+    "exits": {
+      "西": "sunken_flume"
+    },
+    "npcs": [],
+    "safe": false,
+    "coord": [
+      4,
+      2
+    ],
+    "difficulty_level": 11,
+    "difficulty_label": "沉河闸口·极危",
+    "area_level": 9,
+    "recommended_level": 11,
+    "danger": "high",
+    "enemies": [
+      "沉河尸傀"
+    ],
+    "exploration_events": [
+      "闸座凹槽里嵌着一圈水纹刻印，与潮纹石片上的纹路一模一样。",
+      "你听见闸板后传来沉闷的撞击声，随即又归于死寂。"
     ],
     "indoor": true
   },
@@ -3848,7 +3958,7 @@
   "duanhun_sword_grave": {
     "name": "断魂剑冢",
     "zone": "duanhun_ridge",
-    "desc": "断魂崖北面的一片乱石坡，几十柄断剑插在石缝里，剑柄朝向山下。这里是旧日护镖人没能归乡的埋剑处，近来却有人在冢间翻找。南边回到断魂崖。",
+    "desc": "断魂崖北面的一片乱石坡，几十柄断剑插在石缝里，剑柄朝向山下。这里是旧日护镖人没能归乡的埋剑处，近来却有人在冢间翻找。南边回到断魂崖。（输入“探索”可调查冢间遗物）",
     "exits": {
       "南": "duanhun_cliff"
     },
@@ -3866,7 +3976,21 @@
     "exploration_events": [
       "石缝里插着半截断剑，剑脊上刻着一个被磨平的“镖”字。",
       "剑冢中央的土被翻开过，几柄好剑只剩下空空的剑鞘。",
-      "风穿过剑丛时带着细响，像是许多人在低声报数。"
+      "风穿过剑丛时带着细响，像是许多人在低声报数。",
+      {
+        "text": "你在一柄断剑的剑穗下摸到一卷油布包着的旧谱，纸页被雨水浸透，仍能辨出起手处“断魂”二字的剑势。",
+        "item": "断魂剑谱",
+        "requires": {
+          "not_flags": [
+            "explore:duanhun_sword_grave:manual_found"
+          ]
+        },
+        "effects": {
+          "set_flags": {
+            "explore:duanhun_sword_grave:manual_found": true
+          }
+        }
+      }
     ]
   },
   "duanhun_supply_cave": {

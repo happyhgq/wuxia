@@ -2,7 +2,7 @@
 
 > 中文终端武侠 RPG。Python + JSON 数据驱动，包含地图探索、NPC 与关系、任务与选择、门派与武学、回合制战斗、采集与锻造、区域生态、世界时钟与天气、存档与迁移。
 
-当前版本：`P3.2 BL1.0 Alpha308`（`VERSION.txt`），存档版本 `SAVE_VERSION = 12`。
+当前版本：`P3.2 BL1.0 Alpha313`（`VERSION.txt`），存档版本 `SAVE_VERSION = 12`。
 
 ---
 

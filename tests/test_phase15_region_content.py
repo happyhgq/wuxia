@@ -63,9 +63,12 @@ class Phase15RegionContentTests(unittest.TestCase):
             if room.get('zone') not in self.zones:
                 continue
             level = room.get('recommended_level', 0)
+            scaled_level = room.get('difficulty_level') or 0
             for enemy_name in room.get('enemies', []):
-                self.assertLessEqual(self.enemies[enemy_name].get('level', 1), level + 2, rid)
-                self.assertGreaterEqual(self.enemies[enemy_name].get('level', 1), max(1, level - 2), rid)
+                base_level = self.enemies[enemy_name].get('level', 1)
+                effective_level = max(base_level, scaled_level)
+                self.assertLessEqual(effective_level, level + 2, rid)
+                self.assertGreaterEqual(effective_level, max(1, level - 2), rid)
 
 if __name__ == '__main__':
     unittest.main()

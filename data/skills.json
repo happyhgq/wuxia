@@ -83,6 +83,50 @@
       "mastery_mp_reduction": 1,
       "desc": "少林高阶护体拳路，发劲时先稳中盘，再以沉肩坠肘护住门户。",
       "combat_hint": "造成伤害并获得短时护盾，适合应对强敌的连续攻势。"
+    },
+    {
+      "name": "金刚不坏身",
+      "mp_cost": 24,
+      "power": 1.95,
+      "level": 8,
+      "effect": {
+        "type": "self_status",
+        "status": "shield",
+        "chance": 1.0,
+        "turns": 2,
+        "value": 38
+      },
+      "learn_min_reputation": 50,
+      "learn_min_rank": 2,
+      "mastery_max": 100,
+      "mastery_gain": 10,
+      "mastery_power_per_level": 0.04,
+      "mastery_mp_reduction": 1,
+      "desc": "少林僧人淬炼筋骨的护体功，运气时周身皮肉紧绷如铁，先护住要害，再以肩肘撞开来势。",
+      "combat_hint": "出招时获得较强护劲，适合在硬仗中稳住气血。"
+    },
+    {
+      "name": "韦陀降魔印",
+      "mp_cost": 30,
+      "power": 2.7,
+      "level": 12,
+      "effects": [
+        {
+          "type": "self_status",
+          "status": "thorns",
+          "chance": 1.0,
+          "turns": 2,
+          "value": 25
+        }
+      ],
+      "learn_min_reputation": 100,
+      "learn_min_rank": 3,
+      "mastery_max": 100,
+      "mastery_gain": 8,
+      "mastery_power_per_level": 0.035,
+      "mastery_mp_reduction": 1,
+      "desc": "少林传法弟子方可修习的印法，结印时内息外放护住周身，敌人劲力落在身上会被反震回去。",
+      "combat_hint": "出招伤敌并进入反震状态，受击时按比例将伤害回敬给对手。"
     }
   ],
   "武当": [
@@ -169,6 +213,60 @@
       "mastery_mp_reduction": 1,
       "desc": "武当进阶剑法，以圆转引导对手力道，剑锋不争先而后发制人。",
       "combat_hint": "出剑伤敌并短时降低所受伤害，重在稳住节奏。"
+    },
+    {
+      "name": "紫霄绵劲",
+      "mp_cost": 24,
+      "power": 2.05,
+      "level": 8,
+      "effects": [
+        {
+          "type": "self_status",
+          "status": "damage_reduction",
+          "chance": 1.0,
+          "turns": 2,
+          "value": 30
+        },
+        {
+          "type": "mp_restore",
+          "amount": 12
+        }
+      ],
+      "learn_min_reputation": 50,
+      "learn_min_rank": 2,
+      "mastery_max": 100,
+      "mastery_gain": 10,
+      "mastery_power_per_level": 0.04,
+      "mastery_mp_reduction": 1,
+      "desc": "武当内门绵劲，掌势柔缓却层层递进，着力时卸去对方冲劲，同时引导自身内息回流丹田。",
+      "combat_hint": "短时卸力并按招式回补内力，适合久战周旋。"
+    },
+    {
+      "name": "真武玄剑",
+      "mp_cost": 30,
+      "power": 2.6,
+      "level": 12,
+      "effects": [
+        {
+          "type": "self_status",
+          "status": "damage_reduction",
+          "chance": 1.0,
+          "turns": 2,
+          "value": 35
+        },
+        {
+          "type": "mp_restore",
+          "amount": 15
+        }
+      ],
+      "learn_min_reputation": 100,
+      "learn_min_rank": 3,
+      "mastery_max": 100,
+      "mastery_gain": 8,
+      "mastery_power_per_level": 0.035,
+      "mastery_mp_reduction": 1,
+      "desc": "武当真传剑法，剑随身走、劲由丹田生，敌劲未及身便已斜引开去，回气之间剑势仍旧不断。",
+      "combat_hint": "出剑伤敌、大幅卸力并回补内力，适合以静制动。"
     }
   ],
   "华山": [
@@ -251,6 +349,64 @@
       "mastery_mp_reduction": 1,
       "desc": "华山进阶剑式，剑势如苍松迎风，先稳住中门，再连出两道变化。",
       "combat_hint": "有机会追加一记连击，适合主动压制敌人。"
+    },
+    {
+      "name": "白虹贯日",
+      "mp_cost": 26,
+      "power": 2.5,
+      "level": 8,
+      "effects": [
+        {
+          "type": "status",
+          "status": "armor_break",
+          "chance": 0.45,
+          "turns": 2,
+          "value": 4
+        },
+        {
+          "type": "combo",
+          "chance": 0.5,
+          "hits": 2,
+          "damage_ratio": 0.6
+        }
+      ],
+      "learn_min_reputation": 50,
+      "learn_min_rank": 2,
+      "mastery_max": 100,
+      "mastery_gain": 10,
+      "mastery_power_per_level": 0.04,
+      "mastery_mp_reduction": 1,
+      "desc": "华山气宗剑式，剑光直贯如白虹透日，先挑开对手架势，再顺势补上一剑。",
+      "combat_hint": "命中后有机会破防并追加一击，适合抢占先手。"
+    },
+    {
+      "name": "天绅倒悬剑",
+      "mp_cost": 30,
+      "power": 2.68,
+      "level": 12,
+      "effects": [
+        {
+          "type": "status",
+          "status": "armor_break",
+          "chance": 0.55,
+          "turns": 2,
+          "value": 5
+        },
+        {
+          "type": "combo",
+          "chance": 0.55,
+          "hits": 2,
+          "damage_ratio": 0.65
+        }
+      ],
+      "learn_min_reputation": 100,
+      "learn_min_rank": 3,
+      "mastery_max": 100,
+      "mastery_gain": 8,
+      "mastery_power_per_level": 0.035,
+      "mastery_mp_reduction": 1,
+      "desc": "华山剑宗真传，剑势自上而下如天绅倒悬，前剑破开守势，后剑紧追破绽不放。",
+      "combat_hint": "破防与连击兼备，适合在对手架势未稳时连续压攻。"
     }
   ],
   "散人": [
@@ -488,6 +644,25 @@
       "mastery_power_per_level": 0.035,
       "desc": "黑风寨刀法，讲究封堵退路后重斩破势。",
       "combat_hint": "先以横刀封路压缩对手行动，再寻找破绽施展重斩；注意内力消耗。"
+    },
+    {
+      "name": "断魂剑法",
+      "mp_cost": 26,
+      "power": 2.45,
+      "level": 12,
+      "manual_learnable": true,
+      "mastery_gain": 6,
+      "mastery_power_per_level": 0.035,
+      "mastery_mp_reduction": 1,
+      "effect": {
+        "type": "status",
+        "status": "armor_break",
+        "chance": 0.55,
+        "turns": 2,
+        "value": 4
+      },
+      "desc": "断魂剑冢旧谱上的剑法，起手先断对方兵刃来路，剑势不算快，却专挑架势散处落剑。",
+      "combat_hint": "命中后有机会大幅削弱敌方防御，适合在对手架势告破时连续压攻。"
     }
   ]
 }

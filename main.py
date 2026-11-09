@@ -834,11 +834,13 @@ def show_inventory(player):
             return 0
         if kind == "armor":
             return 1
+        if kind == "accessory":
+            return 1
         if kind in ("consumable", "medicine", "food", "potion"):
             return 2
         return 3
 
-    group_names = {0: "【兵刃】", 1: "【防具】", 2: "【药品与消耗品】", 3: "【材料与其他】"}
+    group_names = {0: "【兵刃】", 1: "【防具与饰品】", 2: "【药品与消耗品】", 3: "【材料与其他】"}
     previous_group = None
     for item, cnt in sorted(counts.items(), key=lambda row: (item_group(row[0]), str(row[0]))):
         info = ITEMS.get(item, {})
@@ -854,8 +856,10 @@ def show_inventory(player):
             detail_lines.append(f"攻击 +{info.get('atk', 0)}")
         elif kind == "armor":
             detail_lines.append(f"防御 +{info.get('defense', 0)}")
-        if desc and (kind not in ("weapon", "armor") or desc != detail_lines[0]):
-            label = "说明" if kind in ("weapon", "armor") else "用途"
+        elif kind == "accessory":
+            detail_lines.append(f"防御 +{info.get('defense', 0)}（饰品）")
+        if desc and (kind not in ("weapon", "armor", "accessory") or desc != detail_lines[0]):
+            label = "说明" if kind in ("weapon", "armor", "accessory") else "用途"
             detail_lines.append(f"{label}：{desc}")
         for detail_line in detail_lines:
             print(wrap_player_text(f"    {detail_line}", width=BODY_WIDTH))

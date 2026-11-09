@@ -11,6 +11,7 @@ import unicodedata
 from collections import Counter
 import engine
 import actor_display
+import npc_perception
 from ui_output import BODY_WIDTH, safe_print as print, wrap_player_text, format_action_feedback, format_labeled_fields
 from world_time import format_world_clock, ticks_until_next_dawn, world_hour
 from item_feedback import add_inventory_items, format_item_change, remove_inventory_items
@@ -783,19 +784,9 @@ def look(player, args=None, show_guidance=False):
     print(f"周围和行囊里并没有找到与【{target}】相关的目标。")
 
 
-def _conditional_dialogue_text(player, npc_data):
-    """返回当前世界状态下优先级最高的条件对白；没有则返回 None。"""
-    matched = []
-    for index, entry in enumerate(npc_data.get("conditional_dialogue", []) or []):
-        if not isinstance(entry, dict) or not entry.get("text"):
-            continue
-        if engine.check_conditions(entry.get("requires"), player.world_state, player.completed_quests, player):
-            try:
-                priority = int(entry.get("priority", 0))
-            except (TypeError, ValueError):
-                priority = 0
-            matched.append((priority, -index, str(entry["text"])))
-    return max(matched)[2] if matched else None
+def _conditional_dialogue_text(player, npc_data, npc_name=None, include_templates=True):
+    """返回当前世界与玩家状态下优先级最高的条件对白；没有则返回 None。"""
+    return npc_perception.select_reaction_text(player, npc_data, npc_name, include_templates)
 
 
 def handle_talk_and_ask(player, args):
@@ -1047,7 +1038,10 @@ def handle_talk_and_ask(player, args):
             else:
                 state, detail = _quest_npc_status(player, chosen)
                 title = str(engine.QUESTS.get(chosen, {}).get("title", chosen))
-                print(f"{title}暂时不能接取：{detail}")
+                if state in ("进行中", "待交付"):
+                    print(f"{title}：{detail}")
+                else:
+                    print(f"{title}暂时不能接取：{detail}")
         elif match_state == "ambiguous":
             titles = [str(engine.QUESTS.get(q, {}).get("title", q)) for q in matches]
             print("任务简称对应多项委托，请使用完整名称选择：" + "；".join(titles))
@@ -1238,7 +1232,7 @@ def handle_talk_and_ask(player, args):
         else:
             # 没有对应情报时，若人物有当前世界状态对白，就用它回应，避免
             # “不知道”与随后完成交谈目标互相矛盾。
-            conditional_line = _conditional_dialogue_text(player, npc_data)
+            conditional_line = _conditional_dialogue_text(player, npc_data, target_npc, include_templates=False)
             if conditional_line:
                 print(f"{target_npc} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{conditional_line}{Color.RESET}”")
             else:
@@ -1250,7 +1244,7 @@ def handle_talk_and_ask(player, args):
     print(f"{Color.CYAN}{npc_data.get('desc', '一言不发。')}{Color.RESET}")
     # Alpha241：固定 NPC 可按世界进展切换日常对白，让已完成的任务在场景中留下可感知的结果。
     # 条件按 priority 从高到低选择；没有满足条件的对白时，完全沿用原有随机对白。
-    line = _conditional_dialogue_text(player, npc_data)
+    line = _conditional_dialogue_text(player, npc_data, target_npc)
     if line is None:
         dialogues = npc_data.get("dialogue", ["……"])
         line = random.choice(dialogues) if isinstance(dialogues, list) else dialogues
@@ -1365,6 +1359,13 @@ def _quest_npc_status(player, quest_name):
     info = engine.QUESTS.get(quest_name, {})
     if quest_name in player.active_quests:
         state = player.quest_states.get(quest_name, {})
+        collect_progress = player.get_quest_collect_progress(quest_name)
+        if collect_progress:
+            complete = all(held >= required for _, held, required in collect_progress)
+            detail = "目标已经办妥，等待你当面交付。" if complete else "事情还没办完，交付材料还缺：" + "、".join(
+                f"{item} {min(held, required)}/{required}" for item, held, required in collect_progress
+            ) + "。"
+            return ("待交付" if complete else "进行中"), detail
         stages = info.get("stages") or []
         if stages:
             stage_index = min(int(state.get("stage", 0) or 0), len(stages) - 1)
@@ -2422,7 +2423,12 @@ def handle_quest(player, cmd, args):
                 idx = min(state.get('stage', 0), max(0, len(stages)-1)) if stages else 0
                 goal_complete = player.is_quest_goal_complete(q_name)
                 print(f"当前状态：{'待交付' if goal_complete else '进行中'}")
-                if stages:
+                collect_progress = player.get_quest_collect_progress(q_name)
+                if collect_progress:
+                    print("交付材料：" + "、".join(
+                        f"{item} {min(held, required)}/{required}" for item, held, required in collect_progress
+                    ))
+                elif stages:
                     stage = stages[idx]
                     print(f"当前阶段：{idx+1}/{len(stages)} — {stage.get('desc', '')}")
                     target_type_labels = {"talk": "交谈", "kill": "击败", "collect": "收集", "search": "探索", "visit": "前往", "deliver": "交付", "interact": "互动"}
@@ -2475,7 +2481,13 @@ def handle_quest(player, cmd, args):
             stages = q_info.get("stages")
             goal_complete = player.is_quest_goal_complete(q_name)
             status_suffix = f"  {Color.BRIGHT_GREEN}【待交付】{Color.RESET}" if goal_complete else ""
-            if stages:
+            collect_progress = player.get_quest_collect_progress(q_name)
+            if collect_progress:
+                detail = "、".join(
+                    f"{item} {min(held, required)}/{required}" for item, held, required in collect_progress
+                )
+                print(f"- {Color.YELLOW}{_quest_title(q_name)}{Color.RESET}{_quest_difficulty_text(q_info)}：交付材料 {detail} - {q_info.get('desc', '')}{status_suffix}")
+            elif stages:
                 state = player.quest_states.get(q_name, {"stage": 0, "progress": progress})
                 idx = min(state.get("stage", 0), len(stages)-1)
                 stage = stages[idx]
@@ -2582,7 +2594,11 @@ def handle_quest(player, cmd, args):
         engine.apply_world_effects(player.world_state, q_info.get("on_accept"))
         player.set_flag(f"quest_active:{q_name}", True)
         public_title = _quest_title(q_name)
+        collect_progress = player.sync_collect_quest_from_inventory(q_name)
         print(f"{Color.BRIGHT_GREEN}已接取任务【{public_title}】，已加入你的任务列表。输入“任务”可查看目标与进度。{Color.RESET}")
+        if collect_progress:
+            detail = "、".join(f"{item} {min(held, required)}/{required}" for item, held, required in collect_progress)
+            print(f"{Color.BRIGHT_YELLOW}[任务更新] 【{public_title}】已按行囊现有材料登记：{detail}。{Color.RESET}")
         return True
 
     elif cmd in ("fangqi", "abandon"):
@@ -2636,7 +2652,11 @@ def handle_quest(player, cmd, args):
             player.set_flag(f"quest_active:{q_name}", False)
             print("该任务已经完成，不能重复交付或领取奖励。")
             return False
-        if q_info.get("stages"):
+        collect_progress = player.get_quest_collect_progress(q_name)
+        if collect_progress:
+            # 纯收集委托以行囊实物为准：允许先备料后接取，进度只做展示。
+            pass
+        elif q_info.get("stages"):
             state = player.quest_states.get(q_name, {"stage": 0, "progress": player.active_quests[q_name]})
             all_done = state.get("stage", 0) >= len(q_info["stages"])-1 and state.get("progress", 0) >= q_info["stages"][-1].get("required_cnt", 1)
             if not all_done:
@@ -2656,19 +2676,14 @@ def handle_quest(player, cmd, args):
         # Alpha227：采集类委托不仅检查进度计数，还必须核实对应物品仍在背包中。
         # 此处只校验，不提前消耗；若玩家还需选择任务结局，不能因显示选项而丢失物品。
         delivered_items = []
-        objective_type = q_info.get("target_type")
-        item_name = ""
-        required_items = 0
-        if objective_type == "collect":
-            item_name = str(q_info.get("target_name", "")).strip()
-            try:
-                required_items = max(1, int(q_info.get("required_cnt", 1)))
-            except (TypeError, ValueError, OverflowError):
-                required_items = 1
-            inventory = getattr(player, "inventory", None)
-            held_count = inventory.count(item_name) if item_name and isinstance(inventory, list) else 0
-            if not item_name or held_count < required_items:
-                print(f"{Color.RED}交付失败：需要 {item_name or '任务所需物品'} ×{required_items}，当前 {held_count}。请补齐后再来交付。{Color.RESET}")
+        if collect_progress:
+            missing = [
+                f"{item} ×{required}（现有 {held}）"
+                for item, held, required in collect_progress
+                if held < required
+            ]
+            if missing:
+                print(f"{Color.RED}交付失败：需要 {'、'.join(missing)}。请补齐后再来交付。{Color.RESET}")
                 return False
 
         # 可重复任务允许再次领取基础报酬，但复做奖励由数据单独定义，避免
@@ -2711,15 +2726,18 @@ def handle_quest(player, cmd, args):
         # 确认结局后再正式收取交付物。先移除物品可释放背包格供奖励使用；
         # 奖励结算失败时，下方会将交付物原样退回。
         original_inventory = None
-        if objective_type == "collect":
+        if collect_progress:
             original_inventory = list(player.inventory) if isinstance(player.inventory, list) else None
-            removed, remaining = remove_inventory_items(
-                player, item_name, required_items, action="交付物品"
-            )
-            if not removed:
-                print(f"{Color.RED}交付失败：需要 {item_name} ×{required_items}，当前 {remaining}。{Color.RESET}")
-                return False
-            delivered_items = [item_name] * required_items
+            for item, _held, required in collect_progress:
+                removed, remaining = remove_inventory_items(
+                    player, item, required, action="交付物品"
+                )
+                if not removed:
+                    if original_inventory is not None:
+                        player.inventory[:] = original_inventory
+                    print(f"{Color.RED}交付失败：需要 {item} ×{required}，当前 {remaining}。本次交付未生效。{Color.RESET}")
+                    return False
+                delivered_items.append((item, required))
         result = apply_reward_bundle(player, reward, source="任务奖励")
         if not result["ok"]:
             # 奖励失败时按原顺序回滚交付物，任务状态与玩家物品均保持可重试。
@@ -2727,8 +2745,10 @@ def handle_quest(player, cmd, args):
                 if original_inventory is not None:
                     player.inventory[:] = original_inventory
                 else:
-                    add_inventory_items(player, item_name, len(delivered_items), action="退还", announce=False)
-                print(f"{Color.YELLOW}{format_item_change(item_name, len(delivered_items), player.inventory.count(item_name), action='退还')}{Color.RESET}")
+                    for item, quantity in delivered_items:
+                        add_inventory_items(player, item, quantity, action="退还", announce=False)
+                for item, quantity in delivered_items:
+                    print(f"{Color.YELLOW}{format_item_change(item, quantity, player.inventory.count(item), action='退还')}{Color.RESET}")
             print(f"{Color.RED}任务奖励暂时无法结算，交付物已退还，任务状态保持不变，请稍后重试。{Color.RESET}")
             return False
 
@@ -3239,7 +3259,7 @@ def _print_equipment_compare(player, item_name):
     if not result:
         print(f"{Color.RED}【{item_name}】不是可比较的装备。{Color.RESET}")
         return
-    slot_name = "武器" if result["slot"] == "weapon" else "防具"
+    slot_name = {"weapon": "武器", "accessory": "饰品"}.get(result["slot"], "防具")
     current = result["current"]
     current_name = current.get("name") or "无"
     print(f"\n{Color.BRIGHT_CYAN}========== 装备比较 =========={Color.RESET}")
@@ -3293,6 +3313,13 @@ def show_equipment(player):
             status = engine.STATUS_EFFECTS.get(weapon_effect.get("status"), {})
             chance = max(0.0, min(1.0, float(weapon_effect.get("chance", 0.0))))
             equipment_fields.append(("兵刃特性：", f"命中时 {chance:.0%} 概率触发【{status.get('name', weapon_effect.get('status', '特殊效果'))}】"))
+    accessory = player.get_equipment_stats("accessory")
+    accessory_detail = (f"{Color.GREEN}{accessory.get('name') or '无'}{Color.RESET}"
+                        f" | 防御装备加成 +{accessory.get('defense', 0)}")
+    accessory_insight = (accessory.get("attribute_bonus") or {}).get("insight", 0)
+    if accessory_insight:
+        accessory_detail += f" | 洞察 +{accessory_insight}"
+    equipment_fields.append(("饰品：", accessory_detail))
     affixes = player.get_equipment_affixes()
     equipment_fields.extend([
         ("总攻击：", str(player.get_total_atk())),
@@ -3320,13 +3347,14 @@ def handle_equipment_and_items(player, cmd, args):
         return True
     if cmd == "unequip":
         if not args:
-            print("请指定卸下部位：武器或防具。")
+            print("请指定卸下部位：武器、防具或饰品。")
             return False
         slot_input = args[0].lower()
         slot = {"weapon": "weapon", "武器": "weapon", "w": "weapon",
-                "armor": "armor", "防具": "armor", "a": "armor"}.get(slot_input)
+                "armor": "armor", "防具": "armor", "a": "armor",
+                "accessory": "accessory", "饰品": "accessory"}.get(slot_input)
         if not slot:
-            print("部位无效，请输入武器或防具。")
+            print("部位无效，请输入武器、防具或饰品。")
             return False
         ok, msg = player.unequip_item(slot)
         if ok:
@@ -3351,10 +3379,10 @@ def handle_equipment_and_items(player, cmd, args):
         if cmd == "wield" and item_type != "weapon":
             print(f"{Color.RED}【{item_name}】不是武器，无法使用“装备武器”。{Color.RESET}")
             return False
-        if cmd == "wear" and item_type != "armor":
-            print(f"{Color.RED}【{item_name}】不是防具，无法使用“穿戴”。{Color.RESET}")
+        if cmd == "wear" and item_type not in ("armor", "accessory"):
+            print(f"{Color.RED}【{item_name}】不是防具或饰品，无法使用“穿戴”。{Color.RESET}")
             return False
-        if cmd == "equip" and item_type not in ("weapon", "armor"):
+        if cmd == "equip" and item_type not in ("weapon", "armor", "accessory"):
             print(f"{Color.RED}【{item_name}】无法装备。{Color.RESET}")
             return False
         before_atk = player.get_total_atk()
@@ -3469,7 +3497,7 @@ def handle_attributes(player, args):
         request_autosave(player)
 
 def _print_forge_preview(player):
-    print(f"\n{Color.BRIGHT_YELLOW}============= 强化预览 ============={Color.RESET}")
+    print(f"\n{Color.BRIGHT_YELLOW}============= 强化与升阶预览 ============={Color.RESET}")
     for slot, label in (("weapon", "兵刃"), ("armor", "防具")):
         preview = player.get_enhancement_preview(slot)
         if not preview or not preview.get("name"):
@@ -3486,12 +3514,94 @@ def _print_forge_preview(player):
             f"({preview['stat_delta']:+d}) "
             f"| 成本 {preview['ore_cost']} 铁矿石 + {preview['gold_cost']} 两"
         )
-    print(f"{Color.BRIGHT_YELLOW}===================================={Color.RESET}")
+    for slot, label in (("weapon", "兵刃"), ("armor", "防具")):
+        preview = player.get_quality_upgrade_preview(slot)
+        if not preview.get("name"):
+            print(f"{label}品质：未装备")
+            continue
+        if not preview.get("available"):
+            reason = preview.get("reason")
+            text = "已达最高品质" if reason == "max" else ("该装备没有品质变体" if reason == "no_variant" else "无法升阶")
+            print(f"{label}品质：{preview['name']} [{preview.get('quality', '普通')}] —— {text}")
+            continue
+        print(
+            f"{label}品质：{preview['name']} [{preview['quality']}] → {preview['next_quality']}「{preview['next_item']}」 "
+            f"| 属性 {preview['current_stat']} → {preview['next_stat']} ({preview['stat_delta']:+d}) "
+            f"| 强化 +{preview['enhance']} 保留 "
+            f"| 成本 {preview['ore_cost']} 铁矿石 + {preview['gold_cost']} 两"
+        )
+    print(f"{Color.BRIGHT_YELLOW}=========================================={Color.RESET}")
+
+
+def _quality_upgrade_label(player, slot):
+    """打造炉菜单里的一行品质升阶说明；不修改状态。"""
+    label = "兵刃" if slot == "weapon" else "防具"
+    preview = player.get_quality_upgrade_preview(slot)
+    if not preview.get("name"):
+        return f"{label}未装备"
+    if not preview.get("available"):
+        reason = preview.get("reason")
+        text = "已达最高品质" if reason == "max" else ("该装备没有品质变体" if reason == "no_variant" else "无法升阶")
+        return f"{preview['name']}（{text}）"
+    return (
+        f"{preview['name']} → {preview['next_quality']}「{preview['next_item']}」，"
+        f"{preview['ore_cost']} 块铁矿石 + {preview['gold_cost']} 两"
+    )
+
+
+def _forge_upgrade_quality(player, slot_key):
+    label = "兵刃" if slot_key == "weapon" else "防具"
+    preview = player.get_quality_upgrade_preview(slot_key)
+    if not preview.get("name"):
+        print(f"{Color.RED}你身上并未装备对应的{label}！{Color.RESET}")
+        return False
+    if not preview.get("available"):
+        reason = preview.get("reason")
+        text = "已经达到最高品质" if reason == "max" else ("没有可升的品质变体" if reason == "no_variant" else "无法升阶")
+        print(f"{Color.RED}【{preview['name']}】{text}！{Color.RESET}")
+        return False
+
+    ore_cost, gold_cost = preview["ore_cost"], preview["gold_cost"]
+    ore_cnt = player.inventory.count("铁矿石")
+    if ore_cnt < ore_cost or player.gold < gold_cost:
+        print(
+            f"{Color.RED}品质升阶材料不足！需要 {ore_cost} 块铁矿石及 {gold_cost} 银两"
+            f"（现有 {ore_cnt} 块 / {player.gold} 两）。{Color.RESET}"
+        )
+        return False
+
+    removed, remaining = remove_inventory_items(
+        player, "铁矿石", ore_cost, action="消耗", announce=False
+    )
+    if not removed:
+        print(f"{Color.RED}品质升阶失败：需要 铁矿石 ×{ore_cost}，当前 {remaining}。{Color.RESET}")
+        return False
+    print(f"{Color.YELLOW}{format_item_change('铁矿石', ore_cost, remaining, action='消耗')}{Color.RESET}")
+    player.gold -= gold_cost
+    from economy.flow import record_player_consumption
+    record_player_consumption(player, "铁矿石", ore_cost, source="装备品质升阶", gold=gold_cost)
+
+    player.equipment[slot_key] = preview["next_item"]
+    after = player.get_equipment_stats(slot_key)
+    after_stat = after.get("atk", 0) if slot_key == "weapon" else after.get("defense", 0)
+    stat_label = "攻击" if slot_key == "weapon" else "防御"
+    print(
+        f"\n{Color.BRIGHT_GREEN}炉火重燃，锤声如雷！【{preview['name']}】成功升阶为"
+        f"【{preview['next_item']}】！{Color.RESET}"
+    )
+    print(
+        f"品质：{preview['quality']} → {preview['next_quality']} "
+        f"| {stat_label}：{preview['current_stat']} → {after_stat} (+{after_stat - preview['current_stat']}) "
+        f"| 强化 +{preview['enhance']} 保留"
+    )
+    print(f"剩余材料：铁矿石 {player.inventory.count('铁矿石')} 块 | 银两 {player.gold} 两")
+    request_autosave(player)
+    return True
 
 
 def handle_forge(player, args):
     if player.location not in ("blacksmith", "guiyun_forge"):
-        print("只有在打铁铺才可以强化装备！")
+        print("只有在打铁铺才可以强化或升阶装备！")
         return False
 
     if args and args[0].lower() in ("preview", "预览", "查看"):
@@ -3513,10 +3623,12 @@ def handle_forge(player, args):
     print("--------------------------------------------")
     print(f"1. 强化兵刃（{w_info.get('enhance_ore_cost', 1)} 块铁矿石 + {w_info.get('enhance_gold_cost', 30)} 银两）")
     print(f"2. 强化防具（{a_info.get('enhance_ore_cost', 1)} 块铁矿石 + {a_info.get('enhance_gold_cost', 30)} 银两）")
-    print("p. 查看下一等级属性与成本预览")
+    print(f"3. 提升兵刃品质（{_quality_upgrade_label(player, 'weapon')}）")
+    print(f"4. 提升防具品质（{_quality_upgrade_label(player, 'armor')}）")
+    print("p. 查看强化与品质升阶预览")
     print("0. 离开打造炉")
 
-    choice = input("请选择打造项目 (0-2)：").strip()
+    choice = input("请选择打造项目 (0-4, p)：").strip()
     if choice.lower() in ("p", "预览"):
         _print_forge_preview(player)
         return False
@@ -3524,6 +3636,10 @@ def handle_forge(player, args):
         slot_key, target_name = "weapon", w_name
     elif choice == "2":
         slot_key, target_name = "armor", a_name
+    elif choice == "3":
+        return _forge_upgrade_quality(player, "weapon")
+    elif choice == "4":
+        return _forge_upgrade_quality(player, "armor")
     else:
         return False
 

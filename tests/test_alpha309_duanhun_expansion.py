@@ -159,7 +159,7 @@ def test_expanded_enemies_follow_tier_templates_and_drop_gradient():
     swordsman = enemies["守冢剑客"]
     assert swordsman["respawn_seconds"] == 240
     assert swordsman["loadout_variants"]
-    assert [drop["item"] for drop in swordsman["drops"]] == ["断剑残锋", "大还丹"]
+    assert [drop["item"] for drop in swordsman["drops"]] == ["断剑残锋", "大还丹", "断锋护符"]
 
 
 def test_expanded_enemies_do_not_scale_beyond_room_level():
@@ -201,10 +201,10 @@ def test_expanded_npcs_are_always_available_in_their_rooms():
     npcs = _data("npcs.json")
     expected = {
         "落难镖师": ("duanhun_supply_cave", ["断魂岭·寻回镖货"]),
-        "守冢老人": ("duanhun_rain_shrine", ["断魂岭·剑冢旧誓"]),
-        "守祠老妪": ("duanhun_rain_shrine", []),
+        "守冢老人": ("duanhun_rain_shrine", ["断魂岭·剑冢旧誓", "断魂岭·断锋回炉"]),
+        "守祠老妪": ("duanhun_rain_shrine", ["断魂岭·皮货换药"]),
     }
-    assert len(npcs) == 77
+    assert len(npcs) == 79
     for name, (home_room, quests) in expected.items():
         info = npcs[name]
         assert info["home_room"] == home_room
@@ -220,7 +220,7 @@ def test_expanded_npcs_are_always_available_in_their_rooms():
 
 def test_expanded_quests_form_a_gated_l14_l15_chain():
     quests = _data("quests.json")
-    assert len(quests) == 71
+    assert len(quests) == 81
     for name, expected in EXPANDED_QUESTS.items():
         quest = quests[name]
         assert quest["npc"] == expected["npc"]
@@ -321,7 +321,7 @@ def test_new_flags_drive_conditional_dialogue_for_ridge_npcs():
     text = _conditional_dialogue_text(player, engine.NPCS["守冢老人"])
     assert "剑都扶正了" in text
 
-    assert _conditional_dialogue_text(player, engine.NPCS["守岭猎户"]) is None
+    assert "狼谷安静了" not in (_conditional_dialogue_text(player, engine.NPCS["守岭猎户"]) or "")
     player.set_flag("duanhun_ridge:wolf_cleared", True)
     text = _conditional_dialogue_text(player, engine.NPCS["守岭猎户"])
     assert "狼谷安静了" in text

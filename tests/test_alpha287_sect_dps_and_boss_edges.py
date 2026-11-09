@@ -61,7 +61,7 @@ def test_alpha287_iron_sect_top_power_matches_peer_sects():
     top = {}
     for sect in ("少林", "武当", "华山", "铁衣门"):
         top[sect] = max(float(sk.get("power", 0)) for sk in data[sect])
-    assert top == {"少林": 2.75, "武当": 2.55, "华山": 2.7, "铁衣门": 2.65}
+    assert top == {"少林": 2.75, "武当": 2.6, "华山": 2.7, "铁衣门": 2.65}
     peers = (top["少林"], top["武当"], top["铁衣门"])
     assert max(peers) - min(peers) <= 0.35
 

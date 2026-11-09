@@ -31,7 +31,7 @@ def make_busy_owner(reason="正在坐堂配药", source=""):
 
 
 def test_all_fixed_npcs_define_verbal_talk_verb():
-    assert len(engine.NPCS) == 77
+    assert len(engine.NPCS) == 79
     for npc_name, info in engine.NPCS.items():
         verb = info.get("talk_verb")
         assert isinstance(verb, str) and verb.strip(), npc_name

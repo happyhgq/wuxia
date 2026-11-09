@@ -1,0 +1,282 @@
+{
+  "smith": [
+    {
+      "priority": 8,
+      "perception": {"injury": ["wounded", "badly_wounded"]},
+      "variants": [
+        "带着伤还握锤？先顾命。铁器跑不了，人得先站得住。",
+        "手上没劲就别碰炉子，烫着可不划算。歇好了再来。"
+      ]
+    },
+    {
+      "priority": 7,
+      "perception": {"equipment_quality": {"weapon": "精良"}},
+      "variants": [
+        "这兵刃底子不错，保养得也勤。真要再进一步，得看舍不舍得下本钱。",
+        "好钢得配好火候，你这把剑已经算养出来了。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "炉火压了，眼神也不好使。淬火的事明日再说。",
+        "夜深了，锤子也该歇。有什么事天亮再来。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "潮气重，铁件容易生锈。湿了的兵刃先擦干再说。",
+        "雨天淬火最讲究水温，急不得。"
+      ]
+    }
+  ],
+  "innkeeper": [
+    {
+      "priority": 8,
+      "perception": {"injury": "badly_wounded"},
+      "variants": [
+        "您这脸色不对，先躺下歇歇。房钱的事缓一缓，我去请个郎中。",
+        "伤成这样还赶路？先别管房钱，命要紧。"
+      ]
+    },
+    {
+      "priority": 7,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "夜色深了，灶上还温着汤。要住店就趁早，晚了只剩偏房。",
+        "客官这时候来，先坐。楼上还有两间清静房。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"weather": ["storm", "snow"]},
+      "variants": [
+        "这风雪不像要停。与其硬走，不如先添壶热茶。",
+        "门窗我都关严了，您安心坐着，等天缓一缓。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"time_phase": "dawn"},
+      "variants": [
+        "天刚亮，粥已经熬上了。赶路的话，吃口热的再走。",
+        "早起的客官不多，伙计刚扫完堂，坐哪儿都成。"
+      ]
+    }
+  ],
+  "inn_staff": [
+    {
+      "priority": 7,
+      "perception": {"injury": ["wounded", "badly_wounded"]},
+      "variants": [
+        "您这伤得先包一下，我去拿干净布条。",
+        "客官别动，我这就端盆热水来。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "楼上给您留着灯。要热水就喊一声，我给您送上去。",
+        "夜里凉，被褥我多加了一床。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "外头雨大，斗篷给我，我拿去灶边烘着。",
+        "鞋湿了吧？先换双干的，免得着凉。"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"time_phase": "dawn"},
+      "variants": [
+        "早饭刚出锅，馒头还热着。",
+        "您起得真早，我给您打盆洗脸水。"
+      ]
+    }
+  ],
+  "apothecary": [
+    {
+      "priority": 8,
+      "perception": {"injury": "badly_wounded"},
+      "variants": [
+        "这伤拖不得，先坐下，我看看脉。",
+        "别动，伤口得先清。银子的事待会儿再说。"
+      ]
+    },
+    {
+      "priority": 7,
+      "perception": {"injury": "wounded"},
+      "variants": [
+        "找金创药？先让我看看伤口深不深，别乱敷。",
+        "小伤也不能硬扛，敷了药再走。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "湿气重，旧伤容易发沉。回去煎一副祛湿的。",
+        "雨天关节最难受。药我给您包好了，记得趁热喝。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "夜里抓药不方便，急用的话我先给你配一服。",
+        "这么晚还来，是伤着了还是发热？"
+      ]
+    }
+  ],
+  "shopkeeper": [
+    {
+      "priority": 6,
+      "perception": {"injury": ["wounded", "badly_wounded"]},
+      "variants": [
+        "您气色不太好，要不要先坐下歇歇？",
+        "带着伤还出门，先缓口气吧。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"equipment_quality": {"best": "稀有"}},
+      "variants": [
+        "客官这身行头，小店的东西怕是入不了眼。",
+        "您这佩剑一看就不是凡品，倒是我这架子寒酸了。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "这么晚了还逛？要点什么赶紧说，我这就收摊。",
+        "灯油不多了，您看好了就开口。"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "雨天客人少，价钱好说。就是货别淋湿了。",
+        "外头风雨大，进来避一避也无妨。"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"time_phase": "dawn"},
+      "variants": [
+        "刚开门，货还没摆齐。您要什么，我先给您找。",
+        "早市人少，正好慢慢挑。"
+      ]
+    }
+  ],
+  "guard": [
+    {
+      "priority": 8,
+      "perception": {"injury": "badly_wounded"},
+      "variants": [
+        "伤成这样还要进城？先去找药铺，别倒在门口。",
+        "你这伤得先处理，城门不是逞强的地方。"
+      ]
+    },
+    {
+      "priority": 7,
+      "perception": {"equipment_quality": {"best": "稀有"}},
+      "variants": [
+        "这一身不像寻常百姓。规矩还是那句话，兵器不得当街出鞘。",
+        "好行头不顶用，城里讲的是规矩。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "夜里城门查得严，路引和兵器都收好。",
+        "入夜了，街上少走动，早些回去。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "雨天路滑，进出城都慢些。别在门洞里堵着。",
+        "这天气还赶路？先避避雨，登记的事不急。"
+      ]
+    }
+  ],
+  "hunter": [
+    {
+      "priority": 6,
+      "perception": {"time_phase": ["dusk", "night"]},
+      "variants": [
+        "天黑得快，山道上有野兽，走大路。",
+        "这时辰进山不划算，火把也照不了多远。"
+      ]
+    },
+    {
+      "priority": 6,
+      "perception": {"weather": ["rain", "storm", "snow"]},
+      "variants": [
+        "雨雪天山路最难走，踩空了没人拉你。",
+        "这种天气别进山，柴火不值命。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"injury": ["wounded", "badly_wounded"]},
+      "variants": [
+        "带着伤进山？先回去养着，山跑不了。",
+        "你这走路都不稳，还是别往里去了。"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"time_phase": "dawn"},
+      "variants": [
+        "山里天亮得晚，雾还没散，别急着往里走。",
+        "早起的鸟兽最警醒，脚步得轻。"
+      ]
+    }
+  ],
+  "villager": [
+    {
+      "priority": 5,
+      "perception": {"injury": ["wounded", "badly_wounded"]},
+      "variants": [
+        "哎哟，怎么伤成这样？我家有热水，先洗洗。",
+        "看你走路都费劲，坐下歇会儿吧。"
+      ]
+    },
+    {
+      "priority": 5,
+      "perception": {"time_phase": "night"},
+      "variants": [
+        "天黑透了，外头不太平，早点回家吧。",
+        "这么晚还在外头，家里人该惦记了。"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"weather": ["rain", "storm"]},
+      "variants": [
+        "雨这么大，先到屋檐下躲躲。",
+        "这天气还赶路，衣裳都湿透了吧？"
+      ]
+    },
+    {
+      "priority": 4,
+      "perception": {"time_phase": "dawn"},
+      "variants": [
+        "这么早就出门？灶上刚热了饭，吃口再走。",
+        "天刚亮，路上还没什么人。"
+      ]
+    }
+  ]
+}

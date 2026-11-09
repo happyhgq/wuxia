@@ -18,7 +18,7 @@ def capture(fn, *args, **kwargs):
 
 def test_all_fixed_npcs_remain_locatable_and_present_while_temporarily_busy():
     player = Player("全体NPC忙碌审计", "散人")
-    assert len(engine.NPCS) == 77
+    assert len(engine.NPCS) == 79
     for npc_name in engine.NPCS:
         room_id = player.get_npc_home_location(npc_name)
         assert room_id in engine.ROOMS, npc_name
@@ -46,7 +46,7 @@ def test_all_fixed_npcs_remain_locatable_and_present_while_temporarily_busy():
 def test_all_npc_schedule_locations_and_states_are_valid():
     data_path = Path(__file__).resolve().parents[1] / "data" / "npcs.json"
     data = json.loads(data_path.read_text(encoding="utf-8"))
-    assert len(data) == 77
+    assert len(data) == 79
     allowed = Player.NPC_STATE_ALLOWED
     busy_entries = []
     scheduled_npcs = set()

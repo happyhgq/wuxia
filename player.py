@@ -36,6 +36,24 @@ def request_autosave(player, verbose=True):
     return autosave()
 
 
+QUALITY_UPGRADE_TIERS = ("精良", "稀有", "史诗")
+
+
+def get_quality_upgrade_cost(base_price, target_quality):
+    """品质升阶消耗：目标品质越高、基础物品越贵，铁矿石与银两越多。"""
+    try:
+        base = max(0, int(base_price))
+    except (TypeError, ValueError):
+        base = 0
+    if target_quality == "精良":
+        return 3, max(80, base)
+    if target_quality == "稀有":
+        return 6, max(240, base * 2)
+    if target_quality == "史诗":
+        return 10, max(600, base * 3)
+    return 0, 0
+
+
 
 # Alpha285 成长节奏：Lv1–15 采用分阶段经验曲线，Lv16 起沿用 1.35 倍增长。
 # 新表每一项均不低于旧表，旧存档载入后不会额外升级，V12 存档结构不变。
@@ -305,10 +323,11 @@ class Player:
     def get_equipment_stats(self, slot):
         """返回指定装备槽的基础属性、强化等级和词条加成。
 
-        slot 仅接受 weapon / armor；未知槽位返回空字典，避免 UI 或旧存档
-        数据异常时中断游戏。P2.14 的词条完全由 items.json 驱动，不写入存档。
+        slot 仅接受 weapon / armor / accessory；未知槽位返回空字典，避免 UI 或
+        旧存档数据异常时中断游戏。饰品不参与强化。P2.14 的词条完全由
+        items.json 驱动，不写入存档。
         """
-        if slot not in ("weapon", "armor"):
+        if slot not in ("weapon", "armor", "accessory"):
             return {}
         item_name = self.equipment.get(slot)
         if not item_name:
@@ -380,6 +399,60 @@ class Player:
             "quality": info.get("quality", "普通"),
         }
 
+    def get_quality_upgrade_preview(self, slot):
+        """返回当前装备下一次品质升阶的预览，不修改任何状态。
+
+        品质链取自基础物品的 quality_variants：普通 → 精良 → 稀有 → 史诗，
+        缺档时自动跳到下一档（如玄铁重剑直接从普通升稀有）。强化等级保留。
+        """
+        if slot not in ("weapon", "armor"):
+            return {}
+        item_name = self.equipment.get(slot)
+        if not item_name:
+            return {"slot": slot, "available": False, "reason": "empty"}
+        info = engine.ITEMS.get(item_name, {})
+        if not isinstance(info, dict) or info.get("type") not in ("weapon", "armor"):
+            return {"slot": slot, "available": False, "reason": "invalid", "name": item_name}
+        base_name = info.get("base_item") or item_name
+        base_info = engine.ITEMS.get(base_name, {})
+        variants = base_info.get("quality_variants", {}) if isinstance(base_info, dict) else {}
+        if not isinstance(variants, dict) or not variants:
+            return {"slot": slot, "available": False, "reason": "no_variant", "name": item_name}
+        order = ("精良", "稀有", "史诗")
+        current_quality = info.get("quality", "普通")
+        try:
+            start = order.index(current_quality) + 1
+        except ValueError:
+            start = 0
+        next_quality = next(
+            (quality for quality in order[start:] if variants.get(quality) in engine.ITEMS), None
+        )
+        if not next_quality:
+            return {
+                "slot": slot, "available": False, "reason": "max",
+                "name": item_name, "quality": current_quality,
+            }
+        next_item = variants[next_quality]
+        next_info = engine.ITEMS[next_item]
+        stat_key = "atk" if slot == "weapon" else "defense"
+        per_level = 3 if slot == "weapon" else 2
+        enhance = max(0, int(self.equip_enhance.get(slot, 0)))
+        current_stat = int(info.get(stat_key, 0)) + enhance * per_level
+        next_stat = int(next_info.get(stat_key, 0)) + enhance * per_level
+        ore_cost, gold_cost = get_quality_upgrade_cost(
+            base_info.get("price", info.get("price", 0)), next_quality
+        )
+        return {
+            "slot": slot, "available": True, "name": item_name,
+            "quality": current_quality, "next_quality": next_quality,
+            "next_item": next_item, "stat_key": stat_key,
+            "current_stat": current_stat, "next_stat": next_stat,
+            "stat_delta": next_stat - current_stat,
+            "ore_cost": ore_cost, "gold_cost": gold_cost,
+            "enhance": enhance,
+            "enhance_max": int(next_info.get("enhance_max", 5)),
+        }
+
     def get_equipment_power_breakdown(self, slot):
         """返回装备基础属性与强化贡献，便于明确解释最终数值来源。"""
         info = self.get_equipment_stats(slot)
@@ -403,7 +476,7 @@ class Player:
         """汇总当前装备的 P2.14 词条，不改变存档结构。"""
         totals = {"accuracy_bonus": 0.0, "crit_bonus": 0.0, "dodge_bonus": 0.0,
                   "attribute_bonus": {k: 0 for k in self.attributes}}
-        for slot in ("weapon", "armor"):
+        for slot in ("weapon", "armor", "accessory"):
             info = self.get_equipment_stats(slot)
             totals["accuracy_bonus"] += info.get("accuracy_bonus", 0.0)
             totals["crit_bonus"] += info.get("crit_bonus", 0.0)
@@ -495,7 +568,7 @@ class Player:
         """计算换上指定背包装备后的流派变化，不实际换装。"""
         info = engine.ITEMS.get(item_name, {})
         slot = info.get("type")
-        if slot not in ("weapon", "armor"):
+        if slot not in ("weapon", "armor", "accessory"):
             return None
         candidate = dict(self.equipment)
         candidate[slot] = item_name
@@ -511,7 +584,7 @@ class Player:
     def get_equipment_score(self, item_name, include_current_enhance=False):
         """计算装备综合评分；仅用于比较/推荐，不直接参与战斗公式。"""
         info = engine.ITEMS.get(item_name, {})
-        if info.get("type") not in ("weapon", "armor"):
+        if info.get("type") not in ("weapon", "armor", "accessory"):
             return 0
         quality_weight = {"普通": 0, "精良": 8, "稀有": 18, "史诗": 30}
         score = quality_weight.get(info.get("quality", "普通"), 0)
@@ -547,7 +620,7 @@ class Player:
     def evaluate_equipment(self, item_name):
         """返回掉落装备的可读价值评估；不修改装备、背包或存档。"""
         info = engine.ITEMS.get(item_name, {})
-        if info.get("type") not in ("weapon", "armor"):
+        if info.get("type") not in ("weapon", "armor", "accessory"):
             return None
         slot = info["type"]
         current_name = self.equipment.get(slot)
@@ -575,7 +648,7 @@ class Player:
         """比较背包中的装备与当前同槽装备，返回可供终端 UI 使用的数据。"""
         info = engine.ITEMS.get(item_name, {})
         slot = info.get("type")
-        if slot not in ("weapon", "armor"):
+        if slot not in ("weapon", "armor", "accessory"):
             return None
         current = self.get_equipment_stats(slot)
         candidate_atk = int(info.get("atk", 0))
@@ -604,33 +677,40 @@ class Player:
         }
 
     def equip_item(self, item_name):
-        """装备背包中的武器/防具；返回 (success, message)。"""
+        """装备背包中的武器/防具/饰品；返回 (success, message)。"""
         if item_name not in self.inventory:
             return False, f"你的背包里没有【{item_name}】。"
         info = engine.ITEMS.get(item_name, {})
-        slot = info.get("type")
-        if slot not in ("weapon", "armor"):
-            return False, f"【{item_name}】不是可装备的武器或防具。"
+        item_type = info.get("type")
+        if item_type in ("weapon", "armor"):
+            slot = item_type
+        elif item_type == "accessory" and info.get("slot") == "accessory":
+            slot = "accessory"
+        else:
+            return False, f"【{item_name}】不是可装备的武器、防具或饰品。"
         old = self.equipment.get(slot)
         if old:
             self.inventory.append(old)
         self.inventory.remove(item_name)
         self.equipment[slot] = item_name
         # 保持 V12 原有“换装后该槽强化等级归零”的行为，避免改变旧存档语义。
-        self.equip_enhance[slot] = 0
-        label = "武器" if slot == "weapon" else "防具"
+        if slot in ("weapon", "armor"):
+            self.equip_enhance[slot] = 0
+        label = {"weapon": "武器", "armor": "防具", "accessory": "饰品"}[slot]
         return True, f"装备了{label}：【{item_name}】！"
 
     def unequip_item(self, slot):
         """卸下指定装备槽；不改变 V12 存档结构。"""
-        if slot not in ("weapon", "armor"):
-            return False, "只能卸下 weapon/armor 装备槽。"
+        if slot not in ("weapon", "armor", "accessory"):
+            return False, "只能卸下 weapon/armor/accessory 装备槽。"
         item_name = self.equipment.get(slot)
         if not item_name:
-            return False, f"当前没有装备{('武器' if slot == 'weapon' else '防具')}。"
+            label = {"weapon": "武器", "armor": "防具", "accessory": "饰品"}[slot]
+            return False, f"当前没有装备{label}。"
         self.inventory.append(item_name)
         self.equipment[slot] = None
-        self.equip_enhance[slot] = 0
+        if slot in ("weapon", "armor"):
+            self.equip_enhance[slot] = 0
         return True, f"已卸下【{item_name}】。"
 
     def get_total_atk(self):
@@ -643,7 +723,9 @@ class Player:
         a_name = self.equipment.get("armor")
         base = engine.ITEMS.get(a_name, {}).get("defense", 0) if a_name else 0
         enhance_bonus = self.equip_enhance.get("armor", 0) * 2
-        return self.defense + self.get_effective_attribute("constitution") + base + enhance_bonus + self.get_build_bonuses()["defense"]
+        accessory_name = self.equipment.get("accessory")
+        accessory_defense = engine.ITEMS.get(accessory_name, {}).get("defense", 0) if accessory_name else 0
+        return self.defense + self.get_effective_attribute("constitution") + base + enhance_bonus + accessory_defense + self.get_build_bonuses()["defense"]
 
     def get_attribute(self, name):
         return int(self.attributes.get(name, 0))
@@ -4211,6 +4293,62 @@ class Player:
         stage_idx = max(0, min(state.get("stage", 0), len(stages)-1))
         return stages[stage_idx], q_info
 
+    def get_quest_collect_requirements(self, q_name):
+        """返回纯收集任务需要交付的 (物品, 数量)；混合任务的收集阶段不在此列。"""
+        info = engine.QUESTS.get(q_name, {})
+        stages = info.get("stages") or []
+        if stages:
+            if not all(isinstance(stage, dict) and stage.get("target_type") == "collect" for stage in stages):
+                return []
+            raw = [(stage.get("target_name"), stage.get("required_cnt", 1)) for stage in stages]
+        elif info.get("target_type") == "collect":
+            raw = [(info.get("target_name"), info.get("required_cnt", 1))]
+        else:
+            return []
+        requirements = []
+        for name, count in raw:
+            item_name = str(name or "").strip()
+            if not item_name:
+                continue
+            try:
+                quantity = max(1, int(count or 1))
+            except (TypeError, ValueError, OverflowError):
+                quantity = 1
+            requirements.append((item_name, quantity))
+        return requirements
+
+    def get_quest_collect_progress(self, q_name):
+        """按行囊实物返回 (物品, 现有数量, 需要数量)；非收集任务返回空列表。"""
+        requirements = self.get_quest_collect_requirements(q_name)
+        if not requirements:
+            return []
+        inventory = getattr(self, "inventory", None)
+        if not isinstance(inventory, list):
+            return [(item_name, 0, required) for item_name, required in requirements]
+        return [(item_name, inventory.count(item_name), required) for item_name, required in requirements]
+
+    def sync_collect_quest_from_inventory(self, q_name):
+        """接取收集任务时按现有材料登记阶段进度，避免“先备料后接取”无法交付。"""
+        progress = self.get_quest_collect_progress(q_name)
+        if not progress:
+            return []
+        stages = engine.QUESTS.get(q_name, {}).get("stages") or []
+        state = self.quest_states.setdefault(q_name, {"stage": 0, "progress": 0})
+        if not stages:
+            item_name, held, required = progress[0]
+            registered = min(held, required)
+            self.active_quests[q_name] = registered
+            state["progress"] = registered
+            return progress
+        for index, (item_name, held, required) in enumerate(progress):
+            registered = min(held, required)
+            state["stage"] = index
+            state["progress"] = registered
+            self.active_quests[q_name] = registered
+            if held < required:
+                break
+        return progress
+
     def is_quest_goal_complete(self, q_name):
         """目标是否已完成但尚未交付；已交付状态只由完成列表与完成旗标表示。"""
         if q_name not in self.active_quests:
@@ -4219,6 +4357,9 @@ class Player:
         state = self.quest_states.get(q_name, {})
         if state.get("branch_pending"):
             return False
+        collect_progress = self.get_quest_collect_progress(q_name)
+        if collect_progress:
+            return all(held >= required for _, held, required in collect_progress)
         stages = info.get("stages") or []
         if stages:
             try:
