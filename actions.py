@@ -12,6 +12,7 @@ from collections import Counter
 import engine
 import actor_display
 import npc_perception
+import npc_reaction
 from ui_output import BODY_WIDTH, safe_print as print, wrap_player_text, format_action_feedback, format_labeled_fields
 from world_time import format_world_clock, ticks_until_next_dawn, world_hour
 from item_feedback import add_inventory_items, format_item_change, remove_inventory_items
@@ -922,6 +923,12 @@ def handle_talk_and_ask(player, args):
         return False
     if sect_stance == "wary" and not topic:
         print(f"{Color.YELLOW}{target_npc} 对你所属的【{player.get_sect()}】保持戒心：“江湖门派各有规矩，先证明诚意再说。”{Color.RESET}")
+
+    # 感知反应先于忙碌短应答：例如药铺老板见重伤会先放下手里的活。
+    if not topic:
+        reaction = npc_reaction.run_talk_action(player, target_npc, npc_data)
+        if reaction:
+            return False
 
     if busy_idle:
         # 忙碌且没有具体话题时只给一句短应答，不重复整段寒暄、关系变化与委托列表。

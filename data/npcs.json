@@ -301,7 +301,42 @@
         "id": "hong ying qiang"
       }
     ],
-    "perception_role": "guard"
+    "perception_role": "guard",
+    "perception_actions": [
+      {
+        "id": "gate_short_check_rain",
+        "priority": 12,
+        "perception": {
+          "weather": [
+            "rain",
+            "storm",
+            "snow",
+            "fog"
+          ]
+        },
+        "once_per_day": true,
+        "region_effects": {
+          "main": {
+            "security": 1
+          }
+        },
+        "text": "守卫紧了紧蓑衣，把灯笼挪到门洞背风处：“这种天最容易出事。盘查从简，你走你的，村口这班我加人巡着。”"
+      },
+      {
+        "id": "gate_short_check_night",
+        "priority": 10,
+        "perception": {
+          "time_phase": "night"
+        },
+        "once_per_day": true,
+        "region_effects": {
+          "main": {
+            "security": 1
+          }
+        },
+        "text": "守卫把灯挑近了些，没有细问你的来路：“夜里不细盘查了。路上黑，把招子放亮，村口我加了一班巡夜。”"
+      }
+    ]
   },
   "村长": {
     "id": "cun zhang",
@@ -974,7 +1009,19 @@
         "text": "雨天湿气重，旧伤容易发沉。回去记得煎一副祛湿的，别嫌麻烦。"
       }
     ],
-    "perception_role": "apothecary"
+    "perception_role": "apothecary",
+    "perception_actions": [
+      {
+        "id": "tend_badly_wounded",
+        "priority": 20,
+        "perception": {
+          "injury": "badly_wounded"
+        },
+        "once_per_day": true,
+        "heal_percent": 25,
+        "text": "百草堂主把手里的药秤一搁，先把你按在长凳上：“坐下，别逞强。”他剪开血衣敷上金创药，又塞来一包止血的散剂，“命比银子要紧，缓过来再上路。”"
+      }
+    ]
   },
   "铁匠": {
     "id": "tie jiang",

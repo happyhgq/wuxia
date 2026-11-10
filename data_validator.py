@@ -151,6 +151,36 @@ def check_region_effects(effects, label, zone_names, errors):
             elif not low <= amount <= high:
                 errors.append(f"{label}: region_effects.{zone}.{key} 超出 {low}~{high}")
 
+def validate_perception_action(entry, label, zone_names, errors):
+    """感知反应会实际改气血或持久治安，结构与效果范围必须显式校验。"""
+    if not isinstance(entry, dict):
+        errors.append(f"{label} 必须为对象")
+        return
+    action_id = entry.get("id")
+    if not isinstance(action_id, str) or not action_id.strip():
+        errors.append(f"{label} id 必须为非空字符串")
+    if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+        errors.append(f"{label} text 必须为非空字符串")
+    if "priority" in entry:
+        try:
+            int(entry.get("priority"))
+        except (TypeError, ValueError):
+            errors.append(f"{label} priority 必须为整数")
+    if "perception" not in entry:
+        errors.append(f"{label} perception 必须为非空对象")
+    else:
+        validate_perception_rules(entry.get("perception"), label, errors)
+    if "once_per_day" in entry and not isinstance(entry.get("once_per_day"), bool):
+        errors.append(f"{label} once_per_day 必须为布尔值")
+    heal = entry.get("heal_percent")
+    if heal is not None and (isinstance(heal, bool) or not isinstance(heal, int) or not 1 <= heal <= 100):
+        errors.append(f"{label} heal_percent 必须为 1~100 的整数")
+    region_effects = entry.get("region_effects")
+    if region_effects is not None:
+        check_region_effects(entry, label, zone_names, errors)
+    if heal is None and region_effects is None:
+        errors.append(f"{label} 至少需要 heal_percent 或 region_effects")
+
 def schedule_hours(start, end):
     """返回日程条目覆盖的整点集合；左闭右开，支持跨午夜。"""
     if start < end:
@@ -1092,6 +1122,20 @@ def main():
             else:
                 for idx, entry in enumerate(entries, 1):
                     validate_conditional_entry(entry, f"NPC {n}: conditional_dialogue[{idx}]", errors)
+
+        if "perception_actions" in info:
+            actions = info.get("perception_actions")
+            if not isinstance(actions, list) or not actions:
+                errors.append(f"NPC {n}: perception_actions 必须为非空数组")
+            else:
+                seen_actions = set()
+                for idx, action in enumerate(actions, 1):
+                    validate_perception_action(action, f"NPC {n}: perception_actions[{idx}]", zone_names, errors)
+                    action_id = action.get("id") if isinstance(action, dict) else None
+                    if isinstance(action_id, str) and action_id.strip():
+                        if action_id in seen_actions:
+                            errors.append(f"NPC {n}: perception_actions id 重复 {action_id}")
+                        seen_actions.add(action_id)
     for sect_name, skill_list in skills.items():
         if not isinstance(skill_list, list):
             errors.append(f"武学组 {sect_name}: 必须为数组")
