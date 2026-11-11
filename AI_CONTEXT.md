@@ -12,7 +12,7 @@
 ```text
 Wuxia · 武侠文字 RPG
 仓库：happyhgq/wuxia
-版本：P3.2 BL1.0 Alpha313
+版本：P3.2 BL1.0 Alpha317
 存档：SAVE_VERSION = 12
 ```
 
@@ -59,6 +59,7 @@ data/*.json 与相关测试
 | 战斗 | `combat.py`、`engine.py`、`player.py`、`data/enemies.json`、`data/skills.json` |
 | 地图 | `engine.py`、`data/rooms.json`、`data/world_regions.json`、`data_validator.py` |
 | NPC / 任务 | `actions.py`、`engine.py`、`data/npcs.json`、`data/quests.json` |
+| NPC 感知 / 反应 | `npc_perception.py`、`npc_reaction.py`、`data/perception_templates.json` |
 | 世界时间 / 氛围 | `world_time.py`、`world_ambience.py`、`weather.py` |
 | 区域生态 | `region_activity.py`、`data/region_activity.json` |
 | 经济 | `economy/`、`data/economy/*.json` |
@@ -84,6 +85,7 @@ main.py（主循环 / 命令分发）
           ├── world_time.py  world_ambience.py  weather.py
           ├── world_lifecycle.py  region_activity.py  entry_events.py
           ├── travel_system.py  npc_behavior.py  npc_utility.py
+          ├── npc_perception.py  npc_reaction.py
           └── random_npcs.py
           │
           ↓
@@ -115,6 +117,8 @@ main.py（主循环 / 命令分发）
 | `ui_output.py` | 折行、颜色开关、输出防泄漏 |
 | `npc_behavior.py` | NPC 五态微行为（纯函数） |
 | `npc_utility.py` | NPC 效用行为与只读状态 |
+| `npc_perception.py` | NPC 对时间/天气/伤势/装备品质的只读感知与对白匹配 |
+| `npc_reaction.py` | NPC 感知后的可执行反应（治疗、区域效果，按世界日限次） |
 | `random_npcs.py` | 临时随机路人 |
 | `travel_system.py` | 快速旅行与路线记录 |
 | `item_feedback.py` | 统一物品增减与提示 |
@@ -138,7 +142,7 @@ DataLoader 当前加载：
 ```text
 rooms / npcs / items / enemies / skills / quests
 build_profiles / world_regions / sects / factions
-world_events / events
+world_events / events / perception_templates
 ```
 
 `deep_merge()` 只递归合并 dict：
@@ -229,6 +233,7 @@ dialogue / talk_verb / conditional_dialogue
 info / shop / quests
 daily_schedule / utility_profile / home_room
 faction / relations
+perception_role / perception_actions
 ```
 
 ### [RULE]
@@ -236,6 +241,9 @@ faction / relations
 - 条件对白用 `conditional_dialogue`（`priority` + `requires`），不要把世界状态判断硬编码进 Python。
 - 条件对白优先级相同时，按数据中的先后顺序取前者。
 - 展示字段（称号、性别、年龄、武评、装备）由 `actor_display.py` 读取，不在对话里重复输出面板。
+- 感知对白用 `requires` + `perception` 双重过滤；职业模板放 `data/perception_templates.json`，变体轮换游标只挂玩家临时属性，不写入存档。
+- 感知快照必须保持只读：不写存档、不推进世界时间、不初始化天气。
+- `perception_actions` 的效果只支持 `heal_percent` 与 `region_effects`；`once_per_day` 按世界日记录在既有 `variables.npc_action_days`，不新增存档顶层字段。
 - NPC 的关系、记忆与势力写入 V12 `world_state.variables`。
 
 ---
