@@ -70,8 +70,8 @@ def test_faction_conflict_reason_is_not_rendered_as_npc_activity():
     people_section = output.split("【人物】", 1)[1].split("【", 1)[0]
     assert "村长" in people_section
     assert "对峙" not in people_section
-    # T1 村长已有覆盖全天的日程，人物行应展示日程活动而不是势力冲突文本。
-    assert "打水洗漱" in people_section or "整理今日的村务" in people_section
+    # 冲突忙碌时不能沿用日程描述，否则与“脱不开身”的交谈应答互相矛盾。
+    assert "急事缠住" in people_section
     assert "【区域局势】" in output
 
 
@@ -85,4 +85,4 @@ def test_busy_npc_remains_a_valid_present_interaction_target():
     assert "状态：" not in output and "处理村务" in output
     assert "只匆匆应了一声" in output
     assert "说道" not in output
-    assert "【可接取委托】" not in output
+    assert "【可接取委托】" in output

@@ -16,7 +16,7 @@ import npc_reaction
 from ui_output import BODY_WIDTH, safe_print as print, wrap_player_text, format_action_feedback, format_labeled_fields
 from world_time import format_world_clock, ticks_until_next_dawn, world_hour
 from item_feedback import add_inventory_items, format_item_change, remove_inventory_items
-from player import request_autosave
+from player import normalize_follow_up, request_autosave
 
 Color = engine.Color
 
@@ -227,8 +227,8 @@ def handle_inn_service(player, action, args=None):
         player.hp = player.max_hp
         player.mp = player.max_mp
         player.world_state.setdefault("variables", {})["inn_nights_stayed"] = int(player.world_state.get("variables", {}).get("inn_nights_stayed", 0) or 0) + 1
-        print(f"你付了 {cost} 两，店小二引你上楼。关好房门后，你安心睡下，再睁眼时窗外已是{format_world_clock(wake_clock)}，这一觉过去 {steps} 个世界时刻。气血恢复 {player.hp-old_hp} 点，内力恢复 {player.mp-old_mp} 点，楼下已飘来热粥的香气。")
-        print("住店不会自动保存进度；需要保留变化时，请输入“保存”。")
+        inn_waiter = actor_display.prose_name("店小二", engine.NPCS.get("店小二"))
+        print(f"你付了 {cost} 两，{inn_waiter}引你上楼。关好房门后，你安心睡下，再睁眼时窗外已是{format_world_clock(wake_clock)}，这一觉过去 {steps} 个世界时刻。气血恢复 {player.hp-old_hp} 点，内力恢复 {player.mp-old_mp} 点，楼下已飘来热粥的香气。")
         return steps
     if action in ("吃饭", "用餐", "打尖", "饭菜"):
         cost = 4
@@ -318,12 +318,12 @@ def handle_npc_actions(player, args=None):
         destination = item.get("to")
         destination_name = engine.ROOMS.get(destination, {}).get("name", "") if destination else ""
         detail = f" → {destination_name}" if destination_name else ""
-        target = f"（目标：{item.get('target')}）" if item.get("target") else ""
-        print(f"{format_world_clock(item.get('clock', 0))}：{item.get('npc')}【{label}】{target}{detail} — {item.get('reason', '')}")
+        target = f"（目标：{_npc_actor_label(item.get('target'))}）" if item.get("target") else ""
+        print(f"{format_world_clock(item.get('clock', 0))}：{_npc_actor_label(item.get('npc'))}【{label}】{target}{detail} — {item.get('reason', '')}")
     if events:
         print(f"\n{Color.BRIGHT_YELLOW}【主动剧情事件】{Color.RESET}")
         for event in events:
-            print(f"{format_world_clock(event.get('clock', 0))}：{event.get('npc')}【{event.get('title', '事件')}】{event.get('text', '')}")
+            print(f"{format_world_clock(event.get('clock', 0))}：{_npc_actor_label(event.get('npc'))}【{event.get('title', '事件')}】{event.get('text', '')}")
 
 
 def handle_world_activity(player, args=None):
@@ -392,8 +392,16 @@ def _business_activity_lines(rows, limit):
     return lines
 
 
+def _npc_actor_label(actor):
+    """把内部 NPC 键转为玩家可见称谓；商队等非 NPC 记录保持原样。"""
+    name = str(actor or "").strip()
+    if name in engine.NPCS:
+        return actor_display.display_name(name, engine.NPCS.get(name))
+    return name
+
+
 def _business_activity_sentence(row):
-    actor = str(row.get("actor", "一名江湖人")).strip() or "一名江湖人"
+    actor = actor_display.prose_name(str(row.get("actor", "")).strip()) or "一名江湖人"
     kind = str(row.get("kind", "")).strip()
     action = str(row.get("action", "")).strip()
     item = str(row.get("item", "货物")).strip() or "货物"
@@ -466,7 +474,7 @@ def _npc_economy_context(npc_name, economy_state, room_id=""):
     actor = str(row.get("actor", npc_name))
     if actor.replace(" ", "") == name or name in actor.replace(" ", ""):
         return f"你提起近来的营生，对方点头道：‘方才确实{action}了{amount}份{item}，都是按手头货物实做的。’"
-    return f"谈话间，{actor}近来{action}的消息传来：已处理{amount}份{item}。"
+    return f"谈话间，{actor_display.prose_name(actor)}近来{action}的消息传来：已处理{amount}份{item}。"
 
 
 def _safe_int_for_activity(value):
@@ -545,6 +553,56 @@ def _room_is_night(player, room):
     except (AttributeError, TypeError, ValueError, OverflowError):
         return False
     return (start <= hour < end) if start < end else (hour >= start or hour < end)
+
+
+def _map_room_detail(target_id):
+    """返回舆图上单个场景的名称与首句描述；无有效场景返回 None。"""
+    target_room = engine.ROOMS.get(target_id, {}) if target_id else {}
+    if not isinstance(target_room, dict) or not target_room:
+        return None
+    desc = str(target_room.get("desc", "") or "").strip()
+    first_sentence = desc.split("。", 1)[0].strip() if desc else ""
+    detail = str(target_room.get("name", target_id))
+    if first_sentence:
+        detail += f"——{first_sentence}。"
+    return detail
+
+
+def _show_map_view(player):
+    """摊开江湖舆图：邻近道路，加上玩家已走过的再远一站；只读，不改变世界状态。"""
+    room = engine.ROOMS.get(player.location, {})
+    print(f"\n{Color.BRIGHT_GREEN}【江湖舆图】{Color.RESET}你摊开舆图，就着当前所在比对道路：")
+    print(f"所在：{room.get('name', player.location)}")
+    exits = room.get("exits", {}) or {}
+    if not isinstance(exits, dict) or not exits:
+        print("图上没有标出可走的方向。")
+        return
+    seen_far = set()
+    adjacent_ids = {target_id for target_id in exits.values() if target_id}
+    for direction, target_id in exits.items():
+        detail = _map_room_detail(target_id)
+        if detail is None:
+            print(f"{direction}：道路未标注")
+            continue
+        print(wrap_player_text(f"{direction}：{detail}", width=BODY_WIDTH))
+        neighbor_room = engine.ROOMS.get(target_id, {}) if target_id else {}
+        neighbor_exits = neighbor_room.get("exits", {}) if isinstance(neighbor_room, dict) else {}
+        if not isinstance(neighbor_exits, dict):
+            continue
+        for far_direction, far_id in neighbor_exits.items():
+            if far_id == player.location or far_id in adjacent_ids or far_id in seen_far:
+                continue
+            # 再远一站只标玩家实际走过的场景，未踏足的地方仍留白，避免剧透。
+            if not player.get_flag(f"visited:{far_id}", False):
+                continue
+            far_detail = _map_room_detail(far_id)
+            if far_detail is None:
+                continue
+            seen_far.add(far_id)
+            print(wrap_player_text(
+                f"　　└ 再往{far_direction}：{far_detail}", width=BODY_WIDTH
+            ))
+    print("提示：舆图标出邻近道路与你走过的再远一站，未曾踏足的地方仍是空白。")
 
 
 def look(player, args=None, show_guidance=False):
@@ -628,15 +686,28 @@ def look(player, args=None, show_guidance=False):
                 npc_state_source = str((npc_state_record or {}).get("source", ""))
                 state_reason = str((npc_state_record or {}).get("reason", "")).strip().rstrip("。.!！")
                 economy_reason = _npc_economy_scene_status(npc_name, economy_state, economy_manager, player.location)
-                if scene_status:
+                npc_state = str((npc_state_record or {}).get("state", ""))
+                # 日程或势力冲突造成的忙碌要压过静态岗位描述，才能与忙碌短应答的措辞一致。
+                busy_by_record = npc_state == "busy" and (
+                    npc_state_source == "schedule" or npc_state_source.startswith("faction_conflict:")
+                )
+                if scene_status and not busy_by_record:
                     reason = scene_status
                 elif npc_state_source.startswith("faction_conflict:"):
                     # 势力冲突原因属于区域局势，不是人物行为；避免把“局势升级至对峙”显示成人物状态。
-                    scheduled = player._schedule_state_record(npc_name) if hasattr(player, "_schedule_state_record") else None
-                    reason = str((scheduled or {}).get("reason", "正在处理事务")).strip().rstrip("。.!！")
+                    if str((npc_state_record or {}).get("state", "")) == "busy":
+                        # 冲突忙碌时不能再显示日程描述，否则会与忙碌短应答的“脱不开身”自相矛盾。
+                        reason = "正被一桩急事缠住，一时脱不开身"
+                    else:
+                        scheduled = player._schedule_state_record(npc_name) if hasattr(player, "_schedule_state_record") else None
+                        reason = str((scheduled or {}).get("reason", "正在处理事务")).strip().rstrip("。.!！")
                 elif npc_state_source not in ("", "schedule") and state_reason:
                     # 任务/事件留下的具体状态优先于营生模拟，只有作息兜底才让位给实际营生。
                     reason = state_reason
+                elif npc_state_source == "schedule" and str((npc_state_record or {}).get("state", "")) == "busy":
+                    # 日程明确在岗时以日程为准；营生模拟的“等原料/歇口气”是作坊状态，
+                    # 不能把正在上岗的人写成停工，否则与“忙碌”短应答互相矛盾。
+                    reason = state_reason or activity_reason
                 elif economy_reason:
                     reason = economy_reason
                 else:
@@ -673,7 +744,7 @@ def look(player, args=None, show_guidance=False):
         # 世界营生只保留在主动查询中；默认场景不展示后台经济记录，避免刷屏和人物状态矛盾。
         encounters = player.get_npc_encounters(player.location)
         for encounter in encounters:
-            print(f"{engine.style('人物偶遇：', 'warning')}{engine.style(encounter['npc_a'], 'npc')} 与 {engine.style(encounter['npc_b'], 'npc')} 正在{encounter['tone']}交谈。")
+            print(f"{engine.style('人物偶遇：', 'warning')}{engine.style(actor_display.prose_name(encounter['npc_a']), 'npc')} 与 {engine.style(actor_display.prose_name(encounter['npc_b']), 'npc')} 正在{encounter['tone']}交谈。")
         if room.get("enemies"):
             from world_lifecycle import visible_enemies
             active_enemies, corpses = visible_enemies(player, player.location, room.get("enemies", []))
@@ -697,6 +768,9 @@ def look(player, args=None, show_guidance=False):
     target = args[0]
     if str(target).strip() in {"商情", "营生", "营生消息", "附近营生"}:
         handle_local_business_rumor(player)
+        return
+    if any(word in str(target) for word in ("货架", "柜台", "商品", "货单")):
+        _look_shop_shelf(player, args)
         return
 
     npc_target = " ".join(str(part) for part in args)
@@ -747,7 +821,14 @@ def look(player, args=None, show_guidance=False):
         if item_name and (target in item_name or item_name in target):
             i_data = engine.ITEMS.get(item_name, {})
             i_type = i_data.get("type", "普通物品")
-            type_cn = {"weapon": "兵刃", "armor": "防具", "consumable": "消耗药剂", "material": "材料"}.get(i_type, i_type)
+            type_cn = {
+                "weapon": "兵刃", "armor": "防具", "consumable": "消耗药剂",
+                "material": "材料", "tool": "工具", "quest": "任务物品",
+                "manual": "秘籍", "accessory": "饰品",
+            }.get(i_type, i_type)
+            if i_data.get("map_view"):
+                _show_map_view(player)
+                return
             desc = i_data.get("desc", "暂无说明。")
             price = i_data.get("price", 0)
             print(f"\n{Color.BRIGHT_GREEN}【{item_name}】({type_cn}){Color.RESET}")
@@ -790,18 +871,66 @@ def _conditional_dialogue_text(player, npc_data, npc_name=None, include_template
     return npc_perception.select_reaction_text(player, npc_data, npc_name, include_templates)
 
 
+def _sect_entry_level(sect_name):
+    """正式入门等级由门派数据决定，文案与校验共用同一来源。"""
+    info = engine.SECTS.get(str(sect_name or ""), {})
+    try:
+        return max(1, int(info.get("entry_level", 3) or 3))
+    except (TypeError, ValueError, AttributeError):
+        return 3
+
+
+def _common_sect_entry_level():
+    levels = [_sect_entry_level(name) for name in ("少林", "武当", "华山", "铁衣门")]
+    return min(levels) if levels else 3
+
+
+def _npc_whereabouts_hint(player, npc_name):
+    """NPC 不在当前场景时，按当前时刻给出所在场景与方位；无行踪信息返回 None。"""
+    npc_name = str(npc_name or "")
+    if npc_name not in engine.NPCS:
+        return None
+    npc_data = engine.NPCS.get(npc_name, {})
+    label = actor_display.prose_name(npc_name, npc_data)
+    location = player.get_npc_location(npc_name, refresh=False)
+    if location and location != player.location:
+        room_name = engine.ROOMS.get(location, {}).get("name", location)
+        step = player._npc_room_path(player.location, location)
+        if step:
+            return f"【{label}】此刻在【{room_name}】，往{step[0]}边过去便能找到。"
+        return f"【{label}】此刻在【{room_name}】。"
+    public = player.get_npc_public_state(npc_name)
+    status = str((public or {}).get("status", "")).strip() if isinstance(public, dict) else ""
+    if status:
+        return f"【{label}】{status}。"
+    return None
+
+
+def _print_npc_whereabouts_hint(player, npc_name):
+    hint = _npc_whereabouts_hint(player, npc_name)
+    if hint:
+        print(hint)
+
+
 def handle_talk_and_ask(player, args):
     if args and "".join(str(part) for part in args).strip() in {"营生", "商情", "营生消息", "附近营生"}:
         # “打听 营生”是本地商情查询，不应被当成人物名或普通话题。
         handle_local_business_rumor(player)
         return False
     room = engine.ROOMS.get(player.location, {})
+    # 交谈是玩家主动行为：先按当前时钟校准日程，避免整点换班后场景人物仍是上一刻的旧状态。
+    player.refresh_npc_schedules()
     npcs_in_room = player.get_npcs_in_room(player.location)
     player.propagate_npc_information(player.location)
     player.propagate_npc_player_memories(player.location)
 
     if not npcs_in_room:
         print("此地空无一人，并无可以交谈的对象。")
+        if args:
+            normalized_args = "".join(str(part) for part in args).replace(" ", "")
+            missing_name, _ = actor_display.match_name_prefix(normalized_args, list(engine.NPCS))
+            if missing_name:
+                _print_npc_whereabouts_hint(player, missing_name)
         return False
 
     target_npc = npcs_in_room[0]
@@ -809,37 +938,31 @@ def handle_talk_and_ask(player, args):
     if args:
         # 优先按“完整 NPC 名称前缀”匹配，避免多词姓名被误拆成话题。
         # 例如“交谈 青石村 老村长 安慰”应识别为 NPC“青石村老村长”、话题“安慰”。
+        # 房间人物行显示的是姓名/称号标签，玩家照抄“交谈 百草堂主”也必须能识别。
         joined_args = " ".join(str(part) for part in args).strip()
         normalized_args = joined_args.replace(" ", "")
-        exact_prefix_matches = []
-        for name in npcs_in_room:
-            normalized_name = str(name).replace(" ", "")
-            if normalized_args == normalized_name or normalized_args.startswith(normalized_name):
-                exact_prefix_matches.append((len(normalized_name), name, normalized_name))
-        if exact_prefix_matches:
-            _, target_npc, normalized_name = max(exact_prefix_matches, key=lambda item: item[0])
+        target_npc, matched_len = actor_display.match_name_prefix(normalized_args, npcs_in_room)
+        if target_npc:
             # NPC 名称本身允许被空格分隔；保留名称之后话题中的原始空格。
             consumed = 0
             matched_chars = 0
-            while consumed < len(joined_args) and matched_chars < len(normalized_name):
+            while consumed < len(joined_args) and matched_chars < matched_len:
                 if not joined_args[consumed].isspace():
                     matched_chars += 1
                 consumed += 1
             topic = joined_args[consumed:].strip() or None
         else:
             # 若输入前缀明确对应游戏中的某个 NPC，但该 NPC 不在当前房间，不能静默改为询问首位 NPC。
-            normalized_global_matches = [
-                str(name).replace(" ", "") for name in engine.NPCS
-                if normalized_args.startswith(str(name).replace(" ", ""))
-            ]
-            if normalized_global_matches:
-                missing_name = max(normalized_global_matches, key=len)
-                print(f"当前地点没有【{missing_name}】，请前往对方所在地点再交谈。")
+            missing_name, _ = actor_display.match_name_prefix(normalized_args, list(engine.NPCS))
+            if missing_name:
+                print(f"当前地点没有【{actor_display.prose_name(missing_name)}】，请前往对方所在地点再交谈。")
+                _print_npc_whereabouts_hint(player, missing_name)
                 return False
             # 兼容旧用法：只输入 NPC 名称的一部分仍可定位；其余参数作为话题。
             matched = False
             for name in sorted(npcs_in_room, key=lambda value: len(str(value)), reverse=True):
-                if args[0] in name or name in args[0]:
+                label = actor_display.format_room_label(name, engine.NPCS.get(name))
+                if args[0] in name or name in args[0] or args[0] in label:
                     target_npc = name
                     matched = True
                     break
@@ -861,6 +984,8 @@ def handle_talk_and_ask(player, args):
         return
 
     npc_data = engine.NPCS.get(target_npc, {})
+    npc_label = actor_display.display_name(target_npc, npc_data)
+    npc_command = actor_display.prose_name(target_npc, npc_data)
     npc_state = player.get_npc_state(target_npc)
     state_record = player.get_npc_state_record(target_npc)
     # 忙碌且没有具体话题时只展示状态与日常对白，不推进世界时钟；
@@ -871,15 +996,15 @@ def handle_talk_and_ask(player, args):
         player.set_flag("newcomer:guide_seen", True)
         print()
         if npc_state == "busy":
-            clause = actor_display.busy_clause(target_npc, state_record.get("reason"))
+            clause = actor_display.busy_clause(npc_label, state_record.get("reason"))
             if clause:
                 print(f"{clause}，仍抽空应了你一声。")
         if first_guide:
             print("初入江湖，可以先从村中委托熟悉行路、交谈与任务交付。公告栏只提供求助线索；看到消息后，请去找相关人物问清详情，再决定是否接受委托。")
             print("资源操作分两步：输入“搜索”发现草药，输入“采集”实际获取；木材用“伐木”，矿石用“采矿”。")
-            print("正式拜入门派需达到 10 级。先完成跑腿、采集和野外历练，不必急着远行。")
+            print(f"正式拜入门派需达到 {_common_sect_entry_level()} 级。先完成跑腿、采集和野外历练，不必急着远行。")
         else:
-            print("村中广场公告栏张贴公开消息与求助线索；输入“公告”查看，随后与相关人物交谈领取委托，输入“任务”查看进度。资源先“搜索”发现，再“采集”获取。正式拜入门派需达到 10 级。")
+            print(f"村中广场公告栏张贴公开消息与求助线索；输入“公告”查看，随后与相关人物交谈领取委托，输入“任务”查看进度。资源先“搜索”发现，再“采集”获取。正式拜入门派需达到 {_common_sect_entry_level()} 级。")
         return False if busy_idle else None
     print()
     relation_value = player.get_relation(target_npc)
@@ -888,13 +1013,13 @@ def handle_talk_and_ask(player, args):
     memory_behavior = player.get_npc_memory_behavior(target_npc)
     memory_action = memory_behavior.get("action")
     if memory_action == "welcome":
-        print(f"{Color.GREEN}{target_npc} 显然记得你的过往善举，态度比普通来客亲近许多。{Color.RESET}")
+        print(f"{Color.GREEN}{npc_label} 显然记得你的过往善举，态度比普通来客亲近许多。{Color.RESET}")
     elif memory_action == "cooperate":
-        print(f"{Color.CYAN}{target_npc} 记得你曾经的作为，愿意认真听你说话。{Color.RESET}")
+        print(f"{Color.CYAN}{npc_label} 记得你曾经的作为，愿意认真听你说话。{Color.RESET}")
     elif memory_action == "caution":
-        print(f"{Color.YELLOW}{target_npc} 似乎记得一些不愉快的过往，言语间多了几分戒备。{Color.RESET}")
+        print(f"{Color.YELLOW}{npc_label} 似乎记得一些不愉快的过往，言语间多了几分戒备。{Color.RESET}")
     elif memory_action == "refuse":
-        print(f"{Color.RED}{target_npc} 记得你过去的失信或冲突：“旧账未清，我不会再轻易帮你。”{Color.RESET}")
+        print(f"{Color.RED}{npc_label} 记得你过去的失信或冲突：“旧账未清，我不会再轻易帮你。”{Color.RESET}")
         if not topic and behavior not in {"hostile", "refuse"}:
             return False
     fame_reaction = player.get_jianghu_npc_reaction()
@@ -902,44 +1027,50 @@ def handle_talk_and_ask(player, args):
         print(f"{Color.CYAN}{fame_reaction}{Color.RESET}")
 
     if npc_state == "away":
-        print(f"{Color.YELLOW}{target_npc} 此刻暂时不在状态，无法与你正常交谈。{Color.RESET}")
+        print(f"{Color.YELLOW}{npc_label} 此刻暂时不在状态，无法与你正常交谈。{Color.RESET}")
         return False
     if npc_state == "fear" and not topic:
-        print(f"{target_npc} 神色紧张：“最近的局势不太对劲，你也多加小心。”")
+        print(f"{npc_label} 神色紧张：“最近的局势不太对劲，你也多加小心。”")
     if npc_state == "injured" and not topic:
-        print(f"{target_npc} 看起来有些负伤，动作明显比平时迟缓。")
+        print(f"{npc_label} 看起来有些负伤，动作明显比平时迟缓。")
     if npc_state == "angry" and not topic:
-        print(f"{target_npc} 仍在气头上：“现在不是闲聊的时候。”")
+        print(f"{npc_label} 仍在气头上：“现在不是闲聊的时候。”")
 
     # P2.22-R2：关系不再只是数值；极端负面关系会直接改变 NPC 行为。
     if behavior == "hostile":
-        print(f"{Color.RED}{target_npc} 对你怒目而视：“少来烦我！再靠近一步，休怪我不客气。”{Color.RESET}")
+        print(f"{Color.RED}{npc_label} 对你怒目而视：“少来烦我！再靠近一步，休怪我不客气。”{Color.RESET}")
         return False
     if behavior == "refuse":
-        print(f"{Color.YELLOW}{target_npc} 冷冷说道：“我不信任你，不会与你合作，也不会透露更多消息。”{Color.RESET}")
+        print(f"{Color.YELLOW}{npc_label} 冷冷说道：“我不信任你，不会与你合作，也不会透露更多消息。”{Color.RESET}")
         return False
     if sect_stance == "opposed" and not topic:
-        print(f"{Color.RED}{target_npc} 对你所属的【{player.get_sect()}】明显抱有敌意：“门派立场不同，今日无话可谈。”{Color.RESET}")
+        print(f"{Color.RED}{npc_label} 对你所属的【{player.get_sect()}】明显抱有敌意：“门派立场不同，今日无话可谈。”{Color.RESET}")
         return False
     if sect_stance == "wary" and not topic:
-        print(f"{Color.YELLOW}{target_npc} 对你所属的【{player.get_sect()}】保持戒心：“江湖门派各有规矩，先证明诚意再说。”{Color.RESET}")
+        print(f"{Color.YELLOW}{npc_label} 对你所属的【{player.get_sect()}】保持戒心：“江湖门派各有规矩，先证明诚意再说。”{Color.RESET}")
 
     # 感知反应先于忙碌短应答：例如药铺老板见重伤会先放下手里的活。
+    # 反应结算后继续走完整交谈流程，避免施药/调整巡逻后把玩家挡在对话之外。
+    reaction = None
     if not topic:
         reaction = npc_reaction.run_talk_action(player, target_npc, npc_data)
-        if reaction:
-            return False
 
-    if busy_idle:
-        # 忙碌且没有具体话题时只给一句短应答，不重复整段寒暄、关系变化与委托列表。
+    if busy_idle and not reaction:
+        # 忙碌且没有具体话题时只给一句短应答，省略寒暄与关系变化。
         record_source = str(state_record.get("source", ""))
         clause = ""
         if not record_source.startswith("faction_conflict:"):
-            clause = actor_display.busy_clause(target_npc, state_record.get("reason"))
+            clause = actor_display.busy_clause(npc_label, state_record.get("reason"))
         if clause:
             print(f"{clause}，只匆匆应了一声：“稍等，忙完这阵再细说。”")
         else:
-            print(f"{target_npc} 只匆匆应了你一声，似乎一时脱不开身。")
+            print(f"{npc_label} 只匆匆应了你一声，似乎一时脱不开身。")
+        if _has_pending_talk_objective(player, target_npc):
+            print("这番话没听进去，委托进度也就没有变化；换个不那么忙的时辰再来更稳妥。")
+        # 忙碌只省略寒暄，不吞掉委托入口：否则玩家在忙碌时段无法通过“交谈”接取或交付。
+        busy_quests = _talk_visible_quests(player, target_npc)
+        if busy_quests:
+            _print_npc_quest_offers(player, target_npc, busy_quests)
         return False
 
     # 忙碌只是人物状态描述，不拦截了解、接取或交付；真正的不可交互状态使用独立的“暂离”机制。
@@ -959,7 +1090,8 @@ def handle_talk_and_ask(player, args):
             q_name = requested_matches[0]
             original = engine.QUESTS.get(q_name, {}).get("turn_in_npc") or engine.QUESTS.get(q_name, {}).get("npc")
             if original and original != target_npc:
-                print(f"交付失败：此人不是【{_quest_title(q_name)}】的原委托人。请回到【{original}】处交付。")
+                origin_label = actor_display.prose_name(original, engine.NPCS.get(original))
+                print(f"交付失败：此人不是【{_quest_title(q_name)}】的原委托人。请回到【{origin_label}】处交付。")
                 return
 
     # Alpha226：任务由发布 NPC 的交谈流程接取；交付则必须同时支持单独配置的交付 NPC。
@@ -992,10 +1124,10 @@ def handle_talk_and_ask(player, args):
                     print(f"【{_quest_title(named)}】暂不能交付：{detail}")
                 return
             if npc_quests or npc_turn_in_quests:
-                print(f"{target_npc}说道：“你目前没有可交付的委托。”")
+                print(f"{npc_label}说道：“你目前没有可交付的委托。”")
                 _print_npc_quest_offers(player, target_npc, list(dict.fromkeys(npc_quests + npc_turn_in_quests)), detailed=True)
             else:
-                print(f"{target_npc}说道：“我这里没有需要交付的委托。”")
+                print(f"{npc_label}说道：“我这里没有需要交付的委托。”")
             return
         chosen = None
         if query and query.isdigit():
@@ -1011,9 +1143,9 @@ def handle_talk_and_ask(player, args):
             if match_state == "matched":
                 chosen = matches[0]
             elif match_state == "ambiguous":
-                print(f"{target_npc}说道：“这个称呼对应多项委托，请按序号选择：”")
+                print(f"{npc_label}说道：“这个称呼对应多项委托，请按序号选择：”")
                 _print_delivery_choices(player, target_npc, matches)
-                print(f"请输入序号，或使用：交谈 {target_npc} 交付委托 任务名称")
+                print(f"请输入序号，或使用：交谈 {npc_command} 交付委托 任务名称")
                 return
             else:
                 print(f"未找到委托【{query}】，你可能想交付：")
@@ -1021,9 +1153,9 @@ def handle_talk_and_ask(player, args):
                 return
         elif deliverable:
             # 未点名任务时必须由玩家确认，不能在打开列表的同一次交谈中自动结算。
-            print(f"{target_npc}说道：“你有以下可交付委托：”")
+            print(f"{npc_label}说道：“你有以下可交付委托：”")
             _print_delivery_choices(player, target_npc, deliverable)
-            print(f"请选择要交付的委托序号，或使用：交谈 {target_npc} 交付委托 任务名称")
+            print(f"请选择要交付的委托序号，或使用：交谈 {npc_command} 交付委托 任务名称")
             return
 
         if chosen:
@@ -1108,7 +1240,7 @@ def handle_talk_and_ask(player, args):
                 else:
                     entry = None
             if entry is not None:
-                print(f"{target_npc} 低声说道：“{Color.GREEN}{entry.get('text', '……')}{Color.RESET}”")
+                print(f"{npc_label} 低声说道：“{Color.GREEN}{entry.get('text', '……')}{Color.RESET}”")
                 reward = entry.get("reward")
                 if reward:
                     from rewards import apply_reward_bundle
@@ -1116,7 +1248,7 @@ def handle_talk_and_ask(player, args):
                     if not isinstance(reward_result, dict) or not reward_result.get("ok"):
                         detail = reward_result.get("message", "奖励结算未成功。") if isinstance(reward_result, dict) else "奖励结算未成功。"
                         print(f"{Color.YELLOW}这份心意暂时无法交付：{detail}请整理好背包后再来。{Color.RESET}")
-                        return False if busy_idle else None
+                        return False if (busy_idle and not reaction) else None
                 # 奖励先成功结算，再落地一次性对话效果；背包满等失败不会白白消耗剧情。
                 player.apply_jianghu_effects(entry.get("effects"))
                 engine.apply_world_effects(player.world_state, entry.get("effects"))
@@ -1151,11 +1283,12 @@ def handle_talk_and_ask(player, args):
             if admission and any(k in topic for k in ("拜师", "入门申请", "申请入门", "加入")):
                 sect_name, application_flag = admission
                 current_level = int(getattr(player, "level", 1) or 1)
-                if current_level < 10:
-                    print(f"拜师失败：正式拜入【{sect_name}】需达到 10 级，当前 {current_level} 级。可先完成村中委托、采集、伐木、采矿与野外历练；输入“任务”查看进度，村中广场可查看公告。")
+                entry_level = _sect_entry_level(sect_name)
+                if current_level < entry_level:
+                    print(f"拜师失败：正式拜入【{sect_name}】需达到 {entry_level} 级，当前 {current_level} 级。可先完成村中委托、采集、伐木、采矿与野外历练；输入“任务”查看进度，村中广场可查看公告。")
                     return
                 player.set_flag(application_flag, True)
-                print(f"{target_npc} 点头道：“既有拜师之意，便按门规办理入门。”")
+                print(f"{npc_label} 点头道：“既有拜师之意，便按门规办理入门。”")
                 handle_sect(player, ["join", sect_name])
                 player.update_quest_progress(target_npc, event_type="talk")
                 return
@@ -1173,7 +1306,7 @@ def handle_talk_and_ask(player, args):
             flag_name = choice.get("flag")
             if isinstance(flag_name, str) and flag_name.strip():
                 player.set_flag(flag_name.strip(), True)
-            print(f"{target_npc} 回应：“{Color.GREEN}{line}{Color.RESET}”")
+            print(f"{npc_label} 回应：“{Color.GREEN}{line}{Color.RESET}”")
             if relation_after != relation_before:
                 print(f"关系变化：{relation_status_before} {relation_before:+d} → {relation_status_after} {relation_after:+d}")
             player.update_quest_progress(target_npc, event_type="talk")
@@ -1189,7 +1322,7 @@ def handle_talk_and_ask(player, args):
         else:
             dialogues = npc_data.get("dialogue", ["……"])
             line = random.choice(dialogues) if isinstance(dialogues, list) else dialogues
-            print(f"{target_npc} 随口应道：“{Color.GREEN}{line}{Color.RESET}”")
+            print(f"{npc_label} 随口应道：“{Color.GREEN}{line}{Color.RESET}”")
         delta = int(npc_data.get("talk_relation_delta", 1))
         if behavior == "cold" and delta > 0:
             delta = 0
@@ -1209,7 +1342,7 @@ def handle_talk_and_ask(player, args):
 
     if topic:
         if behavior == "cold":
-            print(f"{Color.YELLOW}{target_npc} 的态度明显冷淡：“有话就直说，别浪费我的时间。”{Color.RESET}")
+            print(f"{Color.YELLOW}{npc_label} 的态度明显冷淡：“有话就直说，别浪费我的时间。”{Color.RESET}")
         # P2.32：先尝试从该 NPC 的动态信息记忆中获取线索；关系越高，越容易听到可信消息。
         dynamic_learned = player.learn_information_from_npc(target_npc, topic)
         dynamic_record = None
@@ -1218,7 +1351,7 @@ def handle_talk_and_ask(player, args):
                 dynamic_record = player.get_player_information(learned_topic)
                 break
         if dynamic_record:
-            print(f"{target_npc} 压低声音回答说：“{Color.YELLOW}{dynamic_record.get('text', '')}{Color.RESET}”")
+            print(f"{npc_label} 压低声音回答说：“{Color.YELLOW}{dynamic_record.get('text', '')}{Color.RESET}”")
             print(f"消息可信度：{dynamic_record.get('confidence', 0)} / 100")
             player.change_talk_relation(target_npc, int(npc_data.get("ask_relation_delta", 1)), int(npc_data.get("talk_relation_cap", engine.DEFAULT_TALK_RELATION_CAP)))
             player.update_quest_progress(target_npc, event_type="talk")
@@ -1230,7 +1363,7 @@ def handle_talk_and_ask(player, args):
                 matched_info = val_text
                 break
         if matched_info:
-            print(f"{target_npc} 压低声音回答说：“{Color.YELLOW}{matched_info}{Color.RESET}”")
+            print(f"{npc_label} 压低声音回答说：“{Color.YELLOW}{matched_info}{Color.RESET}”")
             delta = int(npc_data.get("ask_relation_delta", 1))
             if delta > 0:
                 player.change_talk_relation(target_npc, delta, int(npc_data.get("talk_relation_cap", engine.DEFAULT_TALK_RELATION_CAP)))
@@ -1241,9 +1374,9 @@ def handle_talk_and_ask(player, args):
             # “不知道”与随后完成交谈目标互相矛盾。
             conditional_line = _conditional_dialogue_text(player, npc_data, target_npc, include_templates=False)
             if conditional_line:
-                print(f"{target_npc} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{conditional_line}{Color.RESET}”")
+                print(f"{npc_label} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{conditional_line}{Color.RESET}”")
             else:
-                print(f"{target_npc} 摇了摇头：“关于‘{topic}’，老夫并不知道什么信息。”")
+                print(f"{npc_label} 摇了摇头：“关于‘{topic}’，老夫并不知道什么信息。”")
                 player.change_relation(target_npc, int(npc_data.get("failed_ask_relation_delta", 0)))
         player.update_quest_progress(target_npc, event_type="talk")
         return
@@ -1255,7 +1388,7 @@ def handle_talk_and_ask(player, args):
     if line is None:
         dialogues = npc_data.get("dialogue", ["……"])
         line = random.choice(dialogues) if isinstance(dialogues, list) else dialogues
-    print(f"\n{target_npc} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{line}{Color.RESET}”")
+    print(f"\n{npc_label} {actor_display.npc_talk_verb(target_npc)}：“{Color.GREEN}{line}{Color.RESET}”")
     delta = int(npc_data.get("talk_relation_delta", 1))
     if behavior == "cold" and delta > 0:
         delta = 0
@@ -1278,11 +1411,22 @@ def handle_talk_and_ask(player, args):
         print("可选对话：" + " / ".join(str(c.get("keywords", [""])[0]) for c in choices if c.get("keywords")))
     player.update_quest_progress(target_npc, event_type="talk")
 
-    _print_npc_quest_offers(player, target_npc, npc_quests)
-    return False if busy_idle else None
+    _print_npc_quest_offers(player, target_npc, _talk_visible_quests(player, target_npc))
+    return False if (busy_idle and not reaction) else None
 
 
 BOARD_ROOMS = {"village_square", "guiyun_central_square"}
+
+# 公告栏分区：地方消息偏本地见闻与官府事务，江湖见闻偏传闻与门派规矩。
+_BOARD_RUMOR_TOPICS = {
+    "new_wulin_rumor", "huashan_gate_rules", "tieyi_gate_rules",
+    "inn_rumor", "village_concern",
+}
+_BOARD_LOCAL_TOPICS = {
+    "black_wind_pressure", "official_notice", "old_escape_route",
+    "guard_patrol_alert", "medicine_shortage", "prison_alert",
+    "constable_patrol_report", "yamen_record",
+}
 
 
 def _quests_for_npc(npc_name):
@@ -1290,6 +1434,42 @@ def _quests_for_npc(npc_name):
     configured = [name for name, info in engine.QUESTS.items() if isinstance(info, dict) and info.get("npc") == npc_name]
     legacy = engine.NPCS.get(npc_name, {}).get("quests", []) or []
     return list(dict.fromkeys(configured + [q for q in legacy if q in engine.QUESTS]))
+
+
+def _talk_visible_quests(player, npc_name):
+    """交谈面板可见任务：该 NPC 发布的委托，加上玩家已接取、由该 NPC 交付的跨人委托。"""
+    return list(dict.fromkeys(
+        _quests_for_npc(npc_name)
+        + [q for q, info in engine.QUESTS.items()
+           if isinstance(info, dict)
+           and (info.get("turn_in_npc") or info.get("npc")) == npc_name
+           and q in player.active_quests]
+    ))
+
+
+def _has_pending_talk_objective(player, npc_name):
+    """进行中的委托是否正以该 NPC 为当前交谈目标。"""
+    states = player.quest_states if isinstance(getattr(player, "quest_states", None), dict) else {}
+    for q_name in player.active_quests:
+        info = engine.QUESTS.get(q_name, {})
+        if not isinstance(info, dict):
+            continue
+        stages = info.get("stages") or []
+        if stages:
+            try:
+                index = int(states.get(q_name, {}).get("stage", 0))
+            except (TypeError, ValueError, AttributeError):
+                index = 0
+            index = max(0, min(len(stages) - 1, index))
+            stage = stages[index] if isinstance(stages[index], dict) else {}
+            target_type = stage.get("target_type")
+            target_name = stage.get("target_name")
+        else:
+            target_type = info.get("target_type")
+            target_name = info.get("target_name")
+        if target_type == "talk" and target_name == npc_name:
+            return True
+    return False
 
 
 def _quest_command_query(topic, delivery=False):
@@ -1419,7 +1599,8 @@ def _quest_delivery_guidance(player, quest_name, fallback_npc=""):
     guide = player.get_quest_delivery_guide(quest_name)
     if not guide:
         npc_name = fallback_npc or "原委托人"
-        return f"交付方式：回到【{npc_name}】处，输入“交谈 {npc_name} 交付委托 {_quest_title(quest_name)}”。"
+        npc_label = actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))
+        return f"交付方式：回到【{npc_label}】处，输入“交谈 {npc_label} 交付委托 {_quest_title(quest_name)}”。"
     place = f"前往【{guide['location']}】" if guide.get("location") else "回到委托人处"
     return f"交付方式：{place}找【{guide['npc']}】，输入“{guide['command']}”。"
 
@@ -1484,7 +1665,7 @@ def _print_npc_quest_offers(player, npc_name, quest_names, detailed=False):
             title = _quest_title(quest_name)
             desc = str(info.get("desc", "有件事需要帮忙。"))
             print(f"{title}{_quest_difficulty_text(info)}：{desc}")
-            print(f"接取方式：交谈 {npc_name} 接受委托 {title}")
+            print(f"接取方式：交谈 {actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))} 接受委托 {title}")
     if detailed and locked:
         print("\n【当前不可接取】")
         for quest_name, detail in locked:
@@ -1513,7 +1694,7 @@ def _public_topic_label(topic):
     return labels.get(topic, "江湖消息")
 
 
-def _public_information_records(player):
+def _public_information_records(player, require_follow_up=False):
     """筛选可公开张贴到公告栏的消息，隐藏空文本及纯内部状态记录。"""
     records = []
     for record in player.list_information_summary():
@@ -1521,19 +1702,74 @@ def _public_information_records(player):
         confidence = int(record.get("confidence", 0) or 0)
         if not text or confidence <= 0:
             continue
+        follow_up = normalize_follow_up(record.get("follow_up"))
+        if require_follow_up and not follow_up:
+            continue
         item = dict(record)
         item["label"] = _public_topic_label(record.get("topic"))
+        item["follow_up"] = follow_up
         records.append(item)
     records.sort(key=lambda x: int(x.get("learned_at", 0) or 0), reverse=True)
     return records
 
 
-def _quest_notice_clues(player=None):
-    """只公布当前确实能向发布 NPC 接取的任务线索；不暴露任务名或内部状态。"""
+def _board_room_label(room_id):
+    room_id = str(room_id or "").strip()
+    if not room_id:
+        return ""
+    room = engine.ROOMS.get(room_id)
+    if isinstance(room, dict) and room.get("name"):
+        return str(room["name"])
+    for candidate in engine.ROOMS.values():
+        if isinstance(candidate, dict) and candidate.get("name") == room_id:
+            return room_id
+    return room_id
+
+
+def _board_npc_label(npc_name):
+    npc_name = str(npc_name or "").strip()
+    if npc_name in engine.NPCS:
+        return actor_display.display_name(npc_name)
+    return npc_name
+
+
+def format_follow_up_suffix(follow_up):
+    """把 follow_up 渲染成一句可执行指引；没有可去之处时返回空串。"""
+    follow_up = normalize_follow_up(follow_up)
+    if not follow_up:
+        return ""
+    npc = _board_npc_label(follow_up.get("npc"))
+    room = _board_room_label(follow_up.get("room"))
+    hint = str(follow_up.get("hint", "") or "").strip().rstrip("。.!！")
+    if npc and room:
+        detail = f"交谈 {npc}" + (f"，{hint}" if hint else "")
+        return f"——可去【{room}】找【{npc}】（{detail}）"
+    if npc:
+        detail = f"交谈 {npc}" + (f"，{hint}" if hint else "")
+        return f"——可找【{npc}】（{detail}）"
+    return f"——可去【{room}】看看（{hint or '打听当地动静'}）"
+
+
+def _npc_board_room(npc_name):
+    """为委托发布人找到公告上可指引的房间：优先静态驻留，其次日常日程首站。"""
+    for room_id, room in engine.ROOMS.items():
+        if isinstance(room, dict) and npc_name in (room.get("npcs") or []):
+            return room_id
+    data = engine.NPCS.get(npc_name, {})
+    schedule = data.get("daily_schedule") if isinstance(data, dict) else None
+    if isinstance(schedule, list):
+        for entry in schedule:
+            if isinstance(entry, dict) and entry.get("location"):
+                return str(entry["location"])
+    return ""
+
+
+def _quest_notice_entries(player=None):
+    """公告栏委托线索：每条都带发布人与可去地点，便于玩家直接行动。"""
     if player is None:
         return []
-    priority_lines = []
-    lines = []
+    priority_entries = []
+    entries = []
     seen = set()
     # 同一发布人只公布一条当前可接委托，避免后续任务或多条委托同时刷屏。
     seen_givers = set()
@@ -1559,65 +1795,73 @@ def _quest_notice_clues(player=None):
             continue
         seen.add(notice)
         seen_givers.add(giver)
+        follow_up = {"npc": giver, "hint": "可当面问明委托详情"}
+        room_id = _npc_board_room(giver)
+        if room_id:
+            follow_up["room"] = room_id
+        entry = {"text": notice, "follow_up": normalize_follow_up(follow_up)}
         requires = info.get("requires")
         has_prerequisites = isinstance(requires, dict) and bool(requires)
         # 新开放的后续委托优先展示，但同一发布人仍只保留第一条可接线索。
         if has_prerequisites:
-            priority_lines.append(notice)
+            priority_entries.append(entry)
         else:
-            lines.append(notice)
-    return priority_lines + lines
+            entries.append(entry)
+    return priority_entries + entries
+
+
+def _quest_notice_clues(player=None):
+    """只公布当前确实能向发布 NPC 接取的任务线索；不暴露任务名或内部状态。"""
+    return [entry["text"] for entry in _quest_notice_entries(player)]
+
+
+def _board_section_for(topic, label):
+    if topic in _BOARD_RUMOR_TOPICS:
+        return "江湖见闻"
+    if topic in _BOARD_LOCAL_TOPICS:
+        return "地方消息"
+    return "江湖见闻" if label == "江湖传闻" else "地方消息"
 
 
 def handle_notice_board(player, args=None):
-    """Alpha226：公告栏展示自然语言线索；不展示任务状态、内部任务名或接取指令。"""
+    """Alpha318：公告栏只贴可行动线索，每条都指明下一步该找谁、去哪里。"""
     args = args or []
     if player.location not in BOARD_ROOMS:
         print("附近没有公告栏。可前往村中广场或天衡广场查看江湖榜墙。")
         return
     room_name = engine.ROOMS.get(player.location, {}).get("name", "公告栏")
-    records = _public_information_records(player)
     title = "村中公告栏" if player.location == "village_square" else "天衡公告栏 · 江湖榜墙"
     print(f"\n{Color.BRIGHT_CYAN}========== {title} =========={Color.RESET}")
     print(f"{room_name}上张贴着近日流传的消息。")
-    grouped = {"委托线索": [], "地方消息": [], "江湖见闻": [], "势力摘要": []}
-    conflict_topics = []
-    region_notice = False
+    grouped = {"委托线索": [], "地方消息": [], "江湖见闻": []}
     seen_text = set()
-    for record in records:
+
+    def add_entry(section, text, follow_up):
+        suffix = format_follow_up_suffix(follow_up)
+        if not suffix or not text:
+            return
+        key = normalize_follow_up(follow_up)
+        dedupe = (section, text, tuple(sorted(key.items())))
+        if dedupe in seen_text:
+            return
+        seen_text.add(dedupe)
+        grouped[section].append(f"{text}{suffix}")
+
+    if player.location == "village_square":
+        for entry in _quest_notice_entries(player):
+            add_entry("委托线索", entry["text"], entry["follow_up"])
+
+    for record in _public_information_records(player, require_follow_up=True):
         topic = str(record.get("topic", ""))
         raw_text = re.sub(r"\s*[（(]\s*可信度\s*\d+\s*/\s*100.*?[）)]\s*$", "", str(record.get("text", ""))).strip()
         raw_text = re.sub(r"\s*[（(]\s*有效至时辰\s*\d+\s*[）)]\s*$", "", raw_text).strip()
-        if topic.startswith("faction_conflict:"):
-            conflict_topics.append(topic)
+        if not raw_text:
             continue
-        if topic.startswith("region:") or "安全度" in raw_text or "局势变为" in raw_text:
-            region_notice = True
-            continue
-        if not raw_text or raw_text in seen_text:
-            continue
-        seen_text.add(raw_text)
-        label = record["label"]
-        bucket = "江湖见闻" if label == "江湖传闻" else ("势力摘要" if label in ("势力消息", "势力冲突") else "地方消息")
-        grouped[bucket].append(raw_text)
-    if conflict_topics:
-        factions = []
-        for topic in conflict_topics:
-            for faction in topic.split(":")[1:]:
-                faction = faction.strip()
-                if faction and faction not in factions:
-                    factions.append(faction)
-        if len(factions) >= 2:
-            grouped["势力摘要"].append(f"近期{'、'.join(factions[:4])}之间摩擦增多，出行时宜留意盘查与道路动静。")
-        else:
-            grouped["势力摘要"].append("近期当地势力关系紧张，出行时宜多加留意。")
-    if region_notice:
-        grouped["势力摘要"].append("周边数处局势不稳，出行时宜留意道路与巡查变化。")
-    if player.location == "village_square":
-        grouped["委托线索"].extend(_quest_notice_clues(player))
+        add_entry(_board_section_for(topic, record["label"]), raw_text, record.get("follow_up"))
+
     printed = 0
     total_limit = 7
-    for section in ("委托线索", "地方消息", "江湖见闻", "势力摘要"):
+    for section in ("委托线索", "地方消息", "江湖见闻"):
         if printed >= total_limit:
             break
         lines = list(dict.fromkeys(grouped[section]))
@@ -1632,8 +1876,8 @@ def handle_notice_board(player, args=None):
             printed += 1
     if not printed:
         print("暂时没有新的消息。多走动、多与人物交谈，江湖消息自然会汇聚而来。")
-    if player.location == "village_square":
-        print("\n以上仅为消息线索，具体委托请与相关人物交谈领取。")
+        return
+    print("\n以上每条都标了可去之处；与相关人物交谈即可问明详情。")
 
 
 def handle_information(player, args=None):
@@ -1649,7 +1893,7 @@ def handle_information(player, args=None):
         for record in records:
             sentiment_labels = {"positive": "友善", "negative": "不满", "neutral": "中立", "fearful": "戒备"}
             sentiment = sentiment_labels.get(record.get("sentiment", "neutral"), "中立")
-            print(f"- {record['npc']}：{record['text']}（{sentiment}，强度 {int(record.get('strength',0))}）")
+            print(f"- {_npc_actor_label(record['npc'])}：{record['text']}（{sentiment}，强度 {int(record.get('strength',0))}）")
         if npc_name:
             print(f"当前评价倾向：{player.get_npc_memory_attitude(npc_name)}（综合 {player.get_npc_player_reputation(npc_name):+d}）")
         return
@@ -1677,7 +1921,7 @@ def handle_information(player, args=None):
         if learned:
             record = next((player.get_player_information(k) for k in learned if topic in k or k in topic), None)
             if record:
-                print(f"{npc} 告诉你：“{Color.YELLOW}{record.get('text','')}{Color.RESET}”")
+                print(f"{_npc_actor_label(npc)} 告诉你：“{Color.YELLOW}{record.get('text','')}{Color.RESET}”")
                 print(f"消息可信度：{record.get('confidence',0)} / 100")
                 return
     print(f"在场人物没有人愿意透露与“{topic}”有关的新消息。")
@@ -1717,6 +1961,8 @@ def handle_skills(player, args=None):
         skill_owner = next((sect for sect, rows in engine.SKILLS.items()
                             if any(isinstance(row, dict) and row.get("name") == name for row in (rows or []))), None)
         progress = player.get_skill_progress(name) if player.get_skill_info(name) else {"learned": False}
+        lesson_fee = 0
+        teacher_name = ""
         # 门派传承武学的授课地点与授课者由 data/sects.json 配置，
         # 避免新增门派/武学时继续堆叠硬编码分支。
         if skill_owner and skill_owner == player.get_sect() and not progress.get("learned"):
@@ -1724,6 +1970,7 @@ def handle_skills(player, args=None):
             training = sect_info.get("training", {}) or {}
             teacher_by_skill = sect_info.get("skill_teachers", {}) or {}
             required_teacher = teacher_by_skill.get(name)
+            teacher_name = required_teacher or ""
             room_id = training.get("room_id")
             place = training.get("place", "本门演武场")
             if required_teacher and room_id:
@@ -1734,7 +1981,18 @@ def handle_skills(player, args=None):
                     teacher_label = "传功师父" if "师父" in required_teacher or "授业师父" in required_teacher else "传功师兄"
                     print(f"{Color.YELLOW}{place}当前没有{teacher_label}在场，暂时无法传授【{name}】。{Color.RESET}")
                     return
+            fee_table = sect_info.get("lesson_fees", {}) or {}
+            try:
+                lesson_fee = max(0, int(fee_table.get(name, 0) or 0))
+            except (TypeError, ValueError):
+                lesson_fee = 0
+            if lesson_fee > 0 and player.gold < lesson_fee:
+                print(f"{Color.YELLOW}向{teacher_name or '传功师长'}请教【{name}】需付 {lesson_fee} 两，你身上只有 {player.gold} 两。{Color.RESET}")
+                return
         ok, msg = player.learn_skill(name)
+        if ok and lesson_fee > 0:
+            player.gold -= lesson_fee
+            print(f"{Color.GREEN}你向{teacher_name or '传功师长'}付了 {lesson_fee} 两学费。{Color.RESET}")
         print(f"{Color.GREEN if ok else Color.RED}{msg}{Color.RESET}")
         return
     if sub in ("forget", "遗忘", "忘却") and name:
@@ -1854,9 +2112,10 @@ def handle_sect(player, args=None):
             if not player.get_flag("sect:tieyi:entry_interview", False):
                 print(f"{Color.YELLOW}接引执事尚未登记你的入门申请。请先交谈铁衣门接引执事，并说明“拜师”。{Color.RESET}")
                 return
-        # 正式入门统一要求达到 10 级；山门访问、交谈和了解门规不受此限制。
-        if int(getattr(player, "level", 1) or 1) < 10:
-            print(f"{Color.YELLOW}正式拜入【{sect_name}】需达到 10 级，你当前为 {int(getattr(player, 'level', 1) or 1)} 级。可先完成村中委托、采集、制作与野外历练；输入“任务”查看进度，村中广场可查看公告。{Color.RESET}")
+        # 正式入门的等级门槛由门派数据配置；山门访问、交谈和了解门规不受此限制。
+        entry_level = _sect_entry_level(sect_name)
+        if int(getattr(player, "level", 1) or 1) < entry_level:
+            print(f"{Color.YELLOW}正式拜入【{sect_name}】需达到 {entry_level} 级，你当前为 {int(getattr(player, 'level', 1) or 1)} 级。可先完成村中委托、采集、制作与野外历练；输入“任务”查看进度，村中广场可查看公告。{Color.RESET}")
             return
         ok, message = player.join_sect(sect_name)
         if ok and sect_name == "华山":
@@ -1895,17 +2154,22 @@ def handle_sect(player, args=None):
         rank_index = player.get_sect_official_rank_index("少林")
         if rank_index == 0:
             flag = "sect:shaolin:ordination:novice"
-            target_name = "沙弥"
-            required_level, required_rep, required_mastery = 3, 20, 10
             rite_name = "入门受戒"
         elif rank_index == 1:
             flag = "sect:shaolin:ordination:full"
-            target_name = "僧人"
-            required_level, required_rep, required_mastery = 8, 50, 30
             rite_name = "正式受戒"
         else:
             print("你已完成当前阶段所需的受戒仪礼，无需重复办理。")
             return
+        # 受戒只是少林的身份仪礼，门槛与晋升表共用同一份数据，避免两处各自硬编码。
+        requirements = player.get_sect_promotion_requirements("少林")
+        if not requirements.get("available"):
+            print(requirements.get("reason", "当前没有可办理的受戒仪礼。"))
+            return
+        target_name = requirements.get("target_rank", "沙弥" if rank_index == 0 else "僧人")
+        required_level = int(requirements.get("required_level", 5 if rank_index == 0 else 10))
+        required_rep = int(requirements.get("required_reputation", 20 if rank_index == 0 else 50))
+        required_mastery = int(requirements.get("required_mastery", 10 if rank_index == 0 else 30))
         skill_name = (engine.SECTS.get("少林", {}) or {}).get("exclusive_skills", [""])[0]
         mastery = player.get_skill_progress(skill_name).get("mastery", 0) if skill_name else 0
         missing = []
@@ -1992,24 +2256,34 @@ def handle_sect(player, args=None):
 
     if sub in ("师徒", "师承", "mentorship", "师门"):
         operation = str(args[1]).lower() if len(args) >= 2 else "查看"
-        if player.get_sect() != "华山":
-            print("师承事务目前仅在华山开放；请先正式拜入华山。")
+        sect_name = player.get_sect()
+        sect_info = engine.SECTS.get(sect_name, {}) or {}
+        training = sect_info.get("training", {}) or {}
+        teacher = str(training.get("lesson_teacher") or "")
+        if sect_name == "散人" or not teacher:
+            print("师承事务目前仅在少林、武当、华山与铁衣门开放；请先正式拜入对应门派。")
             return
-        if player.location != "huashan_training_ground":
-            print("师承事务须亲自前往华山演武场办理。")
+        room_id = training.get("room_id")
+        place = training.get("place", "本门演武场")
+        if player.location != room_id:
+            print(f"师承事务须亲自前往{place}办理。")
             return
-        present = player.get_npcs_in_room(player.location)
-        if "华山授业师父" not in present:
-            print("授业师父此刻不在演武场，暂时无法办理师承事务。")
+        if teacher not in player.get_npcs_in_room(player.location):
+            print(f"授业师长【{teacher}】此刻不在{place}，暂时无法办理师承事务。")
             return
         if operation in ("拜师", "建立", "行礼"):
-            ok, message = player.establish_sect_mentorship("华山授业师父")
+            level = int(getattr(player, "level", 1) or 1)
+            rank_index = player.get_sect_official_rank_index(sect_name)
+            if level < 10 or rank_index < 2:
+                print(f"{Color.YELLOW}拜师须先成为【{sect_name}】内门弟子：人物等级需达到 10 级，且正式身份需达到内门（当前 {level} 级，身份为【{player.get_sect_official_rank(sect_name)}】）。{Color.RESET}")
+                return
+            ok, message = player.establish_sect_mentorship(teacher)
             print(f"{Color.GREEN if ok else Color.YELLOW}{message}{Color.RESET}")
             return
         if operation in ("请教", "指点", "上课"):
             ok, message = player.record_mentorship_lesson()
             if ok:
-                player.change_sect_reputation("华山", 1)
+                player.change_sect_reputation(sect_name, 1)
             print(f"{Color.GREEN if ok else Color.YELLOW}{message}{Color.RESET}")
             return
         if operation in ("查看", "身份", "状态"):
@@ -2305,7 +2579,7 @@ def handle_relations(player, args=None):
     print(f"\n{Color.CYAN}========== 人物关系 =========={Color.RESET}")
     shown = False
     for name, value in player.get_all_relations().items():
-        print(f"- {name}：{player.get_relation_status(name)} ({value:+d})")
+        print(f"- {actor_display.format_room_label(name, engine.NPCS.get(name))}：{player.get_relation_status(name)} ({value:+d})")
         shown = True
     if not shown:
         print("目前尚未与任何人物建立明显关系。")
@@ -2344,7 +2618,7 @@ def handle_world_events(player, args=None):
             if rewards.get("sect_reputation"):
                 print("门派声望变化：" + "；".join(f"{k} {v:+d}" for k,v in rewards["sect_reputation"].items()))
             if rewards.get("relations"):
-                print("人物关系变化：" + "；".join(f"{k} {v:+d}" for k,v in rewards["relations"].items()))
+                print("人物关系变化：" + "；".join(f"{actor_display.format_room_label(k, engine.NPCS.get(k))} {v:+d}" for k,v in rewards["relations"].items()))
         return
     print("用法：事件；或输入“事件 触发 事件名称”。")
 
@@ -2362,10 +2636,37 @@ def handle_explore(player):
     events = player.get_region_exploration_event(zone, events)
     eligible = []
     for candidate in events:
-        if isinstance(candidate, dict) and candidate.get("requires"):
-            if not engine.check_conditions(candidate.get("requires"), player.world_state, player.completed_quests, player):
+        if isinstance(candidate, dict):
+            if candidate.get("night_only") and not _room_is_night(player, room):
                 continue
+            if candidate.get("requires"):
+                if not engine.check_conditions(candidate.get("requires"), player.world_state, player.completed_quests, player):
+                    continue
         eligible.append(candidate)
+    if not any(isinstance(candidate, dict) and candidate.get("night_only") for candidate in eligible):
+        # 夜间特殊线索被所需照明物拦下时，明确说出缺什么，而不是回落到普通搜索。
+        missing_night_items = []
+        for candidate in events:
+            if not isinstance(candidate, dict) or not candidate.get("night_only"):
+                continue
+            if not _room_is_night(player, room):
+                continue
+            requires = candidate.get("requires")
+            needed = requires.get("items") if isinstance(requires, dict) else None
+            if not isinstance(needed, dict):
+                continue
+            not_flags = requires.get("not_flags")
+            if isinstance(not_flags, list) and any(player.get_flag(str(flag), False) for flag in not_flags):
+                # 已完成的夜间线索不再提示补买照明物。
+                continue
+            for item_name, amount in needed.items():
+                if player.inventory.count(str(item_name)) < max(1, _trade_int(amount)):
+                    missing_night_items.append(str(item_name))
+        if missing_night_items:
+            missing = "、".join(dict.fromkeys(missing_night_items))
+            print(f"\n{Color.BRIGHT_CYAN}【探索】{Color.RESET} {room.get('name', player.location)}")
+            print(f"夜色太浓，四下几乎看不真切；需要{missing}照明才能继续搜寻。（杂货铺可买到。）")
+            return
     if not eligible:
         eligible = ["你仔细搜索了一番，但当前没有发现符合条件的特殊线索。"]
     event = eligible[count % len(eligible)]
@@ -2375,6 +2676,19 @@ def handle_explore(player):
     if isinstance(event, dict):
         text = event.get("text", "")
         print(text)
+        # 照明等消耗物在结算前扣除：缺物则不发放线索，避免“先拿奖励后扣物”的歧义。
+        consume = event.get("consume_items") or {}
+        if isinstance(consume, dict):
+            for item_name, amount in consume.items():
+                quantity = max(0, _trade_int(amount))
+                if quantity < 1:
+                    continue
+                removed, remaining = remove_inventory_items(
+                    player, str(item_name), quantity, action="消耗"
+                )
+                if not removed:
+                    print(f"{Color.YELLOW}这次探索需要 {item_name} ×{quantity}，当前只有 {remaining}，未继续深入。{Color.RESET}")
+                    return
         effects = event.get("effects") or {}
         engine.apply_world_effects(player.world_state, effects)
         reward = event.get("item")
@@ -2440,7 +2754,10 @@ def handle_quest(player, cmd, args):
                     print(f"当前阶段：{idx+1}/{len(stages)} — {stage.get('desc', '')}")
                     target_type_labels = {"talk": "交谈", "kill": "击败", "collect": "收集", "search": "探索", "visit": "前往", "deliver": "交付", "interact": "互动"}
                     target_type = target_type_labels.get(stage.get('target_type', 'talk'), '完成目标')
-                    print(f"阶段目标：{target_type} / {stage.get('target_name', '')} ({state.get('progress', 0)}/{stage.get('required_cnt', 1)})")
+                    target_name = stage.get('target_name', '')
+                    if stage.get('target_type', 'talk') in {"talk", "deliver", "interact"} and target_name in engine.NPCS:
+                        target_name = actor_display.prose_name(target_name, engine.NPCS.get(target_name))
+                    print(f"阶段目标：{target_type} / {target_name} ({state.get('progress', 0)}/{stage.get('required_cnt', 1)})")
                 else:
                     print(f"进度：{player.active_quests[q_name]}/{q_info.get('required_cnt', 1)}")
                 if goal_complete:
@@ -2590,7 +2907,7 @@ def handle_quest(player, cmd, args):
             return False
         quest_npc = q_info.get("npc")
         if quest_npc and quest_npc not in player.get_npcs_in_room(player.location):
-            print(f"请先在当前地点找到任务发布人【{quest_npc}】再接取此任务。")
+            print(f"请先在当前地点找到任务发布人【{actor_display.prose_name(quest_npc)}】再接取此任务。")
             return False
         player.active_quests[q_name] = 0
         if q_info.get("stages"):
@@ -2676,9 +2993,14 @@ def handle_quest(player, cmd, args):
                 return False
         # 未单独配置交付人时，默认回到原发布 NPC，避免任务完成后在任意地点结算。
         turn_in_npc = q_info.get("turn_in_npc") or q_info.get("npc")
-        if turn_in_npc and turn_in_npc not in player.get_npcs_in_room(player.location):
-            print(f"请回到【{turn_in_npc}】处交付任务。")
-            return False
+        if turn_in_npc:
+            # 交付按行动时的时钟判定：先刷新日程，整点换班不会把委托人吞成“场景无人”。
+            player.refresh_npc_schedules()
+            if turn_in_npc not in player.get_npcs_in_room(player.location):
+                turn_in_label = actor_display.prose_name(turn_in_npc, engine.NPCS.get(turn_in_npc))
+                print(f"请回到【{turn_in_label}】处交付任务。")
+                _print_npc_whereabouts_hint(player, turn_in_npc)
+                return False
 
         # Alpha227：采集类委托不仅检查进度计数，还必须核实对应物品仍在背包中。
         # 此处只校验，不提前消耗；若玩家还需选择任务结局，不能因显示选项而丢失物品。
@@ -2952,6 +3274,17 @@ def _market_event_rate(player):
 
 def _market_quote(player, item_name, base_price, side, merchant_rate=1.0):
     """统一计算普通店铺货架显示价与实际成交价，确保行情事件两处一致。"""
+    info = engine.ITEMS.get(str(item_name), {})
+    if isinstance(info, dict) and info.get("fixed_price") is True:
+        # 秘籍等标价物不随行情浮动：买入按标价，回收仍按店家折价比例。
+        base = max(0, _trade_int(base_price))
+        if side == "buy":
+            return base
+        try:
+            sell_rate = float(merchant_rate)
+        except (TypeError, ValueError, OverflowError):
+            sell_rate = 0.5
+        return max(0, int(round(base * max(0.0, min(1.0, sell_rate)))))
     from economy import TradeService
     return TradeService.market_price(
         player, item_name, base_price, side, merchant_rate, _market_event_rate(player)
@@ -3053,6 +3386,80 @@ def _handle_caravan_trading(player, cmd, args, caravan_id, caravan_config):
     return True
 
 
+def _shop_shelf_lines(player, trader_npc, npc_data):
+    """返回店铺货架的展示行；交易货架与“看货架”共用同一库存与报价口径。"""
+    from economy import TradeService
+    npc_data = npc_data if isinstance(npc_data, dict) else {}
+    shop_items = [str(item) for item in (npc_data.get("shop", []) or [])]
+    buy_rate, sell_rate = _merchant_rates(npc_data)
+    merchant_wallet = TradeService.merchant_wallet(player, trader_npc)
+    lines = []
+    for idx, item in enumerate(shop_items, 1):
+        info = engine.ITEMS.get(item, {})
+        base_price = info.get("price", 0)
+        stock = _merchant_stock(player, trader_npc, item)
+        if stock is not None and stock <= 0:
+            lines.append(f"  {idx}. {item} - 暂无现货 ({info.get('desc', '')})")
+            continue
+        buy_price = _market_quote(player, item, base_price, "buy", buy_rate) if base_price > 0 else 0
+        sell_price = _market_quote(player, item, base_price, "sell", sell_rate) if base_price > 0 else 0
+        notes = []
+        if stock is not None and stock > 0:
+            notes.append(f"余 {stock} 件")
+        if isinstance(merchant_wallet, int) and 0 <= merchant_wallet < sell_price:
+            notes.append("店家现银不足")
+        line = f"  {idx}. {item} - 买入 {buy_price} 两 / 回收 {sell_price} 两"
+        if notes:
+            line += "，" + "；".join(notes)
+        lines.append(f"{line} ({info.get('desc', '')})")
+    for idx, service in enumerate(npc_data.get("shop_services", []) or [], len(shop_items) + 1):
+        if not isinstance(service, dict):
+            continue
+        service_name = str(service.get("name", "") or "").strip()
+        if not service_name:
+            continue
+        service_price = service.get("price", 0)
+        service_desc = str(service.get("desc", "") or "").strip()
+        service_command = str(service.get("command", service_name) or service_name).strip()
+        detail = f"（{service_desc}；输入“{service_command}”）" if service_desc else f"（输入“{service_command}”）"
+        lines.append(f"  {idx}. {service_name} - {service_price} 两{detail}")
+    return lines
+
+
+def _look_shop_shelf(player, args):
+    """“看 货架/柜台/商品”：只列当前店家货架，不进入交易流程。"""
+    player.refresh_npc_schedules()
+    room_npcs = player.get_npcs_in_room(player.location)
+    traders = [
+        name for name in room_npcs
+        if isinstance(engine.NPCS.get(name), dict) and engine.NPCS.get(name, {}).get("shop")
+    ]
+    if not traders:
+        print("这里没有摆着货架，也没有店家可以询问货品。")
+        return
+    selector = "".join(str(part) for part in list(args or [])[1:]).replace(" ", "")
+    chosen = None
+    if selector:
+        chosen, _ = actor_display.match_name_prefix(selector, traders)
+        if not chosen:
+            chosen = actor_display.find_npc(selector, traders)
+        if not chosen:
+            names = "、".join(actor_display.display_name(name, engine.NPCS.get(name)) for name in traders)
+            print(f"此处店家没有【{selector}】，可查看：{names}。")
+            return
+    elif len(traders) > 1:
+        names = "、".join(actor_display.display_name(name, engine.NPCS.get(name)) for name in traders)
+        print(f"这里有多位店家，请指定要看的货架：{names}。")
+        return
+    else:
+        chosen = traders[0]
+    label = _npc_actor_label(chosen)
+    print(f"\n{Color.YELLOW}======== {label} 的店铺货架 ========{Color.RESET}")
+    for line in _shop_shelf_lines(player, chosen, engine.NPCS.get(chosen, {})):
+        print(line)
+    print(f"手头银两：{player.gold} 两")
+
+
 def handle_trading(player, cmd, args):
     room = engine.ROOMS.get(player.location, {})
     if room.get("trade_closed") is True:
@@ -3075,10 +3482,14 @@ def handle_trading(player, cmd, args):
                      if isinstance(info, dict) and info.get("shop")]
     explicit_target = None
     joined_args = " ".join(str(a) for a in args)
-    for name in sorted(set(caravan_names + all_merchants), key=len, reverse=True):
-        if name and name in joined_args:
-            explicit_target = name
-            args = [str(a) for a in args if str(a) != name and str(a) not in ("给", "向", "对", "找", "跟")]
+    target_lookup = {}
+    for name in set(caravan_names + all_merchants):
+        for candidate in actor_display.text_candidates(name):
+            target_lookup.setdefault(candidate, name)
+    for candidate in sorted(target_lookup, key=len, reverse=True):
+        if candidate and candidate in joined_args:
+            explicit_target = target_lookup[candidate]
+            args = [str(a) for a in args if str(a) != candidate and str(a) not in ("给", "向", "对", "找", "跟")]
             break
     active_here = []
     if isinstance(active, dict):
@@ -3099,7 +3510,7 @@ def handle_trading(player, cmd, args):
         selected = next((row for row in active_here if row[0] == explicit_target), None)
         if selected:
             return _handle_caravan_trading(player, cmd, args, selected[0], selected[1])
-        print(f"{explicit_target}此刻不在这里，请先查看场景或商旅消息确认到场。")
+        print(f"{_npc_actor_label(explicit_target)}此刻不在这里，请先查看场景或商旅消息确认到场。")
         return False
     if len(active_here) > 1 and not explicit_target:
         print("这里有多支商队，请指定交易对象：")
@@ -3111,7 +3522,7 @@ def handle_trading(player, cmd, args):
 
     # 玩家点名了其他场景的商人：明确拒绝，不能把交易转给同场景旁人。
     if explicit_target and explicit_target in all_merchants and explicit_target not in trader_names:
-        print(f"{explicit_target}此刻不在此处，无法与其交易；请先确认所在场景。")
+        print(f"{_npc_actor_label(explicit_target)}此刻不在此处，无法与其交易；请先确认所在场景。")
         return False
 
     npcs_in_room = room_npcs
@@ -3121,48 +3532,33 @@ def handle_trading(player, cmd, args):
     else:
         candidates = [n for n in trader_names if player.get_npc_state(n) != "away"]
         if len(candidates) > 1 and cmd in ("shop", "list", "buy", "sell"):
-            print("这里有多位商人，请先指定对象，例如：查看 药铺老板，或：卖 草药 2 给 药铺老板。")
-            print("当前可交易对象：" + "、".join(candidates))
+            print("这里有多位商人，请先指定对象，例如：查看 百草堂主，或：卖 草药 2 给 百草堂主。")
+            print("当前可交易对象：" + "、".join(
+                actor_display.display_name(name, engine.NPCS.get(name)) for name in candidates
+            ))
             return False
         trader_npc = candidates[0] if candidates else None
 
     if not trader_npc:
         if explicit_target and explicit_target in all_merchants:
-            print(f"{explicit_target}此刻不在此处，无法与其交易；请先确认所在场景。")
+            print(f"{_npc_actor_label(explicit_target)}此刻不在此处，无法与其交易；请先确认所在场景。")
             return False
         print("此处没有可以交易的商贾或店家。")
         return False
 
     npc_data = engine.NPCS[trader_npc]
     npc_state = player.get_npc_state(trader_npc)
+    trader_label = _npc_actor_label(trader_npc)
     if npc_state == "away":
-        print(f"{Color.YELLOW}{trader_npc} 此刻暂时离开了，无法交易。{Color.RESET}")
+        print(f"{Color.YELLOW}{trader_label} 此刻暂时离开了，无法交易。{Color.RESET}")
         return False
     shop_items = npc_data.get("shop", [])
     buy_rate, sell_rate = _merchant_rates(npc_data)
 
     if cmd in ("shop", "list"):
-        from economy import TradeService
-        merchant_wallet = TradeService.merchant_wallet(player, trader_npc)
-        print(f"\n{Color.YELLOW}======== {trader_npc} 的店铺货架 ========{Color.RESET}")
-        for idx, item in enumerate(shop_items, 1):
-            info = engine.ITEMS.get(item, {})
-            base_price = info.get("price", 0)
-            stock = _merchant_stock(player, trader_npc, item)
-            if stock is not None and stock <= 0:
-                print(f"  {idx}. {item} - 暂无现货 ({info.get('desc', '')})")
-                continue
-            buy_price = _market_quote(player, item, base_price, "buy", buy_rate) if base_price > 0 else 0
-            sell_price = _market_quote(player, item, base_price, "sell", sell_rate) if base_price > 0 else 0
-            notes = []
-            if stock is not None and stock > 0:
-                notes.append(f"余 {stock} 件")
-            if isinstance(merchant_wallet, int) and 0 <= merchant_wallet < sell_price:
-                notes.append("店家现银不足")
-            line = f"  {idx}. {item} - 买入 {buy_price} 两 / 回收 {sell_price} 两"
-            if notes:
-                line += "，" + "；".join(notes)
-            print(f"{line} ({info.get('desc', '')})")
+        print(f"\n{Color.YELLOW}======== {trader_label} 的店铺货架 ========{Color.RESET}")
+        for line in _shop_shelf_lines(player, trader_npc, npc_data):
+            print(line)
         print(f"手头银两：{player.gold} 两")
         return True
 
@@ -3192,9 +3588,9 @@ def handle_trading(player, cmd, args):
         stock = _merchant_stock(player, trader_npc, target)
         if stock is not None and stock < quantity:
             if stock <= 0:
-                print(f"{trader_npc} 的【{target}】暂无现货，请稍后再来。")
+                print(f"{trader_label} 的【{target}】暂无现货，请稍后再来。")
             else:
-                print(f"{trader_npc} 的【{target}】只剩 {stock} 件，暂时买不了 {quantity} 件。")
+                print(f"{trader_label} 的【{target}】只剩 {stock} 件，暂时买不了 {quantity} 件。")
             return False
         unit_price = _market_quote(player, target, info.get("price", 0), "buy", buy_rate)
         total_price = unit_price * quantity

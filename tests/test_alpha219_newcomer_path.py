@@ -24,8 +24,8 @@ def test_newcomer_quests_are_hintable_without_exposing_task_names_or_commands():
     with contextlib.redirect_stdout(output):
         handle_notice_board(p)
     text = output.getvalue()
-    assert "百草堂" in text and "药铺老板" in text
-    assert "铁匠铺" in text and "王打铁" in text
+    assert "百草堂" in text and "百草堂主" in text
+    assert "铁匠铺" in text and "王铁匠" in text
     assert "村长" in text and "青石村接引人" in text
     for name in expected:
         assert name not in text
@@ -39,7 +39,7 @@ def test_newcomer_guide_is_persistent_and_no_popup_hook_stays_silent():
     assert p.get_flag("newcomer:guide_seen") is True
 
 
-def test_gameplay_sect_join_is_gated_until_level_ten():
+def test_gameplay_sect_join_is_gated_until_level_three():
     p = Player("门派等级门槛验收", "散人")
     p.location = "huashan_guest_hall"
     p.set_flag("sect:huashan:entry_interview", True)
@@ -47,7 +47,7 @@ def test_gameplay_sect_join_is_gated_until_level_ten():
     with contextlib.redirect_stdout(output):
         handle_sect(p, ["join", "华山"])
     assert p.get_sect() == "散人"
-    assert "需达到 10 级" in output.getvalue()
+    assert "需达到 3 级" in output.getvalue()
 
 
 def test_new_quest_data_uses_existing_v12_compatible_flags_and_targets():

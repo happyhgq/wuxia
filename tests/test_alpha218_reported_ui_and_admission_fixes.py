@@ -76,7 +76,7 @@ def test_baishi_failure_names_required_and_current_level():
     p.location = "tieyi_guest_hall"
     output = capture(handle_talk_and_ask, p, ["铁衣门接引执事", "拜师"])
     assert "拜师失败" in output
-    assert "需达到 10 级" in output
+    assert "需达到 3 级" in output
     assert "当前 1 级" in output
     assert p.get_sect() == "散人"
 

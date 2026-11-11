@@ -34,7 +34,7 @@ class Alpha59InnTests(unittest.TestCase):
             self.assertIn(command, CMD_MAP)
             self.assertTrue(command_will_be_handled(CMD_MAP[command], {}))
 
-    def test_stay_costs_money_and_restores_hp_mp_without_autosave(self):
+    def test_stay_costs_money_and_restores_hp_mp_without_stale_warning(self):
         p = Player('住宿测试')
         p.location = 'inn'
         p.hp, p.mp, p.gold = 20, 5, 50
@@ -42,7 +42,7 @@ class Alpha59InnTests(unittest.TestCase):
         with contextlib.redirect_stdout(out):
             handle_inn_service(p, '住店')
         self.assertEqual((p.hp, p.mp, p.gold), (p.max_hp, p.max_mp, 38))
-        self.assertIn('不会自动保存', out.getvalue())
+        self.assertNotIn('不会自动保存', out.getvalue())
 
     def test_meal_tea_and_rumor_effects_and_insufficient_funds(self):
         p = Player('服务测试')

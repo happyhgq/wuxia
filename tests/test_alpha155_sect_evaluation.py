@@ -4,6 +4,7 @@ from player import Player
 
 def huashan_disciple():
     p = Player("门派考核测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("华山")[0]
     return p
 
@@ -15,27 +16,22 @@ def test_advanced_huashan_skill_uses_formal_rank_not_reputation_alone():
     ok, message = p.can_learn_skill("夺命连环三仙剑")
     assert not ok
     assert "身份不足" in message
-    assert "内门弟子" in message
+    assert "外门弟子" in message
     assert p.get_sect_official_rank() == "记名弟子"
 
 
 def test_formal_promotion_unlocks_rank_gated_skill_when_other_conditions_met():
     p = huashan_disciple()
-    p.level = 3
-    p.change_sect_reputation("华山", 20)
+    p.level = 5
+    p.change_sect_reputation("华山", 70)
     for _ in range(10):
         p.record_skill_use("华山剑法")
-    p.set_flag("sect:huashan:sword_principle", True)
-    assert p.promote_sect_rank()[0]
-    p.level = 3
-    p.change_sect_reputation("华山", 50)
+    # 等级与声望都已达标，但没有正式授阶仍不能学习。
+    assert p.get_sect_official_rank() == "记名弟子"
     ok, message = p.can_learn_skill("夺命连环三仙剑")
     assert not ok
     assert "身份不足" in message
-    p.level = 8
-    for _ in range(20):
-        p.record_skill_use("华山剑法")
-    p.set_flag("sect:huashan:questline:patrol_done", True)
+    p.set_flag("sect:huashan:sword_principle", True)
     assert p.promote_sect_rank()[0]
     assert p.can_learn_skill("夺命连环三仙剑")[0]
 

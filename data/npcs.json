@@ -20,7 +20,8 @@
       "黑风山": "黑风山上有一伙恶霸，为首的二当家极为残暴！",
       "山贼": "黑风山的山贼凶残无比，没有像样的兵刃千万别去冒险。",
       "村中广场": "沿青石长街往北走便是村中广场。榕树旁有公告栏，青石村接引人也常在那里替初来乍到的江湖客指路。",
-      "接引人": "去村中广场找青石村接引人吧。他能介绍门派、营生和探索方向，但不会替你直接拜入门派。"
+      "接引人": "去村中广场找青石村接引人吧。他能介绍门派、营生和探索方向，但不会替你直接拜入门派。",
+      "旧柴场": "旧柴场夜里不太平，柴堆深处埋着些旧物。若肯替村里去一趟，先到杂货铺备一盏火折子，入夜后看得清些；那火折子点一次就烧尽了。"
     },
     "faction": "青石村",
     "talk_relation_delta": 1,
@@ -209,7 +210,12 @@
         "sentiment": "negative",
         "source": "守卫",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "守卫",
+          "room": "village_gate",
+          "hint": "可问清黑风寨最近的劫道动向"
+        }
       }
     ],
     "memory_profile": {
@@ -357,7 +363,7 @@
       "唉……黑风山的山贼最近越来越猖狂，连出村采药的村民都被抓走了。"
     ],
     "info": {
-      "山贼": "若有少侠能击败山贼二当家，解救被绑村民，老夫必有重赏！",
+      "山贼": "若有少侠能击败山贼二当家，解救受难村民，老夫必有重赏！",
       "黑风山": "黑风山就在村后荒野西面。"
     },
     "quests": [
@@ -543,7 +549,12 @@
         "sentiment": "negative",
         "source": "村长",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "村长",
+          "room": "village_head_house",
+          "hint": "可问村中防务与黑风寨动向"
+        }
       },
       {
         "topic": "old_escape_route",
@@ -553,7 +564,12 @@
         "sentiment": "secret",
         "source": "村长",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "村长",
+          "room": "village_head_house",
+          "hint": "只对可信之人说明入口"
+        }
       }
     ],
     "memory_profile": {
@@ -740,7 +756,8 @@
       "金创药",
       "大还丹",
       "护体丹",
-      "采药小锄"
+      "草药",
+      "蛇胆"
     ],
     "dialogue": [
       "刀剑无眼，出远门可得多备些金创药与护体丹啊！"
@@ -846,9 +863,14 @@
         "confidence": 68,
         "ttl": 16,
         "sentiment": "negative",
-        "source": "药铺老板",
+        "source": "百草堂主",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "药铺老板",
+          "room": "medicine_shop",
+          "hint": "可问药材缺口与伤者情形"
+        }
       }
     ],
     "memory_profile": {
@@ -902,7 +924,7 @@
         "title": "药材短缺预警",
         "trigger_action": "investigate",
         "cooldown": 12,
-        "text": "药铺老板盘点药材后发现库存不足，主动提醒你最近可能有更多伤患。",
+        "text": "百草堂主盘点药材后发现库存不足，主动提醒你最近可能有更多伤患。",
         "effects": {
           "increment_variables": {
             "world:main:medicine_shortage": 1
@@ -910,8 +932,8 @@
           "player_information": [
             {
               "topic": "medicine_shortage",
-              "text": "药铺老板发现常用伤药库存不足，近期似乎会有更多伤患出现。",
-              "source": "药铺老板",
+              "text": "百草堂主发现常用伤药库存不足，近期似乎会有更多伤患出现。",
+              "source": "百草堂主",
               "confidence": 84,
               "ttl": 24,
               "sentiment": "negative"
@@ -1026,8 +1048,9 @@
   "铁匠": {
     "id": "tie jiang",
     "talk_verb": "头也不抬道",
-    "name": "王打铁",
-    "rank_title": "青石村铁匠",
+    "name": "王铁匠",
+    "rank_title": "",
+    "prose": "王铁匠",
     "gender": "male",
     "power_tier": 2,
     "age_desc": "四十上下",
@@ -1039,7 +1062,7 @@
         "id": "old hammer"
       }
     ],
-    "title": "王打铁",
+    "title": "王铁匠",
     "desc": "肌肉虬结，赤膊挥舞着百斤重的铁锤，浑身泛着健康的光泽与汗水。",
     "type": "smith",
     "schedule_tier": "T1",
@@ -1050,10 +1073,11 @@
       "皮甲",
       "锁子甲",
       "砍柴斧",
-      "矿镐"
+      "矿镐",
+      "铁矿石"
     ],
     "dialogue": [
-      "只要你有铁矿石和银子，我就能帮你的兵刃与防具精炼加固！（输入“打造”后选择 1 或 2 强化）"
+      "我王打铁，只要你有铁矿石和银子，就能帮你的兵刃与防具精炼加固！（输入“打造”后选择 1 或 2 强化）"
     ],
     "info": {
       "打造": "消耗铁矿石和银子可以强化装备属性。"
@@ -1213,11 +1237,19 @@
     "desc": "身材稍显发福，手里拿着算盘啪啪作响，眼神精明得很。",
     "type": "trader",
     "shop": [
-      "疗伤药",
-      "护体丹",
       "粗粮馒头",
       "热汤面",
-      "酱香烧鸡"
+      "酱香烧鸡",
+      "竹叶青",
+      "干粮"
+    ],
+    "shop_services": [
+      {
+        "name": "住店",
+        "price": 12,
+        "command": "住店",
+        "desc": "住一晚至次日卯时，恢复气血与内力"
+      }
     ],
     "dialogue": [
       "住店养伤请上楼，打尖用餐请坐大堂！",
@@ -2021,9 +2053,11 @@
     "desc": "小眼睛笑成一条缝，极其热情的外地商人，正殷勤地擦拭着货架。",
     "type": "trader",
     "shop": [
-      "疗伤药",
-      "回内丹",
-      "采药小锄"
+      "采药小锄",
+      "麻绳",
+      "火折子",
+      "干粮",
+      "粗粮馒头"
     ],
     "dialogue": [
       "走过路过不要错过，日用杂货应有尽有！"
@@ -3249,7 +3283,12 @@
         "sentiment": "negative",
         "source": "捕头",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "捕头",
+          "room": "guiyun_guard_camp",
+          "hint": "可问官府掌握的山贼线索"
+        }
       }
     ],
     "memory_profile": {
@@ -3449,7 +3488,12 @@
         "sentiment": "neutral",
         "source": "府衙文书",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "府衙文书",
+          "room": "guiyun_yamen_hall",
+          "hint": "可问案卷与上报线索的章程"
+        }
       }
     ],
     "memory_profile": {
@@ -3573,7 +3617,12 @@
         "sentiment": "secret",
         "source": "狱卒",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "狱卒",
+          "room": "guiyun_prison",
+          "hint": "可问牢中山贼口供的矛盾之处"
+        }
       }
     ],
     "memory_profile": {
@@ -5708,7 +5757,7 @@
             "world:main:deep_iron_gallery_cleared"
           ]
         },
-        "text": "铁脉长廊的矿獾已经赶走，深处那段矿道总算能安全作业了。矿脉恢复需要些时日，但我能更稳定地采出铁料，王打铁也不必总等着缺料。"
+        "text": "铁脉长廊的矿獾已经赶走，深处那段矿道总算能安全作业了。矿脉恢复需要些时日，但我能更稳定地采出铁料，王铁匠也不必总等着缺料。"
       }
     ],
     "perception_role": "shopkeeper"
@@ -6838,7 +6887,12 @@
         "sentiment": "neutral",
         "source": "华山守门弟子",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "华山守门弟子",
+          "room": "huashan_gate",
+          "hint": "可问访客可入区域与入门流程"
+        }
       }
     ],
     "memory_profile": {
@@ -7102,7 +7156,7 @@
           "苍松迎客剑",
           "苍松剑"
         ],
-        "response": "华山进阶剑式“苍松迎客剑”讲究稳中求变。正式晋升为真传弟子、声望达到要求且根基足够后，可在武学中请教。"
+        "response": "华山进阶剑式“苍松迎客剑”讲究稳中求变。正式晋升为内门弟子、声望达到要求且根基足够后，可在武学中请教。"
       }
     ],
     "state_profile": {
@@ -7859,7 +7913,7 @@
           "金刚护体拳",
           "护体拳"
         ],
-        "response": "少林高阶护体拳路名为“金刚护体拳”。正式晋升为传法弟子、声望达到要求且根基足够后，可在武学中请教。"
+        "response": "少林高阶护体拳路名为“金刚护体拳”。正式晋升为僧人、声望达到要求且根基足够后，可在武学中请教。"
       }
     ]
   },
@@ -8822,7 +8876,7 @@
           "绕指柔剑",
           "柔剑"
         ],
-        "response": "“绕指柔剑”重在借力化劲。正式晋升为真传弟子、声望达到要求且根基足够后，可在武学中请教。"
+        "response": "“绕指柔剑”重在借力化劲。正式晋升为内门弟子、声望达到要求且根基足够后，可在武学中请教。"
       }
     ],
     "autonomy_profile": {
@@ -9102,7 +9156,12 @@
         "sentiment": "neutral",
         "source": "铁衣门守门弟子",
         "player_shareable": true,
-        "npc_shareable": true
+        "npc_shareable": true,
+        "follow_up": {
+          "npc": "铁衣门守门弟子",
+          "room": "tieyi_gate",
+          "hint": "可问门内身份与可入区域"
+        }
       }
     ],
     "memory_profile": {
@@ -9701,6 +9760,120 @@
     "voice": "语气平和，讲事情条理清楚，不会催促别人做决定。",
     "demeanor": "耐心务实，只介绍公开信息，不替任何门派作主。",
     "behavior_hint": "可以询问新手、门派、拜师、公告或赚钱等话题。"
+  },
+  "江湖武师": {
+    "id": "jiang hu wu shi",
+    "talk_verb": "抱拳道",
+    "name": "江湖武师",
+    "rank_title": "",
+    "gender": "male",
+    "power_tier": 3,
+    "age_desc": "四十来岁",
+    "face_attire": "他穿一件洗得发白的短打劲装，袖口挽到手肘，露出小臂上一道旧疤。",
+    "martial_style": "拳脚扎实，长于拆招",
+    "title": "江湖武师",
+    "desc": "一名四十来岁的武师在榕树旁活动筋骨，招式不求花哨，落脚却稳。",
+    "type": "villager",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "home_room": "village_square",
+    "scene_status": "在榕树旁教人吐纳与散手",
+    "dialogue": [
+      "没门派也不要紧，先把气息调顺、拳脚站稳，往后走到哪里都用得上。",
+      "我这两手都是江湖上摸爬滚打学来的，不藏私；想学就当着面问。"
+    ],
+    "info": {
+      "学武": "我教三样入门功夫：基础吐纳、江湖散手与流云步。基础吐纳不收学费，江湖散手 10 两，流云步 20 两；人在村中广场，当面请教即可。",
+      "拜师": "我算不得门派。想正式拜师，少林、武当、华山与铁衣门都收人，人物等级到 3 级便可去山门问询；要在门内拜师学艺，通常得先升到内门。",
+      "门派": "四派山门都在外头，先去和接引人员谈，再按门规历练。没有门派也能靠吐纳和散手走一段路。",
+      "熟练度": "招式要常用才熟。对练、实战、赶路时多使几次，体会自然就深了。"
+    },
+    "faction": "青石村",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "wushi_learn_basics",
+        "keywords": [
+          "学武",
+          "学功",
+          "功夫",
+          "吐纳",
+          "散手",
+          "流云步",
+          "步法",
+          "教",
+          "拜师"
+        ],
+        "response": "先学基础吐纳，再练江湖散手与流云步。基础吐纳不收学费，江湖散手 10 两，流云步 20 两；输入“武学 学习 基础吐纳”“武学 学习 江湖散手”或“武学 学习 流云步”，人在村中广场就能学；条件不够我再告诉你差什么。",
+        "relation_delta": 0,
+        "once": false
+      },
+      {
+        "id": "wushi_sect_entry",
+        "keywords": [
+          "入门",
+          "门派",
+          "外门",
+          "内门",
+          "晋升"
+        ],
+        "response": "人物等级到 3 级就能去四派山门问入门的事，先做外门弟子；升至 5 级可争外门身份，10 级以后才有内门与拜师的资格。门规不同，去了先问接引人。",
+        "relation_delta": 0,
+        "once": false
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 999,
+      "allowed_actions": [
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": []
+    },
+    "appearance": "短打劲装洗得发白，小臂上有一道旧疤，双手指节粗大。",
+    "voice": "说话直来直去，讲招式时先示范再拆解。",
+    "demeanor": "不摆架子，愿意把江湖上换来的经验讲给后辈听。",
+    "behavior_hint": "在村中广场向武师学习基础吐纳与江湖散手，也可询问四派入门与晋升的大致门槛。",
+    "quests": [],
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "gear_display": [
+      {
+        "name": "木剑",
+        "id": "mu jian"
+      }
+    ]
   },
   "守岭猎户": {
     "id": "shou ling lie hu",
@@ -10463,5 +10636,127 @@
     "schedule_tier": "T3",
     "always_available": true,
     "scene_status": "蹲在堰口石墩上晾着绳索，守着沉河水路"
+  },
+  "书铺掌柜": {
+    "id": "shu pu zhang gui",
+    "talk_verb": "拱手道",
+    "name": "书铺掌柜",
+    "rank_title": "",
+    "gender": "male",
+    "power_tier": 0,
+    "age_desc": "五十来岁",
+    "face_attire": "他穿着一件洗得发旧的青灰长衫，袖口沾着墨痕，指间常夹着一支细笔。",
+    "gear_display": [
+      {
+        "name": "账册",
+        "id": "zhang ce"
+      }
+    ],
+    "title": "书铺掌柜",
+    "desc": "青灰长衫上沾着淡淡墨痕，正低头把一摞薄册子码齐，见客进门才抬起头来。",
+    "type": "trader",
+    "shop": [
+      "基础拳谱",
+      "流云步谱",
+      "江湖舆图"
+    ],
+    "dialogue": [
+      "书铺小本经营，拳谱、步法谱和舆图都在架上；拿不定主意就先翻翻。",
+      "拳谱要有些底子才看得懂，步法谱更讲究火候；买回去先看清册页上的门槛。",
+      "舆图只标邻近道路，走远了还得靠自己问路。"
+    ],
+    "info": {
+      "拳谱": "《基础拳谱》四十两，记载江湖散手；人物到 3 级才能领会。",
+      "流云步": "《流云步谱》六十两，记载流云步；人物到 4 级才能领会。",
+      "舆图": "《江湖舆图》二十两；买下后输入“看 江湖舆图”，可查看当前所在与相邻道路。",
+      "书铺": "书铺就在青石村口东侧，村中广场往南到村口，再往东便是。"
+    },
+    "faction": "青石村",
+    "talk_relation_delta": 1,
+    "dialogue_choices": [
+      {
+        "id": "bookshop_manuals",
+        "keywords": [
+          "拳谱",
+          "步法",
+          "秘籍",
+          "武学"
+        ],
+        "response": "拳谱和步法谱都是入门抄本，不是门派真传。学成后与武师所授并无高下，差别只在能不能随身带走。",
+        "relation_delta": 0,
+        "once": false
+      }
+    ],
+    "state_profile": {
+      "default": "normal",
+      "allowed": [
+        "normal",
+        "busy",
+        "injured",
+        "fear",
+        "angry",
+        "away",
+        "event_affected"
+      ]
+    },
+    "relation_dialogue": [],
+    "event_reactions": [],
+    "npc_bonds": {},
+    "quests": [],
+    "memory_profile": {
+      "remember_player_actions": true,
+      "share_player_memories": true,
+      "receive_player_memories": true,
+      "memory_share_min_bond": 5,
+      "memory_propagation_loss": 10,
+      "behavior": {
+        "friendly_gte": 70,
+        "favorable_gte": 30,
+        "wary_lte": -30,
+        "hostile_lte": -75
+      },
+      "quest_memory": {
+        "complete": 65,
+        "fail": 60,
+        "abandon": 60,
+        "ttl": 0
+      }
+    },
+    "autonomy_profile": {
+      "enabled": true,
+      "interval": 3,
+      "allowed_actions": [
+        "patrol",
+        "investigate",
+        "meet_npc",
+        "seek_player",
+        "rest"
+      ],
+      "blocked_states": [
+        "injured",
+        "fear",
+        "away"
+      ],
+      "route": [
+        "village_bookshop"
+      ],
+      "seek_player_min_relation": 30,
+      "seek_player_memory_behaviors": [
+        "welcome",
+        "cooperate"
+      ],
+      "seek_player_frequency": 5,
+      "meet_frequency": 4
+    },
+    "home_room": "village_bookshop",
+    "schedule_tier": "T3",
+    "always_available": true,
+    "scene_status": "在书铺柜台后整理拳谱与舆图",
+    "appearance": "青灰长衫洗得发旧，袖口和指节沾着墨痕，举止间带着书铺掌柜的斯文。",
+    "voice": "说话不紧不慢，提到拳谱与舆图时，总会先把研习门槛说清楚。",
+    "demeanor": "做事仔细，重信誉，不夸口货物。",
+    "behavior_hint": "在青石书铺出售基础拳谱、流云步谱与江湖舆图，并说明研习门槛。",
+    "equipment_detail": "手边账册与细笔常年摊着，纸页边缘已被翻得起了毛。",
+    "perception_role": "shopkeeper"
   }
 }

@@ -8,6 +8,7 @@ def test_foreign_sect_skill_cannot_be_forgotten_after_switching_sects():
     before = player.get_skill_progress("罗汉拳")
     assert before["learned"]
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
 
     ok, message = player.forget_skill("罗汉拳")
@@ -22,6 +23,7 @@ def test_foreign_sect_skill_cannot_be_forgotten_after_switching_sects():
 def test_foreign_sect_forget_command_explains_history_is_preserved(capsys):
     player = Player("跨门派遗忘指令", "少林")
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
 
     handle_skills(player, ["遗忘", "罗汉拳"])

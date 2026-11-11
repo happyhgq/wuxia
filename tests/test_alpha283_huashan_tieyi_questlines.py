@@ -245,7 +245,7 @@ def test_huashan_questline_full_flow_and_v12_round_trip(tmp_path, monkeypatch):
     assert "行军干粮" in player.inventory
 
     # 巡剑完成后才允许晋升内门。
-    player.level = 8
+    player.level = 10
     set_mastery(player, "华山剑法", 30)
     ok, message = player.promote_sect_rank("华山")
     assert ok, message
@@ -268,7 +268,7 @@ def test_tieyi_questline_full_flow_and_v12_round_trip(tmp_path, monkeypatch):
     player = make_player(monkeypatch, "铁衣门", "铁衣门任务线全流程")
     complete_tieyi_prerequisites(player)
 
-    player.level = 3
+    player.level = 5
     set_mastery(player, "铁衣功", 10)
     player.location = TIEYI_OUTER
     assert "已接取任务" in accept(player, TIEYI_TRADE)
@@ -314,7 +314,7 @@ def test_tieyi_questline_full_flow_and_v12_round_trip(tmp_path, monkeypatch):
     assert player.get_flag("sect:tieyi:questline:escort_done") is True
     assert "铁衣护腕" in player.inventory
 
-    player.level = 8
+    player.level = 10
     set_mastery(player, "铁衣功", 30)
     ok, message = player.promote_sect_rank("铁衣门")
     assert ok, message

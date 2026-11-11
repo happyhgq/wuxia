@@ -15,6 +15,7 @@ def test_new_character_starts_as_wanderer_without_sect_bonus():
 
 def test_new_character_can_join_sect_through_gameplay_later():
     player = create_new_player("待拜师侠客")
+    player.level = max(player.level, 3)
     ok, reason = player.join_sect("少林")
     assert ok, reason
     assert player.get_sect() == "少林"

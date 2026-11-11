@@ -62,5 +62,7 @@ def test_only_one_currently_available_clue_per_giver_is_published():
     player.location = "village_square"
     out = capture(player)
     # 村长名下存在多条分阶段委托，但起始阶段只展示当前可接的一条。
-    assert out.count("村长") <= 2  # 一条线索及可能的自然语言正文，不泄漏多条委托清单
+    # 每条线索现在都附带“可去【地点】找【人物】”，因此按条目而非出现次数判断。
+    bullets = [line for line in out.splitlines() if line.startswith("- ")]
+    assert sum(1 for line in bullets if "村长" in line) == 1
     assert "黑风山道仍有山贼拦路" not in out

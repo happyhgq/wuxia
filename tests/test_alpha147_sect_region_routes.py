@@ -24,6 +24,7 @@ def test_visitors_can_reach_gate_and_guest_hall_but_not_inner_practice_area():
     assert engine.ROOMS['huashan_gate']['exits']['西'] == 'huashan_guest_hall'
     assert '华山' in room_access_denial(player, engine.ROOMS['huashan_front_court'])
     assert '演武场' in room_access_denial(player, engine.ROOMS['huashan_training_ground'])
+    player.level = max(player.level, 3)
     player.join_sect('华山')
     assert room_access_denial(player, engine.ROOMS['huashan_front_court']) == ''
     assert room_access_denial(player, engine.ROOMS['huashan_training_ground']) == ''

@@ -45,7 +45,7 @@ def test_ambiguous_short_name_lists_numbered_candidates(monkeypatch):
     assert "对应多项委托" in out
     assert "1 初入江湖·备些木料" in out
     assert "2 初入江湖·寻找铁矿" in out
-    assert "交谈 铁匠 交付委托 任务名称" in out
+    assert "交谈 王铁匠 交付委托 任务名称" in out
 
 
 def test_delivery_can_be_selected_by_number_in_command_or_followup(monkeypatch):

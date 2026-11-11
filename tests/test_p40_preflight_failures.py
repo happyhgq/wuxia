@@ -77,7 +77,7 @@ def test_sect_join_wrong_place_costs_no_time():
 def test_sect_join_below_level_gate_costs_no_time():
     player = _player_at("shaolin_guest_hall")
     player.set_flag("sect:shaolin:entry_interview", True)
-    player.level = 5
+    player.level = 2
     _run_main_loop(player, ["门派 加入 少林", "退出"])
     assert player.get_quest_clock() == 7
     assert player.get_sect() == "散人"

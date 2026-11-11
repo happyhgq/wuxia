@@ -31,15 +31,15 @@ class CombatRewardFailureAtomicityTests(unittest.TestCase):
 
     def test_successful_reward_commits_death_quest_and_save(self):
         player = Player("奖励成功测试", "散人")
-        player.location = "test_room"
+        player.location = "village_square"
         enemy_data = {"tier": "normal"}
         with patch("world_lifecycle.record_death") as record_death, \
              patch("rewards.apply_reward_bundle", return_value={"ok": True}), \
              patch.object(player, "update_quest_progress") as quest_progress, \
              patch("region_activity.record_criminal_defeat", return_value={"applied": False}), \
              patch.object(player, "save_to_file") as save:
-            combat._finish_combat_victory(player, "test_room", "测试敌人", enemy_data)
-        record_death.assert_called_once_with(player, "test_room", "测试敌人", tier="normal", kind="enemy")
+            combat._finish_combat_victory(player, "village_square", "测试敌人", enemy_data)
+        record_death.assert_called_once_with(player, "village_square", "测试敌人", tier="normal", kind="enemy")
         quest_progress.assert_called_once_with("测试敌人")
         save.assert_called_once()
 

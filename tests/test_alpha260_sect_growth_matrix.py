@@ -24,17 +24,17 @@ def run_capture(fn, *args):
     return stream.getvalue()
 
 
-def test_formal_sect_admission_requires_level_ten_for_all_four_sects():
+def test_formal_sect_admission_requires_level_three_for_all_four_sects():
     for sect, (room, interview_flag) in SECT_ENTRY.items():
         player = Player(f"入门门槛-{sect}", "散人")
         player.location = room
         player.set_flag(interview_flag, True)
-        player.level = 9
+        player.level = 2
         output = run_capture(handle_sect, player, ["拜师", sect])
-        assert "需达到 10 级" in output, (sect, output)
+        assert "需达到 3 级" in output, (sect, output)
         assert player.get_sect() == "散人"
 
-        player.level = 10
+        player.level = 3
         output = run_capture(handle_sect, player, ["拜师", sect])
         assert player.get_sect() == sect, (sect, output)
         assert "正式拜入" in output

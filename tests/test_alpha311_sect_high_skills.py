@@ -18,15 +18,15 @@ ROOT = Path(__file__).resolve().parents[1]
 NEW_SKILLS = {
     "少林": {
         "金刚不坏身": {"level": 8, "rep": 50, "rank": 2, "power": 1.95},
-        "韦陀降魔印": {"level": 12, "rep": 100, "rank": 3, "power": 2.7},
+        "韦陀降魔印": {"level": 12, "rep": 50, "rank": 2, "power": 2.7},
     },
     "武当": {
         "紫霄绵劲": {"level": 8, "rep": 50, "rank": 2, "power": 2.05},
-        "真武玄剑": {"level": 12, "rep": 100, "rank": 3, "power": 2.6},
+        "真武玄剑": {"level": 12, "rep": 50, "rank": 2, "power": 2.6},
     },
     "华山": {
         "白虹贯日": {"level": 8, "rep": 50, "rank": 2, "power": 2.5},
-        "天绅倒悬剑": {"level": 12, "rep": 100, "rank": 3, "power": 2.68},
+        "天绅倒悬剑": {"level": 12, "rep": 50, "rank": 2, "power": 2.68},
     },
 }
 
@@ -82,7 +82,7 @@ def test_new_skills_keep_peer_sect_power_spread():
             assert _skill(sect, name)["power"] <= tops[sect]
 
 
-def test_l8_needs_rank_two_and_l12_needs_rank_three():
+def test_high_skill_rank_gates():
     for sect, rows in NEW_SKILLS.items():
         for name, expected in rows.items():
             player = Player(f"Alpha311-门槛-{sect}-{name}", sect)
@@ -130,7 +130,7 @@ def test_l8_lessons_require_training_ground_and_present_teacher():
 def test_skill_detail_shows_new_gates_and_rank_label():
     player = Player("Alpha311-武学详情", "少林")
     output = _capture(handle_skills, player, ["详情", "韦陀降魔印"])
-    assert "学习条件：角色等级 12 / 门派声望 100 / 正式职位：传法弟子" in output
+    assert "学习条件：角色等级 12 / 门派声望 50 / 正式职位：僧人" in output
     assert "反震" in _skill("少林", "韦陀降魔印")["combat_hint"]
 
 

@@ -7,6 +7,7 @@ class Alpha185SectSkillGrowthGuardTests(unittest.TestCase):
         p = Player("退门武学熟练度", "少林")
         before = p.get_skill_progress("罗汉拳")
         self.assertTrue(p.leave_sect()[0])
+        p.level = max(p.level, 3)
         self.assertTrue(p.join_sect("武当")[0])
         after = p.record_skill_use("罗汉拳")
         self.assertEqual(after["mastery"], before["mastery"])

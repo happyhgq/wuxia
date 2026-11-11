@@ -1295,5 +1295,84 @@
       "insight": 1
     },
     "use_hint": "佩戴后发挥其附加效果，留意装备栏与属性变化。"
+  },
+  "麻绳": {
+    "id": "ma sheng",
+    "type": "material",
+    "desc": "一捆结实的麻绳，捆扎杂物、系缚行囊都用得上。",
+    "price": 5,
+    "use_hint": "日常杂货，可留作捆扎或制作材料。",
+    "material": "麻纤维",
+    "condition": "可用",
+    "craft_note": "绳股紧密，沾水后略沉，晾干仍可继续使用。"
+  },
+  "火折子": {
+    "id": "huo zhe zi",
+    "type": "tool",
+    "desc": "一支以火绒和硝纸引火的火折子，拔开竹管轻轻一吹便能亮起。夜里在荒废柴场探索时，可照见柴堆深处的旧物；一次夜探后便会烧尽。",
+    "price": 8,
+    "use_hint": "放在行囊中即可在夜间探索时照明，成功找到旧物后消耗一支。",
+    "condition": "可用"
+  },
+  "干粮": {
+    "id": "gan liang",
+    "type": "consumable",
+    "desc": "用粗布包好的耐放干粮，赶路时垫饥最方便。",
+    "effect": {
+      "hp": 25,
+      "mp": 8
+    },
+    "price": 6,
+    "use_hint": "使用后可恢复少量气血与内力。",
+    "material": "粮食",
+    "condition": "可用",
+    "craft_note": "干粮耐放，适合长途赶路时随身携带。"
+  },
+  "竹叶青": {
+    "id": "zhu ye qing",
+    "type": "consumable",
+    "desc": "客栈常备的竹叶青，酒色清亮，入口微辣，回味带着一点竹叶香。",
+    "effect": {
+      "mp": 18
+    },
+    "price": 12,
+    "use_hint": "饮下可恢复内力，赶路或对练后小酌一口。",
+    "material": "酒水",
+    "condition": "可用",
+    "craft_note": "酒性不烈，适合行脚客解乏。"
+  },
+  "江湖舆图": {
+    "id": "jiang hu yu tu",
+    "type": "tool",
+    "desc": "一卷手绘的江湖舆图，只标了邻近道路与村镇方位，边角还有几处后来补上的墨线。买下后可随时摊开比对当前所在。",
+    "price": 20,
+    "map_view": true,
+    "use_hint": "输入“看 江湖舆图”查看当前所在与相邻道路；不会消耗。",
+    "condition": "可用"
+  },
+  "基础拳谱": {
+    "id": "ji chu quan pu",
+    "type": "manual",
+    "desc": "书铺抄录的入门拳谱，图文并排，记着一套不拘门派、重在拆招的散手。可使用此物习得江湖散手。",
+    "price": 40,
+    "fixed_price": true,
+    "teaches_skill": "江湖散手",
+    "use_hint": "人物达到 3 级后输入“使用 基础拳谱”研习；习得后拳谱消耗。"
+  },
+  "流云步谱": {
+    "id": "liu yun bu pu",
+    "type": "manual",
+    "desc": "薄薄一册步法谱，画着进退转身的落脚次序，纸页边缘已被翻得发毛。可使用此物习得流云步。",
+    "price": 60,
+    "fixed_price": true,
+    "teaches_skill": "流云步",
+    "use_hint": "人物达到 4 级后输入“使用 流云步谱”研习；习得后步法谱消耗。"
+  },
+  "焦黑木牌": {
+    "id": "jiao hei mu pai",
+    "type": "quest",
+    "desc": "从荒废柴场深处翻出的木牌，半边被火烧焦，残留的刻痕像是旧村差役的记号。",
+    "price": 0,
+    "use_hint": "带回村口交给守卫，可完成“夜探旧柴场”。"
   }
 }

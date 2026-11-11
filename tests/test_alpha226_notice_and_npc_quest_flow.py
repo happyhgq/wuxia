@@ -22,12 +22,16 @@ def test_notice_board_groups_and_sanitizes_public_messages():
     p.learn_player_information("region:main", "主世界局势变为升级，安全度约为59。", "", 80)
     out = capture(handle_notice_board, p)
     assert "【委托线索】" in out
-    assert "【势力摘要】" in out
-    assert "药铺老板" in out and "铁匠铺" in out and "村长" in out
+    # 没有 follow_up 的势力/区域状态不再占公告栏的位置。
+    assert "【势力摘要】" not in out
+    assert "百草堂主" in out and "打铁铺" in out and "村长" in out
     assert "新手采药·认识资源" not in out
     assert "可信度" not in out and "有效至时辰" not in out and "安全度约为" not in out
     assert "官府与黑市冲突升级" not in out
-    assert out.count("官府、黑市、黑风寨") <= 1
+    assert "官府、黑市、黑风寨" not in out
+    # 每条公告都必须给出可去之处与可找之人。
+    bullets = [line for line in out.splitlines() if line.startswith("- ")]
+    assert bullets and all("——可去【" in line and "】找【" in line for line in bullets)
 
 
 def test_npc_conversation_accepts_only_that_npcs_quest():
@@ -54,7 +58,7 @@ def test_npc_dialogue_reports_progress_and_turn_in_required(monkeypatch):
     assert "新手采药·认识资源" in p.active_quests
     p.location = "village_square"
     turn_in = capture(handle_quest, p, "jiaofu", ["新手采药·认识资源"])
-    assert "请回到【药铺老板】处交付任务" in turn_in
+    assert "请回到【百草堂主】处交付任务" in turn_in
     assert "新手采药·认识资源" in p.active_quests
 
     # 正常交付应通过原委托 NPC 的交谈选项完成，并结算一次奖励。

@@ -77,7 +77,8 @@ def test_v12_load_recalculates_legacy_exp_threshold_without_schema_change(tmp_pa
 
 
 def test_low_level_enemy_experience_decay_thresholds_and_floor():
-    assert combat.experience_decay_multiplier(5, 3) == 1.0
+    assert combat.experience_decay_multiplier(4, 3) == 1.0
+    assert combat.experience_decay_multiplier(5, 3) == 0.85
     assert combat.experience_decay_multiplier(6, 3) == 0.70
     assert combat.experience_decay_multiplier(8, 3) == 0.45
     assert combat.experience_decay_multiplier(10, 3) == 0.25
@@ -188,7 +189,7 @@ def test_difficulty_distribution_and_notice_filter_follow_approved_plan():
         tier = info.get("difficulty")
         assert tier in {"入门", "普通", "进阶", "高难", "重大"}, info.get("title")
         counts[tier] = counts.get(tier, 0) + 1
-    assert counts == {"入门": 9, "普通": 14, "进阶": 27, "高难": 26, "重大": 5}
+    assert counts == {"入门": 10, "普通": 14, "进阶": 27, "高难": 26, "重大": 5}
 
     notice = quests[NEW_QUEST]["notice"]
     low = Player("公告过滤低等级", "散人")

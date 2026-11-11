@@ -22,6 +22,7 @@ def test_each_sect_has_a_repeatable_teacher_led_reputation_path():
     ]
     for sect, room, teacher, skill in cases:
         p = Player(f"{sect}修习闭环测试", "散人")
+        p.level = max(p.level, 3)
         assert p.join_sect(sect)[0]
         p.location = room
         before = p.get_sect_reputation(sect)
@@ -32,6 +33,7 @@ def test_each_sect_has_a_repeatable_teacher_led_reputation_path():
 
 def test_sect_reputation_lesson_requires_correct_location_and_teacher():
     p = Player("门派修习条件测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("武当")[0]
     before = p.get_sect_reputation("武当")
     p.location = "wudang_guest_hall"
@@ -51,6 +53,7 @@ def test_sect_reputation_lesson_requires_correct_location_and_teacher():
 
 def test_sect_reputation_lesson_cannot_be_repeated_before_four_ticks():
     p = Player("门派修习冷却测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("少林")[0]
     p.location = "shaolin_training_ground"
     before = p.get_sect_reputation("少林")

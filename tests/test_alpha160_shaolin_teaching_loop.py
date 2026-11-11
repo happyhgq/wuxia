@@ -16,6 +16,7 @@ def capture(fn, *args):
 
 def joined_shaolin():
     p = Player("少林传授测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("少林")[0]
     # 入门时可能自动授予基础拳法；这里重置该技能以测试“重新学习”的命令入口。
     if p.get_skill_progress("罗汉拳")["learned"]:

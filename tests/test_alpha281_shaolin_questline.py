@@ -106,6 +106,7 @@ def test_shaolin_ordination_hall_is_enterable_by_entry_rank_monk():
     assert rooms[DHARMA_HALL]["access"]["min_rank_index"] == 0
 
     player = Player("少林讲经堂入门弟子", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
     assert player.get_sect_official_rank_index("少林") == 0
     assert room_access_denial(player, rooms[DHARMA_HALL]) == ""

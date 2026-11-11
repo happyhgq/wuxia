@@ -7,6 +7,7 @@ QUEST = "青锋疑云"
 
 def make_member():
     p = Player("青锋疑云测试", "散人")
+    p.level = max(p.level, 3)
     ok, _ = p.join_sect("华山")
     assert ok
     p.active_quests[QUEST] = 0
@@ -73,6 +74,7 @@ def test_full_public_route_can_be_turned_in_and_rewards_huashan_reputation():
     import io
 
     p = Player("青锋疑云交付测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("华山")[0]
     p.level = 3
     p.location = "huashan_guest_hall"

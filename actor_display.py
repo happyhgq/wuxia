@@ -102,7 +102,9 @@ def _label_parts(npc_name, data):
     nickname = _text(data.get("nickname"))
     display_id = _text(data.get("id"))
     nickname_part = f"「{nickname}」" if nickname else ""
-    label = f"{rank_title}{nickname_part}{name}"
+    # 部分 NPC 的 name 已含 rank_title，重复拼接会显示成“归云城归云城捕头”。
+    prefix = "" if rank_title and name.startswith(rank_title) else rank_title
+    label = f"{prefix}{nickname_part}{name}"
     return name, rank_title, nickname, display_id, label
 
 
@@ -161,6 +163,44 @@ def format_room_label(npc_name, npc_data=None, include_id=False):
     if include_id and display_id:
         label = f"{label}({display_id})"
     return label or npc_name
+
+
+def display_name(npc_name, npc_data=None):
+    """玩家可见文案统一使用房间标签，避免内部键名泄漏到公告与对话。"""
+    return format_room_label(npc_name, npc_data)
+
+
+def prose_name(npc_name, npc_data=None):
+    """叙述用称谓：优先使用数据中的 prose，缺失时保持原有简短键名/标签回退。"""
+    data = npc_data if isinstance(npc_data, dict) else _npc_data(npc_name)
+    prose = _text(data.get("prose")) if data else ""
+    if prose:
+        return prose
+    label = format_room_label(npc_name, npc_data)
+    return npc_name if npc_name and npc_name in label else label
+
+
+def text_candidates(npc_name):
+    """可用于在玩家输入中识别该 NPC 的称谓集合（键、姓名、称号、ID、标签）。"""
+    return list(_exact_candidates(npc_name, _npc_data(npc_name)))
+
+
+def match_name_prefix(raw_text, npc_names):
+    """按内部键、姓名、称号、拼音 ID 与显示标签做最长前缀匹配。
+
+    返回 (npc_key, matched_length)；长度按去掉空白后的字符数计，
+    便于调用方从原输入中剥离角色名称。
+    """
+    normalized = _normalize(raw_text)
+    if not normalized:
+        return None, 0
+    best_key, best_len = None, 0
+    for npc_name in npc_names:
+        for candidate in _exact_candidates(npc_name, _npc_data(npc_name)):
+            candidate_key = _normalize(candidate)
+            if candidate_key and normalized.startswith(candidate_key) and len(candidate_key) > best_len:
+                best_key, best_len = npc_name, len(candidate_key)
+    return best_key, best_len
 
 
 def _gear_rows(data):

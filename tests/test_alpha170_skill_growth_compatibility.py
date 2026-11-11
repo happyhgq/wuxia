@@ -5,6 +5,7 @@ from player import Player
 
 def join(sect):
     player = Player(f"{sect}武学闭环测试", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect(sect)[0]
     return player
 

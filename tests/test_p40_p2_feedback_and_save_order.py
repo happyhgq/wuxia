@@ -34,26 +34,29 @@ def _player_at(location, name="P2验收"):
     return player
 
 
-def test_heal_reports_actual_recovery_at_full_health():
+def test_heal_rejects_full_health_without_advancing_time():
     player = _player_at("village_square")
     player.hp = player.max_hp
     player.mp = player.max_mp
 
     output = _run_main_loop(player, ["疗伤", "退出"])
 
-    assert "恢复了 0 点气血与 0 点内力" in output
+    assert "你气血充盈，无需打坐调息。" in output
     assert player.hp == player.max_hp and player.mp == player.max_mp
+    assert player.get_quest_clock() == 7
 
 
-def test_heal_reports_partial_recovery_near_max():
+def test_heal_reports_percentage_recovery_and_mp_cost():
     player = _player_at("village_square")
-    player.hp = player.max_hp - 5
+    player.hp = player.max_hp - 10
     player.mp = player.max_mp
 
     output = _run_main_loop(player, ["疗伤", "退出"])
 
-    assert "恢复了 5 点气血与 0 点内力" in output
-    assert player.hp == player.max_hp
+    assert "恢复了 5 点气血，消耗 5 点内力。" in output
+    assert player.hp == player.max_hp - 5
+    assert player.mp == player.max_mp - 5
+    assert player.get_quest_clock() == 8
 
 
 def test_deferred_save_waits_for_post_action_tick(tmp_path, monkeypatch):

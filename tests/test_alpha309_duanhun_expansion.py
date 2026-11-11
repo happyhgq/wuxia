@@ -204,7 +204,7 @@ def test_expanded_npcs_are_always_available_in_their_rooms():
         "守冢老人": ("duanhun_rain_shrine", ["断魂岭·剑冢旧誓", "断魂岭·断锋回炉"]),
         "守祠老妪": ("duanhun_rain_shrine", ["断魂岭·皮货换药"]),
     }
-    assert len(npcs) == 79
+    assert len(npcs) == 81
     for name, (home_room, quests) in expected.items():
         info = npcs[name]
         assert info["home_room"] == home_room
@@ -220,7 +220,7 @@ def test_expanded_npcs_are_always_available_in_their_rooms():
 
 def test_expanded_quests_form_a_gated_l14_l15_chain():
     quests = _data("quests.json")
-    assert len(quests) == 81
+    assert len(quests) == 82
     for name, expected in EXPANDED_QUESTS.items():
         quest = quests[name]
         assert quest["npc"] == expected["npc"]

@@ -11,23 +11,36 @@ from unittest.mock import patch
 import pytest
 
 import main
+import engine
 from actions import handle_inn_service
 from player import Player
 from world_time import format_world_clock, ticks_until_next_dawn, world_hour
 
 
-def _run_main_loop(player, commands):
-    with patch.object(main.os.path, "exists", return_value=True), \
-         patch.object(main.Player, "load_from_file", return_value=player), \
-         patch.object(main.Player, "save_to_file", lambda self, filename=None: True), \
-         patch.object(builtins, "input", return_value="y"), \
-         patch.object(main, "read_command", side_effect=list(commands)), \
-         patch.object(main, "clear_screen"), \
-         patch.object(main, "look"), \
-         patch.object(main, "announce_pending_npc_movement"), \
-         patch.object(main, "announce_pending_caravan_arrivals"), \
-         contextlib.redirect_stdout(io.StringIO()):
+def _run_main_loop(player, commands, patch_save=True):
+    output = io.StringIO()
+    real_exists = os.path.exists
+
+    def exists(path):
+        # 只让主循环以为正式存档存在；其余路径（如存档临时文件）按真实文件系统判断。
+        if os.path.normcase(os.path.abspath(str(path))) == os.path.normcase(os.path.abspath(engine.SAVE_PATH)):
+            return True
+        return real_exists(path)
+
+    with contextlib.ExitStack() as stack:
+        stack.enter_context(patch.object(main.os.path, "exists", side_effect=exists))
+        stack.enter_context(patch.object(main.Player, "load_from_file", return_value=player))
+        if patch_save:
+            stack.enter_context(patch.object(main.Player, "save_to_file", lambda self, filename=None: True))
+        stack.enter_context(patch.object(builtins, "input", return_value="y"))
+        stack.enter_context(patch.object(main, "read_command", side_effect=list(commands)))
+        stack.enter_context(patch.object(main, "clear_screen"))
+        stack.enter_context(patch.object(main, "look"))
+        stack.enter_context(patch.object(main, "announce_pending_npc_movement"))
+        stack.enter_context(patch.object(main, "announce_pending_caravan_arrivals"))
+        stack.enter_context(contextlib.redirect_stdout(output))
         main.main()
+    return output.getvalue()
 
 
 @pytest.mark.parametrize("clock,expected", [
@@ -56,18 +69,22 @@ def test_inn_stay_reports_real_sleep_steps_and_restores_health():
     assert player.world_state["variables"]["inn_nights_stayed"] == 1
     assert "这一觉过去 17 个世界时刻" in output.getvalue()
     assert "卯时 06:00" in output.getvalue()
+    assert "住店不会自动保存进度" not in output.getvalue()
 
 
-def test_main_loop_stay_advances_to_dawn():
+def test_main_loop_stay_advances_to_dawn_and_autosaves():
     player = Player("过夜主循环")
     player.location = "inn"
     player.set_var("quest_clock", 7)
     player.gold = 50
-    _run_main_loop(player, ["住店", "退出"])
+    output = _run_main_loop(player, ["住店", "退出"], patch_save=False)
     assert player.get_quest_clock() == 24
     assert format_world_clock(player.get_quest_clock()) == "卯时 06:00"
     assert world_hour(player.get_quest_clock()) == 6
     assert player.gold == 38
+    assert "住店不会自动保存进度" not in output
+    assert "游戏已自动保存" in output
+    assert output.index("这一觉过去") < output.index("游戏已自动保存")
 
 
 def test_main_loop_failed_stay_costs_no_time():

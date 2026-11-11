@@ -73,6 +73,7 @@ def test_guest_permission_and_wrong_sect_never_open_high_rank_rooms():
 
         other = next(name for name in SECTS if name != sect)
         member = Player(f"异门-{sect}", "散人")
+        member.level = max(member.level, 3)
         assert member.join_sect(other)[0]
         member._sect_progress_state().setdefault(sect, {})["official_rank_index"] = 4
         assert room_access_denial(member, room)
@@ -81,6 +82,7 @@ def test_guest_permission_and_wrong_sect_never_open_high_rank_rooms():
 def test_rank_gated_skills_use_official_promotion_not_reputation_shortcut():
     for sect, cfg in SECTS.items():
         player = Player(f"武学门槛-{sect}", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(sect)[0]
         player.level = 30
         player.change_sect_reputation(sect, 1000)
@@ -96,6 +98,7 @@ def test_rank_gated_skills_use_official_promotion_not_reputation_shortcut():
 def test_foreign_sect_skills_cannot_be_learned_after_joining_another_sect():
     for current, cfg in SECTS.items():
         player = Player(f"跨门派武学-{current}", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(current)[0]
         foreign = next(other for other in SECTS if other != current)
         foreign_skill = SECTS[foreign]["skills"][0]
@@ -106,6 +109,7 @@ def test_foreign_sect_skills_cannot_be_learned_after_joining_another_sect():
 def test_character_panel_reports_formal_sect_identity_and_legacy_save_keeps_compatibility():
     for sect in SECTS:
         fresh = Player(f"新入门-{sect}", "散人")
+        fresh.level = max(fresh.level, 3)
         assert fresh.join_sect(sect)[0]
         assert fresh.get_sect_summary()["rank"] == engine.SECTS[sect]["ranks"][0]["name"]
 

@@ -67,6 +67,7 @@ def test_legacy_multword_sect_command_is_recovered_by_handler():
 
 def test_huashan_skills_require_training_ground_and_instructor_for_command_learning():
     p = Player("传功地点测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("华山")[0]
     p.location = "huashan_guest_hall"
     output = capture(handle_skills, p, ["学习", "夺命连环三仙剑"])

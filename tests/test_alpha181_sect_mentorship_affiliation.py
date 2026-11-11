@@ -12,6 +12,7 @@ SECT_MENTORS = {
 
 def disciple(sect):
     player = Player(f"师承校验-{sect}", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect(sect)[0]
     return player
 

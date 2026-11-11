@@ -1455,6 +1455,18 @@ def clear_statuses():
     p_statuses_global.clear()
 
 
+# 古庙打坐只驱散受制、破防这类病邪异状；中毒、流血属于外伤，需用药或另行处理。
+TEMPLE_PURGED_STATUSES = ("stun", "armor_break")
+
+
+def clear_temple_afflictions(statuses=None):
+    target = p_statuses_global if statuses is None else statuses
+    purged = [name for name in TEMPLE_PURGED_STATUSES if name in target]
+    for name in purged:
+        del target[name]
+    return purged
+
+
 def add_status(statuses, name, turns, value=0):
     if not name:
         return
@@ -1554,7 +1566,7 @@ def apply_shield(statuses, raw_damage):
 DEFAULT_ROOMS = {
     "village_gate": {
         "name": "青石村口", "zone": "main",
-        "desc": "一座破旧的木牌楼立在道旁，匾额上“青石村”三字被风雨侵蚀得斑驳。牌楼下靠着个打盹的守卫。往北进入青石长街，往南则是黄土官道。",
+        "desc": "一座破旧的木牌楼立在道旁，匾额上“青石村”三字被风雨侵蚀得斑驳。牌楼下的哨位旁搁着一面传令锣。往北进入青石长街，往南则是黄土官道。",
         "exits": {"北": "village_south_street", "南": "official_road"},
         "npcs": ["守卫"], "safe": True, "coord": [2, 1]
     },
@@ -1572,7 +1584,7 @@ DEFAULT_ROOMS = {
     },
     "general_shop": {
         "name": "杂货铺", "zone": "main",
-        "desc": "货架上摆满了日用杂物与行脚干粮。杂货铺老板正笑脸迎人。西边是大门。",
+        "desc": "货架上摆满了日用杂物与行脚干粮。杂货张正笑脸迎人。西边是大门。",
         "exits": {"西": "village_south_street"}, "npcs": ["杂货铺老板"], "safe": True, "coord": [3, 2]
     },
     "village_square": {
@@ -1583,12 +1595,12 @@ DEFAULT_ROOMS = {
     },
     "medicine_shop": {
         "name": "百草堂", "zone": "main",
-        "desc": "一进门便能闻到浓郁的药香。墙上密密麻麻排着药柜，老板垂首研磨金创药。东边是大门。",
+        "desc": "一进门便能闻到浓郁的药香。墙上密密麻麻排着药柜，柜台上摊着待称的药材。东边是大门。",
         "exits": {"东": "village_square"}, "npcs": ["药铺老板"], "safe": True, "coord": [1, 3]
     },
     "blacksmith": {
         "name": "打铁铺", "zone": "main",
-        "desc": "炉火通红，热浪扑面。铁匠赤膊抡锤，火星四溅。（输入“打造”可强化兵刃或防具）西边通往村中广场。",
+        "desc": "炉火通红，热浪扑面。铁砧旁码着待修的农具与铁料。（输入“打造”可强化兵刃或防具）西边通往村中广场。",
         "exits": {"西": "village_square"}, "npcs": ["铁匠"], "safe": True, "coord": [3, 3]
     },
     "village_north_street": {
@@ -1598,12 +1610,12 @@ DEFAULT_ROOMS = {
     },
     "village_head_house": {
         "name": "村长宅院", "zone": "main",
-        "desc": "一座朴素的四合小院，青苔爬满石阶。正房里白发村长负手而立，眉宇间带着几分愁容。",
+        "desc": "一座朴素的四合小院，青苔爬满石阶。正房的门半掩着，案头摞着几册翻旧的田亩账册。",
         "exits": {"东": "village_north_street"}, "npcs": ["村长"], "safe": True, "coord": [1, 4]
     },
     "temple": {
         "name": "古庙", "zone": "main",
-        "desc": "古庙颓败，朱漆剥落。室内清幽无人，只有半截石佛立于堂中。这里是打坐恢复绝佳之地，可驱散病邪。（输入“打坐”调息恢复）",
+        "desc": "古庙颓败，朱漆剥落。室内清幽无人，只有半截石佛立于堂中。这里是静心打坐之处，可恢复气血并驱散病邪；打坐会消耗内力。（输入“打坐”调息）",
         "exits": {"南": "village_north_street"}, "safe": True, "coord": [2, 5]
     },
     "official_road": {
@@ -1676,7 +1688,7 @@ DEFAULT_NPCS = {
     "村长": {
         "title": "青石村老村长", "desc": "老态龙钟，身着一袭朴素长袍，双眉紧锁，似乎正在为什么事情忧心忡忡。", "type": "master",
         "dialogue": ["唉……黑风山的山贼最近越来越猖狂，连出村采药的村民都被抓走了。"],
-        "info": {"山贼": "若有少侠能击败山贼二当家，解救被绑村民，老夫必有重赏！", "黑风山": "黑风山就在村后荒野西面。"},
+        "info": {"山贼": "若有少侠能击败山贼二当家，解救受难村民，老夫必有重赏！", "黑风山": "黑风山就在村后荒野西面。"},
         "quests": ["清剿黑风山"]
     },
     "药铺老板": {
@@ -1686,9 +1698,10 @@ DEFAULT_NPCS = {
         "info": {"采药": "草药可以在荒野和官道附近采集得到。"}
     },
     "铁匠": {
-        "title": "王打铁", "desc": "肌肉虬结，赤膊挥舞着百斤重的铁锤，浑身泛着健康的光泽与汗水。", "type": "smith",
+        "name": "王铁匠", "rank_title": "", "prose": "王铁匠",
+        "title": "王铁匠", "desc": "肌肉虬结，赤膊挥舞着百斤重的铁锤，浑身泛着健康的光泽与汗水。", "type": "smith",
         "shop": ["铁剑", "精铁剑", "皮甲", "锁子甲"],
-        "dialogue": ["只要你有铁矿石和银子，我就能帮你的兵刃与防具精炼加固！（输入“打造”后选择 1 或 2 强化）"],
+        "dialogue": ["我王打铁，只要你有铁矿石和银子，就能帮你的兵刃与防具精炼加固！（输入“打造”后选择 1 或 2 强化）"],
         "info": {"打造": "消耗铁矿石和银子可以强化装备属性。"}
     },
     "掌柜": {

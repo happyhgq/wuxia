@@ -6,6 +6,7 @@ from travel_system import room_access_denial
 
 def make_shaolin_player(rank_index):
     player = Player("门禁核查", "散人")
+    player.level = max(player.level, 3)
     ok, message = player.join_sect("少林")
     assert ok, message
     player._sect_progress_state().setdefault("少林", {})["official_rank_index"] = rank_index

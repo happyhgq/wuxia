@@ -105,10 +105,19 @@ clear_screen = engine.clear_screen
 reload_game_data = engine.reload_game_data
 battle_pause = engine.battle_pause
 clear_statuses = engine.clear_statuses
+clear_temple_afflictions = engine.clear_temple_afflictions
 from player import Player
 from combat import combat, handle_attack
 from actions import look, handle_world_activity, handle_local_business_rumor, handle_npc_actions, handle_talk_and_ask, handle_relations, handle_sect, handle_skills, handle_explore, handle_world_events, handle_information, handle_notice_board, handle_quest, handle_trading, handle_equipment_and_items, handle_forge, handle_attributes, show_build, handle_factions, handle_faction_conflicts, handle_region_ecology, handle_player_influence, handle_inn_service, handle_security_governance
-from command_policy import command_will_be_handled, command_advances_world, preflight_guaranteed_failure
+from command_policy import (
+    MEDITATION_FULL_HP,
+    MEDITATION_INSUFFICIENT_MP,
+    MEDITATION_UNSAFE,
+    check_meditation_allowed,
+    command_will_be_handled,
+    command_advances_world,
+    preflight_guaranteed_failure,
+)
 
 
 CMD_MAP = {
@@ -905,7 +914,7 @@ def show_context_advice(player):
     room = engine.ROOMS.get(player.location, {})
     tips = []
     if player.hp < player.max_hp * 0.45 or player.mp < player.max_mp * 0.35:
-        tips.append("你目前状态偏弱，可以先输入“打坐”恢复气血与内力。")
+        tips.append("你目前状态偏弱，可以先在安全地点输入“打坐”恢复气血，这会消耗内力。")
     if player.location in ("village_square", "guiyun_central_square"):
         tips.append("这里有公告栏/江湖榜墙，可以输入“公告”看看近期江湖消息。")
     if player.get_npcs_in_room(player.location):
@@ -1366,9 +1375,10 @@ def main():
                 service_action = {"inn_stay": "住店", "inn_meal": "吃饭", "inn_tea": "喝茶", "inn_rumor": "听消息"}[cmd]
                 service_result = handle_inn_service(player, service_action, args)
                 if cmd == "inn_stay":
-                    _advance_world_after_action(
-                        player, service_result if isinstance(service_result, int) and service_result > 0 else 0
-                    )
+                    steps = service_result if isinstance(service_result, int) and service_result > 0 else 0
+                    _advance_world_after_action(player, steps)
+                    if steps > 0:
+                        player.autosave(force=True)
                 elif service_result is not False:
                     _advance_world_after_action(player)
             elif cmd in ("shop", "list", "buy", "sell"):
@@ -1384,20 +1394,25 @@ def main():
                 if attack_ok is not False:
                     _advance_world_after_action(player)
             elif cmd == "heal":
-                is_temple = (player.location == "temple")
-                bonus = 2 if is_temple else 1
-                rec_hp = 30 * bonus
-                rec_mp = 20 * bonus
-                hp_before, mp_before = player.hp, player.mp
-                player.hp = min(player.max_hp, player.hp + rec_hp)
-                player.mp = min(player.max_mp, player.mp + rec_mp)
-                gained_hp = player.hp - hp_before
-                gained_mp = player.mp - mp_before
-                if is_temple:
-                    clear_statuses()
-                    print(f"{Color.BRIGHT_GREEN}古庙石佛前盘膝打坐，气血恢复 {gained_hp} 点，内力恢复 {gained_mp} 点，一身病邪异状皆被驱散！{Color.RESET}")
+                room = engine.ROOMS.get(player.location, {})
+                reason = check_meditation_allowed(player, room)
+                if reason == MEDITATION_FULL_HP:
+                    print(f"{Color.YELLOW}你气血充盈，无需打坐调息。{Color.RESET}")
+                elif reason == MEDITATION_INSUFFICIENT_MP:
+                    print(f"{Color.YELLOW}内力不足，无法运功打坐。{Color.RESET}")
+                elif reason == MEDITATION_UNSAFE:
+                    print(f"{Color.YELLOW}此处不宜入定。{Color.RESET}")
                 else:
-                    print(f"{Color.GREEN}盘膝打坐调息，恢复了 {gained_hp} 点气血与 {gained_mp} 点内力！{Color.RESET}")
+                    mp_cost = max(1, int(player.max_mp * 0.10))
+                    gained_hp = min(player.max_hp - player.hp, max(1, int(player.max_hp * 0.05)))
+                    player.mp = max(0, player.mp - mp_cost)
+                    player.hp = min(player.max_hp, player.hp + gained_hp)
+                    if player.location == "temple":
+                        purged = clear_temple_afflictions()
+                        suffix = "一身病邪异状皆被驱散！" if purged else ""
+                        print(f"{Color.BRIGHT_GREEN}古庙石佛前盘膝打坐，气血恢复 {gained_hp} 点，消耗 {mp_cost} 点内力。{suffix}{Color.RESET}")
+                    else:
+                        print(f"{Color.GREEN}盘膝打坐调息，恢复了 {gained_hp} 点气血，消耗 {mp_cost} 点内力。{Color.RESET}")
             elif cmd == "mine":
                 from economy import EconomyManager, TradeService
                 manager = EconomyManager(getattr(player, "economy_state", {}))

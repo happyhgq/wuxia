@@ -11,6 +11,7 @@ def test_foreign_historical_skill_keeps_mastery_but_cannot_gain_more():
     assert progressed["mastery"] >= before["mastery"]
 
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     locked_before = player.get_skill_progress("罗汉拳")
     player.record_skill_use("罗汉拳", True)
@@ -26,6 +27,7 @@ def test_cross_sect_skill_history_survives_v12_save_load(tmp_path, capsys):
     player.record_skill_use("罗汉拳", True)
     expected = player.get_skill_progress("罗汉拳")
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     path = tmp_path / "skill_lifecycle_v12.json"
 
@@ -45,7 +47,9 @@ def test_rejoining_original_sect_does_not_restore_departed_official_rank():
     player = Player("重新拜入身份重置", "少林")
     player._sect_progress_state().setdefault("少林", {})["official_rank_index"] = 3
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
     assert player.get_sect_official_rank_index("少林") == 0

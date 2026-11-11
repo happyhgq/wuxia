@@ -92,24 +92,28 @@ def test_look_shangqing_routes_to_local_business_query():
     player = player_at("medicine_shop", state)
     output, _ = capture(look, player, ["商情"])
     assert "【附近营生】" in output
-    assert "药铺老板" in output
+    assert "百草堂主" in output
     assert "草药" in output
 
 
-def test_working_npc_scene_status_matches_economy_activity():
+def test_schedule_busy_wins_over_economy_activity_text():
     manager = EconomyManager()
     manager.update(10)
     manager.state.npc_inventory["铁匠"] = {"铁矿石": 8}
     manager.state.npc_inventory["木匠老许"] = {"木材": 8}
     state = manager.export_state()
 
+    # 铁匠在卯时尚未开工，营生模拟的活动说明可以接管人物行。
     blacksmith = player_at("blacksmith", state)
     output, _ = capture(look, blacksmith)
     assert "正在打铁" in people_line(output, "铁匠")
 
+    # 木匠老许此刻日程明确在岗，人物行以日程为准，不再被营生文案改写。
     square = player_at("village_square", state)
     output, _ = capture(look, square)
-    assert "正在制作木剑" in people_line(output, "木匠老许")
+    line = people_line(output, "木匠老许")
+    assert "支起木架做活" in line
+    assert "正在制作木剑" not in line
 
 
 def test_resting_npc_is_not_rewritten_as_working_after_hours():

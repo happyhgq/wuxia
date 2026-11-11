@@ -21,7 +21,7 @@ def test_three_major_sects_have_gated_advanced_rooms_and_signature_skills():
         assert room['access']['sect'] == sect
         assert room['access']['min_rank_index'] >= 3
         skill = next(x for x in skills[sect] if x['name'] == skill_name)
-        assert skill['learn_min_rank'] >= 3 and skill['learn_min_reputation'] >= 100
+        assert skill['learn_min_rank'] >= 2 and skill['learn_min_reputation'] >= 50
         assert skill_name in sects[sect]['exclusive_skills']
         assert items[item_name]['type'] == 'weapon'
         assert quests[quest_names[sect]]['reward']['item'] == item_name
@@ -64,11 +64,11 @@ def test_signature_skills_obey_formal_sect_rank_and_reputation_gates():
         player.change_sect_reputation(sect, 150)
         ok, reason = player.can_learn_skill(skill_name)
         assert not ok and '正式晋升' in reason
-        player._sect_progress_state()[sect]['official_rank_index'] = 3
-        player.change_sect_reputation(sect, -100)
+        player._sect_progress_state()[sect]['official_rank_index'] = 2
+        player.change_sect_reputation(sect, -150)
         ok, reason = player.can_learn_skill(skill_name)
         assert not ok and '声望' in reason
-        player.change_sect_reputation(sect, 100)
+        player.change_sect_reputation(sect, 50)
         player.level = 10
         ok, reason = player.can_learn_skill(skill_name)
         assert ok, (sect, reason)

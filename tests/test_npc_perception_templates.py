@@ -54,10 +54,10 @@ def test_perception_roles_are_assigned_within_templates():
         if role:
             assert role in engine.PERCEPTION_TEMPLATES, name
             role_counts[role] = role_counts.get(role, 0) + 1
-    assert sum(role_counts.values()) == 35
+    assert sum(role_counts.values()) == 36
     assert role_counts == {
         "smith": 3, "innkeeper": 3, "inn_staff": 3, "apothecary": 4,
-        "shopkeeper": 8, "guard": 5, "hunter": 3, "villager": 6,
+        "shopkeeper": 9, "guard": 5, "hunter": 3, "villager": 6,
     }
 
 

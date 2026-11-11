@@ -9,6 +9,7 @@ def test_newly_joined_sect_summary_shows_formal_rank_not_reputation_rank():
         ("华山", "记名弟子", "内门弟子"),
     ]:
         player = Player(f"{sect}身份显示测试", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(sect)[0]
         player.change_sect_reputation(sect, 50)
         summary = player.get_sect_summary(sect)
@@ -30,7 +31,7 @@ def test_legacy_save_without_official_rank_record_keeps_reputation_based_rank():
 
 def test_official_rank_summary_updates_after_formal_promotion():
     player = Player("正式晋升身份显示测试", "散人")
-    player.level = 3
+    player.level = 5
     assert player.join_sect("武当")[0]
     player.location = "wudang_training_ground"
     player.change_sect_reputation("武当", 20)

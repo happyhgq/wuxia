@@ -10,7 +10,7 @@ from world_lifecycle import entity_state
 class DuplicateVictorySettlementTests(unittest.TestCase):
     def test_same_enemy_cannot_award_rewards_twice_during_corpse_period(self):
         player = Player("重复结算测试", "散人")
-        player.location = "test_room"
+        player.location = "village_square"
         enemy = {"tier": "normal"}
         reward = {"exp": 3, "gold": 2, "drops": []}
 
@@ -19,9 +19,9 @@ class DuplicateVictorySettlementTests(unittest.TestCase):
              patch.object(player, "update_quest_progress") as quest_progress, \
              patch("region_activity.record_criminal_defeat", return_value={"applied": False}), \
              patch.object(player, "save_to_file") as save:
-            combat._finish_combat_victory(player, "test_room", "测试敌人", enemy)
-            self.assertEqual(entity_state(player, "test_room", "测试敌人")[0], "corpse")
-            combat._finish_combat_victory(player, "test_room", "测试敌人", enemy)
+            combat._finish_combat_victory(player, "village_square", "测试敌人", enemy)
+            self.assertEqual(entity_state(player, "village_square", "测试敌人")[0], "corpse")
+            combat._finish_combat_victory(player, "village_square", "测试敌人", enemy)
 
         apply_rewards.assert_called_once_with(player, reward, source="战斗奖励")
         quest_progress.assert_called_once_with("测试敌人")

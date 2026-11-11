@@ -31,6 +31,7 @@ def test_each_sect_promotion_trial_is_listed_by_a_present_giver_and_can_be_accep
         assert quest_name in npcs[giver].get("quests", [])
         assert giver in engine.ROOMS[room].get("npcs", [])
         p = Player(f"{sect}历练任务回归", "散人")
+        p.level = max(p.level, 3)
         assert p.join_sect(sect)[0]
         p.location = room
         prompt = capture(handle_talk_and_ask, p, [giver])
@@ -48,6 +49,7 @@ def test_huashan_core_rank_investigation_is_offered_by_its_giver():
     assert quests[quest_name].get("npc") == giver
     assert quest_name in npcs[giver].get("quests", [])
     p = Player("华山调查入口回归", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("华山")[0]
     p.level = 3
     p.location = "huashan_guest_hall"

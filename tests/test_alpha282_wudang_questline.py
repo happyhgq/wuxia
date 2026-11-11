@@ -132,6 +132,7 @@ def test_wudang_questline_is_reachable_at_entry_rank():
         assert "min_rank_index" not in (rooms[room_id].get("access") or {})
 
     player = Player("武当入门可达性", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     assert player.get_sect_official_rank_index("武当") == 0
     for room_id in (TRAINING_GROUND, OUTER_COURT, GATE):

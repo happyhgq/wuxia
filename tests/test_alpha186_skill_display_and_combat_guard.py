@@ -7,6 +7,7 @@ def test_foreign_sect_skill_detail_marks_historical_record_as_unusable(capsys):
     player = Player("跨门派武学查看", "少林")
     before = player.get_skill_progress("罗汉拳")
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
 
     handle_skills(player, ["详情", "罗汉拳"])
@@ -30,9 +31,11 @@ def test_current_sect_skill_detail_keeps_normal_mastery_display(capsys):
 def test_switching_back_to_original_sect_restores_only_that_sects_available_skills():
     player = Player("往返门派武学", "少林")
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     assert "罗汉拳" not in [skill["name"] for skill in player.get_available_skills()]
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
     available = [skill["name"] for skill in player.get_available_skills()]
     assert "罗汉拳" in available

@@ -131,5 +131,5 @@ def test_alpha286_kill_quest_exp_matches_actual_room_profile_combat_exp():
 def test_alpha286_total_quest_exp_reaches_level_14_threshold():
     quests = _data("quests.json")
     total = sum(info["reward"].get("exp", 0) for info in quests.values())
-    assert total == 16034
+    assert total == 16114
     assert total > 8955

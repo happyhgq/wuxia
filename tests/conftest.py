@@ -12,9 +12,9 @@ def _isolate_official_save(tmp_path, monkeypatch):
     real_save = player_module.Player.save_to_file
     official = os.path.normcase(os.path.abspath(engine.SAVE_PATH))
 
-    def guarded(self, filename=engine.SAVE_PATH, verbose=True):
+    def guarded(self, filename=engine.SAVE_PATH, verbose=True, auto=False):
         if filename is None or os.path.normcase(os.path.abspath(str(filename))) == official:
             filename = str(tmp_path / "save.json")
-        return real_save(self, filename, verbose)
+        return real_save(self, filename, verbose, auto)
 
     monkeypatch.setattr(player_module.Player, "save_to_file", guarded)

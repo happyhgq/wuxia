@@ -10,6 +10,7 @@ from player import Player
 
 def joined_shaolin():
     p = Player("少林身份测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("少林")[0]
     return p
 
@@ -25,6 +26,7 @@ def test_shaolin_uses_distinct_identity_names_without_changing_other_sects():
     p = joined_shaolin()
     assert p.get_sect_official_rank() == "俗家弟子"
     w = Player("武当测试", "散人")
+    w.level = max(w.level, 3)
     assert w.join_sect("武当")[0]
     assert w.get_sect_official_rank() == "记名弟子"
 
@@ -41,7 +43,7 @@ def test_shaolin_status_panel_uses_identity_label_and_no_training_direction():
 
 def test_shaolin_cannot_promote_to_novice_without_ordination():
     p = joined_shaolin()
-    p.level = 3
+    p.level = 5
     p.change_sect_reputation("少林", 20)
     for _ in range(10):
         p.record_skill_use("罗汉拳")
@@ -53,7 +55,7 @@ def test_shaolin_cannot_promote_to_novice_without_ordination():
 
 def test_shaolin_ordination_is_location_npc_and_practice_gated_then_allows_promotion():
     p = joined_shaolin()
-    p.level = 3
+    p.level = 5
     p.change_sect_reputation("少林", 20)
     for _ in range(10):
         p.record_skill_use("罗汉拳")
@@ -71,7 +73,7 @@ def test_shaolin_ordination_is_location_npc_and_practice_gated_then_allows_promo
 def test_shaolin_full_ordination_required_before_becoming_monk():
     p = joined_shaolin()
     p._sect_progress_state().setdefault("少林", {})["official_rank_index"] = 1
-    p.level = 8
+    p.level = 10
     p.change_sect_reputation("少林", 50)
     for _ in range(30):
         p.record_skill_use("罗汉拳")

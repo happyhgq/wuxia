@@ -137,10 +137,10 @@ def test_busy_talk_uses_natural_prose_without_status_label():
     value, result = capture(handle_talk_and_ask, player, ["药铺老板"])
     assert result is False
     assert "状态：" not in value
-    assert "药铺老板正在坐堂配药" in value
+    assert "百草堂主正在坐堂配药" in value
     assert "只匆匆应了一声" in value
     assert "说道" not in value
-    assert "【可接取委托】" not in value
+    assert "【可接取委托】" in value
     assert player.get_relation("药铺老板") == before
 
 

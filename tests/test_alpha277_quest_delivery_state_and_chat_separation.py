@@ -141,8 +141,8 @@ def test_single_deliverable_offer_shows_full_delivery_method():
     assert "【可交付委托】" in output
     assert "初入江湖·采药识草" in output
     assert "等待你当面交付" in output
-    assert "前往【百草堂】找【药铺老板】" in output
-    assert "交谈 药铺老板 交付委托 初入江湖·采药识草" in output
+    assert "前往【百草堂】找【百草堂主】" in output
+    assert "交谈 百草堂主 交付委托 初入江湖·采药识草" in output
     assert HERB_QUEST in player.active_quests
 
 

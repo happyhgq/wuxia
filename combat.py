@@ -568,13 +568,15 @@ def _enemy_combat_stats(enemy_data):
 
 
 def experience_decay_multiplier(player_level, enemy_level):
-    """低级敌人经验衰减：等级差 ≤2 全额，3–4 为 70%，5–6 为 45%，7–9 为 25%，≥10 为 10%。"""
+    """低级敌人经验衰减：等级差 ≤1 全额，2 为 85%，3–4 为 70%，5–6 为 45%，7–9 为 25%，≥10 为 10%。"""
     try:
         diff = int(player_level) - int(enemy_level)
     except (TypeError, ValueError, OverflowError):
         diff = 0
-    if diff <= 2:
+    if diff <= 1:
         return 1.0
+    if diff == 2:
+        return 0.85
     if diff <= 4:
         return 0.70
     if diff <= 6:
@@ -664,7 +666,7 @@ def _finish_combat_victory(player, room_id, enemy_name, e_data):
     request_autosave(player)
 
 
-def combat(player, enemy_name):
+def _combat_impl(player, enemy_name):
     from world_lifecycle import entity_state, record_death
     room_id = getattr(player, "location", None)
     state, corpse = entity_state(player, room_id, enemy_name, "enemy")
@@ -967,11 +969,26 @@ def combat(player, enemy_name):
         recovery_message = _defeat_recovery(player, "temple")
         from engine import clear_statuses
         clear_statuses()
-        player.save_to_file()
-        print(f"{Color.BRIGHT_YELLOW}{recovery_message}状态已清理，当前状态已保存。{Color.RESET}")
+        request_autosave(player)
+        print(f"{Color.BRIGHT_YELLOW}{recovery_message}状态已清理。{Color.RESET}")
     elif e_hp <= 0:
         # 中毒、流血等持续伤害可能在回合开始时直接击倒敌人；也必须走完整胜利结算。
         _finish_combat_victory(player, room_id, enemy_name, e_data)
+
+
+def combat(player, enemy_name):
+    """战斗入口：标记战斗状态，结束后在安全场景补写挂起的自动存档。"""
+    player._in_combat = True
+    try:
+        return _combat_impl(player, enemy_name)
+    finally:
+        player._in_combat = False
+        flush_autosave = getattr(player, "flush_autosave", None)
+        if callable(flush_autosave):
+            try:
+                flush_autosave()
+            except (OSError, TypeError, ValueError):
+                pass
 
 
 def handle_attack(player, args):

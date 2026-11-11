@@ -41,8 +41,8 @@ def test_signature_skills_have_distinct_roles_and_bounded_costs():
         skill = next(s for s in skills[sect] if s["name"] == name)
         assert 2.2 <= skill["power"] <= 2.5
         assert 25 <= skill["mp_cost"] <= 32
-        assert skill["learn_min_rank"] >= 3
-        assert skill["learn_min_reputation"] >= 100
+        assert skill["learn_min_rank"] >= 2
+        assert skill["learn_min_reputation"] >= 50
         effect = skill.get("effect", {})
         assert effect["type"] == effect_type
         if status:

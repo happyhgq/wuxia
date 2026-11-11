@@ -128,7 +128,7 @@ def test_herb_restock_is_locked_separately_from_available_starter_herb_quest():
     out = capture(handle_talk_and_ask, p, ["药铺老板", "委托"])
     assert "【可接取委托】" in out
     assert "初入江湖·采药识草" in out
-    assert "接取方式：交谈 药铺老板 接受委托 初入江湖·采药识草" in out
+    assert "接取方式：交谈 百草堂主 接受委托 初入江湖·采药识草" in out
     assert "【当前不可接取】" in out
     assert "百草备货·补齐药材" in out
     assert out.index("【可接取委托】") < out.index("【当前不可接取】")
@@ -166,7 +166,7 @@ def test_busy_medicine_shop_owner_gives_short_reply_without_full_chat():
     out = capture(handle_talk_and_ask, p, ["药铺老板"])
     assert "状态：" not in out and "正在坐堂配药" in out
     assert "只匆匆应了一声" in out and "稍等" in out
-    assert "【可接取委托】" not in out
+    assert "【可接取委托】" in out
     assert "关系变化" not in out
     assert p.get_relation("药铺老板") == before
     assert p.get_quest_clock() == clock_before

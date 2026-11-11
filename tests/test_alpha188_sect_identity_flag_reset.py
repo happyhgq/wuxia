@@ -36,6 +36,7 @@ def test_rejoining_shaolin_requires_reviewing_scripture_rules_again():
     player = Player("重新拜入少林", "少林")
     player.set_flag("sect:shaolin:scripture_catalogue_reviewed", True)
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
 
     assert not player.get_flag("sect:shaolin:scripture_catalogue_reviewed", False)

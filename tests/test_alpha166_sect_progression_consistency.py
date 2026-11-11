@@ -41,6 +41,7 @@ def test_wudang_join_requires_guest_hall_interview_and_records_success():
 
 def test_wudang_promotion_requires_training_ground_and_teacher():
     p = Player("武当晋升回归", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("武当")[0]
     p.location = "wudang_guest_hall"
     output = capture(handle_sect, p, ["晋升"])
@@ -59,6 +60,7 @@ def test_wudang_promotion_requires_training_ground_and_teacher():
 def test_wudang_internal_access_and_core_rank_gate_are_enforced():
     p = Player("武当地图门禁回归", "散人")
     assert "正式拜师后再入院修习" in room_access_denial(p, engine.ROOMS["wudang_outer_court"])
+    p.level = max(p.level, 3)
     assert p.join_sect("武当")[0]
     assert "内门弟子" in room_access_denial(p, engine.ROOMS["wudang_zhenwu_hall"])
     record = p._sect_progress_state().setdefault("武当", {})

@@ -22,6 +22,7 @@ def capture(fn, *args):
 
 def prepared_disciple(sect):
     player = Player(f"{sect}指令闭环测试", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect(sect)[0]
     player.level = 30
     player.change_sect_reputation(sect, 1000)

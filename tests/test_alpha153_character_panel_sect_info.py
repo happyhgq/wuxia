@@ -16,7 +16,9 @@ def capture(fn, *args):
 
 def huashan_disciple():
     p = Player("面板测试", "散人")
+    p.level = 10
     assert p.join_sect("华山")[0]
+    p._sect_progress_state().setdefault("华山", {})["official_rank_index"] = 2
     p.location = "huashan_training_ground"
     return p
 

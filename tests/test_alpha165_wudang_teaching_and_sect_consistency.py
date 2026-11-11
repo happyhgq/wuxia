@@ -16,6 +16,7 @@ def capture(fn, *args):
 
 def joined_wudang():
     p = Player("武当传功测试", "散人")
+    p.level = max(p.level, 3)
     assert p.join_sect("武当")[0]
     for skill in ("太极剑", "绵掌", "两仪剑诀"):
         if p.get_skill_progress(skill)["learned"]:

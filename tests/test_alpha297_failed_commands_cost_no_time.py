@@ -102,8 +102,8 @@ def test_inn_meal_without_gold_costs_no_time():
 
 def test_missing_exit_direction_costs_no_time():
     player = _player_at("village_gate", "走错方向")
-    assert "东" not in engine.ROOMS["village_gate"]["exits"]
-    _run_main_loop(player, ["东", "退出"])
+    assert "西" not in engine.ROOMS["village_gate"]["exits"]
+    _run_main_loop(player, ["西", "退出"])
     assert player.get_quest_clock() == 7
     assert player.location == "village_gate"
 

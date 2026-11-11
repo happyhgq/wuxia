@@ -10,6 +10,7 @@ MENTORS = {
 
 def test_non_current_sect_cannot_receive_mentorship_lesson():
     player = Player("跨门派指点校验", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
     assert player.establish_sect_mentorship()[0]
     before = dict(player.get_sect_mentorship("少林"))
@@ -17,6 +18,7 @@ def test_non_current_sect_cannot_receive_mentorship_lesson():
     assert ok
     assert player.get_sect_mentorship("少林")["lessons"] == before.get("lessons", 0) + 1
     assert player.leave_sect()[0]
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     ok, message = player.record_mentorship_lesson("少林")
     assert not ok
@@ -26,6 +28,7 @@ def test_non_current_sect_cannot_receive_mentorship_lesson():
 
 def test_stale_foreign_mentor_record_cannot_gain_bond_or_lessons():
     player = Player("旧师承记录校验", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("华山")[0]
     record = player._sect_progress_state().setdefault("华山", {})
     record["mentorship"] = {"mentor": MENTORS["武当"], "bond": 10, "lessons": 2}
@@ -39,6 +42,7 @@ def test_stale_foreign_mentor_record_cannot_gain_bond_or_lessons():
 def test_current_sect_mentorship_lesson_still_works_for_all_three_sects():
     for sect, mentor in MENTORS.items():
         player = Player(f"正常指点-{sect}", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(sect)[0]
         assert player.establish_sect_mentorship(mentor)[0]
         ok, _ = player.record_mentorship_lesson()

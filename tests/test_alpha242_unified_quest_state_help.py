@@ -20,7 +20,7 @@ def capture(fn, *args, **kwargs):
 def test_all_quest_definitions_have_valid_giver_and_turn_in_locations():
     quests = json.loads(Path("data/quests.json").read_text(encoding="utf-8"))
     rooms = json.loads(Path("data/rooms.json").read_text(encoding="utf-8"))
-    assert len(quests) == 81
+    assert len(quests) == 82
     for qid, info in quests.items():
         giver = info.get("npc")
         turn_in = info.get("turn_in_npc") or giver
@@ -84,7 +84,11 @@ def test_notice_board_has_total_cap_and_no_internal_telemetry():
     p = Player("公告条数验收", "散人")
     p.location = "village_square"
     for i in range(15):
-        p.learn_player_information(f"new_wulin_rumor:{i}", f"江湖见闻 {i}。（可信度 80/100｜有效至时辰 {i+10}）", "", 80)
+        p.learn_player_information(
+            f"new_wulin_rumor:{i}",
+            f"江湖见闻 {i}。（可信度 80/100｜有效至时辰 {i+10}）",
+            "", 80, follow_up={"npc": "说书先生", "room": "guiyun_tea_room", "hint": "可打听江湖传闻"},
+        )
     out = capture(handle_notice_board, p)
     assert "可信度" not in out and "有效至时辰" not in out and "安全度约为" not in out
     # Count bullet items only; headings and the final guidance are not message rows.

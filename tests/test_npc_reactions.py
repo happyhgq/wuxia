@@ -157,7 +157,7 @@ def test_healthy_apothecary_talk_keeps_original_flow():
     player.refresh_npc_schedules()
     value, _ = capture(handle_talk_and_ask, player, ["药铺老板"])
     assert "气血恢复" not in value
-    assert "药铺老板 含笑应道：" in value
+    assert "百草堂主 含笑应道：" in value
 
 
 def test_guard_gate_talk_applies_patrol_on_rainy_night():

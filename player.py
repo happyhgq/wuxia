@@ -10,13 +10,14 @@ import tempfile
 import engine
 import npc_behavior
 import npc_utility
+import actor_display
 from ui_output import safe_print as print
 from world_time import world_hour
 
 SAVE_PATH = engine.SAVE_PATH
 
-# 自动存档按世界时刻节流：同一时刻内的多项结算只落盘一次，最多每 3 个时刻写一次。
-AUTO_SAVE_INTERVAL_TICKS = 3
+# 自动存档按世界时刻节流：同一时刻内的多项结算只落盘一次，最多每 10 个时刻写一次。
+AUTO_SAVE_INTERVAL_TICKS = 10
 
 
 def request_autosave(player, verbose=True):
@@ -89,6 +90,25 @@ def _safe_int_value(value, default=0, minimum=None, maximum=None):
     return value
 
 
+def normalize_follow_up(follow_up):
+    """把情报的后续行动整理为 {npc, room, hint}；没有可行动目标时返回 None。"""
+    if not isinstance(follow_up, dict):
+        return None
+    npc = str(follow_up.get("npc", "") or "").strip()
+    room = str(follow_up.get("room", "") or "").strip()
+    hint = str(follow_up.get("hint", "") or "").strip()
+    if not npc and not room:
+        return None
+    result = {}
+    if npc:
+        result["npc"] = npc
+    if room:
+        result["room"] = room
+    if hint:
+        result["hint"] = hint
+    return result
+
+
 class Player:
     def __init__(self, name="无名侠客", sect="散人"):
         self.name = name
@@ -112,6 +132,8 @@ class Player:
         self.attributes = {"strength": 0, "constitution": 0, "internal": 0, "agility": 0, "insight": 0}
         self.attribute_points = 0
         self.location = "village_gate"
+        # 运行期战斗标记，仅用于阻止战斗中的自动存档，不写入 V12 存档。
+        self._in_combat = False
 
         self.active_quests = {}
         self.quest_states = {}
@@ -819,12 +841,13 @@ class Player:
         if sect_name != self.get_sect() or sect_name == "散人":
             return False, "只有本门弟子才能建立师承关系。"
         # 师承必须与当前门派匹配，不能借其他门派的师长建立错误身份记录。
-        sect_mentors = {
+        training = (engine.SECTS.get(sect_name, {}) or {}).get("training", {}) or {}
+        expected_mentor = training.get("lesson_teacher") or {
             "少林": "少林传功师父",
             "武当": "武当传功师父",
             "华山": "华山授业师父",
-        }
-        expected_mentor = sect_mentors.get(sect_name)
+            "铁衣门": "铁衣门传功师父",
+        }.get(sect_name)
         if not expected_mentor:
             return False, "当前门派尚未设置正式授业师长。"
         mentor_name = mentor_name or expected_mentor
@@ -841,7 +864,7 @@ class Player:
         record = progress.setdefault(sect_name, {})
         record["mentorship"] = {"mentor": mentor_name, "bond": 0, "lessons": 0, "established": True}
         self.change_relation(mentor_name, 10)
-        return True, f"你向【{mentor_name}】行拜师礼，正式建立师承关系。师父嘱你先打牢基础，再求剑法精进。"
+        return True, f"你向【{mentor_name}】行拜师礼，正式建立师承关系。师父嘱你先打牢基础，再求武学精进。"
 
     def record_mentorship_lesson(self, sect_name=None):
         sect_name = sect_name or self.get_sect()
@@ -850,12 +873,13 @@ class Player:
             return False, "只有当前门派的正式弟子，才能接受本门师长指点。"
         record = self._sect_progress_state().get(sect_name, {})
         mentorship = record.get("mentorship", {}) if isinstance(record, dict) else {}
-        expected_mentors = {
+        training = (engine.SECTS.get(sect_name, {}) or {}).get("training", {}) or {}
+        expected_mentor = training.get("lesson_teacher") or {
             "少林": "少林传功师父",
             "武当": "武当传功师父",
             "华山": "华山授业师父",
-        }
-        expected_mentor = expected_mentors.get(sect_name)
+            "铁衣门": "铁衣门传功师父",
+        }.get(sect_name)
         if not isinstance(mentorship, dict) or not mentorship.get("mentor"):
             return False, "你尚未建立师承关系。"
         if not expected_mentor or mentorship.get("mentor") != expected_mentor:
@@ -885,7 +909,7 @@ class Player:
             focus_text = f"师父针对你正在修习的【{focus_skill}】指出招式衔接与发力上的不足；当前熟练度为{focus_progress.get('mastery', 0)}，宜继续勤练。"
         else:
             focus_skill = sect_skills[0] if sect_skills else "本门基础功"
-            focus_text = f"你尚未真正掌握本门武学，师父先从【{focus_skill}】的基本身法、握剑与起手式讲起。"
+            focus_text = f"你尚未真正掌握本门武学，师父先从【{focus_skill}】的基本架势与起手式讲起。"
         mentorship["lessons"] = max(0, int(mentorship.get("lessons", 0))) + 1
         mentorship["bond"] = min(100, max(0, int(mentorship.get("bond", 0))) + 5)
         mentorship["last_lesson_clock"] = now
@@ -933,7 +957,7 @@ class Player:
         required_rep = int(target.get("min_reputation", 0))
         # 晋升门槛优先读取门派数据，旧数据或缺项时回退到历史默认值，
         # 便于各门派独立调校成长节奏，同时兼容旧 V12 存档和旧 sects.json。
-        default_level = {1: 3, 2: 8, 3: 15, 4: 25}.get(current + 1, 1)
+        default_level = {1: 5, 2: 10, 3: 15, 4: 25}.get(current + 1, 1)
         default_mastery = {1: 10, 2: 30, 3: 50, 4: 80}.get(current + 1, 10)
         promotion_table = (engine.SECTS.get(sect_name, {}) or {}).get("promotion_requirements", {}) or {}
         rank_rule = promotion_table.get(str(current + 1), promotion_table.get(current + 1, {})) or {}
@@ -1729,13 +1753,14 @@ class Player:
                 continue
             self.learn_npc_information(
                 entry["npc"], entry["topic"], entry.get("text", text), entry.get("source", faction_name),
-                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral")
+                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral"), entry.get("follow_up")
             )
         player_info = action.get("player_information")
         if isinstance(player_info, dict) and player_info.get("topic"):
             self.learn_player_information(
                 player_info["topic"], player_info.get("text", text), player_info.get("source", faction_name),
-                player_info.get("confidence", 70), player_info.get("ttl", 0), player_info.get("sentiment", "neutral")
+                player_info.get("confidence", 70), player_info.get("ttl", 0), player_info.get("sentiment", "neutral"),
+                player_info.get("follow_up")
             )
         reactions = action.get("npc_reactions", []) or []
         if isinstance(reactions, list):
@@ -2336,6 +2361,7 @@ class Player:
         player_room = self.location
         source_text = str(source or "")
         source_lower = source_text.lower()
+        label = actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))
         special = any(token in source_lower for token in ("teleport", "vanish", "disappear", "return", "indoors"))
         if source_text.startswith(("event:", "quest:")) and not special:
             # 事件/任务若恰好移动到真实相邻出口，仍按方向提示；跨房间强制改位则明确视为特殊移动。
@@ -2346,56 +2372,56 @@ class Player:
             if special:
                 destination = engine.ROOMS.get(new_room, {}).get("name", "")
                 if source_lower.startswith(("return", "indoors")):
-                    text = f"{npc_name}转身回了{destination}。" if destination else f"{npc_name}转身回去了。"
+                    text = f"{label}转身回了{destination}。" if destination else f"{label}转身回去了。"
                 elif source_lower.startswith(("vanish", "disappear")):
-                    text = f"{npc_name}悄然消失在人群中。"
+                    text = f"{label}悄然消失在人群中。"
                 elif source_lower.startswith("teleport"):
-                    text = f"{npc_name}被传送离开了。"
+                    text = f"{label}被传送离开了。"
                 else:
-                    text = f"{npc_name}离开了这里。"
+                    text = f"{label}离开了这里。"
             else:
                 step = self._npc_room_path(old_room, new_room)
                 if step:
                     direction, exit_room = step
                     if direction == "上":
-                        text = f"{npc_name}上楼去了。"
+                        text = f"{label}上楼去了。"
                         detail = {"kind": "up_out"}
                     elif direction == "下":
-                        text = f"{npc_name}下楼去了。"
+                        text = f"{label}下楼去了。"
                         detail = {"kind": "down_out"}
                     else:
                         exit_name = engine.ROOMS.get(exit_room, {}).get("name", "")
                         suffix = f"（{exit_name}）" if exit_name else ""
-                        text = f"{npc_name}往{direction}边{suffix}去了。"
+                        text = f"{label}往{direction}边{suffix}去了。"
                         detail = {"kind": "out", "direction": direction, "place": exit_name}
                 else:
                     destination = engine.ROOMS.get(new_room, {}).get("name", "")
-                    text = f"{npc_name}前往{destination}了。" if destination else f"{npc_name}离开了这里。"
+                    text = f"{label}前往{destination}了。" if destination else f"{label}离开了这里。"
         elif player_room == new_room:
             if special:
                 if source_lower.startswith(("vanish", "disappear")):
-                    text = f"{npc_name}突然出现在这里。"
+                    text = f"{label}突然出现在这里。"
                 elif source_lower.startswith("teleport"):
-                    text = f"{npc_name}被传送到了这里。"
+                    text = f"{label}被传送到了这里。"
                 else:
-                    text = f"{npc_name}来到了这里。"
+                    text = f"{label}来到了这里。"
             else:
                 step = self._npc_room_path(new_room, old_room)
                 if step:
                     direction, entry_room = step
                     if direction == "下":
-                        text = f"{npc_name}从楼下走来。"
+                        text = f"{label}从楼下走来。"
                         detail = {"kind": "down_in"}
                     elif direction == "上":
-                        text = f"{npc_name}从楼上下来。"
+                        text = f"{label}从楼上下来。"
                         detail = {"kind": "up_in"}
                     else:
                         entry_name = engine.ROOMS.get(entry_room, {}).get("name", "")
                         suffix = f"（{entry_name}）" if entry_name else ""
-                        text = f"{npc_name}从{direction}边{suffix}走来。"
+                        text = f"{label}从{direction}边{suffix}走来。"
                         detail = {"kind": "in", "direction": direction, "place": entry_name}
                 else:
-                    text = f"{npc_name}从远处来到了这里。"
+                    text = f"{label}从远处来到了这里。"
         else:
             return
         if text not in self._pending_npc_movement_messages.values():
@@ -2441,7 +2467,7 @@ class Player:
         if not announce:
             return True
         if old_location is None and self.location == location:
-            self._pending_npc_movement_messages[npc_name] = f"{npc_name}回到了这里。"
+            self._pending_npc_movement_messages[npc_name] = f"{actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))}回到了这里。"
             self._pending_npc_movement_details[npc_name] = {
                 "kind": "special", "text": self._pending_npc_movement_messages[npc_name],
             }
@@ -2460,7 +2486,7 @@ class Player:
         old_location = raw.get("location") if isinstance(raw, dict) else raw
         locations[npc_name] = {"offstage": True, "source": str(source or "schedule")}
         if old_location in engine.ROOMS and self.location == old_location:
-            self._pending_npc_movement_messages[npc_name] = f"{npc_name}离开了这里。"
+            self._pending_npc_movement_messages[npc_name] = f"{actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))}离开了这里。"
             self._pending_npc_movement_details[npc_name] = {
                 "kind": "special", "text": self._pending_npc_movement_messages[npc_name],
             }
@@ -2958,14 +2984,14 @@ class Player:
                 continue
             self.learn_npc_information(
                 entry["npc"], entry["topic"], entry.get("text", ""), entry.get("source", npc_name),
-                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral")
+                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral"), entry.get("follow_up")
             )
         for entry in effects.get("player_information", []) or []:
             if not isinstance(entry, dict) or not entry.get("topic"):
                 continue
             self.learn_player_information(
                 entry["topic"], entry.get("text", text), entry.get("source", npc_name),
-                entry.get("confidence", 75), entry.get("ttl", 0), entry.get("sentiment", "neutral")
+                entry.get("confidence", 75), entry.get("ttl", 0), entry.get("sentiment", "neutral"), entry.get("follow_up")
             )
         for target, delta in (effects.get("relations", {}) or {}).items():
             self.change_relation(target, delta)
@@ -3118,7 +3144,7 @@ class Player:
             "quest": q_name,
             "action": str((action_record or {}).get("action", "")),
             "title": str(q_info.get("title", q_name)),
-            "text": str(profile.get("text", f"{npc_name} 主动找到你，请你协助处理【{engine.quest_display_name(q_name)}】。")),
+            "text": str(profile.get("text", f"{actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))} 主动找到你，请你协助处理【{engine.quest_display_name(q_name)}】。")),
             "type": "offer",
         }
         log = self._npc_proactive_log()
@@ -3128,7 +3154,7 @@ class Player:
         if isinstance(info, dict) and info.get("topic"):
             self.learn_player_information(
                 info["topic"], info.get("text", record["text"]), info.get("source", npc_name),
-                info.get("confidence", 80), info.get("ttl", 0), info.get("sentiment", "neutral")
+                info.get("confidence", 80), info.get("ttl", 0), info.get("sentiment", "neutral"), info.get("follow_up")
             )
         return record
 
@@ -3157,7 +3183,7 @@ class Player:
             "quest": q_name,
             "action": "advance_quest",
             "title": str(q_info.get("title", q_name)),
-            "text": str(profile.get("advance_text", f"{npc_name} 已替你推进【{engine.quest_display_name(q_name)}】的调查。")),
+            "text": str(profile.get("advance_text", f"{actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))} 已替你推进【{engine.quest_display_name(q_name)}】的调查。")),
             "type": "advance",
             "stage": state["stage"],
         }
@@ -3407,7 +3433,7 @@ class Player:
             self.active_quests[q_name] = state["progress"]
         key = f"{q_name}:{profile.get('id', '')}"
         self._quest_intervention_history()[key] = self.get_quest_clock()
-        text = str(profile.get("text", f"{actor} 的行动改变了【{engine.quest_display_name(q_name)}】的局势。"))
+        text = str(profile.get("text", f"{actor_display.prose_name(actor, engine.NPCS.get(actor))} 的行动改变了【{engine.quest_display_name(q_name)}】的局势。"))
         record = {
             "clock": self.get_quest_clock(), "quest": q_name, "npc": actor,
             "action": action, "type": "intervention", "text": text,
@@ -3457,39 +3483,50 @@ class Player:
             variables["player_information"] = info
         return info
 
-    def _information_record(self, topic, text, source="", confidence=50, ttl=0, sentiment="neutral"):
+    def _information_record(self, topic, text, source="", confidence=50, ttl=0, sentiment="neutral", follow_up=None):
         record = {
             "topic": str(topic), "text": str(text), "source": str(source or ""),
             "confidence": max(0, min(100, _safe_int_value(confidence, 50))), "learned_at": self.get_quest_clock(),
             "sentiment": str(sentiment or "neutral")
         }
+        follow_up = normalize_follow_up(follow_up)
+        if follow_up:
+            record["follow_up"] = follow_up
         ttl = _safe_int_value(ttl, 0)
         if ttl > 0:
             record["expires_at"] = self.get_quest_clock() + ttl
         return record
 
-    def learn_npc_information(self, npc_name, topic, text, source="", confidence=50, ttl=0, sentiment="neutral"):
+    def learn_npc_information(self, npc_name, topic, text, source="", confidence=50, ttl=0, sentiment="neutral", follow_up=None):
         if npc_name not in engine.NPCS or not topic:
             return False
         bucket = self._npc_information_map().setdefault(npc_name, {})
         if not isinstance(bucket, dict):
             bucket = {}
             self._npc_information_map()[npc_name] = bucket
-        record = self._information_record(topic, text, source, confidence, ttl, sentiment)
+        record = self._information_record(topic, text, source, confidence, ttl, sentiment, follow_up)
         old = bucket.get(str(topic))
         if isinstance(old, dict):
             record["confidence"] = max(record["confidence"], max(0, min(100, _safe_int_value(old.get("confidence", 0), 0))))
+            if "follow_up" not in record:
+                old_follow_up = normalize_follow_up(old.get("follow_up"))
+                if old_follow_up:
+                    record["follow_up"] = old_follow_up
         bucket[str(topic)] = record
         return True
 
-    def learn_player_information(self, topic, text, source="", confidence=50, ttl=0, sentiment="neutral"):
+    def learn_player_information(self, topic, text, source="", confidence=50, ttl=0, sentiment="neutral", follow_up=None):
         if not topic:
             return False
         bucket = self._player_information_map()
-        record = self._information_record(topic, text, source, confidence, ttl, sentiment)
+        record = self._information_record(topic, text, source, confidence, ttl, sentiment, follow_up)
         old = bucket.get(str(topic))
         if isinstance(old, dict):
             record["confidence"] = max(record["confidence"], max(0, min(100, _safe_int_value(old.get("confidence", 0), 0))))
+            if "follow_up" not in record:
+                old_follow_up = normalize_follow_up(old.get("follow_up"))
+                if old_follow_up:
+                    record["follow_up"] = old_follow_up
         bucket[str(topic)] = record
         return True
 
@@ -3560,7 +3597,8 @@ class Player:
                 continue
             self.learn_npc_information(
                 npc_name, entry["topic"], entry["text"], entry.get("source", npc_name),
-                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral")
+                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral"),
+                entry.get("follow_up")
             )
 
     def learn_information_from_npc(self, npc_name, topic=None):
@@ -3578,7 +3616,7 @@ class Player:
                 continue
             self.learn_player_information(key, record.get("text", ""), record.get("source", npc_name), record.get("confidence", 50),
                                           max(0, _safe_int_value(record.get("expires_at", self.get_quest_clock())) - self.get_quest_clock()) if record.get("expires_at") is not None else 0,
-                                          record.get("sentiment", "neutral"))
+                                          record.get("sentiment", "neutral"), record.get("follow_up"))
             learned.append(key)
         return learned
 
@@ -3606,7 +3644,7 @@ class Player:
                     if self.learn_npc_information(target, topic, record.get("text", ""), source,
                                                   max(0, _safe_int_value(record.get("confidence", 50), 50) - 5),
                                                   max(0, _safe_int_value(record.get("expires_at", self.get_quest_clock())) - self.get_quest_clock()) if record.get("expires_at") is not None else 0,
-                                                  record.get("sentiment", "neutral")):
+                                                  record.get("sentiment", "neutral"), record.get("follow_up")):
                         learned.append((source, target, topic))
         return learned
 
@@ -4386,10 +4424,11 @@ class Player:
         if room_id not in engine.ROOMS:
             room_id = self.get_npc_home_location(npc_name)
         room_name = str(engine.ROOMS.get(room_id, {}).get("name", "")).strip() if room_id else ""
+        npc_label = actor_display.prose_name(npc_name, engine.NPCS.get(npc_name))
         return {
-            "npc": str(npc_name),
+            "npc": npc_label,
             "location": room_name,
-            "command": f"交谈 {npc_name} 交付委托 {engine.quest_display_name(q_name)}",
+            "command": f"交谈 {npc_label} 交付委托 {engine.quest_display_name(q_name)}",
         }
 
     def _print_quest_delivery_guidance(self, q_name):
@@ -4851,7 +4890,7 @@ class Player:
                 continue
             self.learn_npc_information(
                 entry["npc"], entry["topic"], entry.get("text", ""), chosen,
-                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral")
+                entry.get("confidence", 70), entry.get("ttl", 0), entry.get("sentiment", "neutral"), entry.get("follow_up")
             )
         self.react_npcs_to_event(chosen, info)
         for npc_name, delta in relations.items():
@@ -4863,7 +4902,7 @@ class Player:
         self.increment_var(f"world_event_region:{info.get('region', 'main')}", 1)
         return True, info.get("text", info.get("description", "世界中发生了一件意外之事。")), info
 
-    def save_to_file(self, filename=SAVE_PATH, verbose=True):
+    def save_to_file(self, filename=SAVE_PATH, verbose=True, auto=False):
         if filename == SAVE_PATH and getattr(self, "_save_deferred", False):
             self._save_pending = True
             self._save_pending_filename = filename
@@ -4936,7 +4975,10 @@ class Player:
                     os.remove(tmp_path)
 
             if verbose:
-                print(f"{engine.Color.BRIGHT_GREEN}[存档成功] 游戏进度已保存。{engine.Color.RESET}")
+                if auto:
+                    print(f"{engine.Color.BRIGHT_GREEN}游戏已自动保存{engine.Color.RESET}")
+                else:
+                    print(f"{engine.Color.BRIGHT_GREEN}[存档成功] 游戏进度已保存。{engine.Color.RESET}")
             self._autosave_tick = self._autosave_clock()
             self._clear_autosave_pending()
             return True
@@ -4954,6 +4996,22 @@ class Player:
         last = getattr(self, "_autosave_tick", None)
         return last is None or self._autosave_clock() - last >= AUTO_SAVE_INTERVAL_TICKS
 
+    def _autosave_allowed(self):
+        """只有安全、无存活敌人且不在战斗中时才允许自动落盘。"""
+        try:
+            room = engine.ROOMS.get(getattr(self, "location", None), {}) or {}
+            if room.get("safe") is not True:
+                return False
+            if room.get("secret_realm") is True or room.get("is_secret_realm") is True:
+                return False
+            if getattr(self, "_in_combat", False):
+                return False
+            from world_lifecycle import visible_enemies
+            enemies, _ = visible_enemies(self, self.location, room.get("enemies", []))
+            return not enemies
+        except (ImportError, KeyError, TypeError, ValueError, AttributeError, OSError):
+            return False
+
     def _clear_autosave_pending(self):
         self._autosave_pending = False
         self._autosave_pending_filename = None
@@ -4968,7 +5026,12 @@ class Player:
         accepts_verbose = "verbose" in parameters or any(
             parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
         )
-        if accepts_verbose:
+        accepts_auto = "auto" in parameters or any(
+            parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in parameters.values()
+        )
+        if accepts_auto:
+            saved = saver(filename, verbose, auto=True)
+        elif accepts_verbose:
             saved = saver(filename, verbose)
         else:
             saved = saver(filename)
@@ -4977,9 +5040,14 @@ class Player:
             self._clear_autosave_pending()
         return saved
 
-    def autosave(self, filename=SAVE_PATH, verbose=True):
-        """自动存档：距上次落盘不足 3 个世界时刻时先挂起，等主循环补写。"""
-        if not self._autosave_due():
+    def autosave(self, filename=SAVE_PATH, verbose=True, force=False):
+        """自动存档：安全场景外只挂起；距上次落盘不足 10 个世界时刻时也先挂起。"""
+        if not self._autosave_allowed():
+            self._autosave_pending = True
+            self._autosave_pending_filename = filename
+            self._autosave_pending_verbose = verbose
+            return True
+        if not force and not self._autosave_due():
             self._autosave_pending = True
             self._autosave_pending_filename = filename
             self._autosave_pending_verbose = verbose
@@ -4987,7 +5055,9 @@ class Player:
         return self._write_save(filename, verbose)
 
     def flush_autosave(self):
-        """世界时刻推进后补写挂起的自动存档。"""
+        """只在安全场景补写挂起的自动存档，危险场景继续保留请求。"""
+        if not self._autosave_allowed():
+            return False
         if not getattr(self, "_autosave_pending", False):
             return False
         if not self._autosave_due():

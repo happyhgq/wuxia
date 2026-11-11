@@ -30,6 +30,7 @@ def test_guest_access_does_not_bypass_high_rank_gate_for_any_major_sect():
 def test_low_rank_member_is_still_blocked_from_high_rank_room():
     for sect, room_id, _required_rank in HIGH_RANK_ROOMS:
         player = Player(f"低阶身份测试-{sect}", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(sect)[0]
         assert room_access_denial(player, ROOMS[room_id])
 
@@ -37,6 +38,7 @@ def test_low_rank_member_is_still_blocked_from_high_rank_room():
 def test_sufficiently_promoted_member_can_enter_high_rank_room():
     for sect, room_id, required_rank in HIGH_RANK_ROOMS:
         player = Player(f"高阶身份测试-{sect}", "散人")
+        player.level = max(player.level, 3)
         assert player.join_sect(sect)[0]
         player._sect_progress_state().setdefault(sect, {})["official_rank_index"] = required_rank
         assert room_access_denial(player, ROOMS[room_id]) == ""
@@ -49,6 +51,7 @@ def test_shaolin_ordination_hall_is_open_to_entry_rank_but_not_guests():
     assert room_access_denial(guest, ROOMS[room_id]), "访客许可不应允许散人进入少林讲经堂"
 
     monk = Player("少林受戒堂弟子", "散人")
+    monk.level = max(monk.level, 3)
     assert monk.join_sect(sect)[0]
     assert monk._sect_progress_state().setdefault(sect, {}).get("official_rank_index", 0) == required_rank
     assert room_access_denial(monk, ROOMS[room_id]) == ""

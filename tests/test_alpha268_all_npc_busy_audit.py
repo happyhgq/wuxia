@@ -18,7 +18,7 @@ def capture(fn, *args, **kwargs):
 
 def test_all_fixed_npcs_remain_locatable_and_present_while_temporarily_busy():
     player = Player("全体NPC忙碌审计", "散人")
-    assert len(engine.NPCS) == 79
+    assert len(engine.NPCS) == 81
     for npc_name in engine.NPCS:
         room_id = player.get_npc_home_location(npc_name)
         assert room_id in engine.ROOMS, npc_name
@@ -46,7 +46,7 @@ def test_all_fixed_npcs_remain_locatable_and_present_while_temporarily_busy():
 def test_all_npc_schedule_locations_and_states_are_valid():
     data_path = Path(__file__).resolve().parents[1] / "data" / "npcs.json"
     data = json.loads(data_path.read_text(encoding="utf-8"))
-    assert len(data) == 79
+    assert len(data) == 81
     allowed = Player.NPC_STATE_ALLOWED
     busy_entries = []
     scheduled_npcs = set()
@@ -135,7 +135,7 @@ def test_every_scheduled_busy_period_remains_interactable():
             assert result is False, (npc_name, entry)
             assert "状态：" not in output, (npc_name, entry, output)
             assert "应了一声" in output or "应了你一声" in output, (npc_name, entry, output)
-            assert "【可接取委托】" not in output, (npc_name, entry, output)
+            # 忙碌只省寒暄；委托面板可以出现，任务接取/交付不能被忙碌吞掉。
             assert "无暇交谈" not in output, (npc_name, entry, output)
             assert "当前地点没有" not in output, (npc_name, entry, output)
             checked += 1

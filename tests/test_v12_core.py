@@ -304,10 +304,12 @@ class P223SectTests(unittest.TestCase):
         self.assertEqual(p.get_sect_rank(), "记名弟子")
         p.change_sect_reputation("华山", 50)
         self.assertEqual(p.get_sect_rank(), "内门弟子")
+        p.level = max(p.level, 3)
         ok, _ = p.join_sect("武当")
         self.assertFalse(ok)
         ok, _ = p.leave_sect()
         self.assertTrue(ok)
+        p.level = max(p.level, 3)
         ok, _ = p.join_sect("武当")
         self.assertTrue(ok)
 
@@ -798,24 +800,24 @@ class CombatRewardTests(unittest.TestCase):
 class TradingSystemTests(unittest.TestCase):
     def setUp(self):
         self.player = Player("交易测试", "散人")
-        self.player.location = "general_shop"
+        self.player.location = "medicine_shop"
         self.player.inventory = ["疗伤药", "疗伤药", "野猪肉", "铁矿石"]
         self.player.gold = 1000
 
     def test_buy_multiple_items_is_atomic(self):
         import actions
         with patch.object(self.player, "save_to_file", return_value=True):
-            ok = actions.handle_trading(self.player, "buy", ["疗伤药", "3"])
+            ok = actions.handle_trading(self.player, "buy", ["回内丹", "3"])
         self.assertTrue(ok)
-        self.assertEqual(self.player.inventory.count("疗伤药"), 5)
-        self.assertEqual(self.player.gold, 940)
+        self.assertEqual(self.player.inventory.count("回内丹"), 3)
+        self.assertEqual(self.player.gold, 925)
 
     def test_buy_insufficient_gold_does_not_change_inventory_or_gold(self):
         import actions
         self.player.gold = 10
         before = list(self.player.inventory)
         with patch.object(self.player, "save_to_file", return_value=True):
-            ok = actions.handle_trading(self.player, "buy", ["疗伤药", "2"])
+            ok = actions.handle_trading(self.player, "buy", ["回内丹", "2"])
         self.assertFalse(ok)
         self.assertEqual(self.player.inventory, before)
         self.assertEqual(self.player.gold, 10)
@@ -1590,6 +1592,7 @@ class SectMartialArtsP224Tests(unittest.TestCase):
         p = Player("换门武学", "少林")
         self.assertIn("罗汉拳", [x["name"] for x in p.get_available_skills()])
         self.assertTrue(p.leave_sect()[0])
+        p.level = max(p.level, 3)
         self.assertTrue(p.join_sect("武当")[0])
         self.assertNotIn("罗汉拳", [x["name"] for x in p.get_available_skills()])
         self.assertIn("太极剑", [x["name"] for x in p.get_available_skills()])
@@ -2085,6 +2088,7 @@ class NPCEcologyP229Tests(unittest.TestCase):
 
     def test_sect_switch_changes_npc_stance_without_rewriting_npc_data(self):
         p = Player("门派切换", "散人")
+        p.level = max(p.level, 3)
         p.join_sect("少林")
         self.assertEqual(p.get_npc_sect_stance("捕头"), "preferred")
         self.assertEqual(p.get_npc_sect_stance("归云武馆馆主"), "opposed")
@@ -3189,7 +3193,10 @@ class P251NoticeBoardUXTests(unittest.TestCase):
     def test_notice_board_hides_empty_internal_records(self):
         p = Player("公告栏测试", "散人")
         p.learn_player_information("faction:官府:黑市", "", "", 0)
-        p.learn_player_information("new_wulin_rumor", "最近有镖队经过青石村。", "江湖传闻", 70)
+        p.learn_player_information(
+            "new_wulin_rumor", "最近有镖队经过青石村。", "江湖传闻", 70,
+            follow_up={"npc": "说书先生", "room": "guiyun_tea_room", "hint": "可打听江湖传闻"},
+        )
         import io, contextlib
         buf = io.StringIO()
         p.location = "village_square"

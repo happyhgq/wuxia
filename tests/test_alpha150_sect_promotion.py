@@ -48,6 +48,7 @@ def test_promotion_requires_reputation_level_and_basic_skill_practice():
 
 def test_first_promotion_records_official_rank_and_unlocks_rank_gated_skill_condition():
     p = enrolled_player()
+    p.level = 5
     p.change_sect_reputation("华山", 20)
     p.record_skill_use("华山剑法")
     p.set_flag("sect:huashan:sword_principle", True)
@@ -70,12 +71,13 @@ def test_huashan_council_hall_requires_official_inner_disciple_rank():
     p = enrolled_player()
     room = __import__("engine").ROOMS["huashan_master_hall"]
     assert "内门弟子" in room_access_denial(p, room)
+    p.level = 5
     p.change_sect_reputation("华山", 20)
     p.record_skill_use("华山剑法")
     p.set_flag("sect:huashan:sword_principle", True)
     assert p.promote_sect_rank()[0]
     p.change_sect_reputation("华山", 30)
-    p.level = 8
+    p.level = 10
     p.record_skill_use("华山剑法")
     p.record_skill_use("华山剑法")
     assert "内门弟子" in room_access_denial(p, room)
@@ -88,12 +90,13 @@ def test_huashan_council_hall_requires_official_inner_disciple_rank():
 def test_higher_rank_requires_mentor_trust_without_affecting_earlier_promotions():
     p = enrolled_player()
     # 达到外门、内门所需的既有条件，确保前两次晋升规则保持兼容。
+    p.level = 5
     p.change_sect_reputation("华山", 50)
     for _ in range(10):
         p.record_skill_use("华山剑法")
     p.set_flag("sect:huashan:sword_principle", True)
     assert p.promote_sect_rank()[0]
-    p.level = 8
+    p.level = 10
     for _ in range(30):
         p.record_skill_use("华山剑法")
     p.set_flag("sect:huashan:questline:patrol_done", True)

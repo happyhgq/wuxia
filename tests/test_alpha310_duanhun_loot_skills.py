@@ -197,7 +197,7 @@ def test_duanhun_exchange_quests_are_gated_non_exp_repeatables():
         assert quest["repeat_cooldown_ticks"] == 12
         assert "exp" not in reward
 
-    assert sum(info.get("reward", {}).get("exp", 0) for info in quests.values()) == 16034
+    assert sum(info.get("reward", {}).get("exp", 0) for info in quests.values()) == 16114
 
 
 def test_pelt_exchange_consumes_three_hides_for_medicine(monkeypatch):

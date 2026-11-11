@@ -115,11 +115,42 @@ _ATTRIBUTE_ALIASES = {
 }
 
 
+MEDITATION_UNSAFE = "unsafe"
+MEDITATION_FULL_HP = "full_hp"
+MEDITATION_INSUFFICIENT_MP = "insufficient_mp"
+
+
+def check_meditation_allowed(player, room=None):
+    """打坐前置条件；返回失败原因，None 表示可以打坐。"""
+    room = room if isinstance(room, dict) else {}
+    if getattr(player, "_in_combat", False):
+        return MEDITATION_UNSAFE
+    if room.get("safe") is not True:
+        return MEDITATION_UNSAFE
+    if room.get("secret_realm") is True or room.get("is_secret_realm") is True:
+        return MEDITATION_UNSAFE
+    try:
+        hp = int(getattr(player, "hp", 0) or 0)
+        max_hp = int(getattr(player, "max_hp", 0) or 0)
+        if hp >= max_hp:
+            return MEDITATION_FULL_HP
+        mp = int(getattr(player, "mp", 0) or 0)
+        max_mp = int(getattr(player, "max_mp", 0) or 0)
+        mp_cost = max(1, int(max_mp * 0.10))
+        if mp < mp_cost:
+            return MEDITATION_INSUFFICIENT_MP
+    except (TypeError, ValueError, OverflowError):
+        return MEDITATION_UNSAFE
+    return None
+
+
 def preflight_guaranteed_failure(player, cmd, args, room=None):
     """命令是否必然失败且一个 Tick 不会改变结果；仅在确定时返回 True。"""
     args = [str(part) for part in (args or [])]
     room = room if isinstance(room, dict) else {}
     try:
+        if cmd == "heal":
+            return check_meditation_allowed(player, room) is not None
         if cmd == "attributes":
             return _attributes_failure(player, args)
         if cmd == "sect":
@@ -188,7 +219,11 @@ def _sect_join_failure(player, args):
         level = int(getattr(player, "level", 1) or 1)
     except (TypeError, ValueError, OverflowError):
         level = 1
-    if level < 10:
+    try:
+        entry_level = max(1, int((engine.SECTS.get(sect_name, {}) or {}).get("entry_level", 3) or 3))
+    except (TypeError, ValueError):
+        entry_level = 3
+    if level < entry_level:
         return True
     return player.get_sect() != "散人"
 
@@ -222,9 +257,20 @@ def _sect_failure(player, args):
             return True
         return player.location != training["room_id"]
     if sub in ("师徒", "师承", "mentorship", "师门"):
-        if player.get_sect() != "华山":
+        sect_name = player.get_sect()
+        training = (engine.SECTS.get(sect_name, {}) or {}).get("training", {}) or {}
+        if sect_name == "散人" or not training.get("lesson_teacher"):
             return True
-        return player.location != "huashan_training_ground"
+        if player.location != training.get("room_id"):
+            return True
+        operation = str(args[1]).lower() if len(args) >= 2 else "查看"
+        if operation in ("拜师", "建立", "行礼"):
+            try:
+                level = int(getattr(player, "level", 1) or 1)
+            except (TypeError, ValueError, OverflowError):
+                level = 1
+            return level < 10 or player.get_sect_official_rank_index(sect_name) < 2
+        return False
     if sub in ("leave", "退出", "退门"):
         return player.get_sect() == "散人"
     if sub in ("受戒", "剃度", "戒仪"):
@@ -259,10 +305,21 @@ def _skills_failure(player, args):
         owner = next((sect for sect, rows in engine.SKILLS.items()
                       if any(isinstance(row, dict) and row.get("name") == name for row in (rows or []))), None)
         if owner and owner == player.get_sect() and not _skill_learned(player, name):
-            training = (engine.SECTS.get(owner, {}) or {}).get("training", {}) or {}
-            required_teacher = (engine.SECTS.get(owner, {}) or {}).get("skill_teachers", {}).get(name)
+            sect_info = engine.SECTS.get(owner, {}) or {}
+            training = sect_info.get("training", {}) or {}
+            required_teacher = sect_info.get("skill_teachers", {}).get(name)
             room_id = training.get("room_id")
-            if required_teacher and room_id and player.location != room_id:
+            if required_teacher and room_id:
+                if player.location != room_id:
+                    return True
+                if required_teacher not in player.get_npcs_in_room(player.location):
+                    return True
+            fee_table = sect_info.get("lesson_fees", {}) or {}
+            try:
+                fee = max(0, int(fee_table.get(name, 0) or 0))
+            except (TypeError, ValueError):
+                fee = 0
+            if fee > 0 and int(getattr(player, "gold", 0)) < fee:
                 return True
         return False
     if sub in ("forget", "遗忘", "忘却"):

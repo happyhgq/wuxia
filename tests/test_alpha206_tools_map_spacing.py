@@ -23,7 +23,8 @@ def test_resource_tools_are_sellable_and_have_action_specific_effects():
     assert items["采药小锄"]["tool_effect"] == {"action": "gather", "chance_bonus": 0.2}
     assert items["砍柴斧"]["tool_effect"] == {"action": "chop", "yield_bonus": 1}
     assert items["矿镐"]["tool_effect"] == {"action": "mine", "yield_bonus": 1}
-    assert "采药小锄" in npcs["药铺老板"]["shop"]
+    assert "采药小锄" in npcs["杂货铺老板"]["shop"]
+    assert "采药小锄" not in npcs["药铺老板"]["shop"]
     assert {"砍柴斧", "矿镐"} <= set(npcs["铁匠"]["shop"])
 
 

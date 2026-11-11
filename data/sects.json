@@ -3,7 +3,7 @@
     "title": "少林派",
     "desc": "以禅武并重、内外兼修闻名的正道大派。门内身份由俗家弟子逐步修习、受戒并晋升为高阶传承弟子。",
     "alignment": "正道",
-    "entry_level": 1,
+    "entry_level": 3,
     "max_rank": 4,
     "ranks": [
       {
@@ -49,11 +49,11 @@
     },
     "promotion_requirements": {
       "1": {
-        "level": 3,
+        "level": 5,
         "mastery": 10
       },
       "2": {
-        "level": 8,
+        "level": 10,
         "mastery": 30
       },
       "3": {
@@ -110,7 +110,7 @@
     "title": "武当派",
     "desc": "崇尚清静自然、以柔克刚的道门大派。",
     "alignment": "正道",
-    "entry_level": 1,
+    "entry_level": 3,
     "max_rank": 4,
     "ranks": [
       {
@@ -156,11 +156,11 @@
     },
     "promotion_requirements": {
       "1": {
-        "level": 3,
+        "level": 5,
         "mastery": 10
       },
       "2": {
-        "level": 8,
+        "level": 10,
         "mastery": 30
       },
       "3": {
@@ -217,7 +217,7 @@
     "title": "华山派",
     "desc": "剑术凌厉、门规严谨的名门剑派。",
     "alignment": "正道",
-    "entry_level": 1,
+    "entry_level": 3,
     "max_rank": 4,
     "ranks": [
       {
@@ -263,11 +263,11 @@
     },
     "promotion_requirements": {
       "1": {
-        "level": 3,
+        "level": 5,
         "mastery": 10
       },
       "2": {
-        "level": 8,
+        "level": 10,
         "mastery": 30
       },
       "3": {
@@ -352,6 +352,19 @@
     "reward_multipliers": {
       "exp": 1.0,
       "gold": 1.0
+    },
+    "training": {
+      "room_id": "village_square",
+      "place": "村中广场"
+    },
+    "skill_teachers": {
+      "基础吐纳": "江湖武师",
+      "江湖散手": "江湖武师",
+      "流云步": "江湖武师"
+    },
+    "lesson_fees": {
+      "江湖散手": 10,
+      "流云步": 20
     }
   },
   "铁衣门": {
@@ -403,11 +416,11 @@
     },
     "promotion_requirements": {
       "1": {
-        "level": 3,
+        "level": 5,
         "mastery": 10
       },
       "2": {
-        "level": 8,
+        "level": 10,
         "mastery": 30
       },
       "3": {

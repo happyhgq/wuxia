@@ -43,7 +43,7 @@ def _capture(fn, *args, **kwargs):
 
 def test_new_rooms_keep_vectors_and_extend_sunken_ruins():
     rooms = engine.ROOMS
-    assert len(rooms) == 182
+    assert len(rooms) == 183
     for room_id, (name, coord, exits, enemies, level) in NEW_ROOMS.items():
         room = rooms[room_id]
         assert room["name"] == name
@@ -108,7 +108,7 @@ def test_deep_water_exit_is_locked_until_cache_is_explored():
 def test_new_npcs_are_placed_and_bound_to_the_new_quests():
     npcs = _data("npcs.json")
     rooms = engine.ROOMS
-    assert len(npcs) == 79
+    assert len(npcs) == 81
 
     veteran = npcs["守烽老卒"]
     assert veteran["home_room"] == "bandit_back_mountain"
@@ -137,7 +137,7 @@ def test_new_npcs_are_placed_and_bound_to_the_new_quests():
 
 def test_new_quests_are_configured_as_a_gated_l9_l11_chain():
     quests = _data("quests.json")
-    assert len(quests) == 81
+    assert len(quests) == 82
     for name, (npc, target_type, target_name, required_cnt) in NEW_QUESTS.items():
         quest = quests[name]
         assert quest["npc"] == npc
@@ -317,4 +317,4 @@ def test_kill_quest_exp_matches_scaled_room_profiles():
 
 def test_total_quest_exp_includes_midgame_quests():
     quests = _data("quests.json")
-    assert sum(info["reward"].get("exp", 0) for info in quests.values()) == 16034
+    assert sum(info["reward"].get("exp", 0) for info in quests.values()) == 16114

@@ -24,6 +24,7 @@ def test_scripture_catalogue_dialogue_records_progress_flag():
 
 def test_shaolin_highest_rank_requires_scripture_guidance_and_trial():
     player = Player("少林晋升测试", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("少林")[0]
     player._sect_progress_state().setdefault("少林", {})["official_rank_index"] = 3
     player.level = 30
@@ -44,6 +45,7 @@ def test_shaolin_highest_rank_requires_scripture_guidance_and_trial():
 
 def test_non_shaolin_promotion_does_not_inherit_shaolin_requirement():
     player = Player("门派隔离测试", "散人")
+    player.level = max(player.level, 3)
     assert player.join_sect("武当")[0]
     player._sect_progress_state().setdefault("武当", {})["official_rank_index"] = 2
     player.level = 30

@@ -54,6 +54,11 @@ ALPHA287_BOSS_OVERRIDES = {
     "黑市头目": (725, 61, 20, 489),
 }
 
+# Alpha316：L15 五门派实战复核后微调断魂堡主，经验与掉落不变。
+ALPHA316_BOSS_OVERRIDES = {
+    "断魂堡主": (920, 80, 23, 660),
+}
+
 # Alpha286：击杀任务的实战经验按目标实际房间档位计算，比例为任务经验 ÷（单只实际经验 × 数量）。
 KILL_QUEST_COMBAT_BASELINE = {
     "新手狩猎·野外除害": ("野猪", "official_road", 1),
@@ -165,7 +170,8 @@ def test_elite_and_boss_templates_apply_approved_multipliers():
             continue
         actual = (enemy["hp"], enemy["atk"], enemy["defense"], enemy["exp"])
         expected = (
-            ALPHA287_BOSS_OVERRIDES.get(name)
+            ALPHA316_BOSS_OVERRIDES.get(name)
+            or ALPHA287_BOSS_OVERRIDES.get(name)
             or ALPHA286_BOSS_OVERRIDES.get(name)
             or _expected_stats(int(enemy["level"]), tier)
         )
